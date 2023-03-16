@@ -50,7 +50,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Container(
                   margin: EdgeInsets.only(bottom: 4, top: 14),
                   child: Text(
-                    'Nadsya Utari',
+                    'Riccardo Bal',
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
