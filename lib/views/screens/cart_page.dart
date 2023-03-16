@@ -8,6 +8,8 @@ import 'package:clubtwice/views/screens/order_success_page.dart';
 import 'package:clubtwice/views/widgets/cart_tile.dart';
 
 class CartPage extends StatefulWidget {
+  const CartPage({super.key});
+
   @override
   _CartPageState createState() => _CartPageState();
 }
@@ -25,7 +27,7 @@ class _CartPageState extends State<CartPage> {
         elevation: 0,
         title: Column(
           children: [
-            Text('Your Cart',
+            const Text('Your Cart',
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 14,
@@ -42,7 +44,7 @@ class _CartPageState extends State<CartPage> {
           icon: SvgPicture.asset('assets/icons/Arrow-left.svg'),
         ),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1),
+          preferredSize: const Size.fromHeight(1),
           child: Container(
             height: 1,
             width: MediaQuery.of(context).size.width,
@@ -54,18 +56,25 @@ class _CartPageState extends State<CartPage> {
       // Checkout Button
       bottomNavigationBar: Container(
         width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
             border: Border(top: BorderSide(color: AppColor.border, width: 1))),
         child: ElevatedButton(
           onPressed: () {
             Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => OrderSuccessPage()));
           },
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
+            backgroundColor: AppColor.primary,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            elevation: 0,
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Flexible(
+              const Flexible(
                 flex: 6,
                 child: Text(
                   'Checkout',
@@ -81,7 +90,7 @@ class _CartPageState extends State<CartPage> {
                 height: 26,
                 color: Colors.white.withOpacity(0.5),
               ),
-              Flexible(
+              const Flexible(
                 flex: 6,
                 child: Text(
                   'Rp 10,429,000',
@@ -94,36 +103,30 @@ class _CartPageState extends State<CartPage> {
               ),
             ],
           ),
-          style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.symmetric(horizontal: 36, vertical: 18),
-            backgroundColor: AppColor.primary,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            elevation: 0,
-          ),
         ),
       ),
       body: ListView(
         shrinkWrap: true,
-        physics: BouncingScrollPhysics(),
-        padding: EdgeInsets.all(16),
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.all(16),
         children: [
           ListView.separated(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               return CartTile(
                 data: cartData[index],
               );
             },
-            separatorBuilder: (context, index) => SizedBox(height: 16),
+            separatorBuilder: (context, index) => const SizedBox(height: 16),
             itemCount: 3,
           ),
           // Section 2 - Shipping Information
           Container(
-            margin: EdgeInsets.only(top: 24),
+            margin: const EdgeInsets.only(top: 24),
             width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 20),
+            padding:
+                const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 20),
             decoration: BoxDecoration(
               color: AppColor.primarySoft,
               borderRadius: BorderRadius.circular(20),
@@ -133,11 +136,11 @@ class _CartPageState extends State<CartPage> {
               children: [
                 // header
                 Container(
-                  margin: EdgeInsets.only(bottom: 8),
+                  margin: const EdgeInsets.only(bottom: 8),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
+                      const Text(
                         'Shipping information',
                         style: TextStyle(
                             fontSize: 14,
@@ -147,17 +150,17 @@ class _CartPageState extends State<CartPage> {
                       ),
                       ElevatedButton(
                         onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: AppColor.primary,
+                          shape: const CircleBorder(),
+                          backgroundColor: AppColor.border,
+                          elevation: 0,
+                          padding: const EdgeInsets.all(0),
+                        ),
                         child: SvgPicture.asset(
                           'assets/icons/Pencil.svg',
                           width: 16,
                           color: AppColor.secondary,
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: AppColor.primary,
-                          shape: CircleBorder(),
-                          backgroundColor: AppColor.border,
-                          elevation: 0,
-                          padding: EdgeInsets.all(0),
                         ),
                       ),
                     ],
@@ -165,11 +168,11 @@ class _CartPageState extends State<CartPage> {
                 ),
                 // Name
                 Container(
-                  margin: EdgeInsets.only(bottom: 8),
+                  margin: const EdgeInsets.only(bottom: 8),
                   child: Row(
                     children: [
                       Container(
-                        margin: EdgeInsets.only(right: 12),
+                        margin: const EdgeInsets.only(right: 12),
                         child: SvgPicture.asset('assets/icons/Profile.svg',
                             width: 18),
                       ),
@@ -186,12 +189,12 @@ class _CartPageState extends State<CartPage> {
                 ),
                 // Address
                 Container(
-                  margin: EdgeInsets.only(bottom: 8),
+                  margin: const EdgeInsets.only(bottom: 8),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        margin: EdgeInsets.only(right: 12),
+                        margin: const EdgeInsets.only(right: 12),
                         child: SvgPicture.asset('assets/icons/Home.svg',
                             width: 18),
                       ),
@@ -207,32 +210,30 @@ class _CartPageState extends State<CartPage> {
                   ),
                 ),
                 // Phone Number
-                Container(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(right: 12),
-                        child: SvgPicture.asset('assets/icons/Profile.svg',
-                            width: 18),
-                      ),
-                      Expanded(
-                        child: Text(
-                          '0888 - 8888 - 8888',
-                          style: TextStyle(
-                            color: AppColor.secondary.withOpacity(0.7),
-                          ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(right: 12),
+                      child: SvgPicture.asset('assets/icons/Profile.svg',
+                          width: 18),
+                    ),
+                    Expanded(
+                      child: Text(
+                        '0888 - 8888 - 8888',
+                        style: TextStyle(
+                          color: AppColor.secondary.withOpacity(0.7),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
           // Section 3 - Select Shipping method
           Container(
-            margin: EdgeInsets.only(top: 24),
+            margin: const EdgeInsets.only(top: 24),
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
@@ -242,10 +243,11 @@ class _CartPageState extends State<CartPage> {
               children: [
                 // Header
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   width: MediaQuery.of(context).size.width,
                   height: 60,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: AppColor.primarySoft,
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(20),
@@ -264,14 +266,14 @@ class _CartPageState extends State<CartPage> {
                               style: TextStyle(
                                   color: AppColor.secondary.withOpacity(0.7),
                                   fontSize: 10)),
-                          Text('Official Shipping',
+                          const Text('Official Shipping',
                               style: TextStyle(
                                   color: AppColor.secondary,
                                   fontWeight: FontWeight.w600,
                                   fontFamily: 'poppins')),
                         ],
                       ),
-                      Text('free delivery',
+                      const Text('free delivery',
                           style: TextStyle(
                               color: AppColor.primary,
                               fontWeight: FontWeight.w600)),
@@ -280,16 +282,16 @@ class _CartPageState extends State<CartPage> {
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  padding:
-                      EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 20),
+                  padding: const EdgeInsets.only(
+                      left: 16, right: 16, top: 16, bottom: 20),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
-                        margin: EdgeInsets.only(bottom: 16),
+                        margin: const EdgeInsets.only(bottom: 16),
                         child: Row(
                           children: [
-                            Expanded(
+                            const Expanded(
                               flex: 4,
                               child: Text(
                                 'Shipping',
@@ -307,7 +309,7 @@ class _CartPageState extends State<CartPage> {
                                     color: AppColor.secondary.withOpacity(0.7)),
                               ),
                             ),
-                            Expanded(
+                            const Expanded(
                               flex: 4,
                               child: Text(
                                 'Rp 0',
@@ -320,39 +322,37 @@ class _CartPageState extends State<CartPage> {
                           ],
                         ),
                       ),
-                      Container(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 4,
-                              child: Text(
-                                'Subtotal',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColor.secondary),
-                              ),
+                      Row(
+                        children: [
+                          const Expanded(
+                            flex: 4,
+                            child: Text(
+                              'Subtotal',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColor.secondary),
                             ),
-                            Expanded(
-                              flex: 4,
-                              child: Text(
-                                '4 Items',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: AppColor.secondary.withOpacity(0.7)),
-                              ),
+                          ),
+                          Expanded(
+                            flex: 4,
+                            child: Text(
+                              '4 Items',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: AppColor.secondary.withOpacity(0.7)),
                             ),
-                            Expanded(
-                              flex: 4,
-                              child: Text(
-                                'Rp 1,429,000',
-                                textAlign: TextAlign.end,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColor.primary),
-                              ),
+                          ),
+                          const Expanded(
+                            flex: 4,
+                            child: Text(
+                              'Rp 1,429,000',
+                              textAlign: TextAlign.end,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColor.primary),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
