@@ -3,11 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/core/model/Product.dart';
 import 'package:clubtwice/views/screens/image_viewer.dart';
-import 'package:clubtwice/views/screens/reviews_page.dart';
 import 'package:clubtwice/views/widgets/custom_app_bar.dart';
 import 'package:clubtwice/views/widgets/modals/add_to_cart_modal.dart';
-import 'package:clubtwice/views/widgets/rating_tag.dart';
-import 'package:clubtwice/views/widgets/review_tile.dart';
 import 'package:clubtwice/views/widgets/selectable_circle_color.dart';
 import 'package:clubtwice/views/widgets/selectable_circle_size.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -128,7 +125,7 @@ class _ProductDetailState extends State<ProductDetail> {
               ),
               // appbar
               CustomAppBar(
-                title: '${product.storeName}',
+                title: product.storeName,
                 leftIcon: SvgPicture.asset('assets/icons/Arrow-left.svg'),
                 rightIcon: SvgPicture.asset(
                   'assets/icons/Bookmark.svg',
@@ -157,13 +154,13 @@ class _ProductDetailState extends State<ProductDetail> {
           // Section 2 - product info
           Container(
             width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  margin: EdgeInsets.only(bottom: 4),
+                  margin: const EdgeInsets.only(bottom: 4),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,11 +174,7 @@ class _ProductDetailState extends State<ProductDetail> {
                               fontFamily: 'poppins',
                               color: AppColor.secondary),
                         ),
-                      ),
-                      RatingTag(
-                        margin: const EdgeInsets.only(left: 10),
-                        value: product.rating,
-                      ),
+                      )
                     ],
                   ),
                 ),
@@ -208,13 +201,13 @@ class _ProductDetailState extends State<ProductDetail> {
           // Section 3 - Color Picker
           Container(
             width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            margin: EdgeInsets.only(bottom: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            margin: const EdgeInsets.only(bottom: 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Color',
                   style: TextStyle(
                     color: AppColor.secondary,
@@ -225,7 +218,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 ),
                 SelectableCircleColor(
                   colorWay: product.colors,
-                  margin: EdgeInsets.only(top: 12),
+                  margin: const EdgeInsets.only(top: 12),
                 ),
               ],
             ),
@@ -234,13 +227,13 @@ class _ProductDetailState extends State<ProductDetail> {
           // Section 4 - Size Picker
           Container(
             width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            margin: EdgeInsets.only(bottom: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            margin: const EdgeInsets.only(bottom: 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Size',
                   style: TextStyle(
                     color: AppColor.secondary,
@@ -251,77 +244,11 @@ class _ProductDetailState extends State<ProductDetail> {
                 ),
                 SelectableCircleSize(
                   productSize: product.sizes,
-                  margin: EdgeInsets.only(top: 12),
+                  margin: const EdgeInsets.only(top: 12),
                 ),
               ],
             ),
           ),
-
-          // Section 5 - Reviews
-          Container(
-            width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ExpansionTile(
-                  initiallyExpanded: true,
-                  childrenPadding:
-                      EdgeInsets.symmetric(vertical: 12, horizontal: 0),
-                  tilePadding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                  title: Text(
-                    'Reviews',
-                    style: TextStyle(
-                      color: AppColor.secondary,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'poppins',
-                    ),
-                  ),
-                  expandedCrossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ListView.separated(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) =>
-                          ReviewTile(review: product.reviews[index]),
-                      separatorBuilder: (context, index) =>
-                          SizedBox(height: 16),
-                      itemCount: 2,
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 52, top: 12, bottom: 6),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => ReviewsPage(
-                                reviews: product.reviews,
-                              ),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          'See More Reviews',
-                          style: TextStyle(
-                              color: AppColor.secondary,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: AppColor.primary,
-                          elevation: 0,
-                          backgroundColor: AppColor.primarySoft,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8)),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ],
-            ),
-          )
         ],
       ),
     );

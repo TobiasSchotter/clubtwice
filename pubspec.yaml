@@ -38,7 +38,6 @@ dependencies:
   flutter_svg: ^1.1.6
   smooth_page_indicator: ^1.0.1
   pin_code_fields: ^7.4.0
-  smooth_star_rating: ^1.1.1
   money2: ^3.3.0
 
 dev_dependencies:

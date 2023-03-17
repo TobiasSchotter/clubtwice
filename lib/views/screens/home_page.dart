@@ -193,18 +193,6 @@ class _HomePageState extends State<HomePage> {
           // Section 4 - flashsale
 
           // Section 5 - product list
-
-          const Padding(
-            padding: EdgeInsets.only(left: 16, top: 16),
-            child: Text(
-              'Todays recommendation...',
-              style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400),
-            ),
-          ),
-
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Wrap(

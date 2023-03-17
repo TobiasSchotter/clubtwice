@@ -4,10 +4,12 @@ import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/screens/login_page.dart';
 
 class WelcomePage extends StatelessWidget {
+  const WelcomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: Column(
@@ -15,7 +17,7 @@ class WelcomePage extends StatelessWidget {
           children: [
             // Section 1 - Illustration
             Container(
-              margin: EdgeInsets.only(top: 32),
+              margin: const EdgeInsets.only(top: 32),
               width: MediaQuery.of(context).size.width,
               child: SvgPicture.asset('assets/icons/shopping illustration.svg'),
             ),
@@ -23,8 +25,8 @@ class WelcomePage extends StatelessWidget {
             Column(
               children: [
                 Container(
-                  margin: EdgeInsets.only(bottom: 12),
-                  child: Text(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  child: const Text(
                     'clubtwice',
                     style: TextStyle(
                       color: AppColor.secondary,
@@ -45,28 +47,29 @@ class WelcomePage extends StatelessWidget {
             // Section 3 - Get Started Button
             Container(
               width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              margin: EdgeInsets.only(bottom: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              margin: const EdgeInsets.only(bottom: 16),
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => LoginPage()));
                 },
-                child: Text(
+                style: ElevatedButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
+                  backgroundColor: AppColor.primary,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
+                  elevation: 0,
+                  shadowColor: Colors.transparent,
+                ),
+                child: const Text(
                   'Get Started',
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
                       fontSize: 18,
                       fontFamily: 'poppins'),
-                ),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 36, vertical: 18),
-                  backgroundColor: AppColor.primary,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16)),
-                  elevation: 0,
-                  shadowColor: Colors.transparent,
                 ),
               ),
             ),

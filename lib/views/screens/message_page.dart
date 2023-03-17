@@ -7,6 +7,8 @@ import 'package:clubtwice/core/services/MessageService.dart';
 import 'package:clubtwice/views/widgets/message_tile_widget.dart';
 
 class MessagePage extends StatefulWidget {
+  const MessagePage({super.key});
+
   @override
   _MessagePageState createState() => _MessagePageState();
 }
@@ -23,7 +25,7 @@ class _MessagePageState extends State<MessagePage> {
         elevation: 0,
         title: Column(
           children: [
-            Text('Message',
+            const Text('Message',
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 14,
@@ -40,7 +42,7 @@ class _MessagePageState extends State<MessagePage> {
           icon: SvgPicture.asset('assets/icons/Arrow-left.svg'),
         ),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1),
+          preferredSize: const Size.fromHeight(1),
           child: Container(
             height: 1,
             width: MediaQuery.of(context).size.width,
@@ -51,7 +53,7 @@ class _MessagePageState extends State<MessagePage> {
       ),
       body: ListView(
         shrinkWrap: true,
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         children: List.generate(listMessage.length, (index) {
           return MessageTileWidget(
             data: listMessage[index],
