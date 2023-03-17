@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:clubtwice/core/model/ColorWay.dart';
 import 'package:clubtwice/core/model/ProductSize.dart';
-import 'package:clubtwice/core/model/Review.dart';
 
 class Product {
   List<String> image;
@@ -11,7 +10,6 @@ class Product {
   String description;
   List<ColorWay> colors;
   List<ProductSize> sizes;
-  List<Review> reviews;
   String storeName;
 
   Product({
@@ -22,7 +20,6 @@ class Product {
     required this.description,
     required this.colors,
     required this.sizes,
-    required this.reviews,
     required this.storeName,
   });
 
@@ -39,9 +36,6 @@ class Product {
             .toList(),
         sizes: (json['sizes'] as List)
             .map((data) => ProductSize.fromJson(data))
-            .toList(),
-        reviews: (json['reviews'] as List)
-            .map((data) => Review.fromJson(data))
             .toList(),
         storeName: json['store_name'],
       );
