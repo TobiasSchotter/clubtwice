@@ -106,6 +106,17 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 MenuTileWidget(
                   onTap: () {},
+                  margin: EdgeInsets.only(top: 10),
+                  icon: SvgPicture.asset(
+                    'assets/icons/Show.svg',
+                    color: AppColor.secondary.withOpacity(0.5),
+                  ),
+                  title: 'Meine Anzeigen',
+                  subtitle: 'Passe oder Lösche deine Anzeigen',
+                ),
+                MenuTileWidget(
+                  onTap: () {},
+                  margin: EdgeInsets.only(top: 10),
                   icon: SvgPicture.asset(
                     'assets/icons/Heart.svg',
                     color: AppColor.secondary.withOpacity(0.5),
@@ -144,6 +155,16 @@ class _ProfilePageState extends State<ProfilePage> {
                     color: AppColor.secondary.withOpacity(0.5),
                   ),
                   title: 'Languages',
+                  subtitle: 'Lorem ipsum Dolor sit Amet',
+                ),
+                MenuTileWidget(
+                  onTap: () {},
+                  margin: EdgeInsets.only(top: 10),
+                  icon: SvgPicture.asset(
+                    'assets/icons/Filter.svg',
+                    color: AppColor.secondary.withOpacity(0.5),
+                  ),
+                  title: 'Hilfe',
                   subtitle: 'Lorem ipsum Dolor sit Amet',
                 ),
                 MenuTileWidget(
