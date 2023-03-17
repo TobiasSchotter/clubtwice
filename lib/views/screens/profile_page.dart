@@ -59,7 +59,17 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 // Username
                 Text(
-                  '@UtariNad',
+                  '@RicBal',
+                  style: TextStyle(
+                      color: Colors.white.withOpacity(0.6), fontSize: 14),
+                ),
+                Text(
+                  'SG Quelle Fürth',
+                  style: TextStyle(
+                      color: Colors.white.withOpacity(0.6), fontSize: 14),
+                ),
+                Text(
+                  'Fußball',
                   style: TextStyle(
                       color: Colors.white.withOpacity(0.6), fontSize: 14),
                 ),
@@ -88,20 +98,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   onTap: () {},
                   margin: EdgeInsets.only(top: 10),
                   icon: SvgPicture.asset(
-                    'assets/icons/Heart.svg',
-                    color: AppColor.secondary.withOpacity(0.5),
-                  ),
-                  title: 'Wishlist',
-                  subtitle: 'Lorem ipsum Dolor sit Amet',
-                ),
-                MenuTileWidget(
-                  onTap: () {},
-                  icon: SvgPicture.asset(
                     'assets/icons/Show.svg',
                     color: AppColor.secondary.withOpacity(0.5),
                   ),
-                  title: 'Last Seen',
-                  subtitle: 'Lorem ipsum Dolor sit Amet',
+                  title: 'Profil',
+                  subtitle: 'Passe dein Profil und Vereinszugehörigkeit an',
                 ),
                 MenuTileWidget(
                   onTap: () {},
@@ -109,35 +110,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     'assets/icons/Heart.svg',
                     color: AppColor.secondary.withOpacity(0.5),
                   ),
-                  title: 'Wishlist',
-                  subtitle: 'Lorem ipsum Dolor sit Amet',
-                ),
-                MenuTileWidget(
-                  onTap: () {},
-                  icon: SvgPicture.asset(
-                    'assets/icons/Bag.svg',
-                    color: AppColor.secondary.withOpacity(0.5),
-                  ),
-                  title: 'Orders',
-                  subtitle: 'Lorem ipsum Dolor sit Amet',
-                ),
-                MenuTileWidget(
-                  onTap: () {},
-                  icon: SvgPicture.asset(
-                    'assets/icons/Wallet.svg',
-                    color: AppColor.secondary.withOpacity(0.5),
-                  ),
-                  title: 'Wallet',
-                  subtitle: 'Lorem ipsum Dolor sit Amet',
-                ),
-                MenuTileWidget(
-                  onTap: () {},
-                  icon: SvgPicture.asset(
-                    'assets/icons/Location.svg',
-                    color: AppColor.secondary.withOpacity(0.5),
-                  ),
-                  title: 'Addresses',
-                  subtitle: 'Lorem ipsum Dolor sit Amet',
+                  title: 'Favoriten',
+                  subtitle:
+                      'Markiere deine Favoriten und finde Sie hier wieder',
                 ),
               ],
             ),
@@ -154,7 +129,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Container(
                   margin: EdgeInsets.only(left: 16),
                   child: Text(
-                    'SETTINGS',
+                    'Einstellungen',
                     style: TextStyle(
                         color: AppColor.secondary.withOpacity(0.5),
                         letterSpacing: 6 / 100,
