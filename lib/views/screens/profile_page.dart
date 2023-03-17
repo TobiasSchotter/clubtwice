@@ -87,7 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Container(
                   margin: EdgeInsets.only(left: 16),
                   child: Text(
-                    'ACCOUNT',
+                    'Account',
                     style: TextStyle(
                         color: AppColor.secondary.withOpacity(0.5),
                         letterSpacing: 6 / 100,
@@ -108,7 +108,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   onTap: () {},
                   margin: EdgeInsets.only(top: 10),
                   icon: SvgPicture.asset(
-                    'assets/icons/Show.svg',
+                    'assets/icons/Man-Clothes.svg',
                     color: AppColor.secondary.withOpacity(0.5),
                   ),
                   title: 'Meine Anzeigen',
@@ -154,18 +154,18 @@ class _ProfilePageState extends State<ProfilePage> {
                     'assets/icons/Filter.svg',
                     color: AppColor.secondary.withOpacity(0.5),
                   ),
-                  title: 'Languages',
-                  subtitle: 'Lorem ipsum Dolor sit Amet',
+                  title: 'Sprache',
+                  subtitle: 'Ändere hier die Spracheinstellung',
                 ),
                 MenuTileWidget(
                   onTap: () {},
                   margin: EdgeInsets.only(top: 10),
                   icon: SvgPicture.asset(
-                    'assets/icons/Filter.svg',
+                    'assets/icons/Info Square.svg',
                     color: AppColor.secondary.withOpacity(0.5),
                   ),
                   title: 'Hilfe',
-                  subtitle: 'Lorem ipsum Dolor sit Amet',
+                  subtitle: 'Wie können wir dir weiterhelfen?',
                 ),
                 MenuTileWidget(
                   onTap: () {},
