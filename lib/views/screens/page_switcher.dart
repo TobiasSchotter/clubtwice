@@ -1,3 +1,5 @@
+import 'package:clubtwice/views/screens/cart_page.dart';
+import 'package:clubtwice/views/screens/message_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:clubtwice/constant/app_color.dart';
@@ -27,6 +29,7 @@ class _PageSwitcherState extends State<PageSwitcher> {
         HomePage(),
         FeedsPage(),
         NotificationPage(),
+        MessagePage(),
         ProfilePage(),
       ][_selectedIndex],
       bottomNavigationBar: Container(
@@ -60,6 +63,13 @@ class _PageSwitcherState extends State<PageSwitcher> {
                     icon: SvgPicture.asset('assets/icons/Notification.svg'),
                     label: ''),
             (_selectedIndex == 3)
+                ? BottomNavigationBarItem(
+                    icon: SvgPicture.asset('assets/icons/Message.svg'),
+                    label: '')
+                : BottomNavigationBarItem(
+                    icon: SvgPicture.asset('assets/icons/Message.svg'),
+                    label: ''),
+            (_selectedIndex == 4)
                 ? BottomNavigationBarItem(
                     icon: SvgPicture.asset('assets/icons/Profile-active.svg'),
                     label: '')

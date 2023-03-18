@@ -13,10 +13,6 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(
-        cartValue: 2,
-        chatValue: 2,
-      ),
       body: ListView(
         shrinkWrap: true,
         physics: BouncingScrollPhysics(),
@@ -112,7 +108,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     color: AppColor.secondary.withOpacity(0.5),
                   ),
                   title: 'Meine Anzeigen',
-                  subtitle: 'Passe oder Lösche deine Anzeigen',
+                  subtitle:
+                      'Passe deine Anzeigen hier an oder lösche deine Anzeigen',
                 ),
                 MenuTileWidget(
                   onTap: () {},
@@ -174,7 +171,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     color: Colors.red,
                   ),
                   iconBackground: Colors.red[100]!,
-                  title: 'Log Out',
+                  title: 'Ausloggen',
+                  subtitle: 'Hier kannst du dich ausloggen',
                   titleColor: Colors.red,
                 ),
               ],

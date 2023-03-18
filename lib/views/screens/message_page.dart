@@ -15,6 +15,7 @@ class MessagePage extends StatefulWidget {
 
 class _MessagePageState extends State<MessagePage> {
   List<Message> listMessage = MessageService.messageData;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,12 +35,6 @@ class _MessagePageState extends State<MessagePage> {
                 style: TextStyle(
                     fontSize: 10, color: Colors.black.withOpacity(0.7))),
           ],
-        ),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          icon: SvgPicture.asset('assets/icons/Arrow-left.svg'),
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
