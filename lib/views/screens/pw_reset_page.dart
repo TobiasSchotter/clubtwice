@@ -1,17 +1,16 @@
-import 'package:clubtwice/views/screens/pw_reset_page.dart';
+import 'package:clubtwice/views/screens/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:clubtwice/constant/app_color.dart';
-import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:clubtwice/views/screens/register_page.dart';
 
-class LoginPage extends StatefulWidget {
+class ResetPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _ResetPageState createState() => _ResetPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _ResetPageState extends State<ResetPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: Colors.white,
         elevation: 0,
         // ignore: prefer_const_constructors
-        title: Text('Einloggen',
+        title: Text('Passwort wiederherstellen',
             style: const TextStyle(
                 color: Colors.black,
                 fontSize: 14,
@@ -80,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
           Container(
             margin: EdgeInsets.only(top: 20, bottom: 12),
             child: Text(
-              'Willkommen zurück',
+              'ClubTwice',
               style: TextStyle(
                 color: AppColor.secondary,
                 fontWeight: FontWeight.w700,
@@ -92,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
           Container(
             margin: EdgeInsets.only(bottom: 32),
             child: Text(
-              'Bei ClubTwice schenkst du Vereinskleidung neues Leben und verhilfst Vereinen zu mehr Nachhaltigkeit',
+              'Bitte gib deine E-Mail Adresse an. Du erhälst dann eine E-Mail mit einem Link, über den du ein neues Passwort wählen kannst.',
               style: TextStyle(
                   color: AppColor.secondary.withOpacity(0.7),
                   fontSize: 12,
@@ -125,65 +124,15 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           SizedBox(height: 16),
-          // Password
-          TextField(
-            autofocus: false,
-            obscureText: true,
-            decoration: InputDecoration(
-              hintText: '**********',
-              prefixIcon: Container(
-                padding: EdgeInsets.all(12),
-                child: SvgPicture.asset('assets/icons/Lock.svg',
-                    color: AppColor.primary),
-              ),
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 10, horizontal: 14),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColor.border, width: 1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColor.primary, width: 1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              fillColor: AppColor.primarySoft,
-              filled: true,
-              //
-              suffixIcon: IconButton(
-                onPressed: () {},
-                icon: SvgPicture.asset('assets/icons/Hide.svg',
-                    color: AppColor.primary),
-              ),
-            ),
-          ),
-          // Forgot Passowrd
-          Container(
-            alignment: Alignment.centerRight,
-            child: TextButton(
-              onPressed: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => ResetPage()));
-              },
-              child: Text(
-                'Passwort vergessen?',
-                style: TextStyle(
-                    fontSize: 12,
-                    color: AppColor.secondary.withOpacity(0.5),
-                    fontWeight: FontWeight.w700),
-              ),
-              style: TextButton.styleFrom(
-                foregroundColor: AppColor.primary.withOpacity(0.1),
-              ),
-            ),
-          ),
+
           // Sign In button
           ElevatedButton(
             onPressed: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => PageSwitcher()));
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => LoginPage()));
             },
             child: Text(
-              'Einloggen',
+              'Senden',
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
