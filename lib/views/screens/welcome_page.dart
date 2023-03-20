@@ -17,9 +17,10 @@ class WelcomePage extends StatelessWidget {
           children: [
             // Section 1 - Illustration
             Container(
-              margin: const EdgeInsets.only(top: 32),
+              margin: const EdgeInsets.only(top: 150),
               width: MediaQuery.of(context).size.width,
-              child: SvgPicture.asset('assets/icons/shopping illustration.svg'),
+              //height:
+              child: Image.asset('assets/images/logo.png'),
             ),
             // Section 2 - clubtwice with Caption
             Column(
@@ -27,7 +28,7 @@ class WelcomePage extends StatelessWidget {
                 Container(
                   margin: const EdgeInsets.only(bottom: 12),
                   child: const Text(
-                    'clubtwice',
+                    '',
                     style: TextStyle(
                       color: AppColor.secondary,
                       fontWeight: FontWeight.w700,
@@ -37,7 +38,7 @@ class WelcomePage extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Market in your pocket. Find \nyour best outfit here.',
+                  'Schenke Vereinskleidung neues Leben',
                   style: TextStyle(
                       color: AppColor.secondary.withOpacity(0.7), fontSize: 16),
                   textAlign: TextAlign.center,
@@ -64,7 +65,7 @@ class WelcomePage extends StatelessWidget {
                   shadowColor: Colors.transparent,
                 ),
                 child: const Text(
-                  'Get Started',
+                  'Los gehts',
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,

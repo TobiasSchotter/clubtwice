@@ -19,8 +19,9 @@ class _LoginPageState extends State<LoginPage> {
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Text('Sign in',
-            style: TextStyle(
+        // ignore: prefer_const_constructors
+        title: Text('Einloggen',
+            style: const TextStyle(
                 color: Colors.black,
                 fontSize: 14,
                 fontWeight: FontWeight.w600)),
@@ -28,7 +29,8 @@ class _LoginPageState extends State<LoginPage> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: SvgPicture.asset('assets/icons/Arrow-left.svg'),
+          icon: Icon(Icons.arrow_back_outlined),
+          color: Colors.black,
         ),
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
@@ -49,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Dont have an account?',
+                'Du hast noch keinen Account?',
                 style: TextStyle(
                   color: AppColor.secondary.withOpacity(0.7),
                   fontSize: 14,
@@ -57,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               Text(
-                ' Sign up',
+                ' Anmelden',
                 style: TextStyle(
                   color: AppColor.primary,
                   fontSize: 14,
@@ -77,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
           Container(
             margin: EdgeInsets.only(top: 20, bottom: 12),
             child: Text(
-              'Welcome Back Mate ! 😁',
+              'Willkommen zurück',
               style: TextStyle(
                 color: AppColor.secondary,
                 fontWeight: FontWeight.w700,
@@ -89,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
           Container(
             margin: EdgeInsets.only(bottom: 32),
             child: Text(
-              'Lorem ipsum dolor sit amet, consectetur adipiscing \nelit, sed do eiusmod ',
+              'Bei ClubTwice schenkst du Vereinskleidung neues Leben und verhilfst Vereinen zu mehr Nachhaltigkeit',
               style: TextStyle(
                   color: AppColor.secondary.withOpacity(0.7),
                   fontSize: 12,
@@ -101,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
           TextField(
             autofocus: false,
             decoration: InputDecoration(
-              hintText: 'youremail@email.com',
+              hintText: 'deine.email@email.com',
               prefixIcon: Container(
                 padding: EdgeInsets.all(12),
                 child: SvgPicture.asset('assets/icons/Message.svg',
@@ -159,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
             child: TextButton(
               onPressed: () {},
               child: Text(
-                'Forgot Password ?',
+                'Passwort vergessen?',
                 style: TextStyle(
                     fontSize: 12,
                     color: AppColor.secondary.withOpacity(0.5),
@@ -177,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
                   MaterialPageRoute(builder: (context) => PageSwitcher()));
             },
             child: Text(
-              'Sign in',
+              'Einloggen',
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,

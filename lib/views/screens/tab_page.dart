@@ -1,3 +1,6 @@
+import 'package:clubtwice/views/screens/message_page.dart';
+import 'package:clubtwice/views/screens/notification_page.dart';
+import 'package:clubtwice/views/screens/welcome_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
 
@@ -9,6 +12,27 @@ class TabPage extends StatefulWidget {
 }
 
 class _TabPageState extends State<TabPage> {
+  List<Map<String, dynamic>>? _pages;
+  int _selectedPageIndex = 0;
+  void _selectPage(int index) {
+    setState(() {
+      _selectedPageIndex = index;
+    });
+  }
+
+  @override
+  void initState() {
+    _pages = [
+      {
+        'page': NotificationPage(),
+      },
+      {
+        'page': const WelcomePage(),
+      },
+    ];
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) => DefaultTabController(
         length: 2,
@@ -29,9 +53,7 @@ class _TabPageState extends State<TabPage> {
               ],
             ),
           ),
-          body: const TabBarView(
-            children: [],
-          ),
+          body: _pages![_selectedPageIndex]['page'],
         ),
       );
 }
