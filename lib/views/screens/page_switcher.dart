@@ -1,4 +1,5 @@
 import 'package:clubtwice/views/screens/message_page.dart';
+import 'package:clubtwice/views/screens/sell_page.dart';
 import 'package:clubtwice/views/screens/tab_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
@@ -21,7 +22,7 @@ class _PageSwitcherState extends State<PageSwitcher> {
       body: [
         HomePage(),
         FeedsPage(),
-        NotificationPage(),
+        SellPage(),
         TabPage(),
         ProfilePage(),
       ][_selectedIndex],
