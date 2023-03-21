@@ -19,7 +19,7 @@ class _LoginPageState extends State<RegisterPage> {
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Text('Sign up',
+        title: Text('Registrieren',
             style: TextStyle(
                 color: Colors.black,
                 fontSize: 14,
@@ -49,7 +49,7 @@ class _LoginPageState extends State<RegisterPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Already have an account?',
+                'Du hast schon einen Account?',
                 style: TextStyle(
                   color: AppColor.secondary.withOpacity(0.7),
                   fontSize: 14,
@@ -57,7 +57,7 @@ class _LoginPageState extends State<RegisterPage> {
                 ),
               ),
               Text(
-                ' Sign in',
+                ' Anmelden',
                 style: TextStyle(
                   color: AppColor.primary,
                   fontSize: 14,
@@ -77,7 +77,7 @@ class _LoginPageState extends State<RegisterPage> {
           Container(
             margin: EdgeInsets.only(top: 20, bottom: 12),
             child: Text(
-              'Welcome to clubtwice  👋',
+              'Willkommen bei CubTwice  👋',
               style: TextStyle(
                 color: AppColor.secondary,
                 fontWeight: FontWeight.w700,
@@ -89,7 +89,7 @@ class _LoginPageState extends State<RegisterPage> {
           Container(
             margin: EdgeInsets.only(bottom: 32),
             child: Text(
-              'Lorem ipsum dolor sit amet, consectetur adipiscing \nelit, sed do eiusmod ',
+              'Bei ClubTwice schenkst du Vereinskleidung neues Leben und verhilfst Vereinen zu mehr Nachhaltigkeit',
               style: TextStyle(
                   color: AppColor.secondary.withOpacity(0.7),
                   fontSize: 12,
@@ -101,7 +101,7 @@ class _LoginPageState extends State<RegisterPage> {
           TextField(
             autofocus: false,
             decoration: InputDecoration(
-              hintText: 'Full Name',
+              hintText: 'Vorname',
               prefixIcon: Container(
                 padding: EdgeInsets.all(12),
                 child: SvgPicture.asset('assets/icons/Profile.svg',
@@ -126,14 +126,11 @@ class _LoginPageState extends State<RegisterPage> {
           TextField(
             autofocus: false,
             decoration: InputDecoration(
-              hintText: 'Username',
+              hintText: 'Nachname',
               prefixIcon: Container(
                 padding: EdgeInsets.all(12),
-                child: Text('@',
-                    style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w600,
-                        color: AppColor.primary)),
+                child: SvgPicture.asset('assets/icons/Profile.svg',
+                    color: AppColor.primary),
               ),
               contentPadding:
                   EdgeInsets.symmetric(vertical: 10, horizontal: 14),
@@ -155,7 +152,7 @@ class _LoginPageState extends State<RegisterPage> {
             autofocus: false,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-              hintText: 'youremail@email.com',
+              hintText: 'deine.email@email.com',
               prefixIcon: Container(
                 padding: EdgeInsets.all(12),
                 child: SvgPicture.asset('assets/icons/Message.svg',
@@ -181,7 +178,7 @@ class _LoginPageState extends State<RegisterPage> {
             autofocus: false,
             obscureText: true,
             decoration: InputDecoration(
-              hintText: 'Password',
+              hintText: 'Passwort',
               prefixIcon: Container(
                 padding: EdgeInsets.all(12),
                 child: SvgPicture.asset('assets/icons/Lock.svg',
@@ -213,7 +210,7 @@ class _LoginPageState extends State<RegisterPage> {
             autofocus: false,
             obscureText: true,
             decoration: InputDecoration(
-              hintText: 'Repeat Password',
+              hintText: 'Passwort wiederholen',
               prefixIcon: Container(
                 padding: EdgeInsets.all(12),
                 child: SvgPicture.asset('assets/icons/Lock.svg',
@@ -247,7 +244,7 @@ class _LoginPageState extends State<RegisterPage> {
                   builder: (context) => OTPVerificationPage()));
             },
             child: Text(
-              'Sign up',
+              'Registrieren',
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
@@ -267,7 +264,7 @@ class _LoginPageState extends State<RegisterPage> {
             alignment: Alignment.center,
             margin: EdgeInsets.symmetric(vertical: 16),
             child: Text(
-              'or continue with',
+              'oder',
               style: TextStyle(fontSize: 12, color: Colors.grey[600]),
             ),
           ),
@@ -283,7 +280,7 @@ class _LoginPageState extends State<RegisterPage> {
                 Container(
                   margin: EdgeInsets.only(left: 16),
                   child: Text(
-                    'Continue with Google',
+                    'Registiere dich mit Google',
                     style: TextStyle(
                       color: AppColor.secondary,
                       fontWeight: FontWeight.w600,

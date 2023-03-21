@@ -19,7 +19,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Text('Verification',
+        title: Text('Verifizierung',
             style: TextStyle(
                 color: Colors.black,
                 fontSize: 14,
@@ -40,7 +40,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
           Container(
             margin: EdgeInsets.only(top: 20, bottom: 8),
             child: Text(
-              'Email verification',
+              'E-Mail Verifizierung',
               style: TextStyle(
                 color: AppColor.secondary,
                 fontWeight: FontWeight.w700,
@@ -50,17 +50,24 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(bottom: 32),
+            margin: EdgeInsets.only(bottom: 8),
             child: Row(
               children: [
                 Text(
-                  'OTP Code sent to your email',
+                  'OTP Code wurde an folgende E-Mail Adresse geschickt:',
                   style: TextStyle(
                       color: AppColor.secondary.withOpacity(0.7), fontSize: 14),
                 ),
-                SizedBox(width: 8),
+              ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 0, bottom: 20),
+            child: Row(
+              children: [
+                SizedBox(width: 10),
                 Text(
-                  'youremail@email.com',
+                  'deine.email@email.com',
                   style: TextStyle(
                       color: AppColor.primary,
                       fontSize: 14,
@@ -93,7 +100,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                     MaterialPageRoute(builder: (context) => PageSwitcher()));
               },
               child: Text(
-                'Verify',
+                'Verifizieren',
                 style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
@@ -113,7 +120,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
           ElevatedButton(
             onPressed: () {},
             child: Text(
-              'Resend OTP Code',
+              'Neuen Code anfordern',
               style: TextStyle(
                 color: AppColor.secondary,
                 fontWeight: FontWeight.w600,
