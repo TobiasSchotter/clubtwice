@@ -22,7 +22,7 @@ class _PageSwitcherState extends State<PageSwitcher> {
         HomePage(),
         FeedsPage(),
         NotificationPage(),
-        const TabPage(),
+        TabPage(),
         ProfilePage(),
       ][_selectedIndex],
       bottomNavigationBar: NavigationBar(
