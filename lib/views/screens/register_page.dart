@@ -28,7 +28,8 @@ class _LoginPageState extends State<RegisterPage> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: SvgPicture.asset('assets/icons/Arrow-left.svg'),
+          icon: Icon(Icons.arrow_back_outlined),
+          color: Colors.black,
         ),
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
@@ -77,7 +78,7 @@ class _LoginPageState extends State<RegisterPage> {
           Container(
             margin: EdgeInsets.only(top: 20, bottom: 12),
             child: Text(
-              'Willkommen bei CubTwice  👋',
+              'Willkommen bei ClubTwice  👋',
               style: TextStyle(
                 color: AppColor.secondary,
                 fontWeight: FontWeight.w700,
@@ -281,6 +282,42 @@ class _LoginPageState extends State<RegisterPage> {
                   margin: EdgeInsets.only(left: 16),
                   child: Text(
                     'Registiere dich mit Google',
+                    style: TextStyle(
+                      color: AppColor.secondary,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                )
+              ],
+            ),
+            style: ElevatedButton.styleFrom(
+              foregroundColor: AppColor.primary,
+              padding: EdgeInsets.symmetric(horizontal: 36, vertical: 12),
+              backgroundColor: AppColor.primarySoft,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
+              elevation: 0,
+              shadowColor: Colors.transparent,
+            ),
+          ),
+          Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.symmetric(vertical: 5),
+          ),
+
+          // SIgn in With Facebook
+          ElevatedButton(
+            onPressed: () {},
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  'assets/icons/Google.svg',
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 16),
+                  child: Text(
+                    'Registiere dich mit Facebook',
                     style: TextStyle(
                       color: AppColor.secondary,
                       fontWeight: FontWeight.w600,

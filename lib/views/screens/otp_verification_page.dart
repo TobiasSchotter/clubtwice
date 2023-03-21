@@ -28,7 +28,8 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: SvgPicture.asset('assets/icons/Arrow-left.svg'),
+          icon: Icon(Icons.arrow_back_outlined),
+          color: Colors.black,
         ),
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
