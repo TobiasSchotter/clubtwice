@@ -39,6 +39,7 @@ dependencies:
   smooth_page_indicator: ^1.0.1
   pin_code_fields: ^7.4.0
   money2: ^3.3.0
+  image_picker: ^0.8.7
 
 dev_dependencies:
   flutter_test:
