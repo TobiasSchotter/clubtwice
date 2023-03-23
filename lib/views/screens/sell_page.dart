@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:clubtwice/constant/app_color.dart';
 
 class SellPage extends StatefulWidget {
   const SellPage({Key? key}) : super(key: key);
@@ -16,6 +17,9 @@ class _SellPageState extends State<SellPage> {
   TextEditingController _titleController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
   TextEditingController _priceController = TextEditingController();
+  String selectedSport = "Fußball";
+  String selectedClub = "SG Quelle";
+  String selectedSize = "Einheitsgröße";
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +33,6 @@ class _SellPageState extends State<SellPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SizedBox(height: 16.0),
               Row(
                 children: [
                   Expanded(
@@ -37,21 +40,39 @@ class _SellPageState extends State<SellPage> {
                       onPressed: () {
                         _pickImage();
                       },
-                      child: Text('Add Photo'),
+                      child: Text('Foto hinzufügen'),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 36, vertical: 18),
+                        backgroundColor: AppColor.primary,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16)),
+                        elevation: 0,
+                        shadowColor: Colors.transparent,
+                      ),
                     ),
                   ),
-                  SizedBox(width: 16.0),
+                  Container(width: 16.0),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
                         _removeImage();
                       },
-                      child: Text('Remove Photo'),
+                      child: Text('Foto entfernen'),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 36, vertical: 18),
+                        backgroundColor: AppColor.primary,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16)),
+                        elevation: 0,
+                        shadowColor: Colors.transparent,
+                      ),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 16.0),
+              Container(height: 16.0),
               GridView.builder(
                 shrinkWrap: true,
                 itemCount: _imageList.length,
@@ -67,34 +88,151 @@ class _SellPageState extends State<SellPage> {
                   );
                 },
               ),
-              TextFormField(
-                controller: _titleController,
-                decoration: InputDecoration(
-                  labelText: 'Title',
+              Container(
+                margin: EdgeInsets.only(top: 20, bottom: 0),
+                child: Text(
+                  'Titel',
+                  style: TextStyle(
+                    color: AppColor.secondary.withOpacity(0.7),
+                  ),
                 ),
               ),
-              SizedBox(height: 16.0),
+              TextFormField(
+                  controller: _titleController,
+                  cursorColor: AppColor.primarySoft,
+                  decoration: const InputDecoration(
+                    //icon: Icon(Icons.sell),
+                    hintText: 'z.B. Aufwärmshirt Kurzarm',
+                  )),
+              Container(
+                margin: EdgeInsets.only(top: 20, bottom: 0),
+                child: Text(
+                  'Beschreibung',
+                  style: TextStyle(
+                    color: AppColor.secondary.withOpacity(0.7),
+                  ),
+                ),
+              ),
               TextFormField(
                 controller: _descriptionController,
+                cursorColor: AppColor.primarySoft,
                 decoration: InputDecoration(
-                  labelText: 'Description',
-                ),
+                    //labelText: 'Description',
+                    ),
                 maxLines: 5,
               ),
-              SizedBox(height: 16.0),
+              Container(
+                height: 16,
+              ),
+              DropdownButtonFormField<String>(
+                  value: selectedSize,
+                  decoration: InputDecoration(
+                    labelText: 'Größe auswählen',
+                    border: OutlineInputBorder(),
+                  ),
+                  items: <String>[
+                    'Einheitsgröße',
+                    '116',
+                    '128',
+                    '116',
+                    '128',
+                    '146',
+                    '164',
+                    '170',
+                    'S',
+                    'M',
+                    'L',
+                    'XL',
+                    'XXL',
+                  ].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedSize = newValue!;
+                    });
+                  }),
+              Container(
+                height: 16,
+              ),
+              DropdownButtonFormField<String>(
+                  value: selectedClub,
+                  decoration: InputDecoration(
+                    labelText: 'Verein auswählen',
+                    border: OutlineInputBorder(),
+                  ),
+                  items: <String>['SG Quelle', 'SGV Nürnberg Fürth']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedClub = newValue!;
+                    });
+                  }),
+              Container(
+                height: 16,
+              ),
+              DropdownButtonFormField<String>(
+                  focusColor: AppColor.primarySoft,
+                  value: selectedSport,
+                  decoration: InputDecoration(
+                    //contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                    //border: InputBorder.none,
+                    labelText: 'Sportart auswählen',
+
+                    border: OutlineInputBorder(),
+                  ),
+                  items: <String>['Fußball', 'Basketball']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedSport = newValue!;
+                    });
+                  }),
+              Container(
+                margin: EdgeInsets.only(top: 20, bottom: 0),
+                child: Text(
+                  'Preis',
+                  style: TextStyle(
+                    color: AppColor.secondary.withOpacity(0.7),
+                  ),
+                ),
+              ),
               TextFormField(
                 controller: _priceController,
+                cursorColor: AppColor.primarySoft,
                 decoration: InputDecoration(
-                  labelText: 'Price',
+                  hintText: 'z.B. 5 Euro',
                 ),
                 keyboardType: TextInputType.number,
               ),
-              SizedBox(height: 16.0),
+              Container(height: 16.0),
               ElevatedButton(
                 onPressed: () {
                   // Implement logic to submit the item for sale
                 },
-                child: Text('Submit'),
+                child: Text('Einstellen'),
+                style: ElevatedButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
+                  backgroundColor: AppColor.primary,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
+                  elevation: 0,
+                  shadowColor: Colors.transparent,
+                ),
               ),
             ],
           ),
