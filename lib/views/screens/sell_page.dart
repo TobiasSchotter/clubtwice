@@ -20,12 +20,15 @@ class _SellPageState extends State<SellPage> {
   String selectedSport = "Fußball";
   String selectedClub = "SG Quelle";
   String selectedSize = "Einheitsgröße";
+  String SelectedBrand = "Adidas";
+  String selectedCondition = "Neu";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sell Page'),
+        backgroundColor: AppColor.primary,
+        title: Text('Vereinskleidung verkaufen'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -73,20 +76,23 @@ class _SellPageState extends State<SellPage> {
                 ],
               ),
               Container(height: 16.0),
-              GridView.builder(
-                shrinkWrap: true,
-                itemCount: _imageList.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 4.0,
-                  mainAxisSpacing: 4.0,
+              Container(
+                color: AppColor.primarySoft,
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  itemCount: _imageList.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 4.0,
+                    mainAxisSpacing: 4.0,
+                  ),
+                  itemBuilder: (BuildContext context, int index) {
+                    return Image.file(
+                      _imageList[index],
+                      fit: BoxFit.cover,
+                    );
+                  },
                 ),
-                itemBuilder: (BuildContext context, int index) {
-                  return Image.file(
-                    _imageList[index],
-                    fit: BoxFit.cover,
-                  );
-                },
               ),
               Container(
                 margin: EdgeInsets.only(top: 20, bottom: 0),
@@ -113,13 +119,16 @@ class _SellPageState extends State<SellPage> {
                   ),
                 ),
               ),
-              TextFormField(
-                controller: _descriptionController,
-                cursorColor: AppColor.primarySoft,
-                decoration: InputDecoration(
-                    //labelText: 'Description',
-                    ),
-                maxLines: 5,
+              Container(
+                color: AppColor.primarySoft,
+                child: TextFormField(
+                  controller: _descriptionController,
+                  cursorColor: AppColor.primarySoft,
+                  decoration: InputDecoration(
+                      //labelText: 'Description',
+                      fillColor: Colors.black),
+                  maxLines: 5,
+                ),
               ),
               Container(
                 height: 16,
@@ -153,6 +162,48 @@ class _SellPageState extends State<SellPage> {
                   onChanged: (newValue) {
                     setState(() {
                       selectedSize = newValue!;
+                    });
+                  }),
+              Container(
+                height: 16,
+              ),
+              DropdownButtonFormField<String>(
+                  value: selectedCondition,
+                  decoration: InputDecoration(
+                    labelText: 'Zustand auswählen',
+                    border: OutlineInputBorder(),
+                  ),
+                  items: <String>['Neu', 'Sehr gut', 'Gut', 'Müll']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedCondition = newValue!;
+                    });
+                  }),
+              Container(
+                height: 16,
+              ),
+              DropdownButtonFormField<String>(
+                  value: SelectedBrand,
+                  decoration: InputDecoration(
+                    labelText: 'Marke auswählen',
+                    border: OutlineInputBorder(),
+                  ),
+                  items: <String>['Adidas', 'Puma', 'Nike']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      SelectedBrand = newValue!;
                     });
                   }),
               Container(
@@ -213,10 +264,19 @@ class _SellPageState extends State<SellPage> {
               TextFormField(
                 controller: _priceController,
                 cursorColor: AppColor.primarySoft,
-                decoration: InputDecoration(
-                  hintText: 'z.B. 5 Euro',
-                ),
                 keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  suffixText: '€',
+                  hintText: '',
+                ),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Bitte geben Sie einen Preis ein';
+                  } else if (double.tryParse(value) == null) {
+                    return 'Bitte geben Sie eine gültige Zahl ein';
+                  }
+                  return null;
+                },
               ),
               Container(height: 16.0),
               ElevatedButton(
