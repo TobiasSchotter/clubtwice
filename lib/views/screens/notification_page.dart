@@ -18,10 +18,6 @@ class _NotificationPageState extends State<NotificationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(
-        cartValue: 2,
-        chatValue: 2,
-      ),
       body: ListView(
         shrinkWrap: true,
         physics: BouncingScrollPhysics(),

@@ -5,7 +5,7 @@ import 'package:clubtwice/core/model/Category.dart';
 import 'package:clubtwice/core/model/Product.dart';
 import 'package:clubtwice/core/services/CategoryService.dart';
 import 'package:clubtwice/core/services/ProductService.dart';
-import 'package:clubtwice/views/screens/empty_cart_page.dart';
+
 import 'package:clubtwice/views/screens/message_page.dart';
 import 'package:clubtwice/views/screens/search_page.dart';
 import 'package:clubtwice/views/widgets/category_card.dart';
@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'Find the best \noutfit for you.',
+                        'Find the best outfit for you.',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 22,
@@ -68,31 +68,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       Row(
-                        children: [
-                          CustomIconButtonWidget(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => EmptyCartPage()));
-                            },
-                            value: 0,
-                            icon: SvgPicture.asset(
-                              'assets/icons/Bag.svg',
-                              color: Colors.white,
-                            ),
-                          ),
-                          CustomIconButtonWidget(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => MessagePage()));
-                            },
-                            value: 2,
-                            margin: const EdgeInsets.only(left: 16),
-                            icon: SvgPicture.asset(
-                              'assets/icons/Chat.svg',
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
+                        children: [],
                       ),
                     ],
                   ),

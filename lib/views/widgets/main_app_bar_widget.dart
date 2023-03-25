@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:clubtwice/constant/app_color.dart';
-import 'package:clubtwice/views/screens/cart_page.dart';
+
 import 'package:clubtwice/views/screens/message_page.dart';
 import 'package:clubtwice/views/screens/search_page.dart';
 import 'package:clubtwice/views/widgets/custom_icon_button_widget.dart';
@@ -42,30 +42,6 @@ class _MainAppBarState extends State<MainAppBar> {
                 ),
               );
             },
-          ),
-          CustomIconButtonWidget(
-            onTap: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => CartPage()));
-            },
-            value: widget.cartValue,
-            margin: EdgeInsets.only(left: 16),
-            icon: SvgPicture.asset(
-              'assets/icons/Bag.svg',
-              color: Colors.white,
-            ),
-          ),
-          CustomIconButtonWidget(
-            onTap: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => MessagePage()));
-            },
-            value: widget.chatValue,
-            margin: EdgeInsets.only(left: 16),
-            icon: SvgPicture.asset(
-              'assets/icons/Chat.svg',
-              color: Colors.white,
-            ),
           ),
         ],
       ),

@@ -4,9 +4,6 @@ import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/core/model/Product.dart';
 import 'package:clubtwice/views/screens/image_viewer.dart';
 import 'package:clubtwice/views/widgets/custom_app_bar.dart';
-import 'package:clubtwice/views/widgets/modals/add_to_cart_modal.dart';
-import 'package:clubtwice/views/widgets/selectable_circle_color.dart';
-import 'package:clubtwice/views/widgets/selectable_circle_size.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:money2/money2.dart';
 
@@ -58,31 +55,6 @@ class _ProductDetailState extends State<ProductDetail> {
             Expanded(
               child: SizedBox(
                 height: 64,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColor.primary,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16)),
-                    elevation: 0,
-                  ),
-                  onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      backgroundColor: Colors.transparent,
-                      builder: (context) {
-                        return AddToCartModal();
-                      },
-                    );
-                  },
-                  child: const Text(
-                    'Add To Cart',
-                    style: TextStyle(
-                        fontFamily: 'poppins',
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                        fontSize: 16),
-                  ),
-                ),
               ),
             ),
           ],
@@ -194,57 +166,6 @@ class _ProductDetailState extends State<ProductDetail> {
                   style: TextStyle(
                       color: AppColor.secondary.withOpacity(0.7),
                       height: 150 / 100),
-                ),
-              ],
-            ),
-          ),
-          // Section 3 - Color Picker
-          Container(
-            width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            margin: const EdgeInsets.only(bottom: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Color',
-                  style: TextStyle(
-                    color: AppColor.secondary,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'poppins',
-                  ),
-                ),
-                SelectableCircleColor(
-                  colorWay: product.colors,
-                  margin: const EdgeInsets.only(top: 12),
-                ),
-              ],
-            ),
-          ),
-
-          // Section 4 - Size Picker
-          Container(
-            width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            margin: const EdgeInsets.only(bottom: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Size',
-                  style: TextStyle(
-                    color: AppColor.secondary,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'poppins',
-                  ),
-                ),
-                SelectableCircleSize(
-                  productSize: product.sizes,
-                  margin: const EdgeInsets.only(top: 12),
                 ),
               ],
             ),
