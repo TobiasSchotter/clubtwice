@@ -5,6 +5,7 @@ import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/core/model/Search.dart';
 import 'package:clubtwice/core/services/SearchService.dart';
 import 'package:clubtwice/views/screens/search_result_page.dart';
+import 'package:clubtwice/views/widgets/popular_search_card.dart';
 import 'package:clubtwice/views/widgets/search_history_tile.dart';
 
 class SearchPage extends StatefulWidget {
@@ -14,7 +15,7 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   List<SearchHistory> listSearchHistory = SearchService.listSearchHistory;
-
+  List<PopularSearch> listPopularSearch = SearchService.listPopularSearch;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,6 +121,32 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ],
           ),
+          // Section 2 - Popular Search
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: Text(
+                  'Popular search.',
+                  style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400),
+                ),
+              ),
+              Wrap(
+                direction: Axis.horizontal,
+                children: List.generate(listPopularSearch.length, (index) {
+                  return PopularSearchCard(
+                    data: listPopularSearch[index],
+                    onTap: () {},
+                  );
+                }),
+              ),
+            ],
+          )
         ],
       ),
     );
