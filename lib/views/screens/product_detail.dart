@@ -98,7 +98,7 @@ class _ProductDetailState extends State<ProductDetail> {
               // appbar
               CustomAppBar(
                 title: product.storeName,
-                leftIcon: SvgPicture.asset('assets/icons/Arrow-left.svg'),
+                leftIcon: SvgPicture.asset('assets/icons/Bookmark.svg'),
                 rightIcon: SvgPicture.asset(
                   'assets/icons/Bookmark.svg',
                   color: Colors.black.withOpacity(0.5),

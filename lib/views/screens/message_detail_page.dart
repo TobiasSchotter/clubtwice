@@ -52,7 +52,8 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            icon: SvgPicture.asset('assets/icons/Arrow-left.svg'),
+            icon: Icon(Icons.arrow_back_outlined),
+            color: Colors.black,
           ),
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(1),

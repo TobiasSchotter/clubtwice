@@ -37,7 +37,7 @@ class _SearchResultPageState extends State<SearchResultPage>
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
           icon: SvgPicture.asset(
-            'assets/icons/Arrow-left.svg',
+            'assets/icons/Filter.svg',
             color: Colors.white,
           ),
         ),
