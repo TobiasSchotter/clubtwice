@@ -20,42 +20,6 @@ var productRawData = [
     'description':
         'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
     'store_name': 'Nike Indonesia',
-    'colors': [
-      {
-        'name': 'black',
-        'color': Colors.black,
-      },
-      {
-        'name': 'blueGrey',
-        'color': Colors.blueGrey[200],
-      },
-      {
-        'name': 'pink',
-        'color': Colors.pink[100],
-      },
-      {
-        'name': 'white',
-        'color': Colors.white,
-      },
-    ],
-    'sizes': [
-      {
-        'size': '36.0',
-        'name': '36',
-      },
-      {
-        'size': '37.0',
-        'name': '37',
-      },
-      {
-        'size': '38.0',
-        'name': '38',
-      },
-      {
-        'size': '42.0',
-        'name': '42',
-      },
-    ],
     'reviews': [
       {
         'photo_url': 'assets/images/avatar1.jpg',
