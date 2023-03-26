@@ -6,12 +6,38 @@ import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:clubtwice/views/screens/register_page.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:clubtwice/core/services/auth.dart';
+
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  String? errorMessage = '';
+  bool isLogin = true;
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  Future<void> signInWithEmailAndPassword() async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const PageSwitcher()));
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        errorMessage = e.message;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: Icon(Icons.arrow_back_outlined),
+          icon: const Icon(Icons.arrow_back_outlined),
           color: Colors.black,
         ),
         systemOverlayStyle: SystemUiOverlayStyle.light,
@@ -41,8 +67,8 @@ class _LoginPageState extends State<LoginPage> {
         alignment: Alignment.center,
         child: TextButton(
           onPressed: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => RegisterPage()));
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const RegisterPage()));
           },
           style: TextButton.styleFrom(
             foregroundColor: AppColor.secondary.withOpacity(0.1),
@@ -59,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              Text(
+              const Text(
                 ' Anmelden',
                 style: TextStyle(
                   color: AppColor.primary,
@@ -73,13 +99,13 @@ class _LoginPageState extends State<LoginPage> {
       ),
       body: ListView(
         shrinkWrap: true,
-        padding: EdgeInsets.symmetric(horizontal: 24),
-        physics: BouncingScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        physics: const BouncingScrollPhysics(),
         children: [
           // Section 1 - Header
           Container(
-            margin: EdgeInsets.only(top: 20, bottom: 12),
-            child: Text(
+            margin: const EdgeInsets.only(top: 20, bottom: 12),
+            child: const Text(
               'Willkommen zurück',
               style: TextStyle(
                 color: AppColor.secondary,
@@ -90,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(bottom: 32),
+            margin: const EdgeInsets.only(bottom: 32),
             child: Text(
               'Bei ClubTwice schenkst du Vereinskleidung neues Leben und verhilfst Vereinen zu mehr Nachhaltigkeit',
               style: TextStyle(
@@ -106,25 +132,25 @@ class _LoginPageState extends State<LoginPage> {
             decoration: InputDecoration(
               hintText: 'deine.email@email.com',
               prefixIcon: Container(
-                padding: EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12),
                 child: SvgPicture.asset('assets/icons/Message.svg',
                     color: AppColor.primary),
               ),
               contentPadding:
-                  EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColor.border, width: 1),
+                borderSide: const BorderSide(color: AppColor.border, width: 1),
                 borderRadius: BorderRadius.circular(8),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColor.primary, width: 1),
+                borderSide: const BorderSide(color: AppColor.primary, width: 1),
                 borderRadius: BorderRadius.circular(8),
               ),
               fillColor: AppColor.primarySoft,
               filled: true,
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           // Password
           TextField(
             autofocus: false,
@@ -132,18 +158,18 @@ class _LoginPageState extends State<LoginPage> {
             decoration: InputDecoration(
               hintText: '**********',
               prefixIcon: Container(
-                padding: EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12),
                 child: SvgPicture.asset('assets/icons/Lock.svg',
                     color: AppColor.primary),
               ),
               contentPadding:
-                  EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColor.border, width: 1),
+                borderSide: const BorderSide(color: AppColor.border, width: 1),
                 borderRadius: BorderRadius.circular(8),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColor.primary, width: 1),
+                borderSide: const BorderSide(color: AppColor.primary, width: 1),
                 borderRadius: BorderRadius.circular(8),
               ),
               fillColor: AppColor.primarySoft,
@@ -161,9 +187,12 @@ class _LoginPageState extends State<LoginPage> {
             alignment: Alignment.centerRight,
             child: TextButton(
               onPressed: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => ResetPage()));
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const ResetPage()));
               },
+              style: TextButton.styleFrom(
+                foregroundColor: AppColor.primary.withOpacity(0.1),
+              ),
               child: Text(
                 'Passwort vergessen?',
                 style: TextStyle(
@@ -171,32 +200,31 @@ class _LoginPageState extends State<LoginPage> {
                     color: AppColor.secondary.withOpacity(0.5),
                     fontWeight: FontWeight.w700),
               ),
-              style: TextButton.styleFrom(
-                foregroundColor: AppColor.primary.withOpacity(0.1),
-              ),
             ),
           ),
           // Sign In button
           ElevatedButton(
             onPressed: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => PageSwitcher()));
+              //Nav needs to be removed after firebase integration
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const PageSwitcher()));
+              //signInWithEmailAndPassword();
             },
-            child: Text(
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
+              backgroundColor: AppColor.primary,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
+              elevation: 0,
+              shadowColor: Colors.transparent,
+            ),
+            child: const Text(
               'Einloggen',
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
                   fontSize: 18,
                   fontFamily: 'poppins'),
-            ),
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(horizontal: 36, vertical: 18),
-              backgroundColor: AppColor.primary,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
-              elevation: 0,
-              shadowColor: Colors.transparent,
             ),
           ),
         ],

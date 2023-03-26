@@ -10,8 +10,10 @@ import 'package:clubtwice/views/screens/notification_page.dart';
 import 'package:clubtwice/views/screens/profile_page.dart';
 
 class PageSwitcher extends StatefulWidget {
+  const PageSwitcher({super.key});
+
   @override
-  _PageSwitcherState createState() => _PageSwitcherState();
+  State<PageSwitcher> createState() => _PageSwitcherState();
 }
 
 class _PageSwitcherState extends State<PageSwitcher> {
@@ -21,9 +23,9 @@ class _PageSwitcherState extends State<PageSwitcher> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: [
-        HomePage(),
+        const HomePage(),
         SearchPage(),
-        SellPage(),
+        const SellPage(),
         TabPage(),
         ProfilePage(),
       ][_selectedIndex],

@@ -1,3 +1,4 @@
+import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -5,12 +6,39 @@ import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/screens/login_page.dart';
 import 'package:clubtwice/views/screens/otp_verification_page.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:clubtwice/core/services/auth.dart';
+
 class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<RegisterPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<RegisterPage> {
+  String? errorMessage = '';
+  bool isLogin = true;
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  Future<void> createUserWithEmailAndPassword() async {
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const OTPVerificationPage()));
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        errorMessage = e.message;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +47,7 @@ class _LoginPageState extends State<RegisterPage> {
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Text('Registrieren',
+        title: const Text('Registrieren',
             style: TextStyle(
                 color: Colors.black,
                 fontSize: 14,
@@ -28,7 +56,7 @@ class _LoginPageState extends State<RegisterPage> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: Icon(Icons.arrow_back_outlined),
+          icon: const Icon(Icons.arrow_back_outlined),
           color: Colors.black,
         ),
         systemOverlayStyle: SystemUiOverlayStyle.light,
@@ -39,8 +67,8 @@ class _LoginPageState extends State<RegisterPage> {
         alignment: Alignment.center,
         child: TextButton(
           onPressed: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => LoginPage()));
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const LoginPage()));
           },
           style: TextButton.styleFrom(
             foregroundColor: AppColor.secondary.withOpacity(0.1),
@@ -57,7 +85,7 @@ class _LoginPageState extends State<RegisterPage> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              Text(
+              const Text(
                 ' Anmelden',
                 style: TextStyle(
                   color: AppColor.primary,
@@ -71,13 +99,13 @@ class _LoginPageState extends State<RegisterPage> {
       ),
       body: ListView(
         shrinkWrap: true,
-        padding: EdgeInsets.symmetric(horizontal: 24),
-        physics: BouncingScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        physics: const BouncingScrollPhysics(),
         children: [
           // Section 1 - Header
           Container(
-            margin: EdgeInsets.only(top: 20, bottom: 12),
-            child: Text(
+            margin: const EdgeInsets.only(top: 20, bottom: 12),
+            child: const Text(
               'Willkommen bei ClubTwice  👋',
               style: TextStyle(
                 color: AppColor.secondary,
@@ -88,7 +116,7 @@ class _LoginPageState extends State<RegisterPage> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(bottom: 32),
+            margin: const EdgeInsets.only(bottom: 32),
             child: Text(
               'Bei ClubTwice schenkst du Vereinskleidung neues Leben und verhilfst Vereinen zu mehr Nachhaltigkeit',
               style: TextStyle(
@@ -104,50 +132,50 @@ class _LoginPageState extends State<RegisterPage> {
             decoration: InputDecoration(
               hintText: 'Vorname',
               prefixIcon: Container(
-                padding: EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12),
                 child: SvgPicture.asset('assets/icons/Profile.svg',
                     color: AppColor.primary),
               ),
               contentPadding:
-                  EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColor.border, width: 1),
+                borderSide: const BorderSide(color: AppColor.border, width: 1),
                 borderRadius: BorderRadius.circular(8),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColor.primary, width: 1),
+                borderSide: const BorderSide(color: AppColor.primary, width: 1),
                 borderRadius: BorderRadius.circular(8),
               ),
               fillColor: AppColor.primarySoft,
               filled: true,
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           // Username
           TextField(
             autofocus: false,
             decoration: InputDecoration(
               hintText: 'Nachname',
               prefixIcon: Container(
-                padding: EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12),
                 child: SvgPicture.asset('assets/icons/Profile.svg',
                     color: AppColor.primary),
               ),
               contentPadding:
-                  EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColor.border, width: 1),
+                borderSide: const BorderSide(color: AppColor.border, width: 1),
                 borderRadius: BorderRadius.circular(8),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColor.primary, width: 1),
+                borderSide: const BorderSide(color: AppColor.primary, width: 1),
                 borderRadius: BorderRadius.circular(8),
               ),
               fillColor: AppColor.primarySoft,
               filled: true,
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           // Email
           TextField(
             autofocus: false,
@@ -155,25 +183,25 @@ class _LoginPageState extends State<RegisterPage> {
             decoration: InputDecoration(
               hintText: 'deine.email@email.com',
               prefixIcon: Container(
-                padding: EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12),
                 child: SvgPicture.asset('assets/icons/Message.svg',
                     color: AppColor.primary),
               ),
               contentPadding:
-                  EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColor.border, width: 1),
+                borderSide: const BorderSide(color: AppColor.border, width: 1),
                 borderRadius: BorderRadius.circular(8),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColor.primary, width: 1),
+                borderSide: const BorderSide(color: AppColor.primary, width: 1),
                 borderRadius: BorderRadius.circular(8),
               ),
               fillColor: AppColor.primarySoft,
               filled: true,
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           // Password
           TextField(
             autofocus: false,
@@ -181,18 +209,18 @@ class _LoginPageState extends State<RegisterPage> {
             decoration: InputDecoration(
               hintText: 'Passwort',
               prefixIcon: Container(
-                padding: EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12),
                 child: SvgPicture.asset('assets/icons/Lock.svg',
                     color: AppColor.primary),
               ),
               contentPadding:
-                  EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColor.border, width: 1),
+                borderSide: const BorderSide(color: AppColor.border, width: 1),
                 borderRadius: BorderRadius.circular(8),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColor.primary, width: 1),
+                borderSide: const BorderSide(color: AppColor.primary, width: 1),
                 borderRadius: BorderRadius.circular(8),
               ),
               fillColor: AppColor.primarySoft,
@@ -205,7 +233,7 @@ class _LoginPageState extends State<RegisterPage> {
               ),
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           // Repeat Password
           TextField(
             autofocus: false,
@@ -213,18 +241,18 @@ class _LoginPageState extends State<RegisterPage> {
             decoration: InputDecoration(
               hintText: 'Passwort wiederholen',
               prefixIcon: Container(
-                padding: EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12),
                 child: SvgPicture.asset('assets/icons/Lock.svg',
                     color: AppColor.primary),
               ),
               contentPadding:
-                  EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColor.border, width: 1),
+                borderSide: const BorderSide(color: AppColor.border, width: 1),
                 borderRadius: BorderRadius.circular(8),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColor.primary, width: 1),
+                borderSide: const BorderSide(color: AppColor.primary, width: 1),
                 borderRadius: BorderRadius.circular(8),
               ),
               fillColor: AppColor.primarySoft,
@@ -237,14 +265,24 @@ class _LoginPageState extends State<RegisterPage> {
               ),
             ),
           ),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
           // Sign Up Button
           ElevatedButton(
             onPressed: () {
+              //Nav needs to be removed after firebase integration
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => OTPVerificationPage()));
+                  builder: (context) => const OTPVerificationPage()));
+              //createUserWithEmailAndPassword();
             },
-            child: Text(
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
+              backgroundColor: AppColor.primary,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
+              elevation: 0,
+              shadowColor: Colors.transparent,
+            ),
+            child: const Text(
               'Registrieren',
               style: TextStyle(
                   color: Colors.white,
@@ -252,18 +290,10 @@ class _LoginPageState extends State<RegisterPage> {
                   fontSize: 18,
                   fontFamily: 'poppins'),
             ),
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(horizontal: 36, vertical: 18),
-              backgroundColor: AppColor.primary,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
-              elevation: 0,
-              shadowColor: Colors.transparent,
-            ),
           ),
           Container(
             alignment: Alignment.center,
-            margin: EdgeInsets.symmetric(vertical: 16),
+            margin: const EdgeInsets.symmetric(vertical: 16),
             child: Text(
               'oder',
               style: TextStyle(fontSize: 12, color: Colors.grey[600]),
@@ -272,6 +302,15 @@ class _LoginPageState extends State<RegisterPage> {
           // SIgn in With Google
           ElevatedButton(
             onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              foregroundColor: AppColor.primary,
+              padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 12),
+              backgroundColor: AppColor.primarySoft,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
+              elevation: 0,
+              shadowColor: Colors.transparent,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -279,8 +318,8 @@ class _LoginPageState extends State<RegisterPage> {
                   'assets/icons/Google.svg',
                 ),
                 Container(
-                  margin: EdgeInsets.only(left: 16),
-                  child: Text(
+                  margin: const EdgeInsets.only(left: 16),
+                  child: const Text(
                     'Registiere dich mit Google',
                     style: TextStyle(
                       color: AppColor.secondary,
@@ -290,24 +329,24 @@ class _LoginPageState extends State<RegisterPage> {
                 )
               ],
             ),
+          ),
+          Container(
+            alignment: Alignment.center,
+            margin: const EdgeInsets.symmetric(vertical: 5),
+          ),
+
+          // SIgn in With Facebook
+          ElevatedButton(
+            onPressed: () {},
             style: ElevatedButton.styleFrom(
               foregroundColor: AppColor.primary,
-              padding: EdgeInsets.symmetric(horizontal: 36, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 12),
               backgroundColor: AppColor.primarySoft,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16)),
               elevation: 0,
               shadowColor: Colors.transparent,
             ),
-          ),
-          Container(
-            alignment: Alignment.center,
-            margin: EdgeInsets.symmetric(vertical: 5),
-          ),
-
-          // SIgn in With Facebook
-          ElevatedButton(
-            onPressed: () {},
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -315,8 +354,8 @@ class _LoginPageState extends State<RegisterPage> {
                   'assets/icons/Google.svg',
                 ),
                 Container(
-                  margin: EdgeInsets.only(left: 16),
-                  child: Text(
+                  margin: const EdgeInsets.only(left: 16),
+                  child: const Text(
                     'Registiere dich mit Facebook',
                     style: TextStyle(
                       color: AppColor.secondary,
@@ -325,15 +364,6 @@ class _LoginPageState extends State<RegisterPage> {
                   ),
                 )
               ],
-            ),
-            style: ElevatedButton.styleFrom(
-              foregroundColor: AppColor.primary,
-              padding: EdgeInsets.symmetric(horizontal: 36, vertical: 12),
-              backgroundColor: AppColor.primarySoft,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
-              elevation: 0,
-              shadowColor: Colors.transparent,
             ),
           ),
         ],

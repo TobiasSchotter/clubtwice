@@ -52,7 +52,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     color: Colors.white),
               ),
             ),
-            Expanded(
+            const Expanded(
               child: SizedBox(
                 height: 64,
               ),

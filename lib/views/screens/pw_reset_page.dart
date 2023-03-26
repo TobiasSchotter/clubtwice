@@ -6,8 +6,10 @@ import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/screens/register_page.dart';
 
 class ResetPage extends StatefulWidget {
+  const ResetPage({super.key});
+
   @override
-  _ResetPageState createState() => _ResetPageState();
+  State<ResetPage> createState() => _ResetPageState();
 }
 
 class _ResetPageState extends State<ResetPage> {
@@ -29,7 +31,7 @@ class _ResetPageState extends State<ResetPage> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: Icon(Icons.arrow_back_outlined),
+          icon: const Icon(Icons.arrow_back_outlined),
           color: Colors.black,
         ),
         systemOverlayStyle: SystemUiOverlayStyle.light,
@@ -40,8 +42,8 @@ class _ResetPageState extends State<ResetPage> {
         alignment: Alignment.center,
         child: TextButton(
           onPressed: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => RegisterPage()));
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const RegisterPage()));
           },
           style: TextButton.styleFrom(
             foregroundColor: AppColor.secondary.withOpacity(0.1),
@@ -58,7 +60,7 @@ class _ResetPageState extends State<ResetPage> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              Text(
+              const Text(
                 ' Anmelden',
                 style: TextStyle(
                   color: AppColor.primary,
@@ -72,13 +74,13 @@ class _ResetPageState extends State<ResetPage> {
       ),
       body: ListView(
         shrinkWrap: true,
-        padding: EdgeInsets.symmetric(horizontal: 24),
-        physics: BouncingScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        physics: const BouncingScrollPhysics(),
         children: [
           // Section 1 - Header
           Container(
-            margin: EdgeInsets.only(top: 20, bottom: 12),
-            child: Text(
+            margin: const EdgeInsets.only(top: 20, bottom: 12),
+            child: const Text(
               'ClubTwice',
               style: TextStyle(
                 color: AppColor.secondary,
@@ -89,7 +91,7 @@ class _ResetPageState extends State<ResetPage> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(bottom: 32),
+            margin: const EdgeInsets.only(bottom: 32),
             child: Text(
               'Bitte gib deine E-Mail Adresse an. Du erhälst dann eine E-Mail mit einem Link, über den du ein neues Passwort wählen kannst.',
               style: TextStyle(
@@ -105,47 +107,47 @@ class _ResetPageState extends State<ResetPage> {
             decoration: InputDecoration(
               hintText: 'deine.email@email.com',
               prefixIcon: Container(
-                padding: EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12),
                 child: SvgPicture.asset('assets/icons/Message.svg',
                     color: AppColor.primary),
               ),
               contentPadding:
-                  EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColor.border, width: 1),
+                borderSide: const BorderSide(color: AppColor.border, width: 1),
                 borderRadius: BorderRadius.circular(8),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColor.primary, width: 1),
+                borderSide: const BorderSide(color: AppColor.primary, width: 1),
                 borderRadius: BorderRadius.circular(8),
               ),
               fillColor: AppColor.primarySoft,
               filled: true,
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
 
           // Sign In button
           ElevatedButton(
             onPressed: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => LoginPage()));
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const LoginPage()));
             },
-            child: Text(
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
+              backgroundColor: AppColor.primary,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
+              elevation: 0,
+              shadowColor: Colors.transparent,
+            ),
+            child: const Text(
               'Senden',
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
                   fontSize: 18,
                   fontFamily: 'poppins'),
-            ),
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(horizontal: 36, vertical: 18),
-              backgroundColor: AppColor.primary,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
-              elevation: 0,
-              shadowColor: Colors.transparent,
             ),
           ),
         ],

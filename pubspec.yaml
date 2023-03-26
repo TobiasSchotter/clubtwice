@@ -40,6 +40,8 @@ dependencies:
   pin_code_fields: ^7.4.0
   money2: ^3.3.0
   image_picker: ^0.8.7
+  firebase_core: ^2.8.0
+  firebase_auth: ^4.3.0
 
 dev_dependencies:
   flutter_test:

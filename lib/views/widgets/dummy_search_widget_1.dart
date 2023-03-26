@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class DummySearchWidget1 extends StatelessWidget {
   final VoidCallback onTap;
 
-  DummySearchWidget1({required this.onTap});
+  const DummySearchWidget1({super.key, required this.onTap});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -12,15 +12,15 @@ class DummySearchWidget1 extends StatelessWidget {
       child: Container(
         width: MediaQuery.of(context).size.width,
         height: 40,
-        margin: EdgeInsets.only(top: 24),
-        padding: EdgeInsets.only(left: 16),
+        margin: const EdgeInsets.only(top: 24),
+        padding: const EdgeInsets.only(left: 16),
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(15)),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              margin: EdgeInsets.only(right: 12),
+              margin: const EdgeInsets.only(right: 12),
               child: SvgPicture.asset(
                 'assets/icons/Search.svg',
                 color: Colors.black,
@@ -28,7 +28,7 @@ class DummySearchWidget1 extends StatelessWidget {
                 height: 18,
               ),
             ),
-            Text(
+            const Text(
               'Find a product...',
               style: TextStyle(color: Colors.grey),
             ),

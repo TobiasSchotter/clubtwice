@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:clubtwice/constant/app_color.dart';
-import 'package:clubtwice/views/widgets/main_app_bar_widget.dart';
 import 'package:clubtwice/views/widgets/menu_tile_widget.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:clubtwice/core/services/auth.dart';
+
 class ProfilePage extends StatefulWidget {
+  ProfilePage({super.key});
+
+  final User? user = FirebaseAuth.instance.currentUser;
+
+  Future signOut() async {
+    await FirebaseAuth.instance.signOut();
+  }
+
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
@@ -15,13 +25,13 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       body: ListView(
         shrinkWrap: true,
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         children: [
           // Section 1 - Profile Picture - Username - Name
           Container(
             width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/images/background.jpg'),
                 fit: BoxFit.cover,
@@ -36,7 +46,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100),
                     color: Colors.grey,
-                    image: DecorationImage(
+                    image: const DecorationImage(
                       image: AssetImage('assets/images/pp.jpg'),
                       fit: BoxFit.cover,
                     ),
@@ -44,8 +54,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 // Fullname
                 Container(
-                  margin: EdgeInsets.only(bottom: 4, top: 14),
-                  child: Text(
+                  margin: const EdgeInsets.only(bottom: 4, top: 14),
+                  child: const Text(
                     'Riccardo Bal',
                     style: TextStyle(
                         color: Colors.white,
@@ -75,13 +85,13 @@ class _ProfilePageState extends State<ProfilePage> {
           // Section 2 - Account Menu
           Container(
             width: MediaQuery.of(context).size.width,
-            margin: EdgeInsets.only(top: 24),
+            margin: const EdgeInsets.only(top: 24),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  margin: EdgeInsets.only(left: 16),
+                  margin: const EdgeInsets.only(left: 16),
                   child: Text(
                     'Account',
                     style: TextStyle(
@@ -92,7 +102,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 MenuTileWidget(
                   onTap: () {},
-                  margin: EdgeInsets.only(top: 10),
+                  margin: const EdgeInsets.only(top: 10),
                   icon: SvgPicture.asset(
                     'assets/icons/Show.svg',
                     color: AppColor.secondary.withOpacity(0.5),
@@ -102,7 +112,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 MenuTileWidget(
                   onTap: () {},
-                  margin: EdgeInsets.only(top: 10),
+                  margin: const EdgeInsets.only(top: 10),
                   icon: SvgPicture.asset(
                     'assets/icons/Man-Clothes.svg',
                     color: AppColor.secondary.withOpacity(0.5),
@@ -113,7 +123,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 MenuTileWidget(
                   onTap: () {},
-                  margin: EdgeInsets.only(top: 10),
+                  margin: const EdgeInsets.only(top: 10),
                   icon: SvgPicture.asset(
                     'assets/icons/Heart.svg',
                     color: AppColor.secondary.withOpacity(0.5),
@@ -129,13 +139,13 @@ class _ProfilePageState extends State<ProfilePage> {
           // Section 3 - Settings
           Container(
             width: MediaQuery.of(context).size.width,
-            margin: EdgeInsets.only(top: 24),
+            margin: const EdgeInsets.only(top: 24),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  margin: EdgeInsets.only(left: 16),
+                  margin: const EdgeInsets.only(left: 16),
                   child: Text(
                     'Einstellungen',
                     style: TextStyle(
@@ -146,7 +156,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 MenuTileWidget(
                   onTap: () {},
-                  margin: EdgeInsets.only(top: 10),
+                  margin: const EdgeInsets.only(top: 10),
                   icon: SvgPicture.asset(
                     'assets/icons/Filter.svg',
                     color: AppColor.secondary.withOpacity(0.5),
@@ -156,7 +166,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 MenuTileWidget(
                   onTap: () {},
-                  margin: EdgeInsets.only(top: 10),
+                  margin: const EdgeInsets.only(top: 10),
                   icon: SvgPicture.asset(
                     'assets/icons/Info Square.svg',
                     color: AppColor.secondary.withOpacity(0.5),
@@ -165,7 +175,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   subtitle: 'Wie können wir dir weiterhelfen?',
                 ),
                 MenuTileWidget(
-                  onTap: () {},
+                  onTap: () {
+                    widget.signOut();
+                  },
                   icon: SvgPicture.asset(
                     'assets/icons/Log Out.svg',
                     color: Colors.red,
