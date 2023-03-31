@@ -1,10 +1,9 @@
+import 'package:clubtwice/views/screens/profile_page_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/widgets/menu_tile_widget.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:clubtwice/core/services/auth.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({super.key});
@@ -111,7 +110,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   subtitle: 'Passe dein Profil und Vereinszugehörigkeit an',
                 ),
                 MenuTileWidget(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ProfilePageItem()));
+                  },
                   margin: const EdgeInsets.only(top: 10),
                   icon: SvgPicture.asset(
                     'assets/icons/Man-Clothes.svg',

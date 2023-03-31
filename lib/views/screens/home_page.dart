@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/core/model/Category.dart';
 import 'package:clubtwice/core/model/Product.dart';
 import 'package:clubtwice/core/services/CategoryService.dart';
 import 'package:clubtwice/core/services/ProductService.dart';
 
-import 'package:clubtwice/views/screens/message_page.dart';
 import 'package:clubtwice/views/screens/search_page.dart';
 import 'package:clubtwice/views/widgets/category_card.dart';
-import 'package:clubtwice/views/widgets/custom_icon_button_widget.dart';
+
 import 'package:clubtwice/views/widgets/dummy_search_widget_1.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
 
@@ -165,8 +164,6 @@ class _HomePageState extends State<HomePage> {
           //     },
           //   ),
           // ),
-
-          // Section 4 - flashsale
 
           // Section 5 - product list
           Container(

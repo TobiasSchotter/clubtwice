@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:clubtwice/constant/app_color.dart';
-
-import 'package:clubtwice/views/screens/message_page.dart';
 import 'package:clubtwice/views/screens/search_page.dart';
-import 'package:clubtwice/views/widgets/custom_icon_button_widget.dart';
 import 'package:clubtwice/views/widgets/dummy_search_widget2.dart';
 
 class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
