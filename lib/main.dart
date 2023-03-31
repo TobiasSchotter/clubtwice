@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:flutter/services.dart';
 import 'package:clubtwice/views/screens/welcome_page.dart';
+import 'package:clubtwice/views/widgets/widget_tree.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(MyApp());
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
@@ -28,7 +33,8 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
         fontFamily: 'Nunito',
       ),
-      home: WelcomePage(),
+      home: const WidgetTree(),
+      //WelcomePage(),
     );
   }
 }

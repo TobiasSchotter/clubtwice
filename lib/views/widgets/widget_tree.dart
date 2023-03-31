@@ -1,13 +1,30 @@
-// import 'package:clubtwice/core/services/auth.dart';
-// import 'package:clubtwice/views/screens/login_page.dart';
-// import 'package:clubtwice/views/screens/register_page.dart';
-// import 'package:clubtwice/views/screens/home_page.dart';
-// import 'package:flutter/material.dart';
+import 'package:clubtwice/core/services/auth.dart';
+import 'package:clubtwice/views/screens/login_page.dart';
+import 'package:clubtwice/views/screens/register_page.dart';
+import 'package:clubtwice/views/screens/home_page.dart';
+import 'package:flutter/material.dart';
 
+import '../screens/welcome_page.dart';
 
-// class WidgetTree extends StatefulWidget {
-//   const WidgetTree({super.key});
+class WidgetTree extends StatefulWidget {
+  const WidgetTree({super.key});
 
-//   @override
-//   State<WidgetTree> createState() => _WidgetTreeState();
-// }
+  @override
+  State<WidgetTree> createState() => _WidgetTreeState();
+}
+
+class _WidgetTreeState extends State<WidgetTree> {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: Auth().authStateChanges,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return const HomePage();
+        } else {
+          return const WelcomePage();
+        }
+      },
+    );
+  }
+}
