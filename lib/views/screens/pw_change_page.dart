@@ -1,12 +1,7 @@
-import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:clubtwice/constant/app_color.dart';
-import 'package:clubtwice/views/screens/login_page.dart';
-import 'package:clubtwice/views/screens/otp_verification_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:clubtwice/core/services/auth.dart';
 
 class PWChangePage extends StatefulWidget {
   const PWChangePage({super.key});
@@ -50,7 +45,7 @@ class _PWChangePageState extends State<PWChangePage> {
           Container(
             margin: const EdgeInsets.only(top: 20, bottom: 12),
             child: const Text(
-              'Passwort ändern blalal',
+              'So erstellst du ein sicheres Passwort',
               style: TextStyle(
                 color: AppColor.secondary,
                 fontWeight: FontWeight.w700,
@@ -59,7 +54,16 @@ class _PWChangePageState extends State<PWChangePage> {
               ),
             ),
           ),
-
+          Container(
+            margin: const EdgeInsets.only(bottom: 32),
+            child: Text(
+              ' - Verwende mindestens 8 Zeichen\n - Wähle eine Kombination aus Buchstaben, Zahlen und Sonderzeichen',
+              style: TextStyle(
+                  color: AppColor.secondary.withOpacity(0.7),
+                  fontSize: 12,
+                  height: 150 / 100),
+            ),
+          ),
           const SizedBox(height: 16),
           // Password
           TextField(
@@ -156,13 +160,15 @@ class _PWChangePageState extends State<PWChangePage> {
             ),
           ),
           const SizedBox(height: 24),
-          // Sign Up Button
+
           ElevatedButton(
             onPressed: () {
               //Nav needs to be removed after firebase integration
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const OTPVerificationPage()));
-              //createUserWithEmailAndPassword();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Passwort erfolgreich geändert'),
+                ),
+              );
             },
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 18),

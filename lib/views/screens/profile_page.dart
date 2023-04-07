@@ -3,7 +3,6 @@ import 'package:clubtwice/views/screens/profile_page_item.dart';
 import 'package:clubtwice/views/screens/pw_change_page.dart';
 import 'package:clubtwice/views/screens/welcome_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/widgets/menu_tile_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -195,89 +194,116 @@ class _ProfilePageState extends State<ProfilePage> {
                   title: 'Hilfe',
                   subtitle: 'Wie können wir dir weiterhelfen?',
                 ),
-                MenuTileWidget(
-                  onTap: () async {
-                    // Show a dialog to confirm the sign out
-                    bool confirm = await showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text('Löschen'),
-                        content: const Text(
-                            'Möchtest du dein Account wirklich löschen?'),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(false),
-                            child: const Text('Nein'),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(true),
-                            child: const Text('Ja'),
-                          ),
-                        ],
-                      ),
-                    );
-                    // Sign out if confirmed
-                    if (confirm == true) {
-                      // ignore: use_build_context_synchronously
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => WelcomePage()),
-                      );
-                      widget.signOut();
-                      // ignore: use_build_context_synchronously
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Account erfolgreich gelöscht'),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  margin: const EdgeInsets.only(top: 24),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(left: 16),
+                        child: Text(
+                          'Abmelden',
+                          style: TextStyle(
+                              color: AppColor.secondary.withOpacity(0.5),
+                              letterSpacing: 6 / 100,
+                              fontWeight: FontWeight.w600),
                         ),
-                      );
-                    }
-                  },
-                  icon: Icon(
-                    Icons.delete_outline,
-                    color: AppColor.secondary.withOpacity(0.5),
+                      ),
+                      MenuTileWidget(
+                        onTap: () async {
+                          // Show a dialog to confirm the sign out
+                          bool confirm = await showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Löschen'),
+                              content: const Text(
+                                  'Möchtest du dein Account wirklich löschen?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(false),
+                                  child: const Text('Nein'),
+                                ),
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(true),
+                                  child: const Text('Ja'),
+                                ),
+                              ],
+                            ),
+                          );
+                          // Sign out if confirmed
+                          if (confirm == true) {
+                            // ignore: use_build_context_synchronously
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => WelcomePage()),
+                            );
+                            widget.signOut();
+                            // ignore: use_build_context_synchronously
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Account erfolgreich gelöscht'),
+                              ),
+                            );
+                          }
+                        },
+                        icon: Icon(
+                          Icons.delete_outline,
+                          color: AppColor.secondary.withOpacity(0.5),
+                        ),
+                        title: 'Account löschen',
+                        subtitle: 'Lösche dein Account hier',
+                      ),
+                      MenuTileWidget(
+                        onTap: () async {
+                          // Show a dialog to confirm the sign out
+                          bool confirm = await showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Abmelden'),
+                              content: const Text(
+                                  'Möchtest du dich wirklich abmelden?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(false),
+                                  child: const Text('Nein'),
+                                ),
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(true),
+                                  child: const Text('Ja'),
+                                ),
+                              ],
+                            ),
+                          );
+                          // Sign out if confirmed
+                          if (confirm == true) {
+                            // ignore: use_build_context_synchronously
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => WelcomePage()),
+                            );
+                            widget.signOut();
+                            // ignore: use_build_context_synchronously
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Abmeldung erfolgreich'),
+                              ),
+                            );
+                          }
+                        },
+                        icon: const Icon(Icons.logout_outlined,
+                            color: Colors.red),
+                        iconBackground: Colors.red[50]!,
+                        title: 'Ausloggen',
+                        subtitle: 'Hier kannst du dich ausloggen',
+                      )
+                    ],
                   ),
-                  title: 'Account löschen',
-                  subtitle: 'Lösche dein Account hier',
-                ),
-                MenuTileWidget(
-                  onTap: () async {
-                    // Show a dialog to confirm the sign out
-                    bool confirm = await showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text('Abmelden'),
-                        content:
-                            const Text('Möchtest du dich wirklich abmelden?'),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(false),
-                            child: const Text('Nein'),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(true),
-                            child: const Text('Ja'),
-                          ),
-                        ],
-                      ),
-                    );
-                    // Sign out if confirmed
-                    if (confirm == true) {
-                      // ignore: use_build_context_synchronously
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => WelcomePage()),
-                      );
-                      widget.signOut();
-                      // ignore: use_build_context_synchronously
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Abmeldung erfolgreich'),
-                        ),
-                      );
-                    }
-                  },
-                  icon: const Icon(Icons.logout_outlined, color: Colors.red),
-                  iconBackground: Colors.red[50]!,
-                  title: 'Ausloggen',
-                  subtitle: 'Hier kannst du dich ausloggen',
                 )
               ],
             ),
