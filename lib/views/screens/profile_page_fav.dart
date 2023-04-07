@@ -6,8 +6,8 @@ import 'package:clubtwice/core/services/ProductService.dart';
 import 'package:clubtwice/core/model/Product.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
 
-class ProfilePageItem extends StatefulWidget {
-  ProfilePageItem({super.key});
+class ProfilePageFav extends StatefulWidget {
+  ProfilePageFav({super.key});
 
   final User? user = FirebaseAuth.instance.currentUser;
 
@@ -16,10 +16,10 @@ class ProfilePageItem extends StatefulWidget {
   }
 
   @override
-  State<ProfilePageItem> createState() => _ProfilePageItemState();
+  State<ProfilePageFav> createState() => _ProfilePageFavState();
 }
 
-class _ProfilePageItemState extends State<ProfilePageItem> {
+class _ProfilePageFavState extends State<ProfilePageFav> {
   List<Product> productData = ProductService.productData;
 
   @override
@@ -103,7 +103,7 @@ class _ProfilePageItemState extends State<ProfilePageItem> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
-                  'Meine Anzeigen',
+                  'Deine Favoriten',
                   style: TextStyle(
                       color: AppColor.border,
                       fontSize: 16,

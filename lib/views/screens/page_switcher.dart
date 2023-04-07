@@ -19,13 +19,16 @@ class _PageSwitcherState extends State<PageSwitcher> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: [
-        const HomePage(),
-        SearchPage(),
-        const SellPage(),
-        TabPage(),
-        ProfilePage(),
-      ][_selectedIndex],
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: [
+          const HomePage(),
+          SearchPage(),
+          const SellPage(),
+          TabPage(),
+          ProfilePage(),
+        ],
+      ),
       bottomNavigationBar: NavigationBar(
         height: 60,
         backgroundColor: AppColor.primarySoft,

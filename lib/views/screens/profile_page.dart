@@ -1,4 +1,7 @@
+import 'package:clubtwice/views/screens/login_page.dart';
+import 'package:clubtwice/views/screens/profile_page_fav.dart';
 import 'package:clubtwice/views/screens/profile_page_item.dart';
+import 'package:clubtwice/views/screens/welcome_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:clubtwice/constant/app_color.dart';
@@ -124,7 +127,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       'Passe deine Anzeigen hier an oder lösche deine Anzeigen',
                 ),
                 MenuTileWidget(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ProfilePageFav()));
+                  },
                   margin: const EdgeInsets.only(top: 10),
                   icon: SvgPicture.asset(
                     'assets/icons/Heart.svg',
@@ -177,8 +183,38 @@ class _ProfilePageState extends State<ProfilePage> {
                   subtitle: 'Wie können wir dir weiterhelfen?',
                 ),
                 MenuTileWidget(
-                  onTap: () {
-                    widget.signOut();
+                  onTap: () async {
+                    // Show a dialog to confirm the sign out
+                    bool confirm = await showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('Abmelden'),
+                        content: Text('Möchtest du dich wirklich abmelden?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(false),
+                            child: Text('Nein'),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(true),
+                            child: Text('Ja'),
+                          ),
+                        ],
+                      ),
+                    );
+
+                    // Sign out if confirmed
+                    if (confirm == true) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => WelcomePage()),
+                      );
+                      widget.signOut();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Abmeldung erfolgreich'),
+                        ),
+                      );
+                    }
                   },
                   icon: SvgPicture.asset(
                     'assets/icons/Log Out.svg',
@@ -188,7 +224,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   title: 'Ausloggen',
                   subtitle: 'Hier kannst du dich ausloggen',
                   titleColor: Colors.red,
-                ),
+                )
               ],
             ),
           )
