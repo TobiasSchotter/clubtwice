@@ -1,4 +1,3 @@
-import 'package:clubtwice/views/screens/login_page.dart';
 import 'package:clubtwice/views/screens/profile_page_fav.dart';
 import 'package:clubtwice/views/screens/profile_page_item.dart';
 import 'package:clubtwice/views/screens/welcome_page.dart';
@@ -105,8 +104,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 MenuTileWidget(
                   onTap: () {},
                   margin: const EdgeInsets.only(top: 10),
-                  icon: SvgPicture.asset(
-                    'assets/icons/Show.svg',
+                  icon: Icon(
+                    Icons.person_outlined,
                     color: AppColor.secondary.withOpacity(0.5),
                   ),
                   title: 'Profil',
@@ -118,8 +117,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         builder: (context) => ProfilePageItem()));
                   },
                   margin: const EdgeInsets.only(top: 10),
-                  icon: SvgPicture.asset(
-                    'assets/icons/Man-Clothes.svg',
+                  icon: Icon(
+                    Icons.sell_outlined,
                     color: AppColor.secondary.withOpacity(0.5),
                   ),
                   title: 'Meine Anzeigen',
@@ -132,8 +131,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         builder: (context) => ProfilePageFav()));
                   },
                   margin: const EdgeInsets.only(top: 10),
-                  icon: SvgPicture.asset(
-                    'assets/icons/Heart.svg',
+                  icon: Icon(
+                    Icons.favorite_border_outlined,
                     color: AppColor.secondary.withOpacity(0.5),
                   ),
                   title: 'Favoriten',
@@ -165,22 +164,42 @@ class _ProfilePageState extends State<ProfilePage> {
                 MenuTileWidget(
                   onTap: () {},
                   margin: const EdgeInsets.only(top: 10),
-                  icon: SvgPicture.asset(
-                    'assets/icons/Filter.svg',
+                  icon: Icon(
+                    Icons.password_outlined,
                     color: AppColor.secondary.withOpacity(0.5),
                   ),
-                  title: 'Sprache',
-                  subtitle: 'Ändere hier die Spracheinstellung',
+                  title: 'Passwort',
+                  subtitle: 'Ändere hier dein Passwort',
                 ),
                 MenuTileWidget(
                   onTap: () {},
                   margin: const EdgeInsets.only(top: 10),
-                  icon: SvgPicture.asset(
-                    'assets/icons/Info Square.svg',
+                  icon: Icon(
+                    Icons.mail_lock_outlined,
+                    color: AppColor.secondary.withOpacity(0.5),
+                  ),
+                  title: 'E-Mail',
+                  subtitle: 'Ändere hier deine E-Mail Adresse',
+                ),
+                MenuTileWidget(
+                  onTap: () {},
+                  margin: const EdgeInsets.only(top: 10),
+                  icon: Icon(
+                    Icons.help_center_outlined,
                     color: AppColor.secondary.withOpacity(0.5),
                   ),
                   title: 'Hilfe',
                   subtitle: 'Wie können wir dir weiterhelfen?',
+                ),
+                MenuTileWidget(
+                  onTap: () {},
+                  margin: const EdgeInsets.only(top: 10),
+                  icon: Icon(
+                    Icons.delete_outline,
+                    color: AppColor.secondary.withOpacity(0.5),
+                  ),
+                  title: 'Account löschen',
+                  subtitle: 'Lösche dein Account hier',
                 ),
                 MenuTileWidget(
                   onTap: () async {
@@ -188,42 +207,40 @@ class _ProfilePageState extends State<ProfilePage> {
                     bool confirm = await showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                        title: Text('Abmelden'),
-                        content: Text('Möchtest du dich wirklich abmelden?'),
+                        title: const Text('Abmelden'),
+                        content:
+                            const Text('Möchtest du dich wirklich abmelden?'),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.of(context).pop(false),
-                            child: Text('Nein'),
+                            child: const Text('Nein'),
                           ),
                           TextButton(
                             onPressed: () => Navigator.of(context).pop(true),
-                            child: Text('Ja'),
+                            child: const Text('Ja'),
                           ),
                         ],
                       ),
                     );
-
                     // Sign out if confirmed
                     if (confirm == true) {
+                      // ignore: use_build_context_synchronously
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (context) => WelcomePage()),
                       );
                       widget.signOut();
+                      // ignore: use_build_context_synchronously
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           content: Text('Abmeldung erfolgreich'),
                         ),
                       );
                     }
                   },
-                  icon: SvgPicture.asset(
-                    'assets/icons/Log Out.svg',
-                    color: Colors.red,
-                  ),
-                  iconBackground: Colors.red[100]!,
+                  icon: const Icon(Icons.logout_outlined, color: Colors.red),
+                  iconBackground: Colors.red[50]!,
                   title: 'Ausloggen',
                   subtitle: 'Hier kannst du dich ausloggen',
-                  titleColor: Colors.red,
                 )
               ],
             ),
