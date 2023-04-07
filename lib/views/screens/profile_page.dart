@@ -1,5 +1,6 @@
 import 'package:clubtwice/views/screens/profile_page_fav.dart';
 import 'package:clubtwice/views/screens/profile_page_item.dart';
+import 'package:clubtwice/views/screens/pw_change_page.dart';
 import 'package:clubtwice/views/screens/welcome_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -162,7 +163,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 MenuTileWidget(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => PWChangePage()));
+                  },
                   margin: const EdgeInsets.only(top: 10),
                   icon: Icon(
                     Icons.password_outlined,
@@ -192,8 +196,41 @@ class _ProfilePageState extends State<ProfilePage> {
                   subtitle: 'Wie können wir dir weiterhelfen?',
                 ),
                 MenuTileWidget(
-                  onTap: () {},
-                  margin: const EdgeInsets.only(top: 10),
+                  onTap: () async {
+                    // Show a dialog to confirm the sign out
+                    bool confirm = await showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Löschen'),
+                        content: const Text(
+                            'Möchtest du dein Account wirklich löschen?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(false),
+                            child: const Text('Nein'),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(true),
+                            child: const Text('Ja'),
+                          ),
+                        ],
+                      ),
+                    );
+                    // Sign out if confirmed
+                    if (confirm == true) {
+                      // ignore: use_build_context_synchronously
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => WelcomePage()),
+                      );
+                      widget.signOut();
+                      // ignore: use_build_context_synchronously
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Account erfolgreich gelöscht'),
+                        ),
+                      );
+                    }
+                  },
                   icon: Icon(
                     Icons.delete_outline,
                     color: AppColor.secondary.withOpacity(0.5),
