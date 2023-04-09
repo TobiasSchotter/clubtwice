@@ -1,16 +1,14 @@
+import 'package:clubtwice/views/screens/page_switcher.dart';
+import 'package:clubtwice/views/screens/search_page.dart';
 import 'package:flutter/material.dart';
-
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/core/model/Category.dart';
 import 'package:clubtwice/core/model/Product.dart';
 import 'package:clubtwice/core/services/CategoryService.dart';
 import 'package:clubtwice/core/services/ProductService.dart';
-
-import 'package:clubtwice/views/screens/search_page.dart';
 import 'package:clubtwice/views/widgets/category_card.dart';
-
-import 'package:clubtwice/views/widgets/dummy_search_widget_1.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
+import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -32,55 +30,92 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: false,
+        backgroundColor: AppColor.primary,
+        elevation: 0,
+        title: Container(
+          height: 40,
+          child: TextField(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SearchPage()),
+              );
+            },
+            autofocus: false,
+            style:
+                TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.5)),
+            decoration: InputDecoration(
+              hintStyle:
+                  TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.3)),
+              hintText: 'Suche nach Vereinskleidung aller  ...',
+              prefixIcon: Container(
+                padding: EdgeInsets.all(10),
+                child: Icon(Icons.search_outlined,
+                    color: Colors.white.withOpacity(0.5)),
+              ),
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.transparent, width: 1),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide:
+                    BorderSide(color: Colors.white.withOpacity(0.1), width: 1),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              fillColor: Colors.white.withOpacity(0.1),
+              filled: true,
+            ),
+          ),
+        ),
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+      ),
       body: ListView(
         shrinkWrap: true,
         physics: const BouncingScrollPhysics(),
         children: [
           // Section 1
           Container(
-            height: 190,
+            height: 80,
             width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/background.jpg'),
-                fit: BoxFit.cover,
-              ),
-            ),
+            color: AppColor.primary,
             child: Column(
               children: [
                 Container(
-                  margin: const EdgeInsets.only(top: 26),
+                  margin: const EdgeInsets.only(top: 8),
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Find the best outfit for you.',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          height: 150 / 100,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Poppins',
+                      Flexible(
+                        child: const Text(
+                          'Finde Vereinskleidung und Co. aus deinem Verein',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            height: 150 / 100,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Poppins',
+                          ),
                         ),
-                      ),
-                      Row(
-                        children: [],
                       ),
                     ],
                   ),
                 ),
-                DummySearchWidget1(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => SearchPage(),
-                      ),
-                    );
-                  },
-                ),
+                //   DummySearchWidget1(
+                //   onTap: () {
+                //   Navigator.of(context).push(
+                //   MaterialPageRoute(
+                //   builder: (context) => SearchPage(),
+                // ),
+                // );
+                // },
+                // ),
               ],
             ),
           ),
@@ -99,23 +134,11 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(
-                        'Category',
+                        'Filter',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
                             fontWeight: FontWeight.w600),
-                      ),
-                      TextButton(
-                        onPressed: () {},
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.white,
-                        ),
-                        child: Text(
-                          'View More',
-                          style: TextStyle(
-                              color: Colors.white.withOpacity(0.7),
-                              fontWeight: FontWeight.w400),
-                        ),
                       ),
                     ],
                   ),
@@ -144,26 +167,6 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          // Section 3 - banner
-          // Container(
-          //   height: 106,
-          //   padding: EdgeInsets.symmetric(vertical: 16),
-          //   child: ListView.separated(
-          //     padding: EdgeInsets.symmetric(horizontal: 16),
-          //     scrollDirection: Axis.horizontal,
-          //     itemCount: 3,
-          //     separatorBuilder: (context, index) {
-          //       return SizedBox(width: 16);
-          //     },
-          //     itemBuilder: (context, index) {
-          //       return Container(
-          //         width: 230,
-          //         height: 106,
-          //         decoration: BoxDecoration(color: AppColor.primarySoft, borderRadius: BorderRadius.circular(15)),
-          //       );
-          //     },
-          //   ),
-          // ),
 
           // Section 5 - product list
           Container(

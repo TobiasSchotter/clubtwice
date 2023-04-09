@@ -23,24 +23,20 @@ class _SearchPageState extends State<SearchPage> {
         centerTitle: false,
         backgroundColor: AppColor.primary,
         elevation: 0,
-        leading: IconButton(
-          onPressed: () => Navigator.of(context).pop(),
-          icon: Icon(Icons.arrow_back_outlined),
-          color: Colors.white,
-        ),
         title: Container(
           height: 40,
           child: TextField(
             autofocus: false,
-            style: TextStyle(fontSize: 14, color: Colors.white),
+            style:
+                TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.5)),
             decoration: InputDecoration(
               hintStyle:
                   TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.3)),
-              hintText: 'Find a products...',
+              hintText: 'Suche nach Vereinskleidung ...',
               prefixIcon: Container(
                 padding: EdgeInsets.all(10),
-                child: SvgPicture.asset('assets/icons/Search.svg',
-                    color: Colors.white),
+                child: Icon(Icons.search_outlined,
+                    color: Colors.white.withOpacity(0.5)),
               ),
               contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
               enabledBorder: OutlineInputBorder(
@@ -71,7 +67,7 @@ class _SearchPageState extends State<SearchPage> {
               Padding(
                 padding: EdgeInsets.all(16),
                 child: Text(
-                  'Search history...',
+                  'Dein Suchverlauf...',
                   style: TextStyle(
                       color: Colors.grey,
                       fontSize: 12,
@@ -102,7 +98,7 @@ class _SearchPageState extends State<SearchPage> {
                 child: ElevatedButton(
                   onPressed: () {},
                   child: Text(
-                    'Delete search history',
+                    'Suchverlauf löschen',
                     style:
                         TextStyle(color: AppColor.secondary.withOpacity(0.5)),
                   ),

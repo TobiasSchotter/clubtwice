@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/core/model/Notification.dart';
 import 'package:clubtwice/core/services/NotificationService.dart';
-import 'package:clubtwice/views/widgets/main_app_bar_widget.dart';
-import 'package:clubtwice/views/widgets/menu_tile_widget.dart';
 import 'package:clubtwice/views/widgets/notification_tile.dart';
 
 class NotificationPage extends StatefulWidget {

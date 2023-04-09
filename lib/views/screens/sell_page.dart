@@ -1,8 +1,5 @@
 import 'dart:io';
-import 'package:clubtwice/views/screens/home_page.dart';
 import 'package:clubtwice/views/screens/page_switcher.dart';
-import 'package:clubtwice/views/screens/profile_page.dart';
-import 'package:clubtwice/views/screens/tab_page.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:clubtwice/constant/app_color.dart';
@@ -288,15 +285,10 @@ class _SellPageState extends State<SellPage> {
                   // Navigator.of(context).pop();
                   Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => PageSwitcher()));
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title:
-                            Text("Dein Artikel wurde erfolgreich eingestellt"),
-                        // content: Text("Dies ist eine Popup-Nachricht!"),
-                      );
-                    },
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Erfolgreich eingestellt'),
+                    ),
                   );
                 },
                 child: Text('Einstellen'),

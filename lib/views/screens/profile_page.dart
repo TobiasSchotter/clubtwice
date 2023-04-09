@@ -1,5 +1,7 @@
+import 'package:clubtwice/views/screens/profile_page_club.dart';
 import 'package:clubtwice/views/screens/profile_page_fav.dart';
 import 'package:clubtwice/views/screens/profile_page_item.dart';
+import 'package:clubtwice/views/screens/profile_page_set.dart';
 import 'package:clubtwice/views/screens/pw_change_page.dart';
 import 'package:clubtwice/views/screens/welcome_page.dart';
 import 'package:flutter/material.dart';
@@ -102,14 +104,30 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 MenuTileWidget(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ProfilePageSet()));
+                  },
                   margin: const EdgeInsets.only(top: 10),
                   icon: Icon(
                     Icons.person_outlined,
                     color: AppColor.secondary.withOpacity(0.5),
                   ),
                   title: 'Profil',
-                  subtitle: 'Passe dein Profil und Vereinszugehörigkeit an',
+                  subtitle: 'Passe dein Profil hier an',
+                ),
+                MenuTileWidget(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ProfilePageClub()));
+                  },
+                  margin: const EdgeInsets.only(top: 10),
+                  icon: Icon(
+                    Icons.sports,
+                    color: AppColor.secondary.withOpacity(0.5),
+                  ),
+                  title: 'Verein',
+                  subtitle: 'Passe deine Vereinszugehörigkeit hier an',
                 ),
                 MenuTileWidget(
                   onTap: () {

@@ -29,7 +29,7 @@ class DummySearchWidget1 extends StatelessWidget {
               ),
             ),
             const Text(
-              'Find a product...',
+              'Finde Vereinskleidung aller Vereine ',
               style: TextStyle(color: Colors.grey),
             ),
           ],
