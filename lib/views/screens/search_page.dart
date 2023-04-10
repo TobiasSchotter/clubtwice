@@ -32,7 +32,7 @@ class _SearchPageState extends State<SearchPage> {
             decoration: InputDecoration(
               hintStyle:
                   TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.3)),
-              hintText: 'Suche nach Vereinskleidung ...',
+              hintText: 'Suche nach Vereinskleidung aller Vereine',
               prefixIcon: Container(
                 padding: EdgeInsets.all(10),
                 child: Icon(Icons.search_outlined,

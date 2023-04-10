@@ -3,14 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:clubtwice/constant/app_color.dart';
 
-class ProfilePageSet extends StatefulWidget {
-  const ProfilePageSet({super.key});
+class ProfilePageMail extends StatefulWidget {
+  const ProfilePageMail({super.key});
 
   @override
-  State<ProfilePageSet> createState() => _ProfilePageSetState();
+  State<ProfilePageMail> createState() => _ProfilePageMailState();
 }
 
-class _ProfilePageSetState extends State<ProfilePageSet> {
+class _ProfilePageMailState extends State<ProfilePageMail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +19,7 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: const Text('Profil anpassen',
+        title: const Text('E-Mail ändern',
             style: TextStyle(
                 color: Colors.black,
                 fontSize: 14,
@@ -55,62 +55,12 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
           // Full Name
           TextField(
             autofocus: false,
-            decoration: InputDecoration(
-              hintText: 'Vorname',
-              prefixIcon: Container(
-                padding: const EdgeInsets.all(12),
-                child: SvgPicture.asset('assets/icons/Profile.svg',
-                    color: AppColor.primary),
-              ),
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
-              enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: AppColor.border, width: 1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: AppColor.primary, width: 1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              fillColor: AppColor.primarySoft,
-              filled: true,
-            ),
-          ),
-          const SizedBox(height: 16),
-          // Username
-          TextField(
-            autofocus: false,
-            decoration: InputDecoration(
-              hintText: 'Nachname',
-              prefixIcon: Container(
-                padding: const EdgeInsets.all(12),
-                child: SvgPicture.asset('assets/icons/Profile.svg',
-                    color: AppColor.primary),
-              ),
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
-              enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: AppColor.border, width: 1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: AppColor.primary, width: 1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              fillColor: AppColor.primarySoft,
-              filled: true,
-            ),
-          ),
-          const SizedBox(height: 16),
-          // Email
-          TextField(
-            autofocus: false,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-              hintText: 'Benutzername',
+              hintText: 'deine.email@email.com',
               prefixIcon: Container(
                 padding: const EdgeInsets.all(12),
-                child: SvgPicture.asset('assets/icons/Profile.svg',
+                child: SvgPicture.asset('assets/icons/Message.svg',
                     color: AppColor.primary),
               ),
               contentPadding:
@@ -127,6 +77,7 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
               filled: true,
             ),
           ),
+          const SizedBox(height: 16),
           const SizedBox(height: 16),
 
           ElevatedButton(

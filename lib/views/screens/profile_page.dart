@@ -1,6 +1,8 @@
 import 'package:clubtwice/views/screens/profile_page_club.dart';
 import 'package:clubtwice/views/screens/profile_page_fav.dart';
+import 'package:clubtwice/views/screens/profile_page_help.dart';
 import 'package:clubtwice/views/screens/profile_page_item.dart';
+import 'package:clubtwice/views/screens/profile_page_mail.dart';
 import 'package:clubtwice/views/screens/profile_page_set.dart';
 import 'package:clubtwice/views/screens/pw_change_page.dart';
 import 'package:clubtwice/views/screens/welcome_page.dart';
@@ -193,7 +195,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   subtitle: 'Ändere hier dein Passwort',
                 ),
                 MenuTileWidget(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ProfilePageMail()));
+                  },
                   margin: const EdgeInsets.only(top: 10),
                   icon: Icon(
                     Icons.mail_lock_outlined,
@@ -203,7 +208,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   subtitle: 'Ändere hier deine E-Mail Adresse',
                 ),
                 MenuTileWidget(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ProfilePageHelp()));
+                  },
                   margin: const EdgeInsets.only(top: 10),
                   icon: Icon(
                     Icons.help_center_outlined,
