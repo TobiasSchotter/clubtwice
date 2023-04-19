@@ -41,15 +41,6 @@ class _SearchResultPageState extends State<SearchResultPage>
             color: Colors.white,
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: SvgPicture.asset(
-              'assets/icons/Filter.svg',
-              color: Colors.white,
-            ),
-          ),
-        ],
         title: Container(
           height: 40,
           child: TextField(
@@ -59,7 +50,7 @@ class _SearchResultPageState extends State<SearchResultPage>
             decoration: InputDecoration(
               hintStyle:
                   TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.3)),
-              hintText: 'Find a products...',
+              hintText: 'Finde Vereinskleidung',
               prefixIcon: Container(
                 padding: EdgeInsets.all(10),
                 child: SvgPicture.asset('assets/icons/Search.svg',
@@ -77,42 +68,6 @@ class _SearchResultPageState extends State<SearchResultPage>
               ),
               fillColor: Colors.white.withOpacity(0.1),
               filled: true,
-            ),
-          ),
-        ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50),
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: 50,
-            color: AppColor.secondary,
-            child: TabBar(
-              controller: tabController,
-              indicatorColor: AppColor.accent,
-              indicatorWeight: 5,
-              unselectedLabelColor: Colors.white.withOpacity(0.5),
-              labelStyle: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontFamily: 'poppins',
-                  fontSize: 12),
-              unselectedLabelStyle: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'poppins',
-                  fontSize: 12),
-              tabs: [
-                Tab(
-                  text: 'Related',
-                ),
-                Tab(
-                  text: 'Newest',
-                ),
-                Tab(
-                  text: 'Popular',
-                ),
-                Tab(
-                  text: 'Best Seller',
-                ),
-              ],
             ),
           ),
         ),

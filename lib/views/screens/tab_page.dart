@@ -1,3 +1,4 @@
+import 'package:clubtwice/views/screens/message_page.dart';
 import 'package:clubtwice/views/screens/notification_page.dart';
 import 'package:clubtwice/views/screens/register_page.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,7 @@ class _TabPageState extends State<TabPage> with SingleTickerProviderStateMixin {
       body: IndexedStack(
         index: _currentIndex,
         children: [
-          RegisterPage(),
+          NotificationPage(),
           NotificationPage(),
         ],
       ),

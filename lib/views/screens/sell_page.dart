@@ -28,6 +28,7 @@ class _SellPageState extends State<SellPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false, // den Zurück-Button deaktivieren
         backgroundColor: AppColor.primary,
         title: Text('Vereinskleidung verkaufen'),
       ),

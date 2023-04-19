@@ -18,7 +18,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: const Text('Profil anpassen',
+        title: const Text('Verein und Sportart anpassen',
             style: TextStyle(
                 color: Colors.black,
                 fontSize: 14,
@@ -38,22 +38,11 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
         physics: const BouncingScrollPhysics(),
         children: [
           // Section 1 - Header
-          Container(
-            margin: const EdgeInsets.only(top: 20, bottom: 12),
-            child: const Text(
-              'Willkommen bei ClubTwice  👋',
-              style: TextStyle(
-                color: AppColor.secondary,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'poppins',
-                fontSize: 20,
-              ),
-            ),
-          ),
+
           Container(
             margin: const EdgeInsets.only(bottom: 0),
             child: Text(
-              'Passe hier deine Vereinszugehörigkeit und deine Sportart an.',
+              'Deine Startseite wird dir dementsprechend angezeigt. Bei Verkäufen wird dies bereits vorausgefüllt sein.\nDu kannst diese jederzeit ändern.',
               style: TextStyle(
                   color: AppColor.secondary.withOpacity(0.7),
                   fontSize: 12,
@@ -62,16 +51,6 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
           ),
           // Section 2  - Form
 
-          Container(
-            margin: const EdgeInsets.only(top: 20, bottom: 0),
-            child: Text(
-              'Account',
-              style: TextStyle(
-                  color: AppColor.secondary.withOpacity(0.5),
-                  letterSpacing: 6 / 100,
-                  fontWeight: FontWeight.w600),
-            ),
-          ),
           Container(
             height: 16,
           ),
