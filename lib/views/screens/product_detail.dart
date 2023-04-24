@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/core/model/Product.dart';
 import 'package:clubtwice/views/screens/image_viewer.dart';
-import 'package:clubtwice/views/widgets/custom_app_bar.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:flutter/services.dart';
 import 'package:money2/money2.dart';
 
 class ProductDetail extends StatefulWidget {
@@ -23,38 +21,56 @@ class _ProductDetailState extends State<ProductDetail> {
   Widget build(BuildContext context) {
     Product product = widget.product;
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text(product.name),
+        foregroundColor: Colors.black,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(Icons.arrow_back_outlined),
+          color: Colors.black,
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.bookmark_add_outlined),
+            onPressed: () {
+              // Hier wird Code ausgeführt, wenn der rechte Button gedrückt wird
+            },
+          ),
+        ],
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+      ),
       extendBodyBehindAppBar: true,
       extendBody: true,
       bottomNavigationBar: Container(
         width: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.all(16),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          border: Border(
-            top: BorderSide(color: AppColor.border, width: 1),
-          ),
-        ),
         child: Row(
           children: [
-            Container(
-              width: 64,
-              height: 64,
-              margin: const EdgeInsets.only(right: 14),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColor.secondary,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16)),
-                  elevation: 0,
+            Expanded(
+              child: Container(
+                //width: 400,
+                height: 40,
+                margin: const EdgeInsets.only(right: 14),
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColor.primary,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
+                    elevation: 0,
+                  ),
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.chat_bubble_sharp,
+                    //child: Icon(Icons.chat_bubble_sharp),
+                  ),
+                  label: Text('Bei Verkäufer anfragen'),
                 ),
-                onPressed: () {},
-                child: SvgPicture.asset('assets/icons/Chat.svg',
-                    color: Colors.white),
-              ),
-            ),
-            const Expanded(
-              child: SizedBox(
-                height: 64,
               ),
             ),
           ],
@@ -64,7 +80,6 @@ class _ProductDetailState extends State<ProductDetail> {
         shrinkWrap: true,
         physics: const BouncingScrollPhysics(),
         children: [
-          // Section 1 - appbar & product image
           Stack(
             alignment: Alignment.topCenter,
             children: [
@@ -92,32 +107,6 @@ class _ProductDetailState extends State<ProductDetail> {
                         fit: BoxFit.cover,
                       ),
                     ),
-                  ),
-                ),
-              ),
-              // appbar
-              CustomAppBar(
-                title: product.storeName,
-                leftIcon: SvgPicture.asset('assets/icons/Bookmark.svg'),
-                rightIcon: SvgPicture.asset(
-                  'assets/icons/Bookmark.svg',
-                  color: Colors.black.withOpacity(0.5),
-                ),
-                leftOnTap: () {
-                  Navigator.of(context).pop();
-                },
-                rightOnTap: () {},
-              ),
-              // indicator
-              Positioned(
-                bottom: 16,
-                child: SmoothPageIndicator(
-                  controller: productImageSlider,
-                  count: product.image.length,
-                  effect: ExpandingDotsEffect(
-                    dotColor: AppColor.primary.withOpacity(0.2),
-                    activeDotColor: AppColor.primary.withOpacity(0.2),
-                    dotHeight: 8,
                   ),
                 ),
               ),

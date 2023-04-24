@@ -43,7 +43,7 @@ class ItemCard extends StatelessWidget {
 
             // item details
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 2),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,13 +68,6 @@ class ItemCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Text(
-                    product.storeName,
-                    style: const TextStyle(
-                      color: Colors.grey,
-                      fontSize: 10,
-                    ),
-                  )
                 ],
               ),
             )

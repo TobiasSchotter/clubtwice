@@ -1,11 +1,4 @@
-import 'package:clubtwice/views/screens/help_page%20copy.dart';
-import 'package:clubtwice/views/screens/profile_page_club.dart';
-import 'package:clubtwice/views/screens/profile_page_fav.dart';
 import 'package:clubtwice/views/screens/profile_page_help.dart';
-import 'package:clubtwice/views/screens/profile_page_item.dart';
-import 'package:clubtwice/views/screens/profile_page_mail.dart';
-import 'package:clubtwice/views/screens/profile_page_set.dart';
-import 'package:clubtwice/views/screens/pw_change_page.dart';
 import 'package:clubtwice/views/screens/welcome_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
@@ -54,7 +47,6 @@ class _HelpPageState extends State<HelpPage> {
         physics: const BouncingScrollPhysics(),
         children: [
           // Section 2 - Account Menu
-
           Container(
             width: MediaQuery.of(context).size.width,
             margin: const EdgeInsets.only(top: 0),

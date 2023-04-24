@@ -14,11 +14,16 @@ var categoryRawData = [
   {
     'featured': false,
     'icon_url': 'assets/icons/High-heels.svg',
-    'name': 'Size',
+    'name': 'Sportart',
   },
   {
     'featured': false,
     'icon_url': 'assets/icons/High-heels.svg',
+    'name': 'Größe',
+  },
+  {
+    'featured': false,
+    'icon_url': 'assets/icons/Woman-dress.svg',
     'name': 'Marke',
   },
   {
