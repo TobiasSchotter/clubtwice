@@ -1,11 +1,9 @@
+import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:clubtwice/views/screens/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
-import 'package:clubtwice/core/model/Category.dart';
 import 'package:clubtwice/core/model/Product.dart';
-import 'package:clubtwice/core/services/CategoryService.dart';
 import 'package:clubtwice/core/services/ProductService.dart';
-import 'package:clubtwice/views/widgets/category_card.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
 import 'package:flutter/services.dart';
 
@@ -18,7 +16,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Category> categoryData = CategoryService.categoryData;
   List<Product> productData = ProductService.productData;
 
   @override
@@ -40,7 +37,7 @@ class _HomePageState extends State<HomePage> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SearchPage()),
+                MaterialPageRoute(builder: (context) => const PageSwitcher()),
               );
             },
             autofocus: false,
@@ -49,7 +46,7 @@ class _HomePageState extends State<HomePage> {
             decoration: InputDecoration(
               hintStyle:
                   TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.3)),
-              hintText: 'Suche nach Vereinskleidung aller  ...',
+              hintText: 'Suche nach Vereinskleidung aller Vereine ...',
               prefixIcon: Container(
                 padding: EdgeInsets.all(10),
                 child: Icon(Icons.search_outlined,
@@ -78,7 +75,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           // Section 1
           Container(
-            height: 80,
+            height: 55,
             width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             color: AppColor.primary,
@@ -87,13 +84,14 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   margin: const EdgeInsets.only(top: 8),
                   padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Flex(
+                    direction: Axis.horizontal,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Flexible(
-                        child: const Text(
-                          'Finde Vereinskleidung und Co. aus deinem Verein',
+                      Expanded(
+                        child: Text(
+                          'Artikel aus deinem Verein 💪 ',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 22,
@@ -101,67 +99,114 @@ class _HomePageState extends State<HomePage> {
                             fontWeight: FontWeight.w600,
                             fontFamily: 'Poppins',
                           ),
+                          textAlign: TextAlign.center,
                         ),
                       ),
                     ],
                   ),
                 ),
-                //   DummySearchWidget1(
-                //   onTap: () {
-                //   Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //   builder: (context) => SearchPage(),
-                // ),
-                // );
-                // },
-                // ),
               ],
             ),
           ),
-          // Section 2 - category
+
           Container(
             width: MediaQuery.of(context).size.width,
             color: AppColor.secondary,
-            padding: const EdgeInsets.only(top: 12, bottom: 24),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            padding: EdgeInsets.all(10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Filter',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ],
+                // Filteroptionen für den Verein
+                DropdownButton<String>(
+                  icon: Icon(Icons.group),
+                  iconDisabledColor: Colors.white,
+                  iconEnabledColor: Colors.white,
+                  iconSize: 20.0,
+                  elevation: 16,
+                  style: TextStyle(color: Colors.black),
+                  underline: Container(
+                    height: 0.5,
+                    color: Colors.white,
                   ),
+                  items: [
+                    DropdownMenuItem(child: Text('Verein 1'), value: 'verein1'),
+                    DropdownMenuItem(child: Text('Verein 2'), value: 'verein2'),
+                    DropdownMenuItem(child: Text('Verein 3'), value: 'verein3'),
+                  ],
+                  onChanged: (value) {
+                    // TODO: Implementieren Sie die Filterlogik für den Verein
+                  },
+                  hint: Text('Verein ',
+                      style: TextStyle(color: AppColor.primarySoft)),
                 ),
-                // Category list
-                Container(
-                  margin: const EdgeInsets.only(top: 12),
-                  height: 96,
-                  child: ListView.separated(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: categoryData.length,
-                    physics: const BouncingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    separatorBuilder: (context, index) {
-                      return const SizedBox(width: 16);
-                    },
-                    itemBuilder: (context, index) {
-                      return CategoryCard(
-                        data: categoryData[index],
-                        onTap: () {},
-                      );
-                    },
+
+                // Filteroptionen für die Sportart
+                DropdownButton<String>(
+                  icon: Icon(Icons.directions_run),
+                  iconSize: 20.0,
+                  elevation: 16,
+                  style: TextStyle(color: Colors.black),
+                  underline: Container(
+                    height: 2,
+                    color: Colors.black,
                   ),
+                  items: [
+                    DropdownMenuItem(
+                        child: Text('Sportart 1'), value: 'sportart1'),
+                    DropdownMenuItem(
+                        child: Text('Sportart 2'), value: 'sportart2'),
+                    DropdownMenuItem(
+                        child: Text('Sportart 3'), value: 'sportart3'),
+                  ],
+                  onChanged: (value) {
+                    // TODO: Implementieren Sie die Filterlogik für die Sportart
+                  },
+                  hint: Text('Sportart',
+                      style: TextStyle(color: AppColor.primarySoft)),
+                ),
+
+                // Filteroptionen für die Größe
+                DropdownButton<String>(
+                  icon: Icon(Icons.height_outlined),
+                  iconSize: 20.0,
+                  elevation: 16,
+                  style: TextStyle(color: Colors.black),
+                  underline: Container(
+                    height: 2,
+                    color: Colors.black,
+                  ),
+                  items: [
+                    DropdownMenuItem(child: Text('Größe 1'), value: 'größe1'),
+                    DropdownMenuItem(child: Text('Größe 2'), value: 'größe2'),
+                    DropdownMenuItem(child: Text('Größe 3'), value: 'größe3'),
+                  ],
+                  onChanged: (value) {
+                    // TODO: Implementieren Sie die Filterlogik für die Größe
+                  },
+                  hint: Text('Größe',
+                      style: TextStyle(color: AppColor.primarySoft)),
+                ),
+
+                // Filteroptionen für die Marke
+                DropdownButton<String>(
+                  icon: Icon(Icons.label),
+                  iconSize: 20.0,
+                  elevation: 16,
+                  style: TextStyle(color: Colors.black),
+                  underline: Container(
+                    height: 2,
+                    color: Colors.black,
+                  ),
+                  items: [
+                    DropdownMenuItem(child: Text('Marke 1'), value: 'marke1'),
+                    DropdownMenuItem(child: Text('Marke 2'), value: 'marke2'),
+                    DropdownMenuItem(child: Text('Marke 3'), value: 'marke3'),
+                  ],
+                  onChanged: (value) {
+                    // TODO: Implementieren Sie die Filterlogik für die Marke
+                  },
+                  hint: Text('Marke',
+                      style: TextStyle(color: AppColor.primarySoft)),
                 ),
               ],
             ),

@@ -1,3 +1,4 @@
+import 'package:clubtwice/views/screens/message_page.dart';
 import 'package:clubtwice/views/screens/profile_page_help.dart';
 import 'package:clubtwice/views/screens/welcome_page.dart';
 import 'package:flutter/material.dart';
@@ -69,8 +70,8 @@ class _HelpPageState extends State<HelpPage> {
                 ),
                 MenuTileWidget(
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ProfilePageHelp()));
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => MessagePage()));
                   },
                   margin: const EdgeInsets.only(top: 10),
                   icon: Icon(

@@ -36,9 +36,8 @@ class _SearchResultPageState extends State<SearchResultPage>
         elevation: 0,
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
-          icon: SvgPicture.asset(
-            'assets/icons/Filter.svg',
-            color: Colors.white,
+          icon: Icon(
+            Icons.arrow_back,
           ),
         ),
         title: Container(
@@ -50,12 +49,12 @@ class _SearchResultPageState extends State<SearchResultPage>
             decoration: InputDecoration(
               hintStyle:
                   TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.3)),
-              hintText: 'Finde Vereinskleidung',
+              hintText: 'Finde Vereinskleidung aller Vereine',
               prefixIcon: Container(
-                padding: EdgeInsets.all(10),
-                child: SvgPicture.asset('assets/icons/Search.svg',
-                    color: Colors.white),
-              ),
+                  padding: EdgeInsets.all(10),
+                  child: Icon(Icons.search, color: Colors.white)
+                  //color: Colors.white),
+                  ),
               contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.transparent, width: 1),
@@ -84,7 +83,7 @@ class _SearchResultPageState extends State<SearchResultPage>
               Padding(
                 padding: EdgeInsets.only(left: 16, top: 16),
                 child: Text(
-                  'Search result of ${widget.searchKeyword}',
+                  'Suchergebnisse zu ${widget.searchKeyword}',
                   style: TextStyle(
                       color: Colors.grey,
                       fontSize: 12,

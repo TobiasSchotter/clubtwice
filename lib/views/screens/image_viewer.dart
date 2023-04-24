@@ -25,10 +25,7 @@ class _ImageViewerState extends State<ImageViewer> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: SvgPicture.asset(
-            'assets/icons/Arrow-left.svg',
-            color: Colors.white,
-          ),
+          icon: Icon(Icons.arrow_back),
         ),
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),

@@ -21,7 +21,7 @@ class MessageTileWidget extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         decoration: BoxDecoration(
-          color: (data.isRead == true) ? Colors.white : AppColor.primarySoft,
+          // color: (data.isRead == true) ? Colors.white : AppColor.primarySoft,
           border:
               Border(bottom: BorderSide(color: AppColor.primarySoft, width: 1)),
         ),

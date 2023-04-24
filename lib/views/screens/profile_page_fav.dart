@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:clubtwice/core/services/ProductService.dart';
 import 'package:clubtwice/core/model/Product.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
+import 'package:flutter/services.dart';
 
 class ProfilePageFav extends StatefulWidget {
   ProfilePageFav({super.key});
@@ -25,6 +26,20 @@ class _ProfilePageFavState extends State<ProfilePageFav> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        backgroundColor: AppColor.primary,
+        elevation: 0,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(Icons.arrow_back_outlined),
+          color: Colors.white,
+        ),
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+      ),
       // bottomNavigationBar: PageSwitcher(),
       body: ListView(
         shrinkWrap: true,
@@ -42,15 +57,6 @@ class _ProfilePageFavState extends State<ProfilePageFav> {
             ),
             child: Column(
               children: [
-                Row(
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.arrow_back),
-                      color: Colors.white,
-                      onPressed: () => Navigator.of(context).pop(),
-                    ),
-                  ],
-                ),
                 // Profile Picture
                 Container(
                   width: 96,

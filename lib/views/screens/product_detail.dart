@@ -95,7 +95,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width,
-                  height: 310,
+                  height: 400,
                   color: Colors.white,
                   child: PageView(
                     physics: const BouncingScrollPhysics(),
