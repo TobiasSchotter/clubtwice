@@ -116,31 +116,37 @@ class _HomePageState extends State<HomePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                // Filteroptionen für den Verein
-                DropdownButton<String>(
-                  icon: Icon(Icons.group),
-                  iconDisabledColor: Colors.white,
-                  iconEnabledColor: Colors.white,
-                  iconSize: 20.0,
-                  elevation: 16,
-                  style: TextStyle(color: Colors.black),
-                  underline: Container(
-                    height: 0.5,
-                    color: Colors.white,
+                Container(
+                  width: 75,
+                  // Filteroptionen für den Verein
+                  child: DropdownButton<String>(
+                    icon: Icon(Icons.group),
+                    iconDisabledColor: Colors.white,
+                    iconEnabledColor: Colors.white,
+                    iconSize: 20.0,
+                    elevation: 16,
+                    style: TextStyle(color: Colors.black),
+                    underline: Container(
+                      height: 0.5,
+                      color: Colors.white,
+                    ),
+                    items: [
+                      DropdownMenuItem(
+                          child: Text('Verein 1'), value: 'verein1'),
+                      DropdownMenuItem(
+                          child: Text('Verein 2'), value: 'verein2'),
+                      DropdownMenuItem(
+                          child: Text('Verein 3'), value: 'verein3'),
+                    ],
+                    onChanged: (value) {
+                      // TODO: Implementieren Sie die Filterlogik für den Verein
+                    },
+                    hint: Text('Verein',
+                        style: TextStyle(color: AppColor.primarySoft)),
                   ),
-                  items: [
-                    DropdownMenuItem(child: Text('Verein 1'), value: 'verein1'),
-                    DropdownMenuItem(child: Text('Verein 2'), value: 'verein2'),
-                    DropdownMenuItem(child: Text('Verein 3'), value: 'verein3'),
-                  ],
-                  onChanged: (value) {
-                    // TODO: Implementieren Sie die Filterlogik für den Verein
-                  },
-                  hint: Text('Verein ',
-                      style: TextStyle(color: AppColor.primarySoft)),
                 ),
-
                 // Filteroptionen für die Sportart
+
                 DropdownButton<String>(
                   icon: Icon(Icons.directions_run),
                   iconSize: 20.0,
@@ -165,6 +171,26 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(color: AppColor.primarySoft)),
                 ),
 
+                DropdownButton<String>(
+                  icon: Icon(Icons.type_specimen),
+                  iconSize: 20.0,
+                  elevation: 16,
+                  style: TextStyle(color: Colors.black),
+                  underline: Container(
+                    height: 2,
+                    color: Colors.black,
+                  ),
+                  items: [
+                    DropdownMenuItem(child: Text('Kids'), value: 'typ1'),
+                    DropdownMenuItem(child: Text('Erwachs.'), value: 'typ2'),
+                    DropdownMenuItem(child: Text('Universal'), value: 'typ3'),
+                  ],
+                  onChanged: (value) {
+                    // TODO: Implementieren Sie die Filterlogik für die Sportart
+                  },
+                  hint: Text('Typ',
+                      style: TextStyle(color: AppColor.primarySoft)),
+                ),
                 // Filteroptionen für die Größe
                 DropdownButton<String>(
                   icon: Icon(Icons.height_outlined),

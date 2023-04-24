@@ -20,9 +20,17 @@ class _SellPageState extends State<SellPage> {
   TextEditingController _priceController = TextEditingController();
   String selectedSport = "Fußball";
   String selectedClub = "SG Quelle";
-  String selectedSize = "Einheitsgröße";
+  String _selectedType = "Kids";
+  String _selectedSize = '170';
   String SelectedBrand = "Adidas";
   String selectedCondition = "Neu";
+
+  final List<String> _typeOptions = ['Kids', 'Erwachsene', 'Universal'];
+  final Map<String, List<String>> _sizeOptions = {
+    'Erwachsene': ['S', 'M', 'L', 'XL'],
+    'Kinder': ['140', '164', '170', 'XS'],
+    'Universal': ['Einheitsgröße'],
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +53,7 @@ class _SellPageState extends State<SellPage> {
                       onPressed: () {
                         _pickImage();
                       },
-                      child: Text('Foto hinzufügen'),
+                      child: Text('Foto hochladen'),
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 36, vertical: 18),
@@ -115,7 +123,7 @@ class _SellPageState extends State<SellPage> {
               Container(
                 margin: EdgeInsets.only(top: 20, bottom: 0),
                 child: Text(
-                  'Beschreibung',
+                  'Beschreibe deinen Artikel',
                   style: TextStyle(
                     color: AppColor.secondary.withOpacity(0.7),
                   ),
@@ -127,6 +135,7 @@ class _SellPageState extends State<SellPage> {
                   controller: _descriptionController,
                   cursorColor: AppColor.primarySoft,
                   decoration: InputDecoration(
+                      hintText: 'z.B. nur einmal getragen',
                       //labelText: 'Description',
                       fillColor: Colors.black),
                   maxLines: 5,
@@ -136,36 +145,45 @@ class _SellPageState extends State<SellPage> {
                 height: 16,
               ),
               DropdownButtonFormField<String>(
-                  value: selectedSize,
-                  decoration: InputDecoration(
-                    labelText: 'Größe auswählen',
-                    border: OutlineInputBorder(),
-                  ),
-                  items: <String>[
-                    'Einheitsgröße',
-                    '116',
-                    '128',
-                    '116',
-                    '128',
-                    '146',
-                    '164',
-                    '170',
-                    'S',
-                    'M',
-                    'L',
-                    'XL',
-                    'XXL',
-                  ].map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedSize = newValue!;
-                    });
-                  }),
+                value: _selectedType,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Typ',
+                ),
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedType = newValue!;
+                    _selectedSize = _sizeOptions[_selectedType]![0];
+                  });
+                },
+                items: _typeOptions
+                    .map((option) => DropdownMenuItem<String>(
+                          value: option,
+                          child: Text(option),
+                        ))
+                    .toList(),
+              ),
+              Container(
+                height: 16,
+              ),
+              DropdownButtonFormField<String>(
+                value: _selectedSize,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Größe',
+                ),
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedSize = newValue!;
+                  });
+                },
+                items: _sizeOptions[_selectedType]!
+                    .map((option) => DropdownMenuItem<String>(
+                          value: option,
+                          child: Text(option),
+                        ))
+                    .toList(),
+              ),
               Container(
                 height: 16,
               ),
@@ -269,7 +287,7 @@ class _SellPageState extends State<SellPage> {
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   suffixText: '€',
-                  hintText: '',
+                  hintText: 'z.B. 5',
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -292,7 +310,7 @@ class _SellPageState extends State<SellPage> {
                     ),
                   );
                 },
-                child: Text('Einstellen'),
+                child: Text('Artikel einstellen'),
                 style: ElevatedButton.styleFrom(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 36, vertical: 18),

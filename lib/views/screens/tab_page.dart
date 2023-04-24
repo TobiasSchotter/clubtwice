@@ -41,7 +41,7 @@ class _TabPageState extends State<TabPage> with SingleTickerProviderStateMixin {
           labelColor: Colors.black,
           controller: _tabController,
           tabs: [
-            Tab(text: 'Nachrichten'),
+            Tab(text: 'Nachrichten (1)'),
             Tab(text: 'Benachrichtigungen'),
           ],
         ),

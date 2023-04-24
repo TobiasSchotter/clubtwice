@@ -29,7 +29,7 @@ class MessageTileWidget extends StatelessWidget {
           children: [
             Container(
               width: 46,
-              height: 46,
+              height: 56,
               padding: EdgeInsets.all(10),
               margin: EdgeInsets.only(right: 16),
               decoration: BoxDecoration(

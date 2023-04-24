@@ -5,9 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:clubtwice/views/screens/register_page.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:clubtwice/core/services/auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
