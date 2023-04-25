@@ -70,8 +70,8 @@ class _HelpPageState extends State<HelpPage> {
                 ),
                 MenuTileWidget(
                   onTap: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => MessagePage()));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ProfilePageHelp()));
                   },
                   margin: const EdgeInsets.only(top: 10),
                   icon: Icon(

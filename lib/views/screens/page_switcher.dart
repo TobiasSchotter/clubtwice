@@ -7,7 +7,9 @@ import 'package:clubtwice/views/screens/home_page.dart';
 import 'package:clubtwice/views/screens/profile_page.dart';
 
 class PageSwitcher extends StatefulWidget {
-  const PageSwitcher({super.key});
+  final int selectedIndex;
+
+  PageSwitcher({Key? key, required this.selectedIndex}) : super(key: key);
 
   @override
   State<PageSwitcher> createState() => _PageSwitcherState();
@@ -15,6 +17,12 @@ class PageSwitcher extends StatefulWidget {
 
 class _PageSwitcherState extends State<PageSwitcher> {
   int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.selectedIndex;
+  }
 
   @override
   Widget build(BuildContext context) {

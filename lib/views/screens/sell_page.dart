@@ -27,8 +27,8 @@ class _SellPageState extends State<SellPage> {
 
   final List<String> _typeOptions = ['Kids', 'Erwachsene', 'Universal'];
   final Map<String, List<String>> _sizeOptions = {
-    'Erwachsene': ['S', 'M', 'L', 'XL'],
-    'Kinder': ['140', '164', '170', 'XS'],
+    'Erwachsene': ['S', 'M', 'L', 'XL', 'XXL'],
+    'Kids': ['140', '164', '170', 'XS'],
     'Universal': ['Einheitsgröße'],
   };
 
@@ -227,7 +227,17 @@ class _SellPageState extends State<SellPage> {
                     });
                   }),
               Container(
-                height: 16,
+                child: Column(
+                  children: <Widget>[
+                    Divider(
+                      color: Colors.grey[400],
+                      height: 20,
+                      thickness: 1,
+                      indent: 20,
+                      endIndent: 20,
+                    ),
+                  ],
+                ),
               ),
               DropdownButtonFormField<String>(
                   value: selectedClub,
@@ -302,8 +312,10 @@ class _SellPageState extends State<SellPage> {
               ElevatedButton(
                 onPressed: () {
                   // Navigator.of(context).pop();
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => PageSwitcher()));
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => PageSwitcher(
+                            selectedIndex: 0,
+                          )));
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Erfolgreich eingestellt'),

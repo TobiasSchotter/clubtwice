@@ -98,8 +98,10 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
             margin: const EdgeInsets.only(top: 32, bottom: 16),
             child: ElevatedButton(
               onPressed: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => PageSwitcher()));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => PageSwitcher(
+                          selectedIndex: 0,
+                        )));
               },
               style: ElevatedButton.styleFrom(
                 padding:

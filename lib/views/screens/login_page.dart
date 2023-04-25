@@ -27,8 +27,10 @@ class _LoginPageState extends State<LoginPage> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const PageSwitcher()));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => PageSwitcher(
+                selectedIndex: 0,
+              )));
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;
@@ -205,7 +207,9 @@ class _LoginPageState extends State<LoginPage> {
             onPressed: () {
               //Nav needs to be removed after firebase integration
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const PageSwitcher()));
+                  builder: (context) => PageSwitcher(
+                        selectedIndex: 0,
+                      )));
               //signInWithEmailAndPassword();
             },
             style: ElevatedButton.styleFrom(

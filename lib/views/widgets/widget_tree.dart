@@ -1,7 +1,6 @@
 import 'package:clubtwice/core/services/auth.dart';
 import 'package:clubtwice/views/screens/home_page.dart';
 import 'package:flutter/material.dart';
-
 import '../screens/welcome_page.dart';
 
 class WidgetTree extends StatefulWidget {
