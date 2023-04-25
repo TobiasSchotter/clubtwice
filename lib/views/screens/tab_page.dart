@@ -49,7 +49,7 @@ class _TabPageState extends State<TabPage> with SingleTickerProviderStateMixin {
       body: IndexedStack(
         index: _currentIndex,
         children: [
-          const MessagePage(),
+          MessagePage(),
           NotificationPage(),
         ],
       ),

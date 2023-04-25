@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:clubtwice/core/model/Product.dart';
 
 class ProductService {
@@ -16,67 +15,27 @@ var productRawData = [
     ],
     'name': 'Nike Waffle One',
     'price': 1429000,
-    'rating': 4.0,
     'description':
         'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
     'store_name': 'Nike Indonesia',
-    'colors': [
-      {
-        'name': 'black',
-        'color': Colors.black,
-      },
-      {
-        'name': 'blueGrey',
-        'color': Colors.blueGrey[200],
-      },
-      {
-        'name': 'pink',
-        'color': Colors.pink[100],
-      },
-      {
-        'name': 'white',
-        'color': Colors.white,
-      },
-    ],
-    'sizes': [
-      {
-        'size': '36.0',
-        'name': '36',
-      },
-      {
-        'size': '37.0',
-        'name': '37',
-      },
-      {
-        'size': '38.0',
-        'name': '38',
-      },
-      {
-        'size': '42.0',
-        'name': '42',
-      },
-    ],
     'reviews': [
       {
         'photo_url': 'assets/images/avatar1.jpg',
         'name': 'Uchiha Sasuke',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
       {
         'photo_url': 'assets/images/avatar2.jpg',
         'name': 'Uzumaki Naruto',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
       {
         'photo_url': 'assets/images/avatar3.jpg',
         'name': 'Kurokooo Tetsuya',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
     ]
   },
@@ -88,67 +47,27 @@ var productRawData = [
     ],
     'name': "Nike Blazer Mid77 Vintage",
     'price': 1429000,
-    'rating': 4.0,
     'description':
         'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
     'store_name': 'Nike Indonesia',
-    'colors': [
-      {
-        'name': 'black',
-        'color': Colors.black,
-      },
-      {
-        'name': 'blueGrey',
-        'color': Colors.blueGrey[200],
-      },
-      {
-        'name': 'pink',
-        'color': Colors.pink[100],
-      },
-      {
-        'name': 'white',
-        'color': Colors.white,
-      },
-    ],
-    'sizes': [
-      {
-        'size': '36.0',
-        'name': '36',
-      },
-      {
-        'size': '37.0',
-        'name': '37',
-      },
-      {
-        'size': '38.0',
-        'name': '38',
-      },
-      {
-        'size': '42.0',
-        'name': '42',
-      },
-    ],
     'reviews': [
       {
         'photo_url': 'assets/images/avatar1.jpg',
         'name': 'Uchiha Sasuke',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
       {
         'photo_url': 'assets/images/avatar2.jpg',
         'name': 'Uzumaki Naruto',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
       {
         'photo_url': 'assets/images/avatar3.jpg',
         'name': 'Kurokooo Tetsuya',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
     ]
   },
@@ -161,67 +80,27 @@ var productRawData = [
     ],
     'name': "Nike Sportswear Swoosh",
     'price': 849000,
-    'rating': 4.0,
     'description':
         'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
     'store_name': 'Nike Indonesia',
-    'colors': [
-      {
-        'name': 'black',
-        'color': Colors.black,
-      },
-      {
-        'name': 'blueGrey',
-        'color': Colors.blueGrey[200],
-      },
-      {
-        'name': 'pink',
-        'color': Colors.pink[100],
-      },
-      {
-        'name': 'white',
-        'color': Colors.white,
-      },
-    ],
-    'sizes': [
-      {
-        'size': '36.0',
-        'name': '36',
-      },
-      {
-        'size': '37.0',
-        'name': '37',
-      },
-      {
-        'size': '38.0',
-        'name': '38',
-      },
-      {
-        'size': '42.0',
-        'name': '42',
-      },
-    ],
     'reviews': [
       {
         'photo_url': 'assets/images/avatar1.jpg',
         'name': 'Uchiha Sasuke',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
       {
         'photo_url': 'assets/images/avatar2.jpg',
         'name': 'Uzumaki Naruto',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
       {
         'photo_url': 'assets/images/avatar3.jpg',
         'name': 'Kurokooo Tetsuya',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
     ]
   },
@@ -233,67 +112,27 @@ var productRawData = [
     ],
     'name': "Adidas T-SHIRT R.Y.V.",
     'price': 1900000,
-    'rating': 4.0,
     'description':
         'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
     'store_name': 'Adidas Indonesia',
-    'colors': [
-      {
-        'name': 'black',
-        'color': Colors.black,
-      },
-      {
-        'name': 'blueGrey',
-        'color': Colors.blueGrey[200],
-      },
-      {
-        'name': 'pink',
-        'color': Colors.pink[100],
-      },
-      {
-        'name': 'white',
-        'color': Colors.white,
-      },
-    ],
-    'sizes': [
-      {
-        'size': '36.0',
-        'name': '36',
-      },
-      {
-        'size': '37.0',
-        'name': '37',
-      },
-      {
-        'size': '38.0',
-        'name': '38',
-      },
-      {
-        'size': '42.0',
-        'name': '42',
-      },
-    ],
     'reviews': [
       {
         'photo_url': 'assets/images/avatar1.jpg',
         'name': 'Uchiha Sasuke',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
       {
         'photo_url': 'assets/images/avatar2.jpg',
         'name': 'Uzumaki Naruto',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
       {
         'photo_url': 'assets/images/avatar3.jpg',
         'name': 'Kurokooo Tetsuya',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
     ]
   },
@@ -307,67 +146,27 @@ var searchedProductRawData = [
     ],
     'name': 'Air Jordan XXXVI SE PF',
     'price': 2729000,
-    'rating': 4.0,
     'description':
         'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
     'store_name': 'Nike Indonesia',
-    'colors': [
-      {
-        'name': 'black',
-        'color': Colors.black,
-      },
-      {
-        'name': 'blueGrey',
-        'color': Colors.blueGrey[200],
-      },
-      {
-        'name': 'pink',
-        'color': Colors.pink[100],
-      },
-      {
-        'name': 'white',
-        'color': Colors.white,
-      },
-    ],
-    'sizes': [
-      {
-        'size': '36.0',
-        'name': '36',
-      },
-      {
-        'size': '37.0',
-        'name': '37',
-      },
-      {
-        'size': '38.0',
-        'name': '38',
-      },
-      {
-        'size': '42.0',
-        'name': '42',
-      },
-    ],
     'reviews': [
       {
         'photo_url': 'assets/images/avatar1.jpg',
         'name': 'Uchiha Sasuke',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
       {
         'photo_url': 'assets/images/avatar2.jpg',
         'name': 'Uzumaki Naruto',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
       {
         'photo_url': 'assets/images/avatar3.jpg',
         'name': 'Kurokooo Tetsuya',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
     ]
   },
@@ -379,67 +178,27 @@ var searchedProductRawData = [
     ],
     'name': "Air Jordan 1 Retro OG",
     'price': 1749000,
-    'rating': 5.0,
     'description':
         'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
     'store_name': 'Nike Indonesia',
-    'colors': [
-      {
-        'name': 'black',
-        'color': Colors.black,
-      },
-      {
-        'name': 'blueGrey',
-        'color': Colors.blueGrey[200],
-      },
-      {
-        'name': 'pink',
-        'color': Colors.pink[100],
-      },
-      {
-        'name': 'white',
-        'color': Colors.white,
-      },
-    ],
-    'sizes': [
-      {
-        'size': '36.0',
-        'name': '36',
-      },
-      {
-        'size': '37.0',
-        'name': '37',
-      },
-      {
-        'size': '38.0',
-        'name': '38',
-      },
-      {
-        'size': '42.0',
-        'name': '42',
-      },
-    ],
     'reviews': [
       {
         'photo_url': 'assets/images/avatar1.jpg',
         'name': 'Uchiha Sasuke',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
       {
         'photo_url': 'assets/images/avatar2.jpg',
         'name': 'Uzumaki Naruto',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
       {
         'photo_url': 'assets/images/avatar3.jpg',
         'name': 'Kurokooo Tetsuya',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
     ]
   },
@@ -452,67 +211,27 @@ var searchedProductRawData = [
     ],
     'name': "Jordan Point Lane",
     'price': 2099000,
-    'rating': 5.0,
     'description':
         'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
     'store_name': 'Nike Indonesia',
-    'colors': [
-      {
-        'name': 'black',
-        'color': Colors.black,
-      },
-      {
-        'name': 'blueGrey',
-        'color': Colors.blueGrey[200],
-      },
-      {
-        'name': 'pink',
-        'color': Colors.pink[100],
-      },
-      {
-        'name': 'white',
-        'color': Colors.white,
-      },
-    ],
-    'sizes': [
-      {
-        'size': '36.0',
-        'name': '36',
-      },
-      {
-        'size': '37.0',
-        'name': '37',
-      },
-      {
-        'size': '38.0',
-        'name': '38',
-      },
-      {
-        'size': '42.0',
-        'name': '42',
-      },
-    ],
     'reviews': [
       {
         'photo_url': 'assets/images/avatar1.jpg',
         'name': 'Uchiha Sasuke',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
       {
         'photo_url': 'assets/images/avatar2.jpg',
         'name': 'Uzumaki Naruto',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
       {
         'photo_url': 'assets/images/avatar3.jpg',
         'name': 'Kurokooo Tetsuya',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
     ]
   },
@@ -526,67 +245,27 @@ var searchedProductRawData = [
     ],
     'name': "Air Jordan 4 Crimson",
     'price': 2779000,
-    'rating': 4.0,
     'description':
         'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
     'store_name': 'Nike Indonesia',
-    'colors': [
-      {
-        'name': 'black',
-        'color': Colors.black,
-      },
-      {
-        'name': 'blueGrey',
-        'color': Colors.blueGrey[200],
-      },
-      {
-        'name': 'pink',
-        'color': Colors.pink[100],
-      },
-      {
-        'name': 'white',
-        'color': Colors.white,
-      },
-    ],
-    'sizes': [
-      {
-        'size': '36.0',
-        'name': '36',
-      },
-      {
-        'size': '37.0',
-        'name': '37',
-      },
-      {
-        'size': '38.0',
-        'name': '38',
-      },
-      {
-        'size': '42.0',
-        'name': '42',
-      },
-    ],
     'reviews': [
       {
         'photo_url': 'assets/images/avatar1.jpg',
         'name': 'Uchiha Sasuke',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
       {
         'photo_url': 'assets/images/avatar2.jpg',
         'name': 'Uzumaki Naruto',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
       {
         'photo_url': 'assets/images/avatar3.jpg',
         'name': 'Kurokooo Tetsuya',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
     ]
   },
@@ -600,67 +279,27 @@ var searchedProductRawData = [
     ],
     'name': "Jordan Delta 2 SE",
     'price': 2099000,
-    'rating': 5.0,
     'description':
         'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
     'store_name': 'Nike Indonesia',
-    'colors': [
-      {
-        'name': 'black',
-        'color': Colors.black,
-      },
-      {
-        'name': 'blueGrey',
-        'color': Colors.blueGrey[200],
-      },
-      {
-        'name': 'pink',
-        'color': Colors.pink[100],
-      },
-      {
-        'name': 'white',
-        'color': Colors.white,
-      },
-    ],
-    'sizes': [
-      {
-        'size': '36.0',
-        'name': '36',
-      },
-      {
-        'size': '37.0',
-        'name': '37',
-      },
-      {
-        'size': '38.0',
-        'name': '38',
-      },
-      {
-        'size': '42.0',
-        'name': '42',
-      },
-    ],
     'reviews': [
       {
         'photo_url': 'assets/images/avatar1.jpg',
         'name': 'Uchiha Sasuke',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
       {
         'photo_url': 'assets/images/avatar2.jpg',
         'name': 'Uzumaki Naruto',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
       {
         'photo_url': 'assets/images/avatar3.jpg',
         'name': 'Kurokooo Tetsuya',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
     ]
   },
@@ -674,67 +313,27 @@ var searchedProductRawData = [
     ],
     'name': "Jordan One Take 3",
     'price': 1099000,
-    'rating': 4.0,
     'description':
         'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
     'store_name': 'Nike Indonesia',
-    'colors': [
-      {
-        'name': 'black',
-        'color': Colors.black,
-      },
-      {
-        'name': 'blueGrey',
-        'color': Colors.blueGrey[200],
-      },
-      {
-        'name': 'pink',
-        'color': Colors.pink[100],
-      },
-      {
-        'name': 'white',
-        'color': Colors.white,
-      },
-    ],
-    'sizes': [
-      {
-        'size': '36.0',
-        'name': '36',
-      },
-      {
-        'size': '37.0',
-        'name': '37',
-      },
-      {
-        'size': '38.0',
-        'name': '38',
-      },
-      {
-        'size': '42.0',
-        'name': '42',
-      },
-    ],
     'reviews': [
       {
         'photo_url': 'assets/images/avatar1.jpg',
         'name': 'Uchiha Sasuke',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
       {
         'photo_url': 'assets/images/avatar2.jpg',
         'name': 'Uzumaki Naruto',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
       {
         'photo_url': 'assets/images/avatar3.jpg',
         'name': 'Kurokooo Tetsuya',
         'review':
             'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
-        'rating': 4.0,
       },
     ]
   },

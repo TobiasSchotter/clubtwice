@@ -1,4 +1,3 @@
-import 'package:clubtwice/views/screens/message_page.dart';
 import 'package:clubtwice/views/screens/profile_page_help.dart';
 import 'package:clubtwice/views/screens/welcome_page.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +20,7 @@ class HelpPage extends StatefulWidget {
 }
 
 class _HelpPageState extends State<HelpPage> {
+  bool confirm = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,7 +118,7 @@ class _HelpPageState extends State<HelpPage> {
                     color: AppColor.secondary.withOpacity(0.5),
                   ),
                   title: 'Impressum',
-                  subtitle: 'Hier findest du unser Impressum?',
+                  subtitle: 'Hier findest du unser Impressum',
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width,
@@ -140,25 +140,48 @@ class _HelpPageState extends State<HelpPage> {
                       MenuTileWidget(
                         onTap: () async {
                           // Show a dialog to confirm the sign out
-                          bool confirm = await showDialog(
+                          bool confirmDialog = await showDialog(
                             context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text('Löschen'),
-                              content: const Text(
-                                  'Möchtest du dein Account wirklich löschen?'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () =>
-                                      Navigator.of(context).pop(false),
-                                  child: const Text('Nein'),
+                            builder: (context) {
+                              bool isChecked = true;
+                              return AlertDialog(
+                                title: const Text('Löschen'),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Text(
+                                        'Möchtest du dein Account wirklich löschen?'),
+                                    CheckboxListTile(
+                                      title: const Text(
+                                          'Ich bestätige, dass ich meinen Account löschen möchte'),
+                                      value: isChecked,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          isChecked = value!;
+                                        });
+                                      },
+                                      controlAffinity:
+                                          ListTileControlAffinity.leading,
+                                    ),
+                                  ],
                                 ),
-                                TextButton(
-                                  onPressed: () =>
-                                      Navigator.of(context).pop(true),
-                                  child: const Text('Ja'),
-                                ),
-                              ],
-                            ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(false),
+                                    child: const Text('Abbrechen'),
+                                  ),
+                                  TextButton(
+                                    onPressed: isChecked && confirm
+                                        ? () {
+                                            Navigator.of(context).pop(true);
+                                          }
+                                        : null,
+                                    child: const Text('Löschen'),
+                                  ),
+                                ],
+                              );
+                            },
                           );
                           // Sign out if confirmed
                           if (confirm == true) {

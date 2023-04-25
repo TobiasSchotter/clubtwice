@@ -8,31 +8,22 @@ class NotificationService {
 
 var notificationListRawData = [
   {
-    'image_url': 'assets/images/nikeblack.jpg',
-    'title': '#21070 Order Status',
+    'image_url': 'assets/images/logo.png',
+    'title': 'Neue Funktion',
     'date_time': '${DateTime.now()}',
-    'description':
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
+    'description': 'Ab sofort kannst du mehrere Benachrichtungen hinterlegen',
   },
   {
-    'image_url': 'assets/images/nikegrey.jpg',
-    'title': '#30127 Order Canclelled',
+    'image_url': 'assets/images/logo.png',
+    'title': 'Neue Artikel aus deinem Verein',
     'date_time': '${DateTime.now()}',
-    'description':
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
+    'description': 'Es wurden neue Artikel aus deinem Verein hochgeladen',
   },
   {
-    'image_url': 'assets/images/nikehoodie.jpg',
-    'title': 'Payment Time limit for #1021820',
+    'image_url': 'assets/images/logo.png',
+    'title': 'Neues Kidsprdoukt aus deinem Verein',
     'date_time': '${DateTime.now()}',
     'description':
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
-  },
-  {
-    'image_url': 'assets/images/nikeblack.jpg',
-    'title': '#21070 Order Status',
-    'date_time': '${DateTime.now()}',
-    'description':
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
+        'Es wurde ein neues Kidsprodukt aus deinem Verein hochgeladen',
   },
 ];
