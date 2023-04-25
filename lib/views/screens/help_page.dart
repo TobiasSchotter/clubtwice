@@ -65,6 +65,20 @@ class _HelpPageState extends State<HelpPage> {
                     Icons.help_center_outlined,
                     color: AppColor.secondary.withOpacity(0.5),
                   ),
+                  title: 'Benachrichtigungen',
+                  subtitle:
+                      'Passe hier deine Benachrichtigungen zu neuen Artikel etc. an',
+                ),
+                MenuTileWidget(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ProfilePageHelp()));
+                  },
+                  margin: const EdgeInsets.only(top: 10),
+                  icon: Icon(
+                    Icons.help_center_outlined,
+                    color: AppColor.secondary.withOpacity(0.5),
+                  ),
                   title: 'App bewerten',
                   subtitle: 'Bewerte unsere App',
                 ),
