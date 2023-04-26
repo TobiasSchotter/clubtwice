@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 class MyProfileWidget extends StatelessWidget {
@@ -6,6 +7,7 @@ class MyProfileWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      //height: 241,
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       decoration: const BoxDecoration(
@@ -26,6 +28,17 @@ class MyProfileWidget extends StatelessWidget {
               image: const DecorationImage(
                 image: AssetImage('assets/images/pp.jpg'),
                 fit: BoxFit.cover,
+              ),
+            ),
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: IconButton(
+                iconSize: 15,
+                icon: Icon(Icons.camera_alt_rounded),
+                color: Colors.white,
+                onPressed: () {
+                  // Hier kannst du den Code zum Hochladen oder Löschen des Bildes einfügen
+                },
               ),
             ),
           ),

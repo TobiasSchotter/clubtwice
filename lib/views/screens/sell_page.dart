@@ -14,6 +14,7 @@ class SellPage extends StatefulWidget {
 class _SellPageState extends State<SellPage> {
   final ImagePicker _picker = ImagePicker();
   List<File> _imageList = [];
+  bool _isIndividuallyWearable = false;
 
   TextEditingController _titleController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
@@ -130,7 +131,7 @@ class _SellPageState extends State<SellPage> {
                 ),
               ),
               Container(
-                color: AppColor.primarySoft,
+                // color: AppColor.primarySoft,
                 child: TextFormField(
                   controller: _descriptionController,
                   cursorColor: AppColor.primarySoft,
@@ -138,7 +139,7 @@ class _SellPageState extends State<SellPage> {
                       hintText: 'z.B. nur einmal getragen',
                       //labelText: 'Description',
                       fillColor: Colors.black),
-                  maxLines: 5,
+                  maxLines: 3,
                 ),
               ),
               Container(
@@ -231,7 +232,7 @@ class _SellPageState extends State<SellPage> {
                   children: <Widget>[
                     Divider(
                       color: Colors.grey[400],
-                      height: 20,
+                      height: 30,
                       thickness: 1,
                       indent: 20,
                       endIndent: 20,
@@ -282,8 +283,26 @@ class _SellPageState extends State<SellPage> {
                       selectedSport = newValue!;
                     });
                   }),
+              ListTile(
+                title: Text(
+                  "Kann auch individuell getragen werden",
+                  style: TextStyle(fontSize: 14),
+                ),
+                trailing: Transform.scale(
+                  scale:
+                      0.8, // Hier können Sie den Wert anpassen, um die Größe zu ändern
+                  child: Switch(
+                    value: _isIndividuallyWearable,
+                    onChanged: (value) {
+                      setState(() {
+                        _isIndividuallyWearable = value;
+                      });
+                    },
+                  ),
+                ),
+              ),
               Container(
-                margin: EdgeInsets.only(top: 20, bottom: 0),
+                //margin: EdgeInsets.only(top: 20, bottom: 0),
                 child: Text(
                   'Preis',
                   style: TextStyle(

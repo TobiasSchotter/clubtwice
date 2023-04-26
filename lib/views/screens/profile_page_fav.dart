@@ -6,7 +6,7 @@ import 'package:clubtwice/core/services/ProductService.dart';
 import 'package:clubtwice/core/model/Product.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
 import 'package:flutter/services.dart';
-
+import '../widgets/filter_tile_widget.dart';
 import '../widgets/profile_tile_widget.dart';
 
 class ProfilePageFav extends StatefulWidget {
