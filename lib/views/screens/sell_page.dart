@@ -15,6 +15,7 @@ class _SellPageState extends State<SellPage> {
   final ImagePicker _picker = ImagePicker();
   List<File> _imageList = [];
   bool _isIndividuallyWearable = false;
+  bool _isPriceValid = false;
 
   TextEditingController _titleController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
@@ -88,7 +89,14 @@ class _SellPageState extends State<SellPage> {
               ),
               Container(height: 16.0),
               Container(
-                color: AppColor.primarySoft,
+                decoration: _imageList.isEmpty
+                    ? BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("assets/images/background.jpg"),
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    : null,
                 child: GridView.builder(
                   shrinkWrap: true,
                   itemCount: _imageList.length,
@@ -108,19 +116,35 @@ class _SellPageState extends State<SellPage> {
               Container(
                 margin: EdgeInsets.only(top: 20, bottom: 0),
                 child: Text(
-                  'Titel',
+                  'Titel *',
                   style: TextStyle(
                     color: AppColor.secondary.withOpacity(0.7),
                   ),
                 ),
               ),
               TextFormField(
-                  controller: _titleController,
-                  cursorColor: AppColor.primarySoft,
-                  decoration: const InputDecoration(
-                    //icon: Icon(Icons.sell),
-                    hintText: 'z.B. Aufwärmshirt Kurzarm',
-                  )),
+                controller: _titleController,
+                cursorColor: AppColor.primarySoft,
+                decoration: const InputDecoration(
+                  hintText: 'z.B. Aufwärmshirt Kurzarm',
+                ),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Bitte geben Sie einen Titel ein';
+                  } else {
+                    int letterCount = 0;
+                    for (int i = 0; i < value.length; i++) {
+                      if (value[i].trim().isNotEmpty) {
+                        letterCount++;
+                      }
+                    }
+                    if (letterCount < 3) {
+                      return 'Der Titel muss mindestens 3 Buchstaben haben';
+                    }
+                  }
+                  return null;
+                },
+              ),
               Container(
                 margin: EdgeInsets.only(top: 20, bottom: 0),
                 child: Text(
@@ -285,26 +309,54 @@ class _SellPageState extends State<SellPage> {
                   }),
               ListTile(
                 title: Text(
-                  "Kann auch individuell getragen werden",
+                  "Artikel unabhängig des Vereins / Sportart nutzbar",
                   style: TextStyle(fontSize: 14),
                 ),
-                trailing: Transform.scale(
-                  scale:
-                      0.8, // Hier können Sie den Wert anpassen, um die Größe zu ändern
-                  child: Switch(
-                    value: _isIndividuallyWearable,
-                    onChanged: (value) {
-                      setState(() {
-                        _isIndividuallyWearable = value;
-                      });
-                    },
-                  ),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Transform.scale(
+                      scale: 0.8,
+                      child: Switch(
+                        value: _isIndividuallyWearable,
+                        onChanged: (value) {
+                          setState(() {
+                            _isIndividuallyWearable = value;
+                          });
+                        },
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (_) => AlertDialog(
+                            title: Text("Individuell tragbar"),
+                            content: Text(
+                                "Artikel welche auch unabhängig des Vereins und der Sportart getragen werden können, werden allen Benutzer angezeigt."),
+                            actions: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text("Schließen"),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      child: Icon(
+                        Icons.info_outline,
+                        size: 18,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Container(
                 //margin: EdgeInsets.only(top: 20, bottom: 0),
                 child: Text(
-                  'Preis',
+                  'Preis *',
                   style: TextStyle(
                     color: AppColor.secondary.withOpacity(0.7),
                   ),
@@ -316,8 +368,19 @@ class _SellPageState extends State<SellPage> {
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   suffixText: '€',
-                  hintText: 'z.B. 5',
+                  hintText: 'z.B. 5.50',
                 ),
+                onChanged: (value) {
+                  setState(() {
+                    if (value.isEmpty) {
+                      _isPriceValid = false;
+                    } else if (double.tryParse(value) == null) {
+                      _isPriceValid = false;
+                    } else {
+                      _isPriceValid = true;
+                    }
+                  });
+                },
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Bitte geben Sie einen Preis ein';
@@ -327,20 +390,25 @@ class _SellPageState extends State<SellPage> {
                   return null;
                 },
               ),
-              Container(height: 16.0),
+              Container(
+                height: 16,
+              ),
               ElevatedButton(
-                onPressed: () {
-                  // Navigator.of(context).pop();
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => PageSwitcher(
-                            selectedIndex: 0,
-                          )));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Erfolgreich eingestellt'),
-                    ),
-                  );
-                },
+                onPressed:
+                    _titleController.text.trim().length >= 3 && _isPriceValid
+                        ? () {
+                            // Navigator.of(context).pop();
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => PageSwitcher(
+                                      selectedIndex: 0,
+                                    )));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Erfolgreich eingestellt'),
+                              ),
+                            );
+                          }
+                        : null,
                 child: Text('Artikel einstellen'),
                 style: ElevatedButton.styleFrom(
                   padding:
