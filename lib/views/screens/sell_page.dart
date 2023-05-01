@@ -5,6 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:firebase_database/firebase_database.dart';
 
+import '../widgets/grid_widget.dart';
+
 class SellPage extends StatefulWidget {
   const SellPage({Key? key}) : super(key: key);
 
@@ -13,7 +15,7 @@ class SellPage extends StatefulWidget {
 }
 
 class _SellPageState extends State<SellPage> {
-  final database = FirebaseDatabase.instance.reference();
+  // final database = FirebaseDatabase.instance.reference();
 
   final ImagePicker _picker = ImagePicker();
   List<File> _imageList = [];
@@ -65,7 +67,7 @@ class _SellPageState extends State<SellPage> {
 
   @override
   Widget build(BuildContext context) {
-    final SellRef = database.child('/Sell');
+    // final SellRef = database.child('/Sell');
 
     return Scaffold(
       appBar: AppBar(
@@ -79,71 +81,7 @@ class _SellPageState extends State<SellPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        _pickImage();
-                      },
-                      child: Text('Foto hochladen'),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 36, vertical: 18),
-                        backgroundColor: AppColor.primary,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16)),
-                        elevation: 0,
-                        shadowColor: Colors.transparent,
-                      ),
-                    ),
-                  ),
-                  Container(width: 16.0),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        _removeImage();
-                      },
-                      child: Text('Foto entfernen'),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 36, vertical: 18),
-                        backgroundColor: AppColor.primary,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16)),
-                        elevation: 0,
-                        shadowColor: Colors.transparent,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Container(height: 16.0),
-              Container(
-                decoration: _imageList.isEmpty
-                    ? BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage("assets/images/background.jpg"),
-                          fit: BoxFit.cover,
-                        ),
-                      )
-                    : null,
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  itemCount: _imageList.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 4.0,
-                    mainAxisSpacing: 4.0,
-                  ),
-                  itemBuilder: (BuildContext context, int index) {
-                    return Image.file(
-                      _imageList[index],
-                      fit: BoxFit.cover,
-                    );
-                  },
-                ),
-              ),
+              ImageGrid(),
               Container(
                 margin: EdgeInsets.only(top: 20, bottom: 0),
                 child: Text(
