@@ -48,14 +48,16 @@ class _PageSwitcherState extends State<PageSwitcher> {
         selectedIndex: _selectedIndex,
         destinations: const <Widget>[
           NavigationDestination(
-            icon: Icon(Icons.home_outlined),
+            icon: Icon(
+              Icons.home_outlined,
+            ),
             selectedIcon: Icon(Icons.home),
-            label: 'Start',
+            label: 'Club',
           ),
           NavigationDestination(
             icon: Icon(Icons.search_outlined),
             selectedIcon: Icon(Icons.search),
-            label: 'Suchen',
+            label: 'Suche',
           ),
           NavigationDestination(
             icon: Icon(Icons.sell_outlined),
@@ -65,7 +67,7 @@ class _PageSwitcherState extends State<PageSwitcher> {
           NavigationDestination(
             icon: Icon(Icons.mail_outlined),
             selectedIcon: Icon(Icons.mail),
-            label: 'Nachrichten',
+            label: 'Inbox',
           ),
           NavigationDestination(
             icon: Icon(Icons.person_outlined),

@@ -43,6 +43,7 @@ dependencies:
   firebase_core: ^2.8.0
   firebase_auth: ^4.3.0
   flutter_widget_from_html: ^0.9.1
+  firebase_database: ^10.1.1
 
 dev_dependencies:
   flutter_test:

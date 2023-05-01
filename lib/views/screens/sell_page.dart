@@ -3,6 +3,7 @@ import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:clubtwice/constant/app_color.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class SellPage extends StatefulWidget {
   const SellPage({Key? key}) : super(key: key);
@@ -12,6 +13,8 @@ class SellPage extends StatefulWidget {
 }
 
 class _SellPageState extends State<SellPage> {
+  final database = FirebaseDatabase.instance.reference();
+
   final ImagePicker _picker = ImagePicker();
   List<File> _imageList = [];
   bool _isIndividuallyWearable = false;
@@ -23,7 +26,7 @@ class _SellPageState extends State<SellPage> {
   String selectedSport = "Fußball";
   String selectedClub = "SG Quelle";
   String _selectedType = "Kids";
-  String _selectedSize = '170';
+  String _selectedSize = '140';
   String SelectedBrand = "Adidas";
   String selectedCondition = "Neu";
 
@@ -33,9 +36,37 @@ class _SellPageState extends State<SellPage> {
     'Kids': ['140', '164', '170', 'XS'],
     'Universal': ['Einheitsgröße'],
   };
+  final List<String> _conditionOptions = [
+    'Neu, mit Etikett',
+    'Neu',
+    'Sehr gut',
+    'Gut',
+    'Zufriedenstellend'
+  ];
+
+  final List<String> _popularBrandOptions = ['Adidas', 'Puma', 'Nike'];
+  final List<String> _lessPopularBrandOptions = [
+    'Asics',
+    'Capelli',
+    'Castore',
+    'Craft',
+    'Fila',
+    'Hummel',
+    'Jako',
+    'Joma',
+    'Kappa',
+    'Macron',
+    'Mizuno',
+    'Reebok',
+    'Saller',
+    'Umbro',
+    'Uhlsport'
+  ];
 
   @override
   Widget build(BuildContext context) {
+    final SellRef = database.child('/Sell');
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false, // den Zurück-Button deaktivieren
@@ -218,7 +249,7 @@ class _SellPageState extends State<SellPage> {
                     labelText: 'Zustand auswählen',
                     border: OutlineInputBorder(),
                   ),
-                  items: <String>['Neu', 'Sehr gut', 'Gut', 'Müll']
+                  items: _conditionOptions
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -234,23 +265,60 @@ class _SellPageState extends State<SellPage> {
                 height: 16,
               ),
               DropdownButtonFormField<String>(
-                  value: SelectedBrand,
-                  decoration: InputDecoration(
-                    labelText: 'Marke auswählen',
-                    border: OutlineInputBorder(),
+                value: SelectedBrand,
+                decoration: InputDecoration(
+                  labelText: 'Marke auswählen',
+                  border: OutlineInputBorder(),
+                ),
+                items: [
+                  DropdownMenuItem<String>(
+                    value: null,
+                    child: Text(
+                      'Beliebtesten Marken',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                        fontSize: 14,
+                      ),
+                    ),
+                    enabled: false,
                   ),
-                  items: <String>['Adidas', 'Puma', 'Nike']
+                  ..._popularBrandOptions
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
                     );
-                  }).toList(),
-                  onChanged: (newValue) {
-                    setState(() {
-                      SelectedBrand = newValue!;
-                    });
                   }),
+                  DropdownMenuItem<String>(
+                    value: null,
+                    child: Text(
+                      'Weitere',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                        fontSize: 14,
+                      ),
+                    ),
+                    enabled: false,
+                  ),
+                  ..._lessPopularBrandOptions
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    );
+                  }),
+                ],
+                onChanged: (newValue) {
+                  setState(() {
+                    SelectedBrand = newValue!;
+                  });
+                },
+              ),
               Container(
                 child: Column(
                   children: <Widget>[
@@ -310,7 +378,7 @@ class _SellPageState extends State<SellPage> {
               ListTile(
                 title: Text(
                   "Artikel unabhängig des Vereins / Sportart nutzbar",
-                  style: TextStyle(fontSize: 14),
+                  style: TextStyle(fontSize: 15),
                 ),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -333,7 +401,7 @@ class _SellPageState extends State<SellPage> {
                           builder: (_) => AlertDialog(
                             title: Text("Individuell tragbar"),
                             content: Text(
-                                "Artikel welche auch unabhängig des Vereins und der Sportart getragen werden können, werden allen Benutzer angezeigt."),
+                                "Artikel die unabhängig des Vereins und der Sportart getragen werden können, werden allen Benutzer angezeigt."),
                             actions: [
                               ElevatedButton(
                                 onPressed: () {
@@ -365,16 +433,18 @@ class _SellPageState extends State<SellPage> {
               TextFormField(
                 controller: _priceController,
                 cursorColor: AppColor.primarySoft,
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.numberWithOptions(
+                    decimal: true, signed: false),
                 decoration: InputDecoration(
                   suffixText: '€',
-                  hintText: 'z.B. 5.50',
+                  hintText: 'z.B. 5,50',
                 ),
                 onChanged: (value) {
                   setState(() {
                     if (value.isEmpty) {
                       _isPriceValid = false;
-                    } else if (double.tryParse(value) == null) {
+                    } else if (double.tryParse(value.replaceAll(',', '.')) ==
+                        null) {
                       _isPriceValid = false;
                     } else {
                       _isPriceValid = true;
@@ -384,7 +454,8 @@ class _SellPageState extends State<SellPage> {
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Bitte geben Sie einen Preis ein';
-                  } else if (double.tryParse(value) == null) {
+                  } else if (double.tryParse(value.replaceAll(',', '.')) ==
+                      null) {
                     return 'Bitte geben Sie eine gültige Zahl ein';
                   }
                   return null;
