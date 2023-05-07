@@ -56,28 +56,28 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
             child: Row(
               children: [
                 Text(
-                  'OTP Code wurde an folgende E-Mail Adresse geschickt:',
+                  'OTP Code wurde an deine E-Mail Adresse geschickt:',
                   style: TextStyle(
                       color: AppColor.secondary.withOpacity(0.7), fontSize: 14),
                 ),
               ],
             ),
           ),
-          Container(
-            margin: const EdgeInsets.only(top: 0, bottom: 20),
-            child: Row(
-              children: const [
-                SizedBox(width: 10),
-                Text(
-                  'deine.email@email.com',
-                  style: TextStyle(
-                      color: AppColor.primary,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700),
-                ),
-              ],
-            ),
-          ),
+          // Container(
+          //   margin: const EdgeInsets.only(top: 0, bottom: 20),
+          //   child: Row(
+          //     children: const [
+          //       SizedBox(width: 10),
+          //       Text(
+          //         'deine.email@email.com',
+          //         style: TextStyle(
+          //             color: AppColor.primary,
+          //             fontSize: 14,
+          //             fontWeight: FontWeight.w700),
+          //       ),
+          //     ],
+          //   ),
+          // ),
           PinCodeTextField(
             appContext: (context),
             length: 4,

@@ -179,6 +179,7 @@ class _LoginPageState extends State<RegisterPage> {
           // Email
           TextField(
             autofocus: false,
+            controller: _emailController,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
               hintText: 'deine.email@email.com',
@@ -205,6 +206,7 @@ class _LoginPageState extends State<RegisterPage> {
           // Password
           TextField(
             autofocus: false,
+            controller: _passwordController,
             obscureText: true,
             decoration: InputDecoration(
               hintText: 'Passwort',
@@ -270,9 +272,9 @@ class _LoginPageState extends State<RegisterPage> {
           ElevatedButton(
             onPressed: () {
               //Nav needs to be removed after firebase integration
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const OTPVerificationPage()));
-              //createUserWithEmailAndPassword();
+              // Navigator.of(context).push(MaterialPageRoute(
+              //     builder: (context) => const OTPVerificationPage()));
+              createUserWithEmailAndPassword();
             },
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 18),

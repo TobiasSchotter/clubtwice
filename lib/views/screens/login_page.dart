@@ -27,6 +27,7 @@ class _LoginPageState extends State<LoginPage> {
         email: _emailController.text,
         password: _passwordController.text,
       );
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => PageSwitcher(
                 selectedIndex: 0,
@@ -129,6 +130,7 @@ class _LoginPageState extends State<LoginPage> {
           // Email
           TextField(
             autofocus: false,
+            controller: _emailController,
             decoration: InputDecoration(
               hintText: 'deine.email@email.com',
               prefixIcon: Container(
@@ -154,6 +156,7 @@ class _LoginPageState extends State<LoginPage> {
           // Password
           TextField(
             autofocus: false,
+            controller: _passwordController,
             obscureText: true,
             decoration: InputDecoration(
               hintText: '**********',
@@ -206,11 +209,11 @@ class _LoginPageState extends State<LoginPage> {
           ElevatedButton(
             onPressed: () {
               //Nav needs to be removed after firebase integration
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => PageSwitcher(
-                        selectedIndex: 0,
-                      )));
-              //signInWithEmailAndPassword();
+              // Navigator.of(context).push(MaterialPageRoute(
+              //     builder: (context) => PageSwitcher(
+              //           selectedIndex: 0,
+              //         )));
+              signInWithEmailAndPassword();
             },
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
