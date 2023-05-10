@@ -223,12 +223,15 @@ class _LoginPageState extends State<LoginPage> {
           // Sign In button
           ElevatedButton(
             onPressed: () {
-              //Nav needs to be removed after firebase integration
-              // Navigator.of(context).push(MaterialPageRoute(
-              //     builder: (context) => PageSwitcher(
-              //           selectedIndex: 0,
-              //         )));
-              signInWithEmailAndPassword();
+              if (_emailController.text.isEmpty ||
+                  _passwordController.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Bitte geben Sie Ihre Anmeldedaten ein'),
+                  backgroundColor: Colors.red,
+                ));
+              } else {
+                signInWithEmailAndPassword();
+              }
             },
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
