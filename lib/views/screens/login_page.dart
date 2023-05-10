@@ -17,6 +17,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String? errorMessage = '';
   bool isLogin = true;
+  bool isObscured = true;
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -157,13 +158,15 @@ class _LoginPageState extends State<LoginPage> {
           TextField(
             autofocus: false,
             controller: _passwordController,
-            obscureText: true,
+            obscureText: isObscured,
             decoration: InputDecoration(
               hintText: '**********',
               prefixIcon: Container(
                 padding: const EdgeInsets.all(12),
-                child: SvgPicture.asset('assets/icons/Lock.svg',
-                    color: AppColor.primary),
+                child: SvgPicture.asset(
+                  'assets/icons/Lock.svg',
+                  color: AppColor.primary,
+                ),
               ),
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
@@ -179,9 +182,16 @@ class _LoginPageState extends State<LoginPage> {
               filled: true,
               //
               suffixIcon: IconButton(
-                onPressed: () {},
-                icon: SvgPicture.asset('assets/icons/Hide.svg',
-                    color: AppColor.primary),
+                onPressed: () {
+                  setState(() {
+                    isObscured = !isObscured;
+                  });
+                },
+                icon: isObscured
+                    ? Icon(Icons.visibility_off,
+                        color: AppColor.primary.withOpacity(0.5), size: 20)
+                    : Icon(Icons.visibility,
+                        color: AppColor.primary.withOpacity(0.5), size: 20),
               ),
             ),
           ),
