@@ -34,9 +34,14 @@ class _LoginPageState extends State<LoginPage> {
                 selectedIndex: 0,
               )));
     } on FirebaseAuthException catch (e) {
-      setState(() {
-        errorMessage = e.message;
-      });
+      if (e.code == 'user-not-found' || e.code == 'wrong-password') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('E-Mail oder Passwort ungültig!'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
