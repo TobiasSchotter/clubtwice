@@ -6,6 +6,8 @@ import 'package:clubtwice/core/model/Product.dart';
 import 'package:clubtwice/core/services/ProductService.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
 
+import '../widgets/filter_tile_widget.dart';
+
 class SearchResultPage extends StatefulWidget {
   final String searchKeyword;
   SearchResultPage({required this.searchKeyword});
@@ -80,6 +82,16 @@ class _SearchResultPageState extends State<SearchResultPage>
             shrinkWrap: true,
             physics: BouncingScrollPhysics(),
             children: [
+              ExpansionTile(
+                iconColor: Colors.white,
+                textColor: Colors.white,
+                title: Text('Filter'),
+                backgroundColor: AppColor.primary,
+                children: <Widget>[
+                  FilterWidget(),
+                  // FilterWidget2(),
+                ],
+              ),
               Padding(
                 padding: EdgeInsets.only(left: 16, top: 16),
                 child: Text(

@@ -17,7 +17,6 @@ class PageSwitcher extends StatefulWidget {
 
 class _PageSwitcherState extends State<PageSwitcher> {
   int _selectedIndex = 0;
-  bool _isNavigationBarVisible = true;
 
   @override
   void initState() {
@@ -28,9 +27,7 @@ class _PageSwitcherState extends State<PageSwitcher> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: NotificationListener<ScrollNotification>(
-        onNotification: _handleScrollNotification,
-        child: IndexedStack(
+        body: IndexedStack(
           index: _selectedIndex,
           children: [
             const HomePage(),
@@ -40,69 +37,46 @@ class _PageSwitcherState extends State<PageSwitcher> {
             ProfilePage(),
           ],
         ),
-      ),
-      bottomNavigationBar: _isNavigationBarVisible
-          ? NavigationBar(
-              height: 60,
-              backgroundColor: AppColor.primarySoft,
-              onDestinationSelected: (int index) {
-                setState(() {
-                  _selectedIndex = index;
-                });
-              },
-              selectedIndex: _selectedIndex,
-              destinations: const <Widget>[
-                NavigationDestination(
-                  icon: Icon(
-                    Icons.home_outlined,
-                  ),
-                  selectedIcon: Icon(Icons.home),
-                  label: 'Club',
-                ),
-                NavigationDestination(
-                  icon: Icon(Icons.search_outlined),
-                  selectedIcon: Icon(Icons.search),
-                  label: 'Suche',
-                ),
-                NavigationDestination(
-                  icon: Icon(Icons.sell_outlined),
-                  selectedIcon: Icon(Icons.sell),
-                  label: 'Verkaufen',
-                ),
-                NavigationDestination(
-                  icon: Icon(Icons.mail_outlined),
-                  selectedIcon: Icon(Icons.mail),
-                  label: 'Inbox',
-                ),
-                NavigationDestination(
-                  icon: Icon(Icons.person_outlined),
-                  selectedIcon: Icon(Icons.person),
-                  label: 'Profil',
-                ),
-              ],
-            )
-          : null,
-    );
-  }
-
-  bool _handleScrollNotification(ScrollNotification notification) {
-    if (notification is ScrollStartNotification) {
-      // Set the navigation bar to be invisible when scrolling starts
-      setState(() {
-        _isNavigationBarVisible = false;
-      });
-    } else if (notification is ScrollUpdateNotification) {
-      // Set the navigation bar to be invisible while scrolling
-      setState(() {
-        _isNavigationBarVisible = false;
-      });
-    } else if (notification is ScrollEndNotification) {
-      // Set the navigation bar to be visible when scrolling ends
-      setState(() {
-        _isNavigationBarVisible = true;
-      });
-    }
-    // Return true to allow other widgets to handle this notification
-    return true;
+        bottomNavigationBar: NavigationBar(
+          height: 60,
+          backgroundColor: AppColor.primarySoft,
+          onDestinationSelected: (int index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+          selectedIndex: _selectedIndex,
+          destinations: const <Widget>[
+            NavigationDestination(
+              icon: Icon(
+                Icons.home_outlined,
+              ),
+              selectedIcon: Icon(Icons.home),
+              label: 'Club',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.search_outlined),
+              selectedIcon: Icon(Icons.search),
+              label: 'Suche',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.sell_outlined),
+              selectedIcon: Icon(Icons.sell),
+              label: 'Verkaufen',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.mail_outlined),
+              selectedIcon: Icon(Icons.mail),
+              label: 'Inbox',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.person_outlined),
+              selectedIcon: Icon(Icons.person),
+              label: 'Profil',
+            ),
+          ],
+        )
+        // : null,
+        );
   }
 }

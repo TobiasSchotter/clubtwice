@@ -3,7 +3,6 @@ import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:clubtwice/constant/app_color.dart';
-import 'package:firebase_database/firebase_database.dart';
 
 import '../widgets/grid_widget.dart';
 

@@ -7,8 +7,6 @@ import 'package:clubtwice/core/services/ProductService.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
 import 'package:flutter/services.dart';
 
-import '../widgets/filter_tile_widget 2.dart';
-
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -117,8 +115,8 @@ class _HomePageState extends State<HomePage> {
             title: Text('Filter'),
             backgroundColor: AppColor.primary,
             children: <Widget>[
-              //   FilterWidget(),
-              FilterWidget2(),
+              FilterWidget(),
+              // FilterWidget2(),
             ],
           ),
           // Section 5 - product list
