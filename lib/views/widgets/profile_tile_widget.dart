@@ -1,4 +1,7 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class MyProfileWidget extends StatelessWidget {
   const MyProfileWidget({Key? key}) : super(key: key);
@@ -24,7 +27,7 @@ class MyProfileWidget extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
               color: Colors.grey,
-              image: const DecorationImage(
+              image: DecorationImage(
                 image: AssetImage('assets/images/pp.jpg'),
                 fit: BoxFit.cover,
               ),
@@ -35,8 +38,53 @@ class MyProfileWidget extends StatelessWidget {
                 iconSize: 15,
                 icon: Icon(Icons.camera_alt_rounded),
                 color: Colors.white,
-                onPressed: () {
-                  // Hier kannst du den Code zum Hochladen oder Löschen des Bildes einfügen
+                onPressed: () async {
+                  final pickedFile = await showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return SafeArea(
+                        child: Wrap(
+                          children: [
+                            ListTile(
+                              leading: Icon(Icons.photo_library),
+                              title: Text('Galerie'),
+                              onTap: () async {
+                                final picker = ImagePicker();
+                                final pickedImage = await picker.pickImage(
+                                  source: ImageSource.gallery,
+                                  maxWidth: 400,
+                                );
+                                Navigator.of(context).pop(pickedImage);
+                              },
+                            ),
+                            ListTile(
+                              leading: Icon(Icons.camera_alt),
+                              title: Text('Kamera'),
+                              onTap: () async {
+                                final picker = ImagePicker();
+                                final pickedImage = await picker.pickImage(
+                                  source: ImageSource.camera,
+                                  maxWidth: 400,
+                                );
+                                Navigator.of(context).pop(pickedImage);
+                              },
+                            ),
+                            ListTile(
+                              leading: Icon(Icons.delete),
+                              title: Text('Bild löschen'),
+                              onTap: () {
+                                Navigator.of(context).pop(null);
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                  if (pickedFile != null) {
+                    // Hier kannst du den Code zum Hochladen des Bildes einfügen
+                    // Beispiel für die Verwendung des Bildes:
+                  }
                 },
               ),
             ),
