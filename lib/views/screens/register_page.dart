@@ -19,15 +19,55 @@ class RegisterPage extends StatefulWidget {
 class _LoginPageState extends State<RegisterPage> {
   String? errorMessage = '';
   bool isLogin = true;
+  bool isObscured = true;
+  bool isObscured2 = true;
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   Future<void> createUserWithEmailAndPassword() async {
     try {
+      // Check if email already exists
+      final emailExists = await FirebaseAuth.instance
+          .fetchSignInMethodsForEmail(_emailController.text);
+      if (emailExists.isNotEmpty) {
+        setState(() {
+          errorMessage = 'Diese E-Mail-Adresse wird bereits verwendet.';
+        });
+        // Show error message as snack bar
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMessage!),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
+      // Check password requirements
+      final password = _passwordController.text;
+      final hasNumber = password.contains(RegExp(r'\d'));
+      final hasSpecialChar =
+          password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
+      if (password.length < 8 || !hasNumber || !hasSpecialChar) {
+        setState(() {
+          errorMessage =
+              'Das Passwort muss mindestens 8 Zeichen lang sein und mindestens eine Zahl und ein Sonderzeichen enthalten.';
+        });
+        // Show error message as snack bar
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMessage!),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
+      // Create user with email and password
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text,
-        password: _passwordController.text,
+        password: password,
       );
 
       Navigator.of(context).pushReplacement(
@@ -36,6 +76,13 @@ class _LoginPageState extends State<RegisterPage> {
       setState(() {
         errorMessage = e.message;
       });
+      // Show error message as snack bar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage!),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
@@ -207,7 +254,7 @@ class _LoginPageState extends State<RegisterPage> {
           TextField(
             autofocus: false,
             controller: _passwordController,
-            obscureText: true,
+            obscureText: isObscured,
             decoration: InputDecoration(
               hintText: 'Passwort',
               prefixIcon: Container(
@@ -229,9 +276,16 @@ class _LoginPageState extends State<RegisterPage> {
               filled: true,
               //
               suffixIcon: IconButton(
-                onPressed: () {},
-                icon: SvgPicture.asset('assets/icons/Hide.svg',
-                    color: AppColor.primary),
+                onPressed: () {
+                  setState(() {
+                    isObscured = !isObscured;
+                  });
+                },
+                icon: isObscured
+                    ? Icon(Icons.visibility_off,
+                        color: AppColor.primary.withOpacity(0.5), size: 20)
+                    : Icon(Icons.visibility,
+                        color: AppColor.primary.withOpacity(0.5), size: 20),
               ),
             ),
           ),
@@ -239,7 +293,7 @@ class _LoginPageState extends State<RegisterPage> {
           // Repeat Password
           TextField(
             autofocus: false,
-            obscureText: true,
+            obscureText: isObscured2,
             decoration: InputDecoration(
               hintText: 'Passwort wiederholen',
               prefixIcon: Container(
@@ -261,9 +315,16 @@ class _LoginPageState extends State<RegisterPage> {
               filled: true,
               //
               suffixIcon: IconButton(
-                onPressed: () {},
-                icon: SvgPicture.asset('assets/icons/Hide.svg',
-                    color: AppColor.primary),
+                onPressed: () {
+                  setState(() {
+                    isObscured2 = !isObscured2;
+                  });
+                },
+                icon: isObscured2
+                    ? Icon(Icons.visibility_off,
+                        color: AppColor.primary.withOpacity(0.5), size: 20)
+                    : Icon(Icons.visibility,
+                        color: AppColor.primary.withOpacity(0.5), size: 20),
               ),
             ),
           ),
