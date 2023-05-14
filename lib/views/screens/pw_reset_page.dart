@@ -1,4 +1,5 @@
 import 'package:clubtwice/views/screens/login_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,6 +14,7 @@ class ResetPage extends StatefulWidget {
 }
 
 class _ResetPageState extends State<ResetPage> {
+  final TextEditingController _emailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,6 +105,8 @@ class _ResetPageState extends State<ResetPage> {
           // Section 2 - Form
           // Email
           TextField(
+            controller: _emailController,
+            keyboardType: TextInputType.emailAddress,
             autofocus: false,
             decoration: InputDecoration(
               hintText: 'deine.email@email.com',
@@ -129,10 +133,7 @@ class _ResetPageState extends State<ResetPage> {
 
           // Sign In button
           ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const LoginPage()));
-            },
+            onPressed: _resetPassword,
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
               backgroundColor: AppColor.primary,
@@ -153,5 +154,37 @@ class _ResetPageState extends State<ResetPage> {
         ],
       ),
     );
+  }
+
+  Future<void> _resetPassword() async {
+    try {
+      // Check if the email exists in Firebase
+      final user = await FirebaseAuth.instance
+          .fetchSignInMethodsForEmail(_emailController.text.trim());
+      if (user.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Es gibt keinen Benutzer mit dieser E-Mail-Adresse.'),
+          ),
+        );
+        return;
+      }
+
+      // Send password reset email
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+        email: _emailController.text.trim(),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Eine E-Mail zum Zurücksetzen des Passworts wurde an Ihre E-Mail-Adresse gesendet.',
+          ),
+        ),
+      );
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Ein Fehler ist aufgetreten.')),
+      );
+    }
   }
 }

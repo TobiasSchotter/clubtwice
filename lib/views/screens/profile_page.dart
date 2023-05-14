@@ -81,7 +81,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         },
                         margin: const EdgeInsets.only(top: 10),
                         icon: Icon(
-                          Icons.sports,
+                          Icons.sports_outlined,
                           color: AppColor.secondary.withOpacity(0.5),
                         ),
                         title: 'Verein',
