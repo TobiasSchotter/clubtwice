@@ -1,4 +1,3 @@
-import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,7 +6,6 @@ import 'package:clubtwice/views/screens/login_page.dart';
 import 'package:clubtwice/views/screens/otp_verification_page.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:clubtwice/core/services/auth.dart';
 
 import '../../constant/app_button.dart';
 

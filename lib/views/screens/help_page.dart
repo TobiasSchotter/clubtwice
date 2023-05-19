@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:clubtwice/views/screens/profile_page_help.dart';
 import 'package:clubtwice/views/screens/welcome_page.dart';
 import 'package:flutter/material.dart';

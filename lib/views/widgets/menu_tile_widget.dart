@@ -48,6 +48,7 @@ class MenuTileWidget extends StatelessWidget {
             ),
             // Info
             Expanded(
+              // ignore: unnecessary_null_comparison
               child: (subtitle == null)
                   ? Text('$title',
                       style: TextStyle(

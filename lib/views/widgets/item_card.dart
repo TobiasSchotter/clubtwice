@@ -4,6 +4,7 @@ import 'package:clubtwice/core/model/Product.dart';
 import 'package:clubtwice/views/screens/product_detail.dart';
 import 'package:money2/money2.dart';
 
+// ignore: must_be_immutable
 class ItemCard extends StatelessWidget {
   final Product product;
   final Color titleColor;

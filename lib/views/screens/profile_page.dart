@@ -11,7 +11,6 @@ import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/widgets/menu_tile_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../widgets/filter_tile_widget.dart';
 import '../widgets/profile_tile_widget.dart';
 
 class ProfilePage extends StatefulWidget {

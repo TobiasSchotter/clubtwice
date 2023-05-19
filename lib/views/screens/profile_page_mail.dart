@@ -35,10 +35,13 @@ class _ProfilePageMailState extends State<ProfilePageMail> {
     String newEmail = _emailController.text;
 
     // Überprüfen, ob das E-Mail-Feld leer ist und das "@"-Zeichen nicht darin vorhanden ist
-    if (newEmail.isEmpty || !newEmail.contains('@')) {
+    if (newEmail.isEmpty ||
+        !newEmail.contains('@') ||
+        !newEmail.contains('.')) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Bitte geben Sie eine gültige E-Mail-Adresse ein'),
+          backgroundColor: Colors.red,
         ),
       );
       return;
@@ -50,6 +53,7 @@ class _ProfilePageMailState extends State<ProfilePageMail> {
         const SnackBar(
           content: Text(
               'Die neue E-Mail-Adresse darf nicht identisch mit der alten E-Mail-Adresse sein'),
+          backgroundColor: Colors.red,
         ),
       );
       return;
@@ -77,7 +81,10 @@ class _ProfilePageMailState extends State<ProfilePageMail> {
       print('Fehler beim Aktualisieren der E-Mail-Adresse: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Fehler beim Aktualisieren der E-Mail-Adresse'),
+          content: Text(
+            'Fehler beim Aktualisieren der E-Mail-Adresse',
+          ),
+          backgroundColor: Colors.red,
         ),
       );
       return;

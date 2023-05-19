@@ -1,11 +1,11 @@
-import 'package:clubtwice/views/screens/login_page.dart';
+// ignore_for_file: unused_catch_clause
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/screens/register_page.dart';
-
 import '../../constant/app_button.dart';
 
 class ResetPage extends StatefulWidget {
@@ -149,6 +149,7 @@ class _ResetPageState extends State<ResetPage> {
       final user = await FirebaseAuth.instance
           .fetchSignInMethodsForEmail(_emailController.text.trim());
       if (user.isEmpty) {
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Es gibt keinen Benutzer mit dieser E-Mail-Adresse.'),
@@ -161,6 +162,7 @@ class _ResetPageState extends State<ResetPage> {
       await FirebaseAuth.instance.sendPasswordResetEmail(
         email: _emailController.text.trim(),
       );
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
@@ -170,6 +172,7 @@ class _ResetPageState extends State<ResetPage> {
       );
     } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
+        // ignore: prefer_const_constructors
         SnackBar(content: Text('Ein Fehler ist aufgetreten.')),
       );
     }

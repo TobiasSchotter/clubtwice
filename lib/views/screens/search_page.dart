@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/core/model/Search.dart';
 import 'package:clubtwice/core/services/SearchService.dart';
