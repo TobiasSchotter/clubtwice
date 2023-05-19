@@ -7,6 +7,8 @@ import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:clubtwice/views/screens/register_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../constant/app_button.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -221,34 +223,21 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           // Sign In button
-          ElevatedButton(
+          CustomButton(
+            buttonText: 'Einloggen',
             onPressed: () {
               if (_emailController.text.isEmpty ||
                   _passwordController.text.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('Bitte geben Sie Ihre Anmeldedaten ein'),
-                  backgroundColor: Colors.red,
-                ));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Bitte geben Sie Ihre Anmeldedaten ein'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
               } else {
                 signInWithEmailAndPassword();
               }
             },
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
-              backgroundColor: AppColor.primary,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
-              elevation: 0,
-              shadowColor: Colors.transparent,
-            ),
-            child: const Text(
-              'Einloggen',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18,
-                  fontFamily: 'poppins'),
-            ),
           ),
         ],
       ),

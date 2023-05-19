@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:clubtwice/constant/app_color.dart';
 
+import '../../constant/app_button.dart';
+
 class ProfilePageSet extends StatefulWidget {
   const ProfilePageSet({super.key});
 
@@ -129,7 +131,8 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
           ),
           const SizedBox(height: 16),
 
-          ElevatedButton(
+          CustomButton(
+            buttonText: 'Speichern',
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -137,22 +140,6 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
                 ),
               );
             },
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
-              backgroundColor: AppColor.primary,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
-              elevation: 0,
-              shadowColor: Colors.transparent,
-            ),
-            child: const Text(
-              'Speichern',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18,
-                  fontFamily: 'poppins'),
-            ),
           ),
         ],
       ),

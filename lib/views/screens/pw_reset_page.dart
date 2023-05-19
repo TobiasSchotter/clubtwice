@@ -6,6 +6,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/screens/register_page.dart';
 
+import '../../constant/app_button.dart';
+
 class ResetPage extends StatefulWidget {
   const ResetPage({super.key});
 
@@ -132,24 +134,9 @@ class _ResetPageState extends State<ResetPage> {
           const SizedBox(height: 16),
 
           // Sign In button
-          ElevatedButton(
+          CustomButton(
+            buttonText: 'Senden',
             onPressed: _resetPassword,
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
-              backgroundColor: AppColor.primary,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
-              elevation: 0,
-              shadowColor: Colors.transparent,
-            ),
-            child: const Text(
-              'Senden',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18,
-                  fontFamily: 'poppins'),
-            ),
           ),
         ],
       ),

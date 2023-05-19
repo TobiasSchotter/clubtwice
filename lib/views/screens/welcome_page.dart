@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/screens/login_page.dart';
 
+import '../../constant/app_button.dart';
+
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
 
@@ -49,28 +51,12 @@ class WelcomePage extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               margin: const EdgeInsets.only(bottom: 16),
-              child: ElevatedButton(
+              child: CustomButton(
+                buttonText: 'Los gehts',
                 onPressed: () {
                   Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => LoginPage()));
                 },
-                style: ElevatedButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
-                  backgroundColor: AppColor.primary,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16)),
-                  elevation: 0,
-                  shadowColor: Colors.transparent,
-                ),
-                child: const Text(
-                  'Los gehts',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18,
-                      fontFamily: 'poppins'),
-                ),
               ),
             ),
           ],

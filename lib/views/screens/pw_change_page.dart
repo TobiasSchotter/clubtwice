@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../constant/app_button.dart';
 import '../../constant/app_color.dart';
 
 class PWChangePage extends StatefulWidget {
@@ -202,24 +203,9 @@ class _PWChangePageState extends State<PWChangePage> {
             ),
           ),
           const SizedBox(height: 24),
-          ElevatedButton(
+          CustomButton(
+            buttonText: 'Passwort ändern',
             onPressed: _changePassword,
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
-              backgroundColor: AppColor.primary,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
-              elevation: 0,
-              shadowColor: Colors.transparent,
-            ),
-            child: const Text(
-              'Passwort ändern',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18,
-                  fontFamily: 'poppins'),
-            ),
           ),
           if (_errorMessage != null && _errorMessage!.isNotEmpty) ...[
             const SizedBox(height: 16),

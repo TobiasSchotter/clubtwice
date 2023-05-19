@@ -9,6 +9,8 @@ import 'package:clubtwice/views/screens/otp_verification_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:clubtwice/core/services/auth.dart';
 
+import '../../constant/app_button.dart';
+
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
@@ -330,29 +332,14 @@ class _LoginPageState extends State<RegisterPage> {
           ),
           const SizedBox(height: 24),
           // Sign Up Button
-          ElevatedButton(
+          CustomButton(
+            buttonText: 'Registrieren',
             onPressed: () {
               //Nav needs to be removed after firebase integration
               // Navigator.of(context).push(MaterialPageRoute(
               //     builder: (context) => const OTPVerificationPage()));
               createUserWithEmailAndPassword();
             },
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
-              backgroundColor: AppColor.primary,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
-              elevation: 0,
-              shadowColor: Colors.transparent,
-            ),
-            child: const Text(
-              'Registrieren',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18,
-                  fontFamily: 'poppins'),
-            ),
           ),
           Container(
             alignment: Alignment.center,

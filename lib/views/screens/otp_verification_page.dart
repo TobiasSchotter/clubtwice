@@ -1,3 +1,4 @@
+import 'package:clubtwice/constant/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:clubtwice/constant/app_color.dart';
@@ -96,50 +97,19 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
           ),
           Container(
             margin: const EdgeInsets.only(top: 32, bottom: 16),
-            child: ElevatedButton(
+            child: CustomButton(
+              buttonText: 'Verifizieren',
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => PageSwitcher(
                           selectedIndex: 0,
                         )));
               },
-              style: ElevatedButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
-                backgroundColor: AppColor.primary,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
-                elevation: 0,
-                shadowColor: Colors.transparent,
-              ),
-              child: const Text(
-                'Verifizieren',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18,
-                    fontFamily: 'poppins'),
-              ),
             ),
           ),
-          ElevatedButton(
+          CustomButton(
+            buttonText: 'Neuen Code anfordern',
             onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              foregroundColor: AppColor.primary,
-              padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
-              backgroundColor: AppColor.primarySoft,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
-              elevation: 0,
-              shadowColor: Colors.transparent,
-            ),
-            child: const Text(
-              'Neuen Code anfordern',
-              style: TextStyle(
-                color: AppColor.secondary,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
           ),
         ],
       ),
