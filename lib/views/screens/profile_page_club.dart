@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:clubtwice/constant/app_color.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../constant/app_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ProfilePageClub extends StatefulWidget {
   const ProfilePageClub({super.key});
@@ -12,6 +13,26 @@ class ProfilePageClub extends StatefulWidget {
 }
 
 class _ProfilePageClubState extends State<ProfilePageClub> {
+  String verein = '';
+  String sportart = '';
+
+  Future<void> saveChanges() async {
+    // Beispielaufruf der Funktion
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String userId = user.uid;
+      updateUserData(userId, verein, sportart);
+    }
+  }
+
+  Future<void> updateUserData(
+      String userId, String verein, String sportart) async {
+    await FirebaseFirestore.instance.collection('users').doc(userId).update({
+      'club': verein,
+      'sport': sportart,
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +90,9 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
                 );
               }).toList(),
               onChanged: (newValue) {
-                setState(() {});
+                setState(() {
+                  verein = newValue!;
+                });
               }),
           Container(
             height: 16,
@@ -88,7 +111,9 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
                 );
               }).toList(),
               onChanged: (newValue) {
-                setState(() {});
+                setState(() {
+                  sportart = newValue!;
+                });
               }),
 
           const SizedBox(height: 16),
@@ -96,6 +121,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
           CustomButton(
             buttonText: 'Speichern',
             onPressed: () {
+              saveChanges();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Erfolgreich gespeichert'),
