@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/screens/login_page.dart';
 import 'package:clubtwice/views/screens/otp_verification_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -25,53 +26,43 @@ class _LoginPageState extends State<RegisterPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+
   Future<void> createUserWithEmailAndPassword() async {
     try {
-      // Check if email already exists
-      final emailExists = await FirebaseAuth.instance
-          .fetchSignInMethodsForEmail(_emailController.text);
-      if (emailExists.isNotEmpty) {
-        setState(() {
-          errorMessage = 'Diese E-Mail-Adresse wird bereits verwendet.';
-        });
-        // Show error message as snack bar
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(errorMessage!),
-            backgroundColor: Colors.red,
-          ),
+      if (passwordConfirm() && passwordRequirement(_passwordController.text)) {
+        emailConfirm(_emailController.text);
+
+        // Create user
+        UserCredential userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emailController.text,
+          password: _passwordController.text,
         );
-        return;
+
+        // Get the user's UID
+        String uid = userCredential.user!.uid;
+
+        // add userdetails
+        addUserDetails(uid, _firstNameController.text.trim(),
+            _lastNameController.text.trim(), _emailController.text.trim());
+
+        // Benutzer erfolgreich erstellt, leite zur E-Mail-Verifizierung weiter
+        User? user = FirebaseAuth.instance.currentUser;
+        if (user != null && !user.emailVerified) {
+          await user.sendEmailVerification();
+
+          // ignore: use_build_context_synchronously
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const OTPVerificationPage()),
+          );
+        }
       }
-
-      // Check password requirements
-      final password = _passwordController.text;
-      final hasNumber = password.contains(RegExp(r'\d'));
-      final hasSpecialChar =
-          password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
-      if (password.length < 8 || !hasNumber || !hasSpecialChar) {
-        setState(() {
-          errorMessage =
-              'Das Passwort muss mindestens 8 Zeichen lang sein und mindestens eine Zahl und ein Sonderzeichen enthalten.';
-        });
-        // Show error message as snack bar
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(errorMessage!),
-            backgroundColor: Colors.red,
-          ),
-        );
-        return;
-      }
-
-      // Create user with email and password
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text,
-        password: password,
-      );
-
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const OTPVerificationPage()));
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;
@@ -83,6 +74,65 @@ class _LoginPageState extends State<RegisterPage> {
           backgroundColor: Colors.red,
         ),
       );
+    }
+  }
+
+  Future addUserDetails(
+      String uid, String firstName, String lastName, String email) async {
+    // Speichern der Benutzerdetails in Firestore
+    await FirebaseFirestore.instance.collection('users').doc(uid).set({
+      'first Name': firstName,
+      'last Name': lastName,
+      'email': email,
+    });
+  }
+
+  Future emailConfirm(email) async {
+    final emailExists =
+        await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
+    if (emailExists.isNotEmpty) {
+      setState(() {
+        errorMessage = 'Diese E-Mail-Adresse wird bereits verwendet.';
+      });
+      // Show error message as snack bar
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage!),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+  }
+
+  bool passwordConfirm() {
+    if (_passwordController.text == _confirmPasswordController.text) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool passwordRequirement(password) {
+    // Check password requirements
+    final hasNumber = password.contains(RegExp(r'\d'));
+    final hasSpecialChar = password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
+    if (password.length < 8 || !hasNumber || !hasSpecialChar) {
+      setState(() {
+        errorMessage =
+            'Das Passwort muss mindestens 8 Zeichen lang sein und mindestens eine Zahl und ein Sonderzeichen enthalten.';
+      });
+      // Show error message as snack bar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage!),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return false;
+    } else {
+      return true;
     }
   }
 
@@ -176,6 +226,7 @@ class _LoginPageState extends State<RegisterPage> {
           // Full Name
           TextField(
             autofocus: false,
+            controller: _firstNameController,
             decoration: InputDecoration(
               hintText: 'Vorname',
               prefixIcon: Container(
@@ -201,6 +252,7 @@ class _LoginPageState extends State<RegisterPage> {
           // Username
           TextField(
             autofocus: false,
+            controller: _lastNameController,
             decoration: InputDecoration(
               hintText: 'Nachname',
               prefixIcon: Container(
@@ -293,6 +345,7 @@ class _LoginPageState extends State<RegisterPage> {
           // Repeat Password
           TextField(
             autofocus: false,
+            controller: _confirmPasswordController,
             obscureText: isObscured2,
             decoration: InputDecoration(
               hintText: 'Passwort wiederholen',
