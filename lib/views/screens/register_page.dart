@@ -33,7 +33,8 @@ class _LoginPageState extends State<RegisterPage> {
 
   Future<void> createUserWithEmailAndPassword() async {
     try {
-      if (passwordConfirm() && passwordRequirement(_passwordController.text)) {
+      if (passwordConfirm(_passwordController, _confirmPasswordController) &&
+          passwordRequirement(_passwordController.text)) {
         emailConfirm(_emailController.text);
 
         // Create user
@@ -106,8 +107,8 @@ class _LoginPageState extends State<RegisterPage> {
     }
   }
 
-  bool passwordConfirm() {
-    if (_passwordController.text == _confirmPasswordController.text) {
+  bool passwordConfirm(pw, pwToConfirm) {
+    if (pw == pwToConfirm) {
       return true;
     } else {
       return false;
