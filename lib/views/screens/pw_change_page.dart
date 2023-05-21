@@ -209,16 +209,6 @@ class _PWChangePageState extends State<PWChangePage> {
             buttonText: 'Passwort ändern',
             onPressed: _changePassword,
           ),
-          if (_errorMessage != null && _errorMessage!.isNotEmpty) ...[
-            const SizedBox(height: 16),
-            Text(
-              _errorMessage!,
-              style: const TextStyle(
-                color: Colors.red,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
         ],
       ),
     );
@@ -238,6 +228,12 @@ class _PWChangePageState extends State<PWChangePage> {
       setState(() {
         _errorMessage = 'Bitte alle Felder ausfüllen';
       });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(_errorMessage!),
+          backgroundColor: Colors.red,
+        ),
+      );
       return;
     }
 
@@ -254,6 +250,12 @@ class _PWChangePageState extends State<PWChangePage> {
           _errorMessage =
               'Das neue Passwort muss mindestens 8 Zeichen lang sein und mindestens eine Zahl und ein Sonderzeichen enthalten.';
         });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(_errorMessage!),
+            backgroundColor: Colors.red,
+          ),
+        );
         return;
       }
 
@@ -262,6 +264,12 @@ class _PWChangePageState extends State<PWChangePage> {
           _errorMessage =
               'Die wiederholte Eingabe des neuen Passworts stimmt nicht überein.';
         });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(_errorMessage!),
+            backgroundColor: Colors.red,
+          ),
+        );
         return;
       }
 
@@ -279,17 +287,35 @@ class _PWChangePageState extends State<PWChangePage> {
         setState(() {
           _errorMessage = 'Das alte Passwort ist falsch.';
         });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(_errorMessage!),
+            backgroundColor: Colors.red,
+          ),
+        );
       } else {
         setState(() {
           _errorMessage =
               'Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.';
         });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(_errorMessage!),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
     } catch (e) {
       setState(() {
         _errorMessage =
             'Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.';
       });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(_errorMessage!),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 }
