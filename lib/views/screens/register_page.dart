@@ -64,18 +64,24 @@ class _LoginPageState extends State<RegisterPage> {
                 builder: (context) => const OTPVerificationPage()),
           );
         }
+      } else {
+        // Passwörter stimmen nicht überein
+        setState(() {
+          errorMessage = 'Die Passwörter stimmen nicht überein.';
+        });
+        // Show error message as snack bar
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMessage!),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;
       });
       // Show error message as snack bar
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(errorMessage!),
-          backgroundColor: Colors.red,
-        ),
-      );
     }
   }
 
@@ -90,14 +96,28 @@ class _LoginPageState extends State<RegisterPage> {
   }
 
   Future emailConfirm(email) async {
-    final emailExists =
-        await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
-    if (emailExists.isNotEmpty) {
+    if (email.isEmpty) {
       setState(() {
-        errorMessage = 'Diese E-Mail-Adresse wird bereits verwendet.';
+        errorMessage = 'Die E-Mail-Adresse darf nicht leer sein.';
       });
       // Show error message as snack bar
-      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage!),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Check if email contains '@' and at least one dot
+    final dotCount = email.split('.').length - 1;
+    final isValidEmail = email.contains('@') && dotCount >= 1;
+    if (!isValidEmail) {
+      setState(() {
+        errorMessage = 'Die eingegebene E-Mail-Adresse ist ungültig.';
+      });
+      // Show error message as snack bar
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(errorMessage!),

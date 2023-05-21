@@ -28,8 +28,8 @@ class MyProfileWidget extends StatelessWidget {
 
         final firstname = userData['first Name'] ?? '';
         final lastname = userData['last Name'] ?? '';
-        final club = userData['club'] ?? '';
-        final sport = userData['sport'] ?? '';
+        final club = userData['club'] ?? '[kein Verein hinterlegt]';
+        final sport = userData['sport'] ?? '[keine Sportart hinterlegt]';
 
         return Container(
           width: MediaQuery.of(context).size.width,
