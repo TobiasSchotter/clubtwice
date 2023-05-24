@@ -74,15 +74,14 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
         ),
         leading: IconButton(
           onPressed: () async {
-            bool shouldRefresh =
-                await Navigator.of(context).push(MaterialPageRoute(
+            await Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => ProfilePage(),
             ));
 
-            if (shouldRefresh == true) {
-              // Führe die Aktualisierungslogik aus
-              // ...
-            }
+            // if (shouldRefresh == true) {
+            // Führe die Aktualisierungslogik aus
+            // ...
+            //   }
           },
           icon: const Icon(Icons.arrow_back_outlined),
           color: Colors.black,
