@@ -28,6 +28,7 @@ class MyProfileWidget extends StatelessWidget {
 
         final firstname = userData['first Name'] ?? '';
         final lastname = userData['last Name'] ?? '';
+        final username = userData['username'] ?? '';
         final club = userData['club'] ?? '[kein Verein hinterlegt]';
         final sport = userData['sport'] ?? '[keine Sportart hinterlegt]';
 
@@ -126,7 +127,7 @@ class MyProfileWidget extends StatelessWidget {
               ),
               // Username
               Text(
-                'UserName',
+                '$username',
                 style: TextStyle(
                   color: Colors.white.withOpacity(0.6),
                   fontSize: 14,

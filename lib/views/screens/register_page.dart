@@ -85,13 +85,16 @@ class _LoginPageState extends State<RegisterPage> {
     }
   }
 
-  Future addUserDetails(
+  Future<void> addUserDetails(
       String uid, String firstName, String lastName, String email) async {
+    String username = firstName + lastName; // Benutzername erstellen
+
     // Speichern der Benutzerdetails in Firestore
     await FirebaseFirestore.instance.collection('users').doc(uid).set({
       'first Name': firstName,
       'last Name': lastName,
       'email': email,
+      'username': username, // Benutzername hinzufügen
     });
   }
 

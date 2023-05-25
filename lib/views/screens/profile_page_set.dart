@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:clubtwice/views/screens/profile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,10 +18,13 @@ class ProfilePageSet extends StatefulWidget {
 class _ProfilePageSetState extends State<ProfilePageSet> {
   TextEditingController _firstNameController = TextEditingController();
   TextEditingController _lastNameController = TextEditingController();
+  TextEditingController _userNameController = TextEditingController();
 
   @override
   void dispose() {
     _firstNameController.dispose();
+    _lastNameController.dispose();
+    _userNameController.dispose();
     super.dispose();
   }
 
@@ -44,12 +48,14 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
           return Container(); // Handle when user data is not available
         }
 
-        final firstname = userData['first Name'] ?? '';
+        final firstName = userData['first Name'] ?? '';
         final lastName = userData['last Name'] ?? '';
+        final userName = userData['username'] ?? '';
 
         // Set the initial value of the TextField
-        _firstNameController.text = firstname;
+        _firstNameController.text = firstName;
         _lastNameController.text = lastName;
+        _userNameController.text = userName;
 
         return Scaffold(
           appBar: AppBar(
@@ -66,8 +72,15 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
               ),
             ),
             leading: IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
+              onPressed: () async {
+                await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ProfilePage(),
+                ));
+
+                // if (shouldRefresh == true) {
+                // Führe die Aktualisierungslogik aus
+                // ...
+                //   }
               },
               icon: const Icon(Icons.arrow_back_outlined),
               color: Colors.black,
@@ -126,7 +139,7 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
               ),
 
               const SizedBox(height: 16),
-              // Username
+              // Last Name
               TextField(
                 autofocus: false,
                 controller:
@@ -135,8 +148,10 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
                   hintText: 'Nachname',
                   prefixIcon: Container(
                     padding: const EdgeInsets.all(12),
-                    child: SvgPicture.asset('assets/icons/Profile.svg',
-                        color: AppColor.primary),
+                    child: SvgPicture.asset(
+                      'assets/icons/Profile.svg',
+                      color: AppColor.primary,
+                    ),
                   ),
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
@@ -158,13 +173,17 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
               // Email
               TextField(
                 autofocus: false,
+                controller:
+                    _userNameController, // Bind the controller to the TextField
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   hintText: 'Benutzername',
                   prefixIcon: Container(
                     padding: const EdgeInsets.all(12),
-                    child: SvgPicture.asset('assets/icons/Profile.svg',
-                        color: AppColor.primary),
+                    child: SvgPicture.asset(
+                      'assets/icons/Profile.svg',
+                      color: AppColor.primary,
+                    ),
                   ),
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
@@ -187,13 +206,50 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
               CustomButton(
                 buttonText: 'Speichern',
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Erfolgreich gespeichert'),
-                    ),
-                  );
+                  final newFirstName = _firstNameController.text.trim();
+                  final newLastName = _lastNameController.text.trim();
+
+                  if (newFirstName.isNotEmpty && newLastName.isNotEmpty) {
+                    if (newFirstName != firstName || newLastName != lastName) {
+                      // Update user data in Firebase
+                      FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(user.uid)
+                          .update({
+                        'first Name': newFirstName,
+                        'last Name': newLastName,
+                      }).then((_) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Erfolgreich gespeichert'),
+                          ),
+                        );
+                      }).catchError((error) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content:
+                                Text('Fehler beim Speichern der Daten: $error'),
+                          ),
+                        );
+                      });
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content:
+                              Text('Es wurden keine Änderungen vorgenommen'),
+                        ),
+                      );
+                    }
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content:
+                            Text('Vorname und Nachname dürfen nicht leer sein'),
+                      ),
+                    );
+                  }
                 },
-              ),
+              )
             ],
           ),
         );
