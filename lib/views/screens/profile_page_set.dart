@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:clubtwice/views/screens/profile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -73,9 +74,10 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
             ),
             leading: IconButton(
               onPressed: () async {
-                await Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ProfilePage(),
-                ));
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => PageSwitcher(
+                          selectedIndex: 4,
+                        )));
 
                 // if (shouldRefresh == true) {
                 // Führe die Aktualisierungslogik aus
@@ -208,9 +210,14 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
                 onPressed: () {
                   final newFirstName = _firstNameController.text.trim();
                   final newLastName = _lastNameController.text.trim();
+                  final newUserName = _userNameController.text.trim();
 
-                  if (newFirstName.isNotEmpty && newLastName.isNotEmpty) {
-                    if (newFirstName != firstName || newLastName != lastName) {
+                  if (newFirstName.isNotEmpty &&
+                      newLastName.isNotEmpty &&
+                      newUserName.isNotEmpty) {
+                    if (newFirstName != firstName ||
+                        newLastName != lastName ||
+                        newUserName != userName) {
                       // Update user data in Firebase
                       FirebaseFirestore.instance
                           .collection('users')
@@ -218,6 +225,7 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
                           .update({
                         'first Name': newFirstName,
                         'last Name': newLastName,
+                        'username': newUserName,
                       }).then((_) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(

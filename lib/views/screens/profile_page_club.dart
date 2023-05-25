@@ -1,3 +1,4 @@
+import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:clubtwice/views/screens/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -74,14 +75,10 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
         ),
         leading: IconButton(
           onPressed: () async {
-            await Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ProfilePage(),
-            ));
-
-            // if (shouldRefresh == true) {
-            // Führe die Aktualisierungslogik aus
-            // ...
-            //   }
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => PageSwitcher(
+                      selectedIndex: 4,
+                    )));
           },
           icon: const Icon(Icons.arrow_back_outlined),
           color: Colors.black,
