@@ -32,18 +32,37 @@ class _LoginPageState extends State<LoginPage> {
       );
       // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => PageSwitcher(
-                selectedIndex: 0,
-              )));
+        builder: (context) => PageSwitcher(
+          selectedIndex: 0,
+        ),
+      ));
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found' || e.code == 'wrong-password') {
+      if (e.code == 'wrong-password' || e.code == 'user-not-found') {
+        print('Fehlercode: ${e.code}');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('E-Mail oder Passwort ungültig!'),
+            content: Text('Die E-Mail-Adresse oder das Passwort ist falsch.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      } else {
+        print('Unbekannter Fehler: ${e.code}');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Ein Fehler ist aufgetreten. .'),
             backgroundColor: Colors.red,
           ),
         );
       }
+    } catch (e) {
+      print('Unbekannter Fehler: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+              'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 

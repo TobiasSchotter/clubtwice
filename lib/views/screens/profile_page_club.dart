@@ -1,5 +1,4 @@
 import 'package:clubtwice/views/screens/page_switcher.dart';
-import 'package:clubtwice/views/screens/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:clubtwice/constant/app_color.dart';
