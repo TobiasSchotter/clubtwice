@@ -129,6 +129,21 @@ class _LoginPageState extends State<RegisterPage> {
       );
       return;
     }
+    // Check if email already exists in Firebase
+    final user = await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
+    if (user != null && user.isNotEmpty) {
+      setState(() {
+        errorMessage = 'Die eingegebene E-Mail-Adresse existiert bereits.';
+      });
+      // Show error message as snack bar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage!),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
   }
 
   bool passwordConfirm(pw, pwToConfirm) {
