@@ -51,7 +51,7 @@ class MyProfileWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(100),
                   color: Colors.grey,
                   image: DecorationImage(
-                    image: AssetImage('assets/images/pp.jpg'),
+                    image: AssetImage('assets/images/pp.png'),
                     fit: BoxFit.cover,
                   ),
                 ),

@@ -131,6 +131,7 @@ class _LoginPageState extends State<RegisterPage> {
     }
     // Check if email already exists in Firebase
     final user = await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
+    // ignore: unnecessary_null_comparison
     if (user != null && user.isNotEmpty) {
       setState(() {
         errorMessage = 'Die eingegebene E-Mail-Adresse existiert bereits.';
