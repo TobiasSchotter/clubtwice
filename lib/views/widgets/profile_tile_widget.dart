@@ -29,8 +29,16 @@ class MyProfileWidget extends StatelessWidget {
         final firstname = userData['first Name'] ?? '';
         final lastname = userData['last Name'] ?? '';
         final username = userData['username'] ?? '';
-        final club = userData['club'] ?? '[kein Verein hinterlegt]';
-        final sport = userData['sport'] ?? '[keine Sportart hinterlegt]';
+        //   final club = userData['club'] ?? '[kein Verein hinterlegt]';
+        //    final sport = userData['sport'] ?? '[keine Sportart hinterlegt]';
+
+        var club = userData['club'] ?? '';
+        var sport = userData['sport'] ?? '';
+
+        if (club.isEmpty && sport.isEmpty) {
+          club = '[kein Verein hinterlegt]';
+          sport = '[keine Sportart hinterlegt]';
+        }
 
         return Container(
           width: MediaQuery.of(context).size.width,

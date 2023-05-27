@@ -61,8 +61,9 @@ class NotificationTile extends StatelessWidget {
                   // Datetime
                   Row(
                     children: [
-                      SvgPicture.asset('assets/icons/Time Circle.svg',
-                          color: AppColor.secondary.withOpacity(0.7)),
+                      Icon(
+                        Icons.av_timer,
+                      ),
                       Container(
                         margin: EdgeInsets.only(left: 10),
                         child: Text(

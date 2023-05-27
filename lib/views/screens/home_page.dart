@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:clubtwice/constant/app_button.dart';
 import 'package:clubtwice/views/screens/page_switcher.dart';
+import 'package:clubtwice/views/screens/profile_page_club.dart';
 import 'package:clubtwice/views/widgets/filter_tile_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/core/model/Product.dart';
@@ -17,14 +21,78 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Product> productData = ProductService.productData;
+  String verein = '';
+  String sportart = '';
 
   @override
   void initState() {
     super.initState();
+    fetchUserData();
+  }
+
+  Future<void> fetchUserData() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String userId = user.uid;
+      DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+          .instance
+          .collection('users')
+          .doc(userId)
+          .get();
+      Map<String, dynamic> userData = snapshot.data() ?? {};
+      setState(() {
+        verein = userData['club'] ?? '';
+        sportart = userData['sport'] ?? '';
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    Widget content;
+    if (verein.isNotEmpty) {
+      content = Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Wrap(
+          spacing: 16,
+          runSpacing: 16,
+          children: List.generate(
+            productData.length,
+            (index) => ItemCard(
+              product: productData[index],
+            ),
+          ),
+        ),
+      );
+    } else {
+      content = Container(
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: 96,
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child:
+                  Text('Du hast noch keinen Verein und Sportart hinterlegt.'),
+            ),
+            SizedBox(height: 16),
+            CustomButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfilePageClub()),
+                );
+              },
+              buttonText: 'Verein hinterlegen',
+            ),
+          ],
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -120,19 +188,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           // Section 5 - product list
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Wrap(
-              spacing: 16,
-              runSpacing: 16,
-              children: List.generate(
-                productData.length,
-                (index) => ItemCard(
-                  product: productData[index],
-                ),
-              ),
-            ),
-          )
+          content,
         ],
       ),
     );
