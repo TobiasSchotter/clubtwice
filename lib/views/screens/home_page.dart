@@ -71,12 +71,17 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              height: 96,
+              height: 112,
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child:
-                  Text('Du hast noch keinen Verein und Sportart hinterlegt.'),
+              child: Center(
+                child: Text(
+                  'Du hast noch keinen Verein und Sportart hinterlegt.\n Hier auf deiner Home-Page werden alle Produkte deines Vereins angezeigt',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 15),
+                ),
+              ),
             ),
             SizedBox(height: 16),
             CustomButton(
