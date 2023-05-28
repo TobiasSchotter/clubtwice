@@ -72,17 +72,17 @@ class _SellPageState extends State<SellPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false, // den Zurück-Button deaktivieren
         backgroundColor: AppColor.primary,
-        title: Text('Vereinskleidung verkaufen'),
+        title: const Text('Vereinskleidung verkaufen'),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               ImageGrid(),
               Container(
-                margin: EdgeInsets.only(top: 20, bottom: 0),
+                margin: const EdgeInsets.only(top: 20, bottom: 0),
                 child: Text(
                   'Titel *',
                   style: TextStyle(
@@ -114,7 +114,7 @@ class _SellPageState extends State<SellPage> {
                 },
               ),
               Container(
-                margin: EdgeInsets.only(top: 20, bottom: 0),
+                margin: const EdgeInsets.only(top: 20, bottom: 0),
                 child: Text(
                   'Beschreibe deinen Artikel',
                   style: TextStyle(
@@ -122,24 +122,21 @@ class _SellPageState extends State<SellPage> {
                   ),
                 ),
               ),
-              Container(
-                // color: AppColor.primarySoft,
-                child: TextFormField(
-                  controller: _descriptionController,
-                  cursorColor: AppColor.primarySoft,
-                  decoration: InputDecoration(
-                      hintText: 'z.B. nur einmal getragen',
-                      //labelText: 'Description',
-                      fillColor: Colors.black),
-                  maxLines: 3,
-                ),
+              TextFormField(
+                controller: _descriptionController,
+                cursorColor: AppColor.primarySoft,
+                decoration: const InputDecoration(
+                    hintText: 'z.B. nur einmal getragen',
+                    //labelText: 'Description',
+                    fillColor: Colors.black),
+                maxLines: 3,
               ),
               Container(
                 height: 16,
               ),
               DropdownButtonFormField<String>(
                 value: _selectedType,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Typ',
                 ),
@@ -161,7 +158,7 @@ class _SellPageState extends State<SellPage> {
               ),
               DropdownButtonFormField<String>(
                 value: _selectedSize,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Größe',
                 ),
@@ -182,7 +179,7 @@ class _SellPageState extends State<SellPage> {
               ),
               DropdownButtonFormField<String>(
                   value: selectedCondition,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Zustand auswählen',
                     border: OutlineInputBorder(),
                   ),
@@ -203,13 +200,14 @@ class _SellPageState extends State<SellPage> {
               ),
               DropdownButtonFormField<String>(
                 value: SelectedBrand,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Marke auswählen',
                   border: OutlineInputBorder(),
                 ),
                 items: [
-                  DropdownMenuItem<String>(
+                  const DropdownMenuItem<String>(
                     value: null,
+                    enabled: false,
                     child: Text(
                       'Beliebtesten Marken',
                       style: TextStyle(
@@ -218,7 +216,6 @@ class _SellPageState extends State<SellPage> {
                         fontSize: 14,
                       ),
                     ),
-                    enabled: false,
                   ),
                   ..._popularBrandOptions
                       .map<DropdownMenuItem<String>>((String value) {
@@ -227,8 +224,9 @@ class _SellPageState extends State<SellPage> {
                       child: Text(value),
                     );
                   }),
-                  DropdownMenuItem<String>(
+                  const DropdownMenuItem<String>(
                     value: null,
+                    enabled: false,
                     child: Text(
                       'Weitere',
                       style: TextStyle(
@@ -237,7 +235,6 @@ class _SellPageState extends State<SellPage> {
                         fontSize: 14,
                       ),
                     ),
-                    enabled: false,
                   ),
                   ..._lessPopularBrandOptions
                       .map<DropdownMenuItem<String>>((String value) {
@@ -245,7 +242,7 @@ class _SellPageState extends State<SellPage> {
                       value: value,
                       child: Text(
                         value,
-                        style: TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: 18),
                       ),
                     );
                   }),
@@ -271,7 +268,7 @@ class _SellPageState extends State<SellPage> {
               ),
               DropdownButtonFormField<String>(
                   value: selectedClub,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Verein auswählen',
                     border: OutlineInputBorder(),
                   ),
@@ -293,7 +290,7 @@ class _SellPageState extends State<SellPage> {
               DropdownButtonFormField<String>(
                   focusColor: AppColor.primarySoft,
                   value: selectedSport,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     //contentPadding: EdgeInsets.symmetric(horizontal: 8),
                     //border: InputBorder.none,
                     labelText: 'Sportart auswählen',
@@ -313,7 +310,7 @@ class _SellPageState extends State<SellPage> {
                     });
                   }),
               ListTile(
-                title: Text(
+                title: const Text(
                   "Artikel unabhängig des Vereins / Sportart nutzbar",
                   style: TextStyle(fontSize: 15),
                 ),
@@ -336,21 +333,21 @@ class _SellPageState extends State<SellPage> {
                         showDialog(
                           context: context,
                           builder: (_) => AlertDialog(
-                            title: Text("Individuell tragbar"),
-                            content: Text(
+                            title: const Text("Individuell tragbar"),
+                            content: const Text(
                                 "Artikel die unabhängig des Vereins und der Sportart getragen werden können, werden allen Benutzer angezeigt."),
                             actions: [
                               ElevatedButton(
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: Text("Schließen"),
+                                child: const Text("Schließen"),
                               ),
                             ],
                           ),
                         );
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.info_outline,
                         size: 18,
                       ),
@@ -370,9 +367,9 @@ class _SellPageState extends State<SellPage> {
               TextFormField(
                 controller: _priceController,
                 cursorColor: AppColor.primarySoft,
-                keyboardType: TextInputType.numberWithOptions(
+                keyboardType: const TextInputType.numberWithOptions(
                     decimal: true, signed: false),
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   suffixText: '€',
                   hintText: 'z.B. 5,50',
                 ),
@@ -417,7 +414,7 @@ class _SellPageState extends State<SellPage> {
                             );
                           }
                         : null,
-                child: Text('Artikel einstellen'),
+                child: const Text('Artikel einstellen'),
                 style: ElevatedButton.styleFrom(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
