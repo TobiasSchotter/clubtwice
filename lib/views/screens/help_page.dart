@@ -159,28 +159,10 @@ class _HelpPageState extends State<HelpPage> {
                           bool confirmDialog = await showDialog(
                             context: context,
                             builder: (context) {
-                              bool isChecked = true;
                               return AlertDialog(
                                 title: const Text('Löschen'),
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Text(
-                                        'Möchtest du dein Account wirklich löschen?'),
-                                    CheckboxListTile(
-                                      title: const Text(
-                                          'Ich bestätige, dass ich meinen Account löschen möchte'),
-                                      value: isChecked,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          isChecked = value!;
-                                        });
-                                      },
-                                      controlAffinity:
-                                          ListTileControlAffinity.leading,
-                                    ),
-                                  ],
-                                ),
+                                content: const Text(
+                                    'Möchtest du deinen Account wirklich löschen?'),
                                 actions: [
                                   TextButton(
                                     onPressed: () =>
@@ -188,31 +170,45 @@ class _HelpPageState extends State<HelpPage> {
                                     child: const Text('Abbrechen'),
                                   ),
                                   TextButton(
-                                    onPressed: isChecked && confirm
-                                        ? () {
-                                            Navigator.of(context).pop(true);
-                                          }
-                                        : null,
+                                    onPressed: () {
+                                      Navigator.of(context).pop(true);
+                                    },
                                     child: const Text('Löschen'),
                                   ),
                                 ],
                               );
                             },
                           );
-                          // Sign out if confirmed
-                          if (confirm == true) {
-                            // ignore: use_build_context_synchronously
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) => WelcomePage()),
-                            );
-                            widget.signOut();
-                            // ignore: use_build_context_synchronously
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Account erfolgreich gelöscht'),
-                              ),
-                            );
+                          // Delete user if confirmed
+                          if (confirmDialog == true) {
+                            User? user = FirebaseAuth.instance.currentUser;
+                            if (user != null) {
+                              try {
+                                // Delete user from Firebase
+                                await user.delete();
+                                // Navigate to welcome page
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => WelcomePage()),
+                                );
+                                // Sign out any remaining sessions
+                                await FirebaseAuth.instance.signOut();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content:
+                                        Text('Account erfolgreich gelöscht'),
+                                  ),
+                                );
+                              } catch (e) {
+                                print('Error deleting user: $e');
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'Fehler beim Löschen des Accounts'),
+                                  ),
+                                );
+                              }
+                            }
                           }
                         },
                         icon: Icon(
@@ -220,7 +216,7 @@ class _HelpPageState extends State<HelpPage> {
                           color: AppColor.secondary.withOpacity(0.5),
                         ),
                         title: 'Account löschen',
-                        subtitle: 'Lösche dein Account hier',
+                        subtitle: 'Lösche deinen Account hier',
                       ),
                       MenuTileWidget(
                         onTap: () async {

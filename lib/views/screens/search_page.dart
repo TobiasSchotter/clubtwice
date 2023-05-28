@@ -1,8 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:clubtwice/core/model/Search.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:clubtwice/constant/app_color.dart';
-import 'package:clubtwice/core/model/Search.dart';
 import 'package:clubtwice/core/services/SearchService.dart';
 import 'package:clubtwice/views/screens/search_result_page.dart';
 import 'package:clubtwice/views/widgets/search_history_tile.dart';
@@ -15,6 +16,51 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   List<SearchHistory> listSearchHistory = SearchService.listSearchHistory;
 
+  List<String> search = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData();
+  }
+
+  Future<void> fetchUserData() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String userId = user.uid;
+      DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+          .instance
+          .collection('users')
+          .doc(userId)
+          .get();
+      Map<String, dynamic> userData = snapshot.data() ?? {};
+      setState(() {
+        search = List<String>.from(userData['search'] ?? []);
+      });
+    }
+  }
+
+  Future<void> saveChanges() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String userId = user.uid;
+      await updateUserData(userId);
+    }
+  }
+
+  Future<void> updateUserData(String userId) async {
+    await FirebaseFirestore.instance.collection('users').doc(userId).update({
+      'search': search,
+    });
+  }
+
+  void updateSearchList(String searchTerm) {
+    setState(() {
+      search.add(searchTerm);
+    });
+    saveChanges();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +72,17 @@ class _SearchPageState extends State<SearchPage> {
         title: Container(
           height: 40,
           child: TextField(
+            onSubmitted: (searchTerm) {
+              updateSearchList(searchTerm);
+              saveChanges();
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => SearchResultPage(
+                    searchKeyword: searchTerm,
+                  ),
+                ),
+              );
+            },
             autofocus: false,
             style:
                 TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.5)),
@@ -59,7 +116,6 @@ class _SearchPageState extends State<SearchPage> {
         shrinkWrap: true,
         physics: BouncingScrollPhysics(),
         children: [
-          // Section 1 - Search History
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,6 +138,7 @@ class _SearchPageState extends State<SearchPage> {
                   return SearchHistoryTile(
                     data: listSearchHistory[index],
                     onTap: () {
+                      updateSearchList(listSearchHistory[index].title);
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => SearchResultPage(
@@ -96,7 +153,7 @@ class _SearchPageState extends State<SearchPage> {
               Container(
                 width: MediaQuery.of(context).size.width,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: null,
                   child: Text(
                     'Suchverlauf löschen',
                     style:

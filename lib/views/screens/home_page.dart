@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              height: 112,
+              height: 160,
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
