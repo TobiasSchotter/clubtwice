@@ -1,9 +1,12 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
 import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:clubtwice/constant/app_color.dart';
-
 import '../widgets/grid_widget.dart';
 
 class SellPage extends StatefulWidget {
@@ -17,19 +20,22 @@ class _SellPageState extends State<SellPage> {
   // final database = FirebaseDatabase.instance.reference();
 
   final ImagePicker _picker = ImagePicker();
-  List<File> _imageList = [];
+  final List<File> _imageList = [];
   bool _isIndividuallyWearable = false;
   bool _isPriceValid = false;
 
-  TextEditingController _titleController = TextEditingController();
-  TextEditingController _descriptionController = TextEditingController();
-  TextEditingController _priceController = TextEditingController();
-  String selectedSport = "Fußball";
-  String selectedClub = "SG Quelle";
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+
+  String _selectedSport = "Fußball";
+  String _selectedClub = "SG Quelle";
   String _selectedType = "Kids";
   String _selectedSize = '140';
-  String SelectedBrand = "Adidas";
-  String selectedCondition = "Neu";
+  String _selectedBrand = "Adidas";
+  String _selectedCondition = "Neu";
+
+  User? user = FirebaseAuth.instance.currentUser;
 
   final List<String> _typeOptions = ['Kids', 'Erwachsene', 'Universal'];
   final Map<String, List<String>> _sizeOptions = {
@@ -178,7 +184,7 @@ class _SellPageState extends State<SellPage> {
                 height: 16,
               ),
               DropdownButtonFormField<String>(
-                  value: selectedCondition,
+                  value: _selectedCondition,
                   decoration: const InputDecoration(
                     labelText: 'Zustand auswählen',
                     border: OutlineInputBorder(),
@@ -192,14 +198,14 @@ class _SellPageState extends State<SellPage> {
                   }).toList(),
                   onChanged: (newValue) {
                     setState(() {
-                      selectedCondition = newValue!;
+                      _selectedCondition = newValue!;
                     });
                   }),
               Container(
                 height: 16,
               ),
               DropdownButtonFormField<String>(
-                value: SelectedBrand,
+                value: _selectedBrand,
                 decoration: const InputDecoration(
                   labelText: 'Marke auswählen',
                   border: OutlineInputBorder(),
@@ -249,25 +255,23 @@ class _SellPageState extends State<SellPage> {
                 ],
                 onChanged: (newValue) {
                   setState(() {
-                    SelectedBrand = newValue!;
+                    _selectedBrand = newValue!;
                   });
                 },
               ),
-              Container(
-                child: Column(
-                  children: <Widget>[
-                    Divider(
-                      color: Colors.grey[400],
-                      height: 30,
-                      thickness: 1,
-                      indent: 20,
-                      endIndent: 20,
-                    ),
-                  ],
-                ),
+              Column(
+                children: <Widget>[
+                  Divider(
+                    color: Colors.grey[400],
+                    height: 30,
+                    thickness: 1,
+                    indent: 20,
+                    endIndent: 20,
+                  ),
+                ],
               ),
               DropdownButtonFormField<String>(
-                  value: selectedClub,
+                  value: _selectedClub,
                   decoration: const InputDecoration(
                     labelText: 'Verein auswählen',
                     border: OutlineInputBorder(),
@@ -281,7 +285,7 @@ class _SellPageState extends State<SellPage> {
                   }).toList(),
                   onChanged: (newValue) {
                     setState(() {
-                      selectedClub = newValue!;
+                      _selectedClub = newValue!;
                     });
                   }),
               Container(
@@ -289,7 +293,7 @@ class _SellPageState extends State<SellPage> {
               ),
               DropdownButtonFormField<String>(
                   focusColor: AppColor.primarySoft,
-                  value: selectedSport,
+                  value: _selectedSport,
                   decoration: const InputDecoration(
                     //contentPadding: EdgeInsets.symmetric(horizontal: 8),
                     //border: InputBorder.none,
@@ -306,7 +310,7 @@ class _SellPageState extends State<SellPage> {
                   }).toList(),
                   onChanged: (newValue) {
                     setState(() {
-                      selectedSport = newValue!;
+                      _selectedSport = newValue!;
                     });
                   }),
               ListTile(
@@ -355,13 +359,10 @@ class _SellPageState extends State<SellPage> {
                   ],
                 ),
               ),
-              Container(
-                //margin: EdgeInsets.only(top: 20, bottom: 0),
-                child: Text(
-                  'Preis *',
-                  style: TextStyle(
-                    color: AppColor.secondary.withOpacity(0.7),
-                  ),
+              Text(
+                'Preis *',
+                style: TextStyle(
+                  color: AppColor.secondary.withOpacity(0.7),
                 ),
               ),
               TextFormField(
@@ -402,19 +403,32 @@ class _SellPageState extends State<SellPage> {
                 onPressed:
                     _titleController.text.trim().length >= 3 && _isPriceValid
                         ? () {
-                            // Navigator.of(context).pop();
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => PageSwitcher(
-                                      selectedIndex: 0,
-                                    )));
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Erfolgreich eingestellt'),
-                              ),
-                            );
+                            // // Navigator.of(context).pop();
+                            // Navigator.of(context).push(MaterialPageRoute(
+                            //     builder: (context) => PageSwitcher(
+                            //           selectedIndex: 0,
+                            //         )));
+                            saveArticleToFirebase(
+                                title: _titleController.text,
+                                description: _descriptionController.text,
+                                brand: _selectedBrand,
+                                club: _selectedClub,
+                                sport: _selectedSport,
+                                price: double.parse(_priceController.text),
+                                isIndividuallyWearable: _isIndividuallyWearable,
+                                images: _imageList,
+                                context: context,
+                                condition: _selectedCondition,
+                                size: _selectedSize,
+                                type: _selectedType,
+                                userId: user?.uid);
+                            // ScaffoldMessenger.of(context).showSnackBar(
+                            //   const SnackBar(
+                            //     content: Text('Erfolgreich eingestellt'),
+                            //   ),
+                            // );
                           }
                         : null,
-                child: const Text('Artikel einstellen'),
                 style: ElevatedButton.styleFrom(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
@@ -424,6 +438,7 @@ class _SellPageState extends State<SellPage> {
                   elevation: 0,
                   shadowColor: Colors.transparent,
                 ),
+                child: const Text('Artikel einstellen'),
               ),
             ],
           ),
@@ -451,5 +466,120 @@ class _SellPageState extends State<SellPage> {
         _imageList.removeLast();
       });
     }
+  }
+
+  Future<void> saveArticleToFirebase({
+    required String title,
+    required String description,
+    required double price,
+    required String brand,
+    required String club,
+    required String sport,
+    required bool isIndividuallyWearable,
+    required String condition,
+    required String size,
+    required String type,
+    required List<File> images,
+    required String? userId,
+    required BuildContext context,
+  }) async {
+    try {
+      // Show loading indicator
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const AlertDialog(
+          content: CircularProgressIndicator(),
+        ),
+      );
+
+      List<String> imageUrls = [];
+
+      // Upload images to Firebase Storage
+      if (images.isNotEmpty) {
+        List<String> imageUrls = await uploadImagesToFirebaseStorage(images);
+      }
+
+      // Create a map with article data
+      Map<String, dynamic> articleData = {
+        'title': title,
+        'description': description,
+        'price': price,
+        'brand': brand,
+        'club': club,
+        'sport': sport,
+        'isIndividuallyWearable': isIndividuallyWearable,
+        'condition': condition,
+        'size': size,
+        'type': type,
+        'images': imageUrls,
+        'createdAt': Timestamp.now(),
+        'updatedAt': Timestamp.now(),
+        'userId': userId,
+        'isSold': false,
+        'isDeleted': false,
+      };
+
+      // Save the article data to Firestore
+      await FirebaseFirestore.instance.collection('articles').add(articleData);
+
+      // Hide loading indicator
+      //Navigator.of(context).pop();
+
+      // Show snackbar and navigate to home screen
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Erfolgreich eingestellt.'),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => PageSwitcher(
+                selectedIndex: 0,
+              )));
+    } catch (error) {
+      // Hide loading indicator
+      Navigator.of(context).pop();
+
+      // Show snackbar for error
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Etwas ist schief gelaufen.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      // for debugging
+      //print(error);
+    }
+  }
+
+  Future<List<String>> uploadImagesToFirebaseStorage(List<File> images) async {
+    List<String> imageUrls = [];
+
+    for (var image in images) {
+      try {
+        // Show image upload loading indicator
+        // ...
+
+        // Generate a unique filename for the image
+        String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+
+        // Upload the image file to Firebase Storage
+        Reference storageReference =
+            FirebaseStorage.instance.ref().child('images/$fileName');
+        TaskSnapshot snapshot = await storageReference.putFile(image);
+
+        // Get the download URL of the uploaded image
+        String downloadUrl = await snapshot.ref.getDownloadURL();
+        imageUrls.add(downloadUrl);
+
+        // Hide image upload loading indicator
+      } catch (error) {
+        // Handle image upload error
+      }
+    }
+
+    return imageUrls;
   }
 }
