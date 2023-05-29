@@ -56,6 +56,10 @@ class _SearchPageState extends State<SearchPage> {
 
   void updateSearchList(String searchTerm) {
     setState(() {
+      if (search.length >= 7) {
+        // Remove the oldest search term
+        search.removeAt(0);
+      }
       search.add(searchTerm);
     });
     saveChanges();
