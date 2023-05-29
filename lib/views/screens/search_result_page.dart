@@ -1,3 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:clubtwice/views/screens/page_switcher.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -21,11 +25,56 @@ class _SearchResultPageState extends State<SearchResultPage>
   late TabController tabController;
   TextEditingController searchInputController = TextEditingController();
   List<Product> searchedProductData = ProductService.searchedProductData;
+
+  List<String> search = [];
+
   @override
   void initState() {
     super.initState();
     searchInputController.text = widget.searchKeyword;
     tabController = TabController(length: 4, vsync: this);
+    fetchUserData();
+  }
+
+  Future<void> fetchUserData() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String userId = user.uid;
+      DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+          .instance
+          .collection('users')
+          .doc(userId)
+          .get();
+      Map<String, dynamic> userData = snapshot.data() ?? {};
+      setState(() {
+        search = List<String>.from(userData['search'] ?? []);
+      });
+    }
+  }
+
+  Future<void> saveChanges() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String userId = user.uid;
+      await updateUserData(userId);
+    }
+  }
+
+  Future<void> updateUserData(String userId) async {
+    await FirebaseFirestore.instance.collection('users').doc(userId).update({
+      'search': search,
+    });
+  }
+
+  void updateSearchList(String searchTerm) {
+    setState(() {
+      if (search.length >= 7) {
+        // Remove the oldest search term
+        search.removeAt(0);
+      }
+      search.add(searchTerm);
+    });
+    saveChanges();
   }
 
   @override
@@ -37,14 +86,29 @@ class _SearchResultPageState extends State<SearchResultPage>
         backgroundColor: AppColor.primary,
         elevation: 0,
         leading: IconButton(
-          onPressed: () => Navigator.of(context).pop(),
-          icon: Icon(
-            Icons.arrow_back,
-          ),
+          onPressed: () async {
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => PageSwitcher(
+                      selectedIndex: 1,
+                    )));
+          },
+          icon: Icon(Icons.arrow_back),
         ),
         title: Container(
           height: 40,
           child: TextField(
+            onSubmitted: (searchTerm) {
+              updateSearchList(searchTerm);
+              saveChanges();
+
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => SearchResultPage(
+                    searchKeyword: searchTerm,
+                  ),
+                ),
+              );
+            },
             autofocus: false,
             controller: searchInputController,
             style: TextStyle(fontSize: 14, color: Colors.white),

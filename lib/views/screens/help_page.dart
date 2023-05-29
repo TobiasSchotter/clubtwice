@@ -186,6 +186,7 @@ class _HelpPageState extends State<HelpPage> {
                               try {
                                 // Delete user from Firebase
                                 await user.delete();
+                                print(Text('HallO'));
                                 // Navigate to welcome page
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
