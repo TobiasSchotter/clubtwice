@@ -6,6 +6,8 @@ import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/screens/home_page.dart';
 import 'package:clubtwice/views/screens/profile_page.dart';
 
+import '../../core/services/SearchService.dart';
+
 class PageSwitcher extends StatefulWidget {
   final int selectedIndex;
 
@@ -43,6 +45,9 @@ class _PageSwitcherState extends State<PageSwitcher> {
           onDestinationSelected: (int index) {
             setState(() {
               _selectedIndex = index;
+              if (index == 1) {
+                SearchService.fetchSearchHistory();
+              }
             });
           },
           selectedIndex: _selectedIndex,

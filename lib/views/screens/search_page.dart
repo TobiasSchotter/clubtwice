@@ -61,6 +61,13 @@ class _SearchPageState extends State<SearchPage> {
     saveChanges();
   }
 
+  Future<void> clearSearchHistory() async {
+    setState(() {
+      search = [];
+    });
+    saveChanges();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,6 +82,7 @@ class _SearchPageState extends State<SearchPage> {
             onSubmitted: (searchTerm) {
               updateSearchList(searchTerm);
               saveChanges();
+
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => SearchResultPage(
@@ -153,7 +161,7 @@ class _SearchPageState extends State<SearchPage> {
               Container(
                 width: MediaQuery.of(context).size.width,
                 child: ElevatedButton(
-                  onPressed: null,
+                  onPressed: clearSearchHistory,
                   child: Text(
                     'Suchverlauf löschen',
                     style:

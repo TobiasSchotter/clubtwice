@@ -1,16 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clubtwice/core/model/Search.dart';
 
 class SearchService {
-  static List<SearchHistory> listSearchHistory = listSearchHistoryRawData
-      .map((data) => SearchHistory.fromJson(data))
-      .toList();
-}
+  static List<SearchHistory> listSearchHistory = [];
 
-var listSearchHistoryRawData = [
-  {'title': 'Nike Air Jordan'},
-  {'title': 'Adidas Alphabounce'},
-  {'title': 'Curry 5'},
-  {'title': 'Jordan BRED'},
-  {'title': 'Heiden Heritage Xylo'},
-  {'title': 'Ventela Public'},
-];
+  static Future<void> fetchSearchHistory() async {
+    QuerySnapshot<Map<String, dynamic>> snapshot =
+        await FirebaseFirestore.instance.collection('searchHistory').get();
+
+    listSearchHistory =
+        snapshot.docs.map((doc) => SearchHistory.fromJson(doc.data())).toList();
+  }
+}
