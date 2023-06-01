@@ -1,6 +1,7 @@
 import 'package:clubtwice/core/services/auth.dart';
-import 'package:clubtwice/views/screens/home_page.dart';
+
 import 'package:flutter/material.dart';
+import '../screens/page_switcher.dart';
 import '../screens/welcome_page.dart';
 
 class WidgetTree extends StatefulWidget {
@@ -17,7 +18,7 @@ class _WidgetTreeState extends State<WidgetTree> {
       stream: Auth().authStateChanges,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return const HomePage();
+          return PageSwitcher(selectedIndex: 0);
         } else {
           return const WelcomePage();
         }
