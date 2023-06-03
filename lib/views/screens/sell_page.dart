@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import '../widgets/grid_widget.dart';
@@ -368,18 +369,18 @@ class _SellPageState extends State<SellPage> {
               TextFormField(
                 controller: _priceController,
                 cursorColor: AppColor.primarySoft,
-                keyboardType: const TextInputType.numberWithOptions(
-                    decimal: true, signed: false),
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter
+                      .digitsOnly // Nur ganze Zahlen erlauben
+                ],
                 decoration: const InputDecoration(
                   suffixText: '€',
-                  hintText: 'z.B. 5,50',
+                  hintText: 'z.B. 5',
                 ),
                 onChanged: (value) {
                   setState(() {
                     if (value.isEmpty) {
-                      _isPriceValid = false;
-                    } else if (double.tryParse(value.replaceAll(',', '.')) ==
-                        null) {
                       _isPriceValid = false;
                     } else {
                       _isPriceValid = true;
@@ -389,9 +390,6 @@ class _SellPageState extends State<SellPage> {
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Bitte geben Sie einen Preis ein';
-                  } else if (double.tryParse(value.replaceAll(',', '.')) ==
-                      null) {
-                    return 'Bitte geben Sie eine gültige Zahl ein';
                   }
                   return null;
                 },
