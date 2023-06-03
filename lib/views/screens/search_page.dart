@@ -8,6 +8,8 @@ import 'package:clubtwice/core/services/SearchService.dart';
 import 'package:clubtwice/views/screens/search_result_page.dart';
 import 'package:clubtwice/views/widgets/search_history_tile.dart';
 
+import '../widgets/search_field_tile.dart';
+
 class SearchPage extends StatefulWidget {
   @override
   _SearchPageState createState() => _SearchPageState();
@@ -82,7 +84,7 @@ class _SearchPageState extends State<SearchPage> {
         elevation: 0,
         title: Container(
           height: 40,
-          child: TextField(
+          child: SearchField(
             onSubmitted: (searchTerm) {
               updateSearchList(searchTerm);
               saveChanges();
@@ -95,33 +97,6 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               );
             },
-            autofocus: false,
-            style:
-                TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.5)),
-            decoration: InputDecoration(
-              hintStyle:
-                  TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.3)),
-              hintText: 'Suche nach Vereinskleidung aller Vereine',
-              prefixIcon: Container(
-                padding: const EdgeInsets.all(10),
-                child: Icon(Icons.search_outlined,
-                    color: Colors.white.withOpacity(0.5)),
-              ),
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-              enabledBorder: OutlineInputBorder(
-                borderSide:
-                    const BorderSide(color: Colors.transparent, width: 1),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: Colors.white.withOpacity(0.1), width: 1),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              fillColor: Colors.white.withOpacity(0.1),
-              filled: true,
-            ),
           ),
         ),
         systemOverlayStyle: SystemUiOverlayStyle.light,

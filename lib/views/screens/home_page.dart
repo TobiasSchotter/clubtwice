@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clubtwice/constant/app_button.dart';
-import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:clubtwice/views/screens/profile_page_club.dart';
+import 'package:clubtwice/views/screens/search_result_page.dart';
 import 'package:clubtwice/views/widgets/filter_tile_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +10,10 @@ import 'package:clubtwice/core/model/Product.dart';
 import 'package:clubtwice/core/services/ProductService.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
 import 'package:flutter/services.dart';
+
+import '../../core/model/Search.dart';
+import '../../core/services/SearchService.dart';
+import '../widgets/search_field_tile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,6 +27,9 @@ class _HomePageState extends State<HomePage> {
   List<Product> productData = ProductService.productData;
   String verein = '';
   String sportart = '';
+
+  List<SearchHistory> listSearchHistory = SearchService.listSearchHistory;
+  List<String> search = [];
 
   @override
   void initState() {
@@ -43,8 +50,41 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         verein = userData['club'] ?? '';
         sportart = userData['sport'] ?? '';
+        search = List<String>.from(userData['search'] ?? []);
       });
     }
+  }
+
+  Future<void> saveChanges() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String userId = user.uid;
+      await updateUserData(userId);
+    }
+  }
+
+  Future<void> updateUserData(String userId) async {
+    await FirebaseFirestore.instance.collection('users').doc(userId).update({
+      'search': search,
+    });
+  }
+
+  void updateSearchList(String searchTerm) {
+    setState(() {
+      if (search.length >= 7) {
+        // Remove the oldest search term
+        search.removeAt(0);
+      }
+      search.add(searchTerm);
+    });
+    saveChanges();
+  }
+
+  Future<void> clearSearchHistory() async {
+    setState(() {
+      search = [];
+    });
+    saveChanges();
   }
 
   @override
@@ -105,43 +145,21 @@ class _HomePageState extends State<HomePage> {
         centerTitle: false,
         backgroundColor: AppColor.primary,
         elevation: 0,
-        title: SizedBox(
+        title: Container(
           height: 40,
-          child: TextField(
-            onTap: () {
-              Navigator.push(
-                context,
+          child: SearchField(
+            onSubmitted: (searchTerm) {
+              updateSearchList(searchTerm);
+              saveChanges();
+
+              Navigator.of(context).push(
                 MaterialPageRoute(
-                    builder: (context) => PageSwitcher(selectedIndex: 1)),
+                  builder: (context) => SearchResultPage(
+                    searchKeyword: searchTerm,
+                  ),
+                ),
               );
             },
-            autofocus: false,
-            style:
-                TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.5)),
-            decoration: InputDecoration(
-              hintStyle:
-                  TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.3)),
-              hintText: 'Suche nach Vereinskleidung aller Vereine ...',
-              prefixIcon: Container(
-                padding: const EdgeInsets.all(10),
-                child: Icon(Icons.search_outlined,
-                    color: Colors.white.withOpacity(0.5)),
-              ),
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-              enabledBorder: OutlineInputBorder(
-                borderSide:
-                    const BorderSide(color: Colors.transparent, width: 1),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: Colors.white.withOpacity(0.1), width: 1),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              fillColor: Colors.white.withOpacity(0.1),
-              filled: true,
-            ),
           ),
         ),
         systemOverlayStyle: SystemUiOverlayStyle.light,
