@@ -42,7 +42,7 @@ class MyProfileWidget extends StatelessWidget {
 
         return Container(
           width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
           decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage('assets/images/background.jpg'),
@@ -53,8 +53,8 @@ class MyProfileWidget extends StatelessWidget {
             children: [
               // Profile Picture
               Container(
-                width: 96,
-                height: 96,
+                width: 80,
+                height: 80,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100),
                   color: Colors.grey,
@@ -66,7 +66,7 @@ class MyProfileWidget extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.bottomRight,
                   child: IconButton(
-                    iconSize: 15,
+                    iconSize: 14,
                     icon: const Icon(Icons.camera_alt_rounded),
                     color: Colors.white,
                     onPressed: () async {
@@ -123,13 +123,13 @@ class MyProfileWidget extends StatelessWidget {
               ),
               // Fullname
               Container(
-                margin: const EdgeInsets.only(bottom: 4, top: 14),
+                margin: const EdgeInsets.only(bottom: 2, top: 7),
                 child: Text(
                   '$firstname' + ' $lastname',
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
-                    fontSize: 16,
+                    fontSize: 15,
                   ),
                 ),
               ),
@@ -138,21 +138,21 @@ class MyProfileWidget extends StatelessWidget {
                 '$username',
                 style: TextStyle(
                   color: Colors.white.withOpacity(0.6),
-                  fontSize: 14,
+                  fontSize: 13,
                 ),
               ),
               Text(
                 '$club',
                 style: TextStyle(
                   color: Colors.white.withOpacity(0.6),
-                  fontSize: 14,
+                  fontSize: 13,
                 ),
               ),
               Text(
                 '$sport',
                 style: TextStyle(
                   color: Colors.white.withOpacity(0.6),
-                  fontSize: 14,
+                  fontSize: 13,
                 ),
               ),
             ],
