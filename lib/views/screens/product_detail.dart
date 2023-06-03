@@ -37,7 +37,7 @@ class _ProductDetailState extends State<ProductDetail> {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.bookmark_add_outlined),
+            icon: const Icon(Icons.bookmark_add_outlined),
             onPressed: () {
               // Hier wird Code ausgeführt, wenn der rechte Button gedrückt wird
             },
@@ -65,11 +65,11 @@ class _ProductDetailState extends State<ProductDetail> {
                     elevation: 0,
                   ),
                   onPressed: () {},
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.chat_bubble_sharp,
                     //child: Icon(Icons.chat_bubble_sharp),
                   ),
-                  label: Text('Bei Verkäufer anfragen'),
+                  label: const Text('Bei Verkäufer anfragen'),
                 ),
               ),
             ),

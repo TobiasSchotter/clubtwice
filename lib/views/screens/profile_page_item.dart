@@ -59,8 +59,8 @@ class _ProfilePageItemState extends State<ProfilePageItem> {
             height: 46,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
+              children: const [
+                Text(
                   'Meine Anzeigen',
                   style: TextStyle(
                       color: AppColor.border,

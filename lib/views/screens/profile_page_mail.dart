@@ -14,7 +14,7 @@ class ProfilePageMail extends StatefulWidget {
 }
 
 class _ProfilePageMailState extends State<ProfilePageMail> {
-  TextEditingController _emailController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   String _originalEmail = '';
 
   @override

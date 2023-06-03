@@ -25,14 +25,14 @@ class _ImageViewerState extends State<ImageViewer> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
         ),
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
       body: Stack(
         children: [
           PageView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             controller: productImageSlider,
             children: List.generate(
               widget.imageUrl.length,

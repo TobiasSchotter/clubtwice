@@ -11,7 +11,7 @@ import '../../core/services/SearchService.dart';
 class PageSwitcher extends StatefulWidget {
   final int selectedIndex;
 
-  PageSwitcher({Key? key, required this.selectedIndex}) : super(key: key);
+  const PageSwitcher({Key? key, required this.selectedIndex}) : super(key: key);
 
   @override
   State<PageSwitcher> createState() => _PageSwitcherState();

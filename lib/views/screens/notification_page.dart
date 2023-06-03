@@ -16,11 +16,11 @@ class _NotificationPageState extends State<NotificationPage> {
     return Scaffold(
       body: ListView(
         shrinkWrap: true,
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.symmetric(vertical: 16),
+            padding: const EdgeInsets.symmetric(vertical: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -33,7 +33,7 @@ class _NotificationPageState extends State<NotificationPage> {
                   },
                   itemCount: listNotification.length,
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                 ),
               ],
             ),

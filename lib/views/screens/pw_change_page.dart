@@ -21,7 +21,7 @@ class _PWChangePageState extends State<PWChangePage> {
   final _newPasswordController = TextEditingController();
   final _repeatPasswordController = TextEditingController();
   String? _errorMessage = '';
-  bool _isLogin = true;
+  final bool _isLogin = true;
   bool isObscured = true;
   bool isObscured2 = true;
   bool isObscured3 = true;

@@ -10,7 +10,7 @@ class ImageGrid extends StatefulWidget {
 }
 
 class _ImageGridState extends State<ImageGrid> {
-  List<File> _imageList = [];
+  final List<File> _imageList = [];
   final ImagePicker _picker = ImagePicker();
 
   void _pickImage(ImageSource source) async {
@@ -19,12 +19,13 @@ class _ImageGridState extends State<ImageGrid> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Limit erreicht'),
-            content: Text('Es können maximal 5 Bilder hochgeladen werden.'),
+            title: const Text('Limit erreicht'),
+            content:
+                const Text('Es können maximal 5 Bilder hochgeladen werden.'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           );
@@ -63,7 +64,6 @@ class _ImageGridState extends State<ImageGrid> {
             Expanded(
               child: ElevatedButton(
                 onPressed: () => _pickImage(ImageSource.camera),
-                child: Text('Kamera'),
                 style: ElevatedButton.styleFrom(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
@@ -74,13 +74,13 @@ class _ImageGridState extends State<ImageGrid> {
                   elevation: 0,
                   shadowColor: Colors.transparent,
                 ),
+                child: const Text('Kamera'),
               ),
             ),
-            SizedBox(width: 16),
+            const SizedBox(width: 16),
             Expanded(
               child: ElevatedButton(
                 onPressed: () => _pickImage(ImageSource.gallery),
-                child: Text('Galerie'),
                 style: ElevatedButton.styleFrom(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
@@ -91,6 +91,7 @@ class _ImageGridState extends State<ImageGrid> {
                   elevation: 0,
                   shadowColor: Colors.transparent,
                 ),
+                child: const Text('Galerie'),
               ),
             ),
           ],
@@ -98,7 +99,7 @@ class _ImageGridState extends State<ImageGrid> {
         Container(height: 16.0),
         Container(
           decoration: _imageList.isEmpty
-              ? BoxDecoration(
+              ? const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage("assets/images/background.jpg"),
                     fit: BoxFit.cover,
@@ -108,7 +109,7 @@ class _ImageGridState extends State<ImageGrid> {
           child: GridView.builder(
             shrinkWrap: true,
             itemCount: _imageList.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               crossAxisSpacing: 4.0,
               mainAxisSpacing: 4.0,
@@ -129,12 +130,12 @@ class _ImageGridState extends State<ImageGrid> {
                       child: GestureDetector(
                         onTap: () => _removeImage(index),
                         child: Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                             color: Colors.red,
                           ),
                           padding: const EdgeInsets.all(4.0),
-                          child: Icon(
+                          child: const Icon(
                             Icons.close,
                             size: 16.0,
                             color: Colors.white,

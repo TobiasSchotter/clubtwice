@@ -60,7 +60,7 @@ class _HelpPageState extends State<HelpPage> {
                 MenuTileWidget(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ProfilePageHelp()));
+                        builder: (context) => const ProfilePageHelp()));
                   },
                   margin: const EdgeInsets.only(top: 10),
                   icon: Icon(
@@ -74,7 +74,7 @@ class _HelpPageState extends State<HelpPage> {
                 MenuTileWidget(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ProfilePageHelp()));
+                        builder: (context) => const ProfilePageHelp()));
                   },
                   margin: const EdgeInsets.only(top: 10),
                   icon: Icon(
@@ -87,7 +87,7 @@ class _HelpPageState extends State<HelpPage> {
                 MenuTileWidget(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ProfilePageHelp()));
+                        builder: (context) => const ProfilePageHelp()));
                   },
                   margin: const EdgeInsets.only(top: 10),
                   icon: Icon(
@@ -100,7 +100,7 @@ class _HelpPageState extends State<HelpPage> {
                 MenuTileWidget(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ProfilePageHelp()));
+                        builder: (context) => const ProfilePageHelp()));
                   },
                   margin: const EdgeInsets.only(top: 10),
                   icon: Icon(
@@ -113,7 +113,7 @@ class _HelpPageState extends State<HelpPage> {
                 MenuTileWidget(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ProfilePageHelp()));
+                        builder: (context) => const ProfilePageHelp()));
                   },
                   margin: const EdgeInsets.only(top: 10),
                   icon: Icon(
@@ -126,7 +126,7 @@ class _HelpPageState extends State<HelpPage> {
                 MenuTileWidget(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ProfilePageHelp()));
+                        builder: (context) => const ProfilePageHelp()));
                   },
                   margin: const EdgeInsets.only(top: 10),
                   icon: Icon(
@@ -186,11 +186,12 @@ class _HelpPageState extends State<HelpPage> {
                               try {
                                 // Delete user from Firebase
                                 await user.delete();
-                                print(Text('HallO'));
+                                print(const Text('HallO'));
                                 // Navigate to welcome page
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                      builder: (context) => WelcomePage()),
+                                      builder: (context) =>
+                                          const WelcomePage()),
                                 );
                                 // Sign out any remaining sessions
                                 await FirebaseAuth.instance.signOut();
@@ -247,7 +248,7 @@ class _HelpPageState extends State<HelpPage> {
                             // ignore: use_build_context_synchronously
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                  builder: (context) => WelcomePage()),
+                                  builder: (context) => const WelcomePage()),
                             );
                             widget.signOut();
                             // ignore: use_build_context_synchronously

@@ -6,7 +6,8 @@ import 'package:clubtwice/views/screens/message_detail_page.dart';
 class MessageTileWidget extends StatelessWidget {
   final Message data;
 
-  MessageTileWidget({
+  const MessageTileWidget({
+    super.key,
     required this.data,
   });
 
@@ -19,8 +20,8 @@ class MessageTileWidget extends StatelessWidget {
       },
       child: Container(
         width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        decoration: BoxDecoration(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        decoration: const BoxDecoration(
           // color: (data.isRead == true) ? Colors.white : AppColor.primarySoft,
           border:
               Border(bottom: BorderSide(color: AppColor.primarySoft, width: 1)),
@@ -30,8 +31,8 @@ class MessageTileWidget extends StatelessWidget {
             Container(
               width: 46,
               height: 56,
-              padding: EdgeInsets.all(10),
-              margin: EdgeInsets.only(right: 16),
+              padding: const EdgeInsets.all(10),
+              margin: const EdgeInsets.only(right: 16),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 image: DecorationImage(image: AssetImage(data.shopLogoUrl)),
@@ -42,11 +43,11 @@ class MessageTileWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('${data.shopName}',
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: AppColor.secondary,
                           fontFamily: 'poppins',
                           fontWeight: FontWeight.w500)),
-                  SizedBox(height: 2),
+                  const SizedBox(height: 2),
                   Text('${data.message}',
                       style: TextStyle(
                           color: AppColor.secondary.withOpacity(0.7),
@@ -54,7 +55,7 @@ class MessageTileWidget extends StatelessWidget {
                 ],
               ),
             ),
-            Icon(
+            const Icon(
               Icons.arrow_forward_ios,
               color: AppColor.border,
             ),

@@ -6,7 +6,8 @@ class NotificationTile extends StatelessWidget {
   final VoidCallback onTap;
   final UserNotification data;
 
-  NotificationTile({
+  const NotificationTile({
+    super.key,
     required this.onTap,
     required this.data,
   });
@@ -17,7 +18,7 @@ class NotificationTile extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         color: Colors.white,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,7 +33,7 @@ class NotificationTile extends StatelessWidget {
                 image: DecorationImage(
                     image: AssetImage('${data.imageUrl}'), fit: BoxFit.cover),
               ),
-              margin: EdgeInsets.only(right: 16),
+              margin: const EdgeInsets.only(right: 16),
             ),
             // Info
             Expanded(
@@ -42,14 +43,14 @@ class NotificationTile extends StatelessWidget {
                   // Title
                   Text(
                     '${data.title}',
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: AppColor.secondary,
                         fontFamily: 'poppins',
                         fontWeight: FontWeight.w500),
                   ),
                   // Description
                   Container(
-                    margin: EdgeInsets.only(top: 2, bottom: 8),
+                    margin: const EdgeInsets.only(top: 2, bottom: 8),
                     child: Text(
                       '${data.description}',
                       style: TextStyle(
@@ -60,11 +61,11 @@ class NotificationTile extends StatelessWidget {
                   // Datetime
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.av_timer,
                       ),
                       Container(
-                        margin: EdgeInsets.only(left: 10),
+                        margin: const EdgeInsets.only(left: 10),
                         child: Text(
                           '${data.dateTime}',
                           style: TextStyle(

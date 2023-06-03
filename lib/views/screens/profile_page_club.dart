@@ -75,7 +75,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
         leading: IconButton(
           onPressed: () async {
             Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => PageSwitcher(
+                builder: (context) => const PageSwitcher(
                       selectedIndex: 4,
                     )));
           },

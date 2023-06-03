@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
       if (e.code == 'wrong-password' || e.code == 'user-not-found') {
         print('Fehlercode: ${e.code}');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Die E-Mail-Adresse oder das Passwort ist falsch.'),
             backgroundColor: Colors.red,
           ),
@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
       } else {
         print('Unbekannter Fehler: ${e.code}');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Ein Fehler ist aufgetreten. .'),
             backgroundColor: Colors.red,
           ),
@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
     } catch (e) {
       print('Unbekannter Fehler: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text(
               'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.'),
           backgroundColor: Colors.red,
@@ -248,7 +248,7 @@ class _LoginPageState extends State<LoginPage> {
               if (_emailController.text.isEmpty ||
                   _passwordController.text.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
+                  const SnackBar(
                     content: Text('Bitte geben Sie Ihre Anmeldedaten ein'),
                     backgroundColor: Colors.red,
                   ),

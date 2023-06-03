@@ -88,13 +88,13 @@ class _SearchResultPageState extends State<SearchResultPage>
         leading: IconButton(
           onPressed: () async {
             Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => PageSwitcher(
+                builder: (context) => const PageSwitcher(
                       selectedIndex: 1,
                     )));
           },
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
         ),
-        title: Container(
+        title: SizedBox(
           height: 40,
           child: TextField(
             onSubmitted: (searchTerm) {
@@ -111,19 +111,21 @@ class _SearchResultPageState extends State<SearchResultPage>
             },
             autofocus: false,
             controller: searchInputController,
-            style: TextStyle(fontSize: 14, color: Colors.white),
+            style: const TextStyle(fontSize: 14, color: Colors.white),
             decoration: InputDecoration(
               hintStyle:
                   TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.3)),
               hintText: 'Finde Vereinskleidung aller Vereine',
               prefixIcon: Container(
-                  padding: EdgeInsets.all(10),
-                  child: Icon(Icons.search, color: Colors.white)
+                  padding: const EdgeInsets.all(10),
+                  child: const Icon(Icons.search, color: Colors.white)
                   //color: Colors.white),
                   ),
-              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.transparent, width: 1),
+                borderSide:
+                    const BorderSide(color: Colors.transparent, width: 1),
                 borderRadius: BorderRadius.circular(16),
               ),
               focusedBorder: OutlineInputBorder(
@@ -144,9 +146,9 @@ class _SearchResultPageState extends State<SearchResultPage>
           // 1 - Related
           ListView(
             shrinkWrap: true,
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             children: [
-              ExpansionTile(
+              const ExpansionTile(
                 iconColor: Colors.white,
                 textColor: Colors.white,
                 title: Text('Filter'),
@@ -157,17 +159,18 @@ class _SearchResultPageState extends State<SearchResultPage>
                 ],
               ),
               Padding(
-                padding: EdgeInsets.only(left: 16, top: 16),
+                padding: const EdgeInsets.only(left: 16, top: 16),
                 child: Text(
                   'Suchergebnisse zu ${widget.searchKeyword}',
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Colors.grey,
                       fontSize: 12,
                       fontWeight: FontWeight.w400),
                 ),
               ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Wrap(
                   spacing: 16,
                   runSpacing: 16,
@@ -181,9 +184,9 @@ class _SearchResultPageState extends State<SearchResultPage>
               ),
             ],
           ),
-          SizedBox(),
-          SizedBox(),
-          SizedBox(),
+          const SizedBox(),
+          const SizedBox(),
+          const SizedBox(),
         ],
       ),
     );

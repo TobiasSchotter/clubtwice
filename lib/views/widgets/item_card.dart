@@ -12,6 +12,7 @@ class ItemCard extends StatelessWidget {
   Currency euro = Currency.create('EUR', 2, symbol: '€');
 
   ItemCard({
+    super.key,
     required this.product,
     this.titleColor = Colors.black,
     this.priceColor = AppColor.primary,

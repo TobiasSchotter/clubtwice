@@ -75,7 +75,7 @@ class _HomePageState extends State<HomePage> {
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Center(
+              child: const Center(
                 child: Text(
                   'Du hast noch keinen Verein und Sportart hinterlegt.\n Hier auf deiner Home-Page werden alle Produkte deines Vereins angezeigt',
                   textAlign: TextAlign.center,
@@ -83,12 +83,13 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             CustomButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ProfilePageClub()),
+                  MaterialPageRoute(
+                      builder: (context) => const ProfilePageClub()),
                 );
               },
               buttonText: 'Verein hinterlegen',
@@ -104,7 +105,7 @@ class _HomePageState extends State<HomePage> {
         centerTitle: false,
         backgroundColor: AppColor.primary,
         elevation: 0,
-        title: Container(
+        title: SizedBox(
           height: 40,
           child: TextField(
             onTap: () {
@@ -122,13 +123,15 @@ class _HomePageState extends State<HomePage> {
                   TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.3)),
               hintText: 'Suche nach Vereinskleidung aller Vereine ...',
               prefixIcon: Container(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Icon(Icons.search_outlined,
                     color: Colors.white.withOpacity(0.5)),
               ),
-              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.transparent, width: 1),
+                borderSide:
+                    const BorderSide(color: Colors.transparent, width: 1),
                 borderRadius: BorderRadius.circular(16),
               ),
               focusedBorder: OutlineInputBorder(
@@ -158,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   margin: const EdgeInsets.only(top: 8),
                   padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Flex(
+                  child: const Flex(
                     direction: Axis.horizontal,
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -182,7 +185,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          ExpansionTile(
+          const ExpansionTile(
             iconColor: Colors.white,
             textColor: Colors.white,
             title: Text('Filter'),

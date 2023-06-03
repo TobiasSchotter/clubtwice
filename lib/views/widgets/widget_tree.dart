@@ -18,7 +18,7 @@ class _WidgetTreeState extends State<WidgetTree> {
       stream: Auth().authStateChanges,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return PageSwitcher(selectedIndex: 0);
+          return const PageSwitcher(selectedIndex: 0);
         } else {
           return const WelcomePage();
         }

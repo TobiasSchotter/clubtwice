@@ -103,13 +103,15 @@ class _SearchPageState extends State<SearchPage> {
                   TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.3)),
               hintText: 'Suche nach Vereinskleidung aller Vereine',
               prefixIcon: Container(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Icon(Icons.search_outlined,
                     color: Colors.white.withOpacity(0.5)),
               ),
-              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.transparent, width: 1),
+                borderSide:
+                    const BorderSide(color: Colors.transparent, width: 1),
                 borderRadius: BorderRadius.circular(16),
               ),
               focusedBorder: OutlineInputBorder(
@@ -126,13 +128,13 @@ class _SearchPageState extends State<SearchPage> {
       ),
       body: ListView(
         shrinkWrap: true,
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
+              const Padding(
                 padding: EdgeInsets.all(16),
                 child: Text(
                   'Dein Suchverlauf...',
@@ -144,7 +146,7 @@ class _SearchPageState extends State<SearchPage> {
               ),
               ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: search.length, // Use the length of the 'search' list
                 itemBuilder: (context, index) {
                   String searchTerm = search[
@@ -166,15 +168,10 @@ class _SearchPageState extends State<SearchPage> {
                   );
                 },
               ),
-              Container(
+              SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: ElevatedButton(
                   onPressed: clearSearchHistory,
-                  child: Text(
-                    'Suchverlauf löschen',
-                    style:
-                        TextStyle(color: AppColor.secondary.withOpacity(0.5)),
-                  ),
                   style: ElevatedButton.styleFrom(
                     foregroundColor: AppColor.primary.withOpacity(0.3),
                     backgroundColor: AppColor.primarySoft,
@@ -182,6 +179,11 @@ class _SearchPageState extends State<SearchPage> {
                     shadowColor: Colors.transparent,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(0)),
+                  ),
+                  child: Text(
+                    'Suchverlauf löschen',
+                    style:
+                        TextStyle(color: AppColor.secondary.withOpacity(0.5)),
                   ),
                 ),
               ),

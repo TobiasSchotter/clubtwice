@@ -6,5 +6,5 @@ class AppColor {
   static const Color secondary = Color(0xFF0A0E2F);
   static const Color accent = Color(0xFFFABA3E);
   static const Color border = Color(0xFFD3D3E4);
-  static const Color Icon = Color.fromARGB(255, 164, 164, 171);
+  static const Color icon = Color.fromARGB(255, 164, 164, 171);
 }

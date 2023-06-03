@@ -59,8 +59,8 @@ class _ProfilePageFavState extends State<ProfilePageFav> {
             height: 46,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
+              children: const [
+                Text(
                   'Deine Favoriten',
                   style: TextStyle(
                       color: AppColor.border,

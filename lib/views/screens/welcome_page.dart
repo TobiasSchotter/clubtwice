@@ -54,8 +54,8 @@ class WelcomePage extends StatelessWidget {
               child: CustomButton(
                 buttonText: 'Los gehts',
                 onPressed: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => LoginPage()));
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const LoginPage()));
                 },
               ),
             ),

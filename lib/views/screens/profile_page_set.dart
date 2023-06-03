@@ -16,9 +16,9 @@ class ProfilePageSet extends StatefulWidget {
 }
 
 class _ProfilePageSetState extends State<ProfilePageSet> {
-  TextEditingController _firstNameController = TextEditingController();
-  TextEditingController _lastNameController = TextEditingController();
-  TextEditingController _userNameController = TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _userNameController = TextEditingController();
 
   @override
   void dispose() {
@@ -74,7 +74,7 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
             leading: IconButton(
               onPressed: () async {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => PageSwitcher(
+                    builder: (context) => const PageSwitcher(
                           selectedIndex: 4,
                         )));
 

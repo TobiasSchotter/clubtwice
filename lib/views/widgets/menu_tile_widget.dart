@@ -27,8 +27,8 @@ class MenuTileWidget extends StatelessWidget {
       child: Container(
         margin: margin,
         width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        decoration: BoxDecoration(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        decoration: const BoxDecoration(
           border:
               Border(bottom: BorderSide(color: AppColor.primarySoft, width: 1)),
         ),
@@ -38,8 +38,8 @@ class MenuTileWidget extends StatelessWidget {
             Container(
               width: 46,
               height: 46,
-              padding: EdgeInsets.all(10),
-              margin: EdgeInsets.only(right: 16),
+              padding: const EdgeInsets.all(10),
+              margin: const EdgeInsets.only(right: 16),
               decoration: BoxDecoration(
                 color: iconBackground,
                 borderRadius: BorderRadius.circular(8),
@@ -59,11 +59,11 @@ class MenuTileWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('$title',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: AppColor.secondary,
                                 fontFamily: 'poppins',
                                 fontWeight: FontWeight.w500)),
-                        SizedBox(height: 2),
+                        const SizedBox(height: 2),
                         Text('$subtitle',
                             style: TextStyle(
                                 color: AppColor.secondary.withOpacity(0.7),
@@ -71,7 +71,7 @@ class MenuTileWidget extends StatelessWidget {
                       ],
                     ),
             ),
-            Icon(
+            const Icon(
               Icons.arrow_forward_ios,
               color: AppColor.border,
             ),

@@ -18,7 +18,7 @@ class MyProfileWidget extends StatelessWidget {
           FirebaseFirestore.instance.collection('users').doc(user.uid).get(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator(); // Handle while data is being fetched
+          return const CircularProgressIndicator(); // Handle while data is being fetched
         }
 
         final userData = snapshot.data?.data();
@@ -58,7 +58,7 @@ class MyProfileWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100),
                   color: Colors.grey,
-                  image: DecorationImage(
+                  image: const DecorationImage(
                     image: AssetImage('assets/images/pp.png'),
                     fit: BoxFit.cover,
                   ),
@@ -67,7 +67,7 @@ class MyProfileWidget extends StatelessWidget {
                   alignment: Alignment.bottomRight,
                   child: IconButton(
                     iconSize: 15,
-                    icon: Icon(Icons.camera_alt_rounded),
+                    icon: const Icon(Icons.camera_alt_rounded),
                     color: Colors.white,
                     onPressed: () async {
                       // Image picking logic
@@ -78,8 +78,8 @@ class MyProfileWidget extends StatelessWidget {
                             child: Wrap(
                               children: [
                                 ListTile(
-                                  leading: Icon(Icons.photo_library),
-                                  title: Text('Galerie'),
+                                  leading: const Icon(Icons.photo_library),
+                                  title: const Text('Galerie'),
                                   onTap: () async {
                                     final picker = ImagePicker();
                                     final pickedImage = await picker.pickImage(
@@ -90,8 +90,8 @@ class MyProfileWidget extends StatelessWidget {
                                   },
                                 ),
                                 ListTile(
-                                  leading: Icon(Icons.camera_alt),
-                                  title: Text('Kamera'),
+                                  leading: const Icon(Icons.camera_alt),
+                                  title: const Text('Kamera'),
                                   onTap: () async {
                                     final picker = ImagePicker();
                                     final pickedImage = await picker.pickImage(
@@ -102,8 +102,8 @@ class MyProfileWidget extends StatelessWidget {
                                   },
                                 ),
                                 ListTile(
-                                  leading: Icon(Icons.delete),
-                                  title: Text('Bild löschen'),
+                                  leading: const Icon(Icons.delete),
+                                  title: const Text('Bild löschen'),
                                   onTap: () {
                                     Navigator.of(context).pop(null);
                                   },
@@ -126,7 +126,7 @@ class MyProfileWidget extends StatelessWidget {
                 margin: const EdgeInsets.only(bottom: 4, top: 14),
                 child: Text(
                   '$firstname' + ' $lastname',
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
                     fontSize: 16,

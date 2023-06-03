@@ -40,7 +40,7 @@ class _TabPageState extends State<TabPage> with SingleTickerProviderStateMixin {
           indicatorColor: Colors.black,
           labelColor: Colors.black,
           controller: _tabController,
-          tabs: [
+          tabs: const [
             Tab(text: 'Nachrichten (1)'),
             Tab(text: 'Benachrichtigungen'),
           ],
@@ -49,7 +49,7 @@ class _TabPageState extends State<TabPage> with SingleTickerProviderStateMixin {
       body: IndexedStack(
         index: _currentIndex,
         children: [
-          MessagePage(),
+          const MessagePage(),
           NotificationPage(),
         ],
       ),
