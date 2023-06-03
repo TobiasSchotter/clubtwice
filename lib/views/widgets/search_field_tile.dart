@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SearchField extends StatelessWidget {
@@ -15,7 +14,7 @@ class SearchField extends StatelessWidget {
       decoration: InputDecoration(
         hintStyle:
             TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.3)),
-        hintText: 'Suche nach Vereinskleidung aller Vereine',
+        hintText: 'Suche Vereinskleidung aller Vereine',
         prefixIcon: Container(
           padding: const EdgeInsets.all(10),
           child:

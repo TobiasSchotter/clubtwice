@@ -40,7 +40,7 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
           FirebaseFirestore.instance.collection('users').doc(user.uid).get(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator(); // Handle while data is being fetched
+          return const CircularProgressIndicator(); // Handle while data is being fetched
         }
 
         final userData = snapshot.data?.data();

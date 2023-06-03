@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
       );
       // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => PageSwitcher(
+        builder: (context) => const PageSwitcher(
           selectedIndex: 0,
         ),
       ));

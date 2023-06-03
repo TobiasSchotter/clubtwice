@@ -51,7 +51,7 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            icon: Icon(Icons.arrow_back_outlined),
+            icon: const Icon(Icons.arrow_back_outlined),
             color: Colors.black,
           ),
           bottom: PreferredSize(
