@@ -101,7 +101,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
               buttonText: 'Verifizieren',
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => PageSwitcher(
+                    builder: (context) => const PageSwitcher(
                           selectedIndex: 0,
                         )));
               },

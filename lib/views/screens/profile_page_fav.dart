@@ -48,11 +48,7 @@ class _ProfilePageFavState extends State<ProfilePageFav> {
         physics: const BouncingScrollPhysics(),
         children: [
           // Section 1 - Profile Picture - Username - Name
-          Container(
-            // Profile Picture
-
-            child: const MyProfileWidget(),
-          ),
+          const MyProfileWidget(),
 
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
