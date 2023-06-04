@@ -36,9 +36,9 @@ class MenuTileWidget extends StatelessWidget {
           children: [
             // Icon Box
             Container(
-              width: 46,
-              height: 46,
-              padding: const EdgeInsets.all(10),
+              width: 36,
+              height: 36,
+              padding: const EdgeInsets.all(5),
               margin: const EdgeInsets.only(right: 16),
               decoration: BoxDecoration(
                 color: iconBackground,
@@ -54,7 +54,8 @@ class MenuTileWidget extends StatelessWidget {
                       style: TextStyle(
                           color: titleColor,
                           fontFamily: 'poppins',
-                          fontWeight: FontWeight.w500))
+                          fontWeight: FontWeight.w500,
+                          fontSize: 13))
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -62,12 +63,13 @@ class MenuTileWidget extends StatelessWidget {
                             style: const TextStyle(
                                 color: AppColor.secondary,
                                 fontFamily: 'poppins',
-                                fontWeight: FontWeight.w500)),
+                                fontWeight: FontWeight.w500,
+                                fontSize: 13)),
                         const SizedBox(height: 2),
                         Text('$subtitle',
                             style: TextStyle(
                                 color: AppColor.secondary.withOpacity(0.7),
-                                fontSize: 12)),
+                                fontSize: 11)),
                       ],
                     ),
             ),
