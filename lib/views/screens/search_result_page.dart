@@ -86,11 +86,8 @@ class _SearchResultPageState extends State<SearchResultPage>
         backgroundColor: AppColor.primary,
         elevation: 0,
         leading: IconButton(
-          onPressed: () async {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => const PageSwitcher(
-                      selectedIndex: 1,
-                    )));
+          onPressed: () {
+            Navigator.of(context).pop();
           },
           icon: const Icon(Icons.arrow_back),
         ),

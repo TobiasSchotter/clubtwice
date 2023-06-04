@@ -45,9 +45,9 @@ class _PageSwitcherState extends State<PageSwitcher> {
           onDestinationSelected: (int index) {
             setState(() {
               _selectedIndex = index;
-              if (index == 1) {
-                SearchService.fetchSearchHistory();
-              }
+              // if (index == 1) {
+              //  SearchService.fetchSearchHistory();
+              //   }
             });
           },
           selectedIndex: _selectedIndex,
