@@ -1,4 +1,5 @@
 import 'package:clubtwice/constant/app_button.dart';
+import 'package:clubtwice/views/screens/otp_verification_page_change.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:clubtwice/constant/app_color.dart';
@@ -57,28 +58,16 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
             child: Row(
               children: [
                 Text(
-                  'OTP Code wurde an deine E-Mail Adresse geschickt:',
+                  'Der Verifizierungs-Code wurde an deine E-Mail Adresse geschickt',
                   style: TextStyle(
                       color: AppColor.secondary.withOpacity(0.7), fontSize: 14),
                 ),
               ],
             ),
           ),
-          // Container(
-          //   margin: const EdgeInsets.only(top: 0, bottom: 20),
-          //   child: Row(
-          //     children: const [
-          //       SizedBox(width: 10),
-          //       Text(
-          //         'deine.email@email.com',
-          //         style: TextStyle(
-          //             color: AppColor.primary,
-          //             fontSize: 14,
-          //             fontWeight: FontWeight.w700),
-          //       ),
-          //     ],
-          //   ),
-          // ),
+          Container(
+            height: 16,
+          ),
           PinCodeTextField(
             appContext: (context),
             length: 4,
@@ -98,7 +87,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
           Container(
             margin: const EdgeInsets.only(top: 32, bottom: 16),
             child: CustomButton(
-              buttonText: 'Verifizieren',
+              buttonText: 'Verifiziere deine Mail',
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => const PageSwitcher(
@@ -107,10 +96,26 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
               },
             ),
           ),
-          CustomButton(
-            buttonText: 'Neuen Code anfordern',
-            onPressed: () {},
-          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        const OTPVerificationPageChange()), // Hier "ChangePage" mit dem Namen deiner Seite "Change" ersetzen
+              );
+            },
+            child: const Center(
+              child: Text(
+                'Keine E-Mail von uns erhalten?',
+                style: TextStyle(
+                  decoration: TextDecoration.underline,
+                  color: Colors.blue,
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );
