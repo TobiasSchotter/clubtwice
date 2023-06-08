@@ -57,10 +57,14 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
             margin: const EdgeInsets.only(bottom: 8),
             child: Row(
               children: [
-                Text(
-                  'Der Verifizierungs-Code wurde an deine E-Mail Adresse geschickt',
-                  style: TextStyle(
-                      color: AppColor.secondary.withOpacity(0.7), fontSize: 14),
+                Expanded(
+                  child: Text(
+                    'Der Verifizierungs-Code wurde an deine E-Mail Adresse geschickt',
+                    style: TextStyle(
+                      color: AppColor.secondary.withOpacity(0.7),
+                      fontSize: 14,
+                    ),
+                  ),
                 ),
               ],
             ),
