@@ -1,17 +1,97 @@
 import 'package:clubtwice/constant/app_button.dart';
 import 'package:clubtwice/views/screens/otp_verification_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:clubtwice/constant/app_color.dart';
 
 class OTPVerificationPageChange extends StatefulWidget {
-  const OTPVerificationPageChange({super.key});
+  const OTPVerificationPageChange({Key? key});
 
   @override
   State<OTPVerificationPageChange> createState() => _OTPVerificationPageState();
 }
 
 class _OTPVerificationPageState extends State<OTPVerificationPageChange> {
+  TextEditingController _emailController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    getEmailFromFirebase().then((email) {
+      setState(() {
+        _emailController.text = email;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  Future<bool> _saveChanges() async {
+    String newEmail = _emailController.text;
+
+    // Check if the email field is empty or does not contain the "@" symbol
+    if (newEmail.isEmpty ||
+        !newEmail.contains('@') ||
+        !newEmail.contains('.')) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Bitte geben Sie eine gültige E-Mail-Adresse ein'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return false;
+    }
+
+    try {
+      // Get the current user
+      //User? user = FirebaseAuth.instance.currentUser;
+
+      // Update the email address
+      //await user?.updateEmail(newEmail);
+
+      // Send a verification email to the old address
+      //await user?.sendEmailVerification();
+
+      // Confirmation email sent successfully
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+              'Der Verifizierungs-Code wurde an deine E-Mail Adresse geschickt'),
+        ),
+      );
+    } catch (e) {
+      // Error updating the email address
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Fehler beim Versenden des Verifizierungs-Codes',
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return false;
+    }
+
+    // Update the original email with the new value
+    // setState(() {});
+
+    return true;
+  }
+
+  Future<String> getEmailFromFirebase() async {
+    // Insert code here to retrieve the email address from Firebase
+    // Example:
+    final user = FirebaseAuth.instance.currentUser;
+    final email = user?.email;
+    return email ?? '';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,12 +180,13 @@ class _OTPVerificationPageState extends State<OTPVerificationPageChange> {
           ),
           Container(
             margin: const EdgeInsets.only(top: 0, bottom: 20),
-            child: const Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextField(
+                  controller: _emailController,
                   decoration: InputDecoration(
-                      // Weitere gewünschte Einstellungen für die Textfelddekoration
+                      // Additional desired settings for the text field decoration
                       ),
                 ),
                 Text(
@@ -120,11 +201,17 @@ class _OTPVerificationPageState extends State<OTPVerificationPageChange> {
           ),
           CustomButton(
             buttonText: 'Verifizierungscode erneut senden',
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const OTPVerificationPage()));
+            onPressed: () async {
+              bool changesSaved = await _saveChanges();
+              if (changesSaved) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const OTPVerificationPage(),
+                  ),
+                );
+              }
             },
-          ),
+          )
         ],
       ),
     );
