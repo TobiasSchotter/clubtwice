@@ -151,7 +151,9 @@ class _SearchResultPageState extends State<SearchResultPage>
                 title: Text('Filter'),
                 backgroundColor: AppColor.primary,
                 children: <Widget>[
-                  FilterWidget(),
+                  FilterWidget(
+                    selectedIndex: 1,
+                  ),
                   // FilterWidget2(),
                 ],
               ),

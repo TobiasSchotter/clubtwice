@@ -209,7 +209,9 @@ class _HomePageState extends State<HomePage> {
             title: Text('Filter'),
             backgroundColor: AppColor.primary,
             children: <Widget>[
-              FilterWidget(),
+              FilterWidget(
+                selectedIndex: 0,
+              ),
               // FilterWidget2(),
             ],
           ),
