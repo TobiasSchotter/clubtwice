@@ -94,20 +94,14 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
             physics: const BouncingScrollPhysics(),
             children: [
               // Section 1 - Header
-
-              // Section 2  - Form
-              Container(
-                margin: const EdgeInsets.only(top: 20, bottom: 12),
-                child: Text(
-                  'Account',
-                  style: TextStyle(
-                    color: AppColor.secondary.withOpacity(0.5),
-                    letterSpacing: 6 / 100,
-                    fontWeight: FontWeight.w600,
-                  ),
+              Text(
+                'Vorname',
+                style: TextStyle(
+                  color: AppColor.secondary.withOpacity(0.5),
+                  letterSpacing: 6 / 100,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-
               // Full Name
               TextField(
                 autofocus: false,
@@ -139,7 +133,15 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
                 ),
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
+              Text(
+                'Nachname',
+                style: TextStyle(
+                  color: AppColor.secondary.withOpacity(0.5),
+                  letterSpacing: 6 / 100,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
               // Last Name
               TextField(
                 autofocus: false,
@@ -170,7 +172,15 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
                   filled: true,
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
+              Text(
+                'Benutzername',
+                style: TextStyle(
+                  color: AppColor.secondary.withOpacity(0.5),
+                  letterSpacing: 6 / 100,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
               // Email
               TextField(
                 autofocus: false,
