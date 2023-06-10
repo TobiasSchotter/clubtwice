@@ -29,7 +29,7 @@ class _LoginPageState extends State<RegisterPage> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _UserNameController = TextEditingController();
 
   Future<void> createUserWithEmailAndPassword() async {
     try {
@@ -50,7 +50,7 @@ class _LoginPageState extends State<RegisterPage> {
 
         // add userdetails
         addUserDetails(uid, _firstNameController.text.trim(),
-            _lastNameController.text.trim(), _emailController.text.trim());
+            _UserNameController.text.trim(), _emailController.text.trim());
 
         // Benutzer erfolgreich erstellt, leite zur E-Mail-Verifizierung weiter
         User? user = FirebaseAuth.instance.currentUser;
@@ -86,15 +86,12 @@ class _LoginPageState extends State<RegisterPage> {
   }
 
   Future<void> addUserDetails(
-      String uid, String firstName, String lastName, String email) async {
-    String username = firstName + lastName; // Benutzername erstellen
-
+      String uid, String firstName, String userName, String email) async {
     // Speichern der Benutzerdetails in Firestore
     await FirebaseFirestore.instance.collection('users').doc(uid).set({
       'first Name': firstName,
-      'last Name': lastName,
+      'username': userName,
       'email': email,
-      'username': username, // Benutzername hinzufügen
     });
   }
 
@@ -293,9 +290,9 @@ class _LoginPageState extends State<RegisterPage> {
           // Username
           TextField(
             autofocus: false,
-            controller: _lastNameController,
+            controller: _UserNameController,
             decoration: InputDecoration(
-              hintText: 'Nachname',
+              hintText: 'Nutzername',
               prefixIcon: Container(
                 padding: const EdgeInsets.all(12),
                 child: SvgPicture.asset('assets/icons/Profile.svg',
@@ -322,7 +319,7 @@ class _LoginPageState extends State<RegisterPage> {
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-              hintText: 'deine.email@email.com',
+              hintText: 'E-Mail',
               prefixIcon: Container(
                 padding: const EdgeInsets.all(12),
                 child: SvgPicture.asset('assets/icons/Message.svg',
