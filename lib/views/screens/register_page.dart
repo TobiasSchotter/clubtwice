@@ -27,7 +27,7 @@ class _LoginPageState extends State<RegisterPage> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _UserNameController = TextEditingController();
+  final TextEditingController _userNameController = TextEditingController();
 
   Future<void> createUserWithEmailAndPassword() async {
     try {
@@ -48,7 +48,7 @@ class _LoginPageState extends State<RegisterPage> {
 
         // add userdetails
         addUserDetails(uid, _firstNameController.text.trim(),
-            _UserNameController.text.trim(), _emailController.text.trim());
+            _userNameController.text.trim(), _emailController.text.trim());
 
         // Benutzer erfolgreich erstellt, leite zur E-Mail-Verifizierung weiter
         User? user = FirebaseAuth.instance.currentUser;
@@ -288,7 +288,7 @@ class _LoginPageState extends State<RegisterPage> {
           // Username
           TextField(
             autofocus: false,
-            controller: _UserNameController,
+            controller: _userNameController,
             decoration: InputDecoration(
               hintText: 'Nutzername',
               prefixIcon: Container(
