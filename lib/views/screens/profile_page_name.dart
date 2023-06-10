@@ -209,6 +209,7 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
                           SnackBar(
                             content:
                                 Text('Fehler beim Speichern der Daten: $error'),
+                            backgroundColor: Colors.red,
                           ),
                         );
                       });
@@ -217,6 +218,7 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
                         const SnackBar(
                           content:
                               Text('Es wurden keine Änderungen vorgenommen'),
+                          backgroundColor: Colors.red,
                         ),
                       );
                     }
@@ -225,6 +227,7 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
                       const SnackBar(
                         content:
                             Text('Vorname und Nachname dürfen nicht leer sein'),
+                        backgroundColor: Colors.red,
                       ),
                     );
                   }

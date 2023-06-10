@@ -5,9 +5,7 @@ import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/screens/login_page.dart';
 import 'package:clubtwice/views/screens/otp_verification_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
-
 import '../../constant/app_button.dart';
 
 class RegisterPage extends StatefulWidget {
