@@ -17,13 +17,13 @@ class ProfilePageSet extends StatefulWidget {
 
 class _ProfilePageSetState extends State<ProfilePageSet> {
   final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
+  // final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _userNameController = TextEditingController();
 
   @override
   void dispose() {
     _firstNameController.dispose();
-    _lastNameController.dispose();
+    // _lastNameController.dispose();
     _userNameController.dispose();
     super.dispose();
   }
@@ -49,12 +49,12 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
         }
 
         final firstName = userData['first Name'] ?? '';
-        final lastName = userData['last Name'] ?? '';
+        //final lastName = userData['last Name'] ?? '';
         final userName = userData['username'] ?? '';
 
         // Set the initial value of the TextField
         _firstNameController.text = firstName;
-        _lastNameController.text = lastName;
+        // _lastNameController.text = lastName;
         _userNameController.text = userName;
 
         return Scaffold(
@@ -134,44 +134,7 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
               ),
 
               const SizedBox(height: 8),
-              Text(
-                'Nachname',
-                style: TextStyle(
-                  color: AppColor.secondary.withOpacity(0.5),
-                  letterSpacing: 6 / 100,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              // Last Name
-              TextField(
-                autofocus: false,
-                controller:
-                    _lastNameController, // Bind the controller to the TextField
-                decoration: InputDecoration(
-                  hintText: 'Nachname',
-                  prefixIcon: Container(
-                    padding: const EdgeInsets.all(12),
-                    child: SvgPicture.asset(
-                      'assets/icons/Profile.svg',
-                      color: AppColor.primary,
-                    ),
-                  ),
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide:
-                        const BorderSide(color: AppColor.border, width: 1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        const BorderSide(color: AppColor.primary, width: 1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  fillColor: AppColor.primarySoft,
-                  filled: true,
-                ),
-              ),
+
               const SizedBox(height: 8),
               Text(
                 'Benutzername',
@@ -218,14 +181,14 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
                 buttonText: 'Speichern',
                 onPressed: () {
                   final newFirstName = _firstNameController.text.trim();
-                  final newLastName = _lastNameController.text.trim();
+                  // final newLastName = _lastNameController.text.trim();
                   final newUserName = _userNameController.text.trim();
 
                   if (newFirstName.isNotEmpty &&
-                      newLastName.isNotEmpty &&
+                      //  newLastName.isNotEmpty &&
                       newUserName.isNotEmpty) {
                     if (newFirstName != firstName ||
-                        newLastName != lastName ||
+                        //  newLastName != lastName ||
                         newUserName != userName) {
                       // Update user data in Firebase
                       FirebaseFirestore.instance
@@ -233,7 +196,7 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
                           .doc(user.uid)
                           .update({
                         'first Name': newFirstName,
-                        'last Name': newLastName,
+                        // 'last Name': newLastName,
                         'username': newUserName,
                       }).then((_) {
                         ScaffoldMessenger.of(context).showSnackBar(
