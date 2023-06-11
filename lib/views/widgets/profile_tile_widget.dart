@@ -35,19 +35,11 @@ class MyProfileWidget extends StatelessWidget {
         var club = userData['club'] ?? '';
         var sport = userData['sport'] ?? '';
 
-        if (sport.isEmpty) {
+        if (sport.isEmpty || sport == "Keine Auswahl") {
           sport = '[keine Sportart hinterlegt]';
         }
 
-        if (club.isEmpty) {
-          club = '[kein Verein hinterlegt]';
-        }
-
-        if (club == "Keine Auswahl") {
-          sport = '[keine Sportart hinterlegt]';
-        }
-
-        if (club == "Keine Auswahl") {
+        if (club.isEmpty || club == "Keine Auswahl") {
           club = '[kein Verein hinterlegt]';
         }
 
