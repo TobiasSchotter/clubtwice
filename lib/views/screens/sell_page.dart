@@ -5,7 +5,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import '../widgets/grid_widget.dart';
 
@@ -19,8 +18,7 @@ class SellPage extends StatefulWidget {
 class _SellPageState extends State<SellPage> {
   // final database = FirebaseDatabase.instance.reference();
 
-  final ImagePicker _picker = ImagePicker();
-  final List<File> _imageList = [];
+  List<File> _imageList = [];
   bool _isIndividuallyWearable = false;
   bool _isPriceValid = false;
 
@@ -34,6 +32,8 @@ class _SellPageState extends State<SellPage> {
   String _selectedSize = '140';
   String _selectedBrand = "Adidas";
   String _selectedCondition = "Neu";
+
+  ImageGrid grid = ImageGrid();
 
   User? user = FirebaseAuth.instance.currentUser;
 
@@ -86,7 +86,7 @@ class _SellPageState extends State<SellPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              ImageGrid(),
+              grid,
               Container(
                 margin: const EdgeInsets.only(top: 20, bottom: 0),
                 child: Text(
@@ -413,7 +413,7 @@ class _SellPageState extends State<SellPage> {
                                 sport: _selectedSport,
                                 price: double.parse(_priceController.text),
                                 isIndividuallyWearable: _isIndividuallyWearable,
-                                images: _imageList,
+                                images: _imageList = grid.getImageList(),
                                 context: context,
                                 condition: _selectedCondition,
                                 size: _selectedSize,

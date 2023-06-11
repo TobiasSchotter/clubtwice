@@ -5,13 +5,23 @@ import 'package:image_picker/image_picker.dart';
 import '../../constant/app_color.dart';
 
 class ImageGrid extends StatefulWidget {
+  const ImageGrid({super.key});
+
   @override
   _ImageGridState createState() => _ImageGridState();
+
+  List<File> getImageList() {
+    return _ImageGridState().getImageList();
+  }
 }
 
 class _ImageGridState extends State<ImageGrid> {
   final List<File> _imageList = [];
   final ImagePicker _picker = ImagePicker();
+
+  List<File> getImageList() {
+    return _imageList;
+  }
 
   void _pickImage(ImageSource source) async {
     if (_imageList.length >= 5) {
