@@ -47,7 +47,7 @@ class _PageSwitcherState extends State<PageSwitcher> {
               _selectedIndex = index;
               // if (index == 1) {
               //  SearchService.fetchSearchHistory();
-              //   }
+              // }
             });
           },
           selectedIndex: _selectedIndex,
