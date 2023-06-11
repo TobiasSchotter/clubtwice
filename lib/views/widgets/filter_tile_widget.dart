@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../../constant/app_color.dart';
 
 class FilterWidget extends StatelessWidget {
@@ -42,7 +40,7 @@ class FilterWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   SizedBox(
-                    width: 70,
+                    width: 110,
                     child: DropdownButton<String>(
                       onTap: () {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -70,6 +68,7 @@ class FilterWidget extends StatelessWidget {
                       onChanged: (value) {},
                       hint: const Text('Verein',
                           style: TextStyle(color: AppColor.primarySoft)),
+                      alignment: Alignment.center,
                     ),
                   ),
                   // Filteroptionen für die Sportart
@@ -93,6 +92,7 @@ class FilterWidget extends StatelessWidget {
                     onChanged: (value) {},
                     hint: const Text('Sportart',
                         style: TextStyle(color: AppColor.primarySoft)),
+                    alignment: Alignment.center,
                   ),
                 ],
               ),
@@ -125,6 +125,7 @@ class FilterWidget extends StatelessWidget {
                       onChanged: (value) {},
                       hint: const Text('Typ',
                           style: TextStyle(color: AppColor.primarySoft)),
+                      alignment: Alignment.center,
                     ),
                   ),
                   // Filteroptionen für die Größe
@@ -142,11 +143,10 @@ class FilterWidget extends StatelessWidget {
                       DropdownMenuItem(value: 'größe2', child: Text('Größe 2')),
                       DropdownMenuItem(value: 'größe3', child: Text('Größe 3')),
                     ],
-                    onChanged: (value) {
-                      // TODO: Implementieren Sie die Filterlogik für die Größe
-                    },
+                    onChanged: (value) {},
                     hint: const Text('Größe',
                         style: TextStyle(color: AppColor.primarySoft)),
+                    alignment: Alignment.center,
                   ),
                   // Filteroptionen für die Marke
                   DropdownButton<String>(
@@ -166,6 +166,7 @@ class FilterWidget extends StatelessWidget {
                     onChanged: (value) {},
                     hint: const Text('Marke',
                         style: TextStyle(color: AppColor.primarySoft)),
+                    alignment: Alignment.center,
                   ),
                 ],
               ),

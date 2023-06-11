@@ -1,10 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:clubtwice/views/screens/page_switcher.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/core/model/Product.dart';
 import 'package:clubtwice/core/services/ProductService.dart';
