@@ -471,8 +471,10 @@ class _SellPageState extends State<SellPage> {
 
       List<String> imageUrls = [];
 
+      print('Kurz bevor auf image empty geprüft wird');
       // Upload images to Firebase Storage
       if (images.isNotEmpty) {
+        print('Nach der Prüfung ob images empty sind');
         List<String> imageUrls = await uploadImagesToFirebaseStorage(images);
       }
 
