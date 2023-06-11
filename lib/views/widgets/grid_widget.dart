@@ -50,6 +50,7 @@ class _ImageGridState extends State<ImageGrid> {
     );
 
     if (pickedFile != null) {
+      print("Jetzt wird ein Bild hinzugefügt");
       setState(() {
         _imageList.add(File(pickedFile.path));
       });
