@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clubtwice/constant/app_button.dart';
+import 'package:clubtwice/views/screens/otp_verification_page.dart';
 import 'package:clubtwice/views/screens/profile_page_club.dart';
 import 'package:clubtwice/views/screens/search_result_page.dart';
 import 'package:clubtwice/views/widgets/filter_tile_widget.dart';
@@ -35,7 +36,23 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     fetchUserData();
+    //checkUserVerification();
   }
+
+  // void checkUserVerification() async {
+  //   User? currentUser = FirebaseAuth.instance.currentUser;
+
+  //   if (currentUser != null && !currentUser.emailVerified) {
+  //     await Future.delayed(const Duration(
+  //         milliseconds: 500)); // Verzögerung von 500 Millisekunden
+
+  //     // Benutzer ist eingeloggt, aber nicht verifiziert
+  //     Navigator.pushReplacement(
+  //       context,
+  //       MaterialPageRoute(builder: (context) => const OTPVerificationPage()),
+  //     );
+  //   }
+  // }
 
   Future<void> fetchUserData() async {
     User? user = FirebaseAuth.instance.currentUser;

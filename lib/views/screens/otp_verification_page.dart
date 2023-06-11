@@ -1,10 +1,8 @@
-import 'package:clubtwice/constant/app_button.dart';
-import 'package:clubtwice/views/screens/otp_verification_page_change.dart';
+import 'package:clubtwice/views/screens/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/screens/page_switcher.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class OTPVerificationPage extends StatefulWidget {
   const OTPVerificationPage({super.key});
@@ -14,6 +12,108 @@ class OTPVerificationPage extends StatefulWidget {
 }
 
 class _OTPVerificationPageState extends State<OTPVerificationPage> {
+  User? _user;
+  bool _isEmailVerified = false;
+  bool _isListening = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkEmailVerification();
+  }
+
+  @override
+  void dispose() {
+    _isListening = false;
+    super.dispose();
+  }
+
+  Future<void> _checkEmailVerification() async {
+    while (_isListening) {
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        await currentUser.reload();
+        setState(() {
+          _user = currentUser;
+          _isEmailVerified = currentUser.emailVerified;
+        });
+
+        if (_isEmailVerified) {
+          // E-Mail wurde bereits bestätigt, Seite wechseln
+          _navigateToNextPage();
+          break;
+        }
+      }
+
+      await Future.delayed(const Duration(
+          seconds: 5)); // Warte 3 Sekunden vor dem erneuten Prüfen
+    }
+  }
+
+  void _navigateToNextPage() {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => const PageSwitcher(
+              selectedIndex: 0,
+            )));
+  }
+
+  Future<void> _sendVerificationEmail() async {
+    if (_user != null) {
+      await _user!.sendEmailVerification();
+      // Bestätigungsmail gesendet
+      // ...
+    }
+  }
+
+  Future<void> _showConfirmationDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // Dialog muss manuell geschlossen werden
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Verifizierung abbrechen'),
+          content: const Text(
+              'Sicher, dass du die Verifizierung abbrechen möchtest? Die Registrierung wird vollständig zurückgesetzt!'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Abbrechen'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Dialog schließen
+              },
+            ),
+            TextButton(
+              child: const Text('Bestätigen'),
+              onPressed: () {
+                // Benutzer löschen oder andere Aktionen ausführen
+                _deleteUser(); // Beispiel: Benutzer löschen
+                Navigator.of(context).pop(); // Dialog schließen
+
+                // Zurück zur Registrierungsseite
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const RegisterPage()));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _deleteUser() async {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      await currentUser.delete();
+      // Zeige eine Meldung an den Benutzer
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+              'Die Verifizierung wurde abgebrochen und der Benutzer wurde gelöscht.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,98 +129,37 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                 fontWeight: FontWeight.w600)),
         leading: IconButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            _showConfirmationDialog();
           },
           icon: const Icon(Icons.arrow_back_outlined),
           color: Colors.black,
         ),
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
-      body: ListView(
-        shrinkWrap: true,
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        physics: const BouncingScrollPhysics(),
-        children: [
-          Container(
-            margin: const EdgeInsets.only(top: 20, bottom: 8),
-            child: const Text(
-              'E-Mail Verifizierung',
-              style: TextStyle(
-                color: AppColor.secondary,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'poppins',
-                fontSize: 20,
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Bitte bestätige deine E-Mail-Adresse.',
+                style: TextStyle(fontSize: 16.0),
               ),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(bottom: 8),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    'Der Verifizierungs-Code wurde an deine E-Mail Adresse geschickt',
-                    style: TextStyle(
-                      color: AppColor.secondary.withOpacity(0.7),
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            height: 16,
-          ),
-          PinCodeTextField(
-            appContext: (context),
-            length: 4,
-            onChanged: (value) {},
-            obscureText: false,
-            pinTheme: PinTheme(
-              shape: PinCodeFieldShape.box,
-              borderWidth: 1.5,
-              borderRadius: BorderRadius.circular(8),
-              fieldHeight: 70,
-              fieldWidth: 70,
-              activeColor: AppColor.primary,
-              inactiveColor: AppColor.border,
-              inactiveFillColor: AppColor.primarySoft,
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 32, bottom: 16),
-            child: CustomButton(
-              buttonText: 'Verifiziere deine Mail',
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const PageSwitcher(
-                          selectedIndex: 0,
-                        )));
-              },
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        const OTPVerificationPageChange()), // Hier "ChangePage" mit dem Namen deiner Seite "Change" ersetzen
-              );
-            },
-            child: const Center(
-              child: Text(
-                'Keine E-Mail von uns erhalten?',
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  color: Colors.blue,
-                  fontSize: 16.0,
-                ),
+              const SizedBox(height: 16.0),
+              ElevatedButton(
+                  onPressed: !_isEmailVerified ? _sendVerificationEmail : null,
+                  child: const Text('Bestätigungsmail erneut senden')),
+              const SizedBox(height: 16.0),
+              Text(
+                _isEmailVerified
+                    ? 'E-Mail wurde bestätigt.'
+                    : 'E-Mail wurde noch nicht bestätigt.',
+                style: const TextStyle(fontSize: 16.0),
               ),
-            ),
-          )
-        ],
+            ],
+          ),
+        ),
       ),
     );
   }
