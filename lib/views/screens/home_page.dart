@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Widget content;
-    if (verein.isNotEmpty) {
+    if (verein.isNotEmpty && verein != "Keine Auswahl") {
       content = Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Wrap(
@@ -117,7 +117,7 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: const Center(
                 child: Text(
-                  'Du hast noch keinen Verein und Sportart hinterlegt.\n Hier auf deiner Home-Page werden alle Produkte deines Vereins angezeigt',
+                  'Du hast noch keinen Verein hinterlegt.\n Hier auf deiner Home-Page werden alle Produkte deines Vereins angezeigt',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 15),
                 ),
@@ -179,11 +179,11 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   margin: const EdgeInsets.only(top: 8),
                   padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Flex(
+                  child: const Flex(
                     direction: Axis.horizontal,
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
+                    children: [
                       Expanded(
                         child: Text(
                           'Artikel aus deinem Verein 💪 ',

@@ -109,7 +109,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
               border: OutlineInputBorder(),
             ),
             value: verein.isNotEmpty ? verein : null, // Set the initial value
-            items: <String>['', 'SG Quelle', 'SGV Nürnberg Fürth']
+            items: <String>['Keine Auswahl', 'SG Quelle', 'SGV Nürnberg Fürth']
                 .map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
@@ -133,7 +133,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
             ),
             value:
                 sportart.isNotEmpty ? sportart : null, // Set the initial value
-            items: <String>['', 'Fußball', 'Basketball']
+            items: <String>['Keine Auswahl', 'Fußball', 'Basketball']
                 .map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
