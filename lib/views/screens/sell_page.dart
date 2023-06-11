@@ -444,27 +444,6 @@ class _SellPageState extends State<SellPage> {
     );
   }
 
-  void _pickImage() async {
-    final XFile? pickedFile = await _picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 50,
-    );
-
-    if (pickedFile != null) {
-      setState(() {
-        _imageList.add(File(pickedFile.path));
-      });
-    }
-  }
-
-  void _removeImage() {
-    if (_imageList.isNotEmpty) {
-      setState(() {
-        _imageList.removeLast();
-      });
-    }
-  }
-
   Future<void> saveArticleToFirebase({
     required String title,
     required String description,
