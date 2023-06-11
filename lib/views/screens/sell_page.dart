@@ -533,7 +533,7 @@ class _SellPageState extends State<SellPage> {
       );
 
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => PageSwitcher(
+          builder: (context) => const PageSwitcher(
                 selectedIndex: 0,
               )));
     } catch (error) {
@@ -574,6 +574,7 @@ class _SellPageState extends State<SellPage> {
 
         // Hide image upload loading indicator
       } catch (error) {
+        print('Error uploading image: $error');
         // Handle image upload error
       }
     }
