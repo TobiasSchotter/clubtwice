@@ -572,6 +572,8 @@ class _SellPageState extends State<SellPage> {
         String downloadUrl = await snapshot.ref.getDownloadURL();
         imageUrls.add(downloadUrl);
 
+        print('Hier sollte eigentlich ne URL sein: $downloadUrl');
+
         // Hide image upload loading indicator
       } catch (error) {
         print('Error uploading image: $error');
