@@ -1,7 +1,10 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:path/path.dart' as path;
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class MyProfileWidget extends StatelessWidget {
   const MyProfileWidget({Key? key}) : super(key: key);
@@ -27,11 +30,7 @@ class MyProfileWidget extends StatelessWidget {
         }
 
         final firstname = userData['first Name'] ?? '';
-        // final lastname = userData['last Name'] ?? '';
         final username = userData['username'] ?? '';
-        //   final club = userData['club'] ?? '[kein Verein hinterlegt]';
-        //    final sport = userData['sport'] ?? '[keine Sportart hinterlegt]';
-
         var club = userData['club'] ?? '';
         var sport = userData['sport'] ?? '';
 
@@ -61,8 +60,10 @@ class MyProfileWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100),
                   color: Colors.grey,
-                  image: const DecorationImage(
-                    image: AssetImage('assets/images/pp.png'),
+                  image: DecorationImage(
+                    image: userData['profileImageUrl'] != null
+                        ? NetworkImage(userData['profileImageUrl'])
+                        : AssetImage('assets/images/pp.png') as ImageProvider,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -117,8 +118,40 @@ class MyProfileWidget extends StatelessWidget {
                         },
                       );
                       if (pickedFile != null) {
-                        // Hier kannst du den Code zum Hochladen des Bildes einfügen
-                        // Beispiel für die Verwendung des Bildes:
+                        // Get the file name
+                        String fileName = path.basename(pickedFile.path);
+
+                        // Reference the Firebase storage location where the file will be uploaded
+                        final firebaseStorageRef = firebase_storage
+                            .FirebaseStorage.instance
+                            .ref()
+                            .child('profile_images')
+                            .child(user.uid)
+                            .child(fileName);
+
+                        // Upload the file to Firebase storage
+                        final uploadTask = firebaseStorageRef
+                            .putFile(File(pickedFile.path) as File);
+
+                        // Optional: Monitor the upload progress
+                        uploadTask.snapshotEvents.listen(
+                          (firebase_storage.TaskSnapshot snapshot) {
+                            print(
+                                'Upload progress: ${snapshot.bytesTransferred}/${snapshot.totalBytes}');
+                          },
+                        );
+
+                        // Get the download URL of the uploaded file
+                        final imageUrl =
+                            await (await uploadTask).ref.getDownloadURL();
+
+                        // Save the imageUrl to the user data in Firestore
+                        await FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(user.uid)
+                            .update({'profileImageUrl': imageUrl});
+
+                        print('Image uploaded. Download URL: $imageUrl');
                       }
                     },
                   ),
@@ -129,7 +162,6 @@ class MyProfileWidget extends StatelessWidget {
                 margin: const EdgeInsets.only(bottom: 2, top: 7),
                 child: Text(
                   '$firstname',
-                  // + ' $lastname',
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
