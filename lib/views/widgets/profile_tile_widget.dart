@@ -6,8 +6,53 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:path/path.dart' as path;
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-class MyProfileWidget extends StatelessWidget {
+class MyProfileWidget extends StatefulWidget {
   const MyProfileWidget({Key? key}) : super(key: key);
+
+  @override
+  _MyProfileWidgetState createState() => _MyProfileWidgetState();
+}
+
+class _MyProfileWidgetState extends State<MyProfileWidget> {
+  Future<void> _uploadImage(File pickedFile) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    // Get the file name
+    String fileName = path.basename(pickedFile.path);
+
+    // Reference the Firebase storage location where the file will be uploaded
+    final firebaseStorageRef = firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('profile_images')
+        .child(user.uid)
+        .child(fileName);
+
+    // Upload the file to Firebase storage
+    final uploadTask = firebaseStorageRef.putFile(File(pickedFile.path));
+
+    // Optional: Monitor the upload progress
+    uploadTask.snapshotEvents.listen(
+      (firebase_storage.TaskSnapshot snapshot) {
+        print(
+            'Upload progress: ${snapshot.bytesTransferred}/${snapshot.totalBytes}');
+      },
+    );
+
+    // Get the download URL of the uploaded file
+    final imageUrl = await (await uploadTask).ref.getDownloadURL();
+
+    // Save the imageUrl to the user data in Firestore
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .update({'profileImageUrl': imageUrl});
+
+    print('Image uploaded. Download URL: $imageUrl');
+
+    // Refresh the UI
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,40 +163,7 @@ class MyProfileWidget extends StatelessWidget {
                         },
                       );
                       if (pickedFile != null) {
-                        // Get the file name
-                        String fileName = path.basename(pickedFile.path);
-
-                        // Reference the Firebase storage location where the file will be uploaded
-                        final firebaseStorageRef = firebase_storage
-                            .FirebaseStorage.instance
-                            .ref()
-                            .child('profile_images')
-                            .child(user.uid)
-                            .child(fileName);
-
-                        // Upload the file to Firebase storage
-                        final uploadTask = firebaseStorageRef
-                            .putFile(File(pickedFile.path) as File);
-
-                        // Optional: Monitor the upload progress
-                        uploadTask.snapshotEvents.listen(
-                          (firebase_storage.TaskSnapshot snapshot) {
-                            print(
-                                'Upload progress: ${snapshot.bytesTransferred}/${snapshot.totalBytes}');
-                          },
-                        );
-
-                        // Get the download URL of the uploaded file
-                        final imageUrl =
-                            await (await uploadTask).ref.getDownloadURL();
-
-                        // Save the imageUrl to the user data in Firestore
-                        await FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(user.uid)
-                            .update({'profileImageUrl': imageUrl});
-
-                        print('Image uploaded. Download URL: $imageUrl');
+                        await _uploadImage(File(pickedFile.path));
                       }
                     },
                   ),
