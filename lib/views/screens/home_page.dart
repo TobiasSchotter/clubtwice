@@ -206,7 +206,7 @@ class _HomePageState extends State<HomePage> {
                           'Artikel aus deinem Verein 💪 ',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 18,
+                            fontSize: 17,
                             height: 150 / 100,
                             fontWeight: FontWeight.w600,
                             fontFamily: 'Poppins',
@@ -223,7 +223,10 @@ class _HomePageState extends State<HomePage> {
           const ExpansionTile(
             iconColor: Colors.white,
             textColor: Colors.white,
-            title: Text('Filter'),
+            title: Text(
+              'Filter',
+              style: TextStyle(fontSize: 16),
+            ),
             backgroundColor: AppColor.primary,
             children: <Widget>[
               FilterWidget(

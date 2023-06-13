@@ -177,7 +177,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
-                    fontSize: 15,
+                    fontSize: 16,
                   ),
                 ),
               ),
@@ -186,21 +186,21 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                 '$username',
                 style: TextStyle(
                   color: Colors.white.withOpacity(0.6),
-                  fontSize: 13,
+                  fontSize: 14,
                 ),
               ),
               Text(
                 '$club',
                 style: TextStyle(
                   color: Colors.white.withOpacity(0.6),
-                  fontSize: 13,
+                  fontSize: 14,
                 ),
               ),
               Text(
                 '$sport',
                 style: TextStyle(
                   color: Colors.white.withOpacity(0.6),
-                  fontSize: 13,
+                  fontSize: 14,
                 ),
               ),
             ],
