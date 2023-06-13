@@ -71,7 +71,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           color: AppColor.secondary.withOpacity(0.5),
                         ),
                         title: 'Profil',
-                        subtitle: 'Passe dein Profil hier an',
+                        subtitle: 'Passe dein Profil an',
                       ),
                       MenuTileWidget(
                         onTap: () {
@@ -84,7 +84,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           color: AppColor.secondary.withOpacity(0.5),
                         ),
                         title: 'Verein',
-                        subtitle: 'Passe deine Vereinszugehörigkeit hier an',
+                        subtitle: 'Passe deine Vereinszugehörigkeit an',
                       ),
                       MenuTileWidget(
                         onTap: () {
@@ -97,8 +97,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           color: AppColor.secondary.withOpacity(0.5),
                         ),
                         title: 'Meine Anzeigen',
-                        subtitle:
-                            'Passe deine Anzeigen hier an oder lösche deine Anzeigen',
+                        subtitle: 'Passe oder lösche deine Anzeigen',
                       ),
                       MenuTileWidget(
                         onTap: () {
@@ -111,8 +110,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           color: AppColor.secondary.withOpacity(0.5),
                         ),
                         title: 'Favoriten',
-                        subtitle:
-                            'Markiere deine Favoriten und finde Sie hier wieder',
+                        subtitle: 'Finde deine Favoriten',
                       ),
                     ],
                   ),
