@@ -6,8 +6,6 @@ import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/screens/home_page.dart';
 import 'package:clubtwice/views/screens/profile_page.dart';
 
-import '../../core/services/SearchService.dart';
-
 class PageSwitcher extends StatefulWidget {
   final int selectedIndex;
 
@@ -28,7 +26,12 @@ class _PageSwitcherState extends State<PageSwitcher> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () async {
+        // Hier definieren Sie das Verhalten, wenn der Zurück-Button gedrückt wird
+        return false; // Hier wird der Zurück-Button deaktiviert
+      },
+      child: Scaffold(
         body: IndexedStack(
           index: _selectedIndex,
           children: [
@@ -46,7 +49,7 @@ class _PageSwitcherState extends State<PageSwitcher> {
             setState(() {
               _selectedIndex = index;
               // if (index == 1) {
-              //  SearchService.fetchSearchHistory();
+              //   SearchService.fetchSearchHistory();
               // }
             });
           },
@@ -80,8 +83,8 @@ class _PageSwitcherState extends State<PageSwitcher> {
               label: 'Profil',
             ),
           ],
-        )
-        // : null,
-        );
+        ),
+      ),
+    );
   }
 }

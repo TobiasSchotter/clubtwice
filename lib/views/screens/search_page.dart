@@ -63,7 +63,7 @@ class _SearchPageState extends State<SearchPage> {
         search.remove(searchTerm);
       } else if (search.length >= 7) {
 // Remove the oldest search term
-        search.removeAt(0);
+        search.removeAt(6);
       }
       search.insert(
           0, searchTerm); // Insert the newest search term at the beginning
