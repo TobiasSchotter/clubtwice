@@ -30,10 +30,10 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        shrinkWrap: true,
-        physics: const BouncingScrollPhysics(),
-        children: [
+        body: ListView(
+            shrinkWrap: true,
+            physics: const BouncingScrollPhysics(),
+            children: [
           // Section 1 - Profile Picture - Username - Name
           Container(
             child: Column(
@@ -97,7 +97,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           color: AppColor.secondary.withOpacity(0.5),
                         ),
                         title: 'Meine Anzeigen',
-                        subtitle: 'Passe oder lösche deine Anzeigen',
+                        subtitle: 'Ändere oder lösche deine Anzeigen',
                       ),
                       MenuTileWidget(
                         onTap: () {
@@ -145,7 +145,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           color: AppColor.secondary.withOpacity(0.5),
                         ),
                         title: 'Passwort',
-                        subtitle: 'Ändere hier dein Passwort',
+                        subtitle: 'Ändere dein Passwort',
                       ),
                       MenuTileWidget(
                         onTap: () {
@@ -181,7 +181,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              margin: const EdgeInsets.only(left: 16),
+                              margin:
+                                  const EdgeInsets.only(left: 16, bottom: 8),
                               child: Text(
                                 'Abmelden',
                                 style: TextStyle(
@@ -237,15 +238,69 @@ class _ProfilePageState extends State<ProfilePage> {
                             )
                           ],
                         ),
-                      )
+                      ),
+
+                      // Section 4 - Additional Links
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.only(top: 12, bottom: 12),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                // Handle Impressum link tap
+                                // Add your implementation here
+                              },
+                              child: const Text(
+                                'Impressum',
+                                style: TextStyle(
+                                  color: Colors
+                                      .grey, // Customize the color as needed
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                // Handle AGB link tap
+                                // Add your implementation here
+                              },
+                              child: const Text(
+                                'AGB',
+                                style: TextStyle(
+                                  color: Colors
+                                      .grey, // Customize the color as needed
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                // Handle Daten link tap
+                                // Add your implementation here
+                              },
+                              child: const Text(
+                                'Daten',
+                                style: TextStyle(
+                                  color: Colors
+                                      .grey, // Customize the color as needed
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 )
               ],
             ),
           )
-        ],
-      ),
-    );
+        ]));
   }
 }
