@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/widgets/menu_tile_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import '../widgets/profile_tile_widget.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -30,19 +29,16 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: ListView(
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
-            children: [
+      body: Column(
+        children: [
           // Section 1 - Profile Picture - Username - Name
-          Container(
-            child: Column(
+          const MyProfileWidget(),
+
+          Expanded(
+            child: ListView(
+              shrinkWrap: true,
+              physics: const BouncingScrollPhysics(),
               children: [
-                // Profile Picture
-
-                const MyProfileWidget(),
-
-                // Section 2 - Account Menu
                 Container(
                   width: MediaQuery.of(context).size.width,
                   margin: const EdgeInsets.only(top: 24),
@@ -283,7 +279,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 // Add your implementation here
                               },
                               child: const Text(
-                                'Daten',
+                                'Datenschutzhinweise',
                                 style: TextStyle(
                                   color: Colors
                                       .grey, // Customize the color as needed
@@ -297,10 +293,12 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
-          )
-        ]));
+          ),
+        ],
+      ),
+    );
   }
 }
