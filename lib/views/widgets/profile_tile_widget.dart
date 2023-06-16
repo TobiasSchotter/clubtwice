@@ -21,12 +21,43 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
     // Get the file name
     String fileName = path.basename(pickedFile.path);
 
+    // Show a loading indicator
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const AlertDialog(
+          content: Row(
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(width: 10),
+              Text('Uploading image...'),
+            ],
+          ),
+        );
+      },
+    );
+
     // Reference the Firebase storage location where the file will be uploaded
     final firebaseStorageRef = firebase_storage.FirebaseStorage.instance
         .ref()
         .child('profile_images')
         .child(user.uid)
         .child(fileName);
+
+    // Get the download URL of the current profile image
+    final userData = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
+    final currentImageUrl = userData.data()!['profileImageUrl'];
+
+    // Delete the current profile image from Firebase storage, if it exists
+    if (currentImageUrl != null) {
+      await firebase_storage.FirebaseStorage.instance
+          .refFromURL(currentImageUrl)
+          .delete();
+    }
 
     // Upload the file to Firebase storage
     final uploadTask = firebaseStorageRef.putFile(File(pickedFile.path));
@@ -39,6 +70,12 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
       },
     );
 
+    // Wait for a short duration to show the loading indicator
+    await Future.delayed(Duration(milliseconds: 500));
+
+    // Close the loading indicator dialog
+    Navigator.of(context, rootNavigator: true).pop();
+
     // Get the download URL of the uploaded file
     final imageUrl = await (await uploadTask).ref.getDownloadURL();
 
@@ -49,6 +86,57 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
         .update({'profileImageUrl': imageUrl});
 
     print('Image uploaded. Download URL: $imageUrl');
+
+    // Refresh the UI
+    setState(() {});
+  }
+
+  Future<void> _deleteImage() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    // Get the current user's profile image URL from Firestore
+    final userData = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
+
+    final imageUrl = userData.data()!['profileImageUrl'];
+
+    if (imageUrl == null) return;
+
+    // Show a loading indicator
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const AlertDialog(
+          content: Row(
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(width: 10),
+              Text('Bild wird gelöscht...'),
+            ],
+          ),
+        );
+      },
+    );
+
+    // Delete the image from Firebase storage
+    final imageRef =
+        firebase_storage.FirebaseStorage.instance.refFromURL(imageUrl);
+    await imageRef.delete();
+
+    // Remove the profile image URL from the user data in Firestore
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .update({'profileImageUrl': null});
+
+    // Close the loading indicator dialog
+    Navigator.of(context, rootNavigator: true).pop();
+
+    print('Image deleted.');
 
     // Refresh the UI
     setState(() {});
@@ -155,6 +243,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                   title: const Text('Bild löschen'),
                                   onTap: () {
                                     Navigator.of(context).pop(null);
+                                    _deleteImage();
                                   },
                                 ),
                               ],
