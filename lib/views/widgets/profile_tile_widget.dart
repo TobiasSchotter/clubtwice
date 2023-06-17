@@ -26,9 +26,9 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return const AlertDialog(
+        return AlertDialog(
           content: Row(
-            children: [
+            children: const [
               CircularProgressIndicator(),
               SizedBox(width: 10),
               Text('Uploading image...'),
@@ -71,7 +71,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
     );
 
     // Wait for a short duration to show the loading indicator
-    await Future.delayed(Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 500));
 
     // Close the loading indicator dialog
     Navigator.of(context, rootNavigator: true).pop();
@@ -110,9 +110,9 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return const AlertDialog(
+        return AlertDialog(
           content: Row(
-            children: [
+            children: const [
               CircularProgressIndicator(),
               SizedBox(width: 10),
               Text('Bild wird gelöscht...'),
@@ -196,7 +196,8 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                   image: DecorationImage(
                     image: userData['profileImageUrl'] != null
                         ? NetworkImage(userData['profileImageUrl'])
-                        : AssetImage('assets/images/pp.png') as ImageProvider,
+                        : const AssetImage('assets/images/pp.png')
+                            as ImageProvider,
                     fit: BoxFit.cover,
                   ),
                 ),
