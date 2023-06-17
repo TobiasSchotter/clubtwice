@@ -6,7 +6,8 @@ import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:clubtwice/constant/app_color.dart';
-import '../widgets/grid_widget.dart';
+import 'package:clubtwice/views/widgets/image_picker_widget.dart';
+import 'package:image_picker/image_picker.dart';
 
 class SellPage extends StatefulWidget {
   const SellPage({Key? key}) : super(key: key);
@@ -18,7 +19,7 @@ class SellPage extends StatefulWidget {
 class _SellPageState extends State<SellPage> {
   // final database = FirebaseDatabase.instance.reference();
 
-  List<File> _imageList = [];
+  List<XFile> selectedImages = [];
   bool _isIndividuallyWearable = false;
   bool _isPriceValid = false;
 
@@ -32,8 +33,6 @@ class _SellPageState extends State<SellPage> {
   String _selectedSize = '140';
   String _selectedBrand = "Adidas";
   String _selectedCondition = "Neu";
-
-  ImageGrid grid = ImageGrid();
 
   User? user = FirebaseAuth.instance.currentUser;
 
@@ -86,7 +85,7 @@ class _SellPageState extends State<SellPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              grid,
+              ImagePickerWidget(onImagesSelected: handleImagesSelected),
               Container(
                 margin: const EdgeInsets.only(top: 20, bottom: 0),
                 child: Text(
@@ -413,7 +412,7 @@ class _SellPageState extends State<SellPage> {
                                 sport: _selectedSport,
                                 price: double.parse(_priceController.text),
                                 isIndividuallyWearable: _isIndividuallyWearable,
-                                images: _imageList = grid.getImageList(),
+                                images: selectedImages,
                                 context: context,
                                 condition: _selectedCondition,
                                 size: _selectedSize,
@@ -455,7 +454,7 @@ class _SellPageState extends State<SellPage> {
     required String condition,
     required String size,
     required String type,
-    required List<File> images,
+    required List<XFile> images,
     required String? userId,
     required BuildContext context,
   }) async {
@@ -475,7 +474,7 @@ class _SellPageState extends State<SellPage> {
       // Upload images to Firebase Storage
       if (images.isNotEmpty) {
         print('Nach der Prüfung ob images empty sind');
-        List<String> imageUrls = await uploadImagesToFirebaseStorage(images);
+        List<String> imageUrls = await uploadFiles(images);
       }
 
       // Create a map with article data
@@ -532,42 +531,42 @@ class _SellPageState extends State<SellPage> {
     }
   }
 
-  Future<List<String>> uploadImagesToFirebaseStorage(List<File> images) async {
-    List<String> imageUrls = [];
+  // Future<List<String>> uploadImagesToFirebaseStorage(List<XFile> images) async {
+  //   List<String> imageUrls = [];
 
-    for (var image in images) {
-      try {
-        // Show image upload loading indicator
-        // ...
+  //   for (var image in images) {
+  //     try {
+  //       File file = File(image.path);
 
-        // Generate a unique filename for the image
-        String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+  //       // Generate a unique filename for the image
+  //       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
 
-        // Upload the image file to Firebase Storage
-        Reference storageReference = FirebaseStorage.instance
-            .ref()
-            .child('images/$fileName'); //.child mit unique user nötig?
-        TaskSnapshot snapshot = await storageReference.putFile(image);
+  //       // Upload the image file to Firebase Storage
+  //       Reference storageReference = FirebaseStorage.instance
+  //           .ref()
+  //           .child('images/$fileName'); //.child mit unique user nötig?
+  //       TaskSnapshot snapshot = await storageReference.putFile(file);
 
-        // Get the download URL of the uploaded image
-        String downloadUrl = await snapshot.ref.getDownloadURL();
-        imageUrls.add(downloadUrl);
+  //       // Get the download URL of the uploaded image
+  //       String downloadUrl = await snapshot.ref.getDownloadURL();
+  //       imageUrls.add(downloadUrl);
 
-        print('Hier sollte eigentlich ne URL sein: $downloadUrl');
+  //       print('Hier sollte eigentlich ne URL sein: $downloadUrl');
 
-        // Hide image upload loading indicator
-      } catch (error) {
-        print('Error uploading image: $error');
-        // Handle image upload error
-      }
-    }
+  //       // Hide image upload loading indicator
+  //     } catch (error) {
+  //       print('Error uploading image: $error');
+  //       // Handle image upload error
+  //     }
+  //   }
 
-    return imageUrls;
-  }
+  //   return imageUrls;
+  // }
 
   // TO BE TESTED
-  Future<List<String>> uploadFiles(List<File> images) async {
-    var imageUrls = await Future.wait(images.map((image) => uploadFile(image)));
+  Future<List<String>> uploadFiles(List<XFile> images) async {
+    var imageUrls =
+        await Future.wait(images.map((image) => uploadFile(File(image.path))));
     print(imageUrls);
     return imageUrls;
   }
@@ -585,5 +584,11 @@ class _SellPageState extends State<SellPage> {
     String downloadUrl = await snapshot.ref.getDownloadURL();
 
     return downloadUrl;
+  }
+
+  void handleImagesSelected(List<XFile> images) {
+    setState(() {
+      selectedImages = images;
+    });
   }
 }
