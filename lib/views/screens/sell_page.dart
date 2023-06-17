@@ -544,8 +544,9 @@ class _SellPageState extends State<SellPage> {
         String fileName = DateTime.now().millisecondsSinceEpoch.toString();
 
         // Upload the image file to Firebase Storage
-        Reference storageReference =
-            FirebaseStorage.instance.ref().child('images/$fileName');
+        Reference storageReference = FirebaseStorage.instance
+            .ref()
+            .child('images/$fileName'); //.child mit unique user nötig?
         TaskSnapshot snapshot = await storageReference.putFile(image);
 
         // Get the download URL of the uploaded image
@@ -562,5 +563,27 @@ class _SellPageState extends State<SellPage> {
     }
 
     return imageUrls;
+  }
+
+  // TO BE TESTED
+  Future<List<String>> uploadFiles(List<File> images) async {
+    var imageUrls = await Future.wait(images.map((image) => uploadFile(image)));
+    print(imageUrls);
+    return imageUrls;
+  }
+
+  Future<String> uploadFile(File image) async {
+    // Generate a unique filename for the image
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+
+    // Upload the image file to Firebase Storage
+    Reference storageReference =
+        FirebaseStorage.instance.ref().child('images/$fileName');
+    TaskSnapshot snapshot = await storageReference.putFile(image);
+
+    // Get the download URL of the uploaded image
+    String downloadUrl = await snapshot.ref.getDownloadURL();
+
+    return downloadUrl;
   }
 }
