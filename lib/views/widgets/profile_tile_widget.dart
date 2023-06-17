@@ -31,7 +31,14 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
             children: const [
               CircularProgressIndicator(),
               SizedBox(width: 10),
-              Text('Uploading image...'),
+              Flexible(
+                child: Text(
+                  'Bild wird hochgeladen...',
+                  maxLines: 2, // Begrenzt den Text auf zwei Zeilen
+                  overflow: TextOverflow
+                      .ellipsis, // Fügt Auslassungszeichen hinzu, wenn der Text abgeschnitten wird
+                ),
+              ),
             ],
           ),
         );
@@ -85,10 +92,10 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
         .doc(user.uid)
         .update({'profileImageUrl': imageUrl});
 
-    print('Image uploaded. Download URL: $imageUrl');
-
     // Refresh the UI
     setState(() {});
+
+    print('Image uploaded. Download URL: $imageUrl');
   }
 
   Future<void> _deleteImage() async {
@@ -115,7 +122,14 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
             children: const [
               CircularProgressIndicator(),
               SizedBox(width: 10),
-              Text('Bild wird gelöscht...'),
+              Flexible(
+                child: Text(
+                  'Bild wird gelöscht...',
+                  maxLines: 2, // Begrenzt den Text auf zwei Zeilen
+                  overflow: TextOverflow
+                      .ellipsis, // Fügt Auslassungszeichen hinzu, wenn der Text abgeschnitten wird
+                ),
+              ),
             ],
           ),
         );
