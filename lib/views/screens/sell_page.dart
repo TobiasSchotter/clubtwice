@@ -531,44 +531,15 @@ class _SellPageState extends State<SellPage> {
     }
   }
 
-  // Future<List<String>> uploadImagesToFirebaseStorage(List<XFile> images) async {
-  //   List<String> imageUrls = [];
-
-  //   for (var image in images) {
-  //     try {
-  //       File file = File(image.path);
-
-  //       // Generate a unique filename for the image
-  //       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-
-  //       // Upload the image file to Firebase Storage
-  //       Reference storageReference = FirebaseStorage.instance
-  //           .ref()
-  //           .child('images/$fileName'); //.child mit unique user nötig?
-  //       TaskSnapshot snapshot = await storageReference.putFile(file);
-
-  //       // Get the download URL of the uploaded image
-  //       String downloadUrl = await snapshot.ref.getDownloadURL();
-  //       imageUrls.add(downloadUrl);
-
-  //       print('Hier sollte eigentlich ne URL sein: $downloadUrl');
-
-  //       // Hide image upload loading indicator
-  //     } catch (error) {
-  //       print('Error uploading image: $error');
-  //       // Handle image upload error
-  //     }
-  //   }
-
-  //   return imageUrls;
-  // }
-
   // TO BE TESTED
   Future<List<String>> uploadFiles(List<XFile> images) async {
     var imageUrls =
         await Future.wait(images.map((image) => uploadFile(File(image.path))));
-    print(imageUrls);
-    return imageUrls;
+
+    List<String> stringList = imageUrls.map((item) => item.toString()).toList();
+    print('Hier sollte eine Liste mit Strings sein:');
+    print(stringList[0]);
+    return stringList;
   }
 
   Future<String> uploadFile(File image) async {
