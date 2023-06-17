@@ -470,11 +470,9 @@ class _SellPageState extends State<SellPage> {
 
       List<String> imageUrls = [];
 
-      print('Kurz bevor auf image empty geprüft wird');
       // Upload images to Firebase Storage
       if (images.isNotEmpty) {
-        print('Nach der Prüfung ob images empty sind');
-        List<String> imageUrls = await uploadFiles(images);
+        imageUrls = await uploadFiles(images);
       }
 
       // Create a map with article data
@@ -537,8 +535,6 @@ class _SellPageState extends State<SellPage> {
         await Future.wait(images.map((image) => uploadFile(File(image.path))));
 
     List<String> stringList = imageUrls.map((item) => item.toString()).toList();
-    print('Hier sollte eine Liste mit Strings sein:');
-    print(stringList[0]);
     return stringList;
   }
 
@@ -553,7 +549,6 @@ class _SellPageState extends State<SellPage> {
 
     // Get the download URL of the uploaded image
     String downloadUrl = await snapshot.ref.getDownloadURL();
-    print("Hier sollte ein Downloadlink sein: $downloadUrl");
     return downloadUrl;
   }
 
