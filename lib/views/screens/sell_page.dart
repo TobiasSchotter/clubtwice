@@ -582,7 +582,7 @@ class _SellPageState extends State<SellPage> {
 
     // Get the download URL of the uploaded image
     String downloadUrl = await snapshot.ref.getDownloadURL();
-
+    print("Hier sollte ein Downloadlink sein: $downloadUrl");
     return downloadUrl;
   }
 
