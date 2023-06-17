@@ -20,6 +20,8 @@ class _ImageGridState extends State<ImageGrid> {
   final ImagePicker _picker = ImagePicker();
 
   List<File> getImageList() {
+    print("Hier sollte das erste element der ImageList ausgegeben werden");
+    print(_imageList[0].path);
     return _imageList;
   }
 
