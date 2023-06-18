@@ -524,12 +524,9 @@ class _SellPageState extends State<SellPage> {
           backgroundColor: Colors.red,
         ),
       );
-      // for debugging
-      //print(error);
     }
   }
 
-  // TO BE TESTED
   Future<List<String>> uploadFiles(List<XFile> images) async {
     var imageUrls =
         await Future.wait(images.map((image) => uploadFile(File(image.path))));
@@ -542,9 +539,11 @@ class _SellPageState extends State<SellPage> {
     // Generate a unique filename for the image
     String fileName = DateTime.now().millisecondsSinceEpoch.toString();
 
+    String userID = user!.uid;
+
     // Upload the image file to Firebase Storage
     Reference storageReference =
-        FirebaseStorage.instance.ref().child('images/$fileName');
+        FirebaseStorage.instance.ref().child('users/$userID/images/$fileName');
     TaskSnapshot snapshot = await storageReference.putFile(image);
 
     // Get the download URL of the uploaded image
