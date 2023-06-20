@@ -7,6 +7,7 @@ import 'package:clubtwice/core/model/Product.dart';
 import 'package:clubtwice/core/services/ProductService.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
 
+import '../../core/model/article.dart';
 import '../widgets/filter_tile_widget.dart';
 
 class SearchResultPage extends StatefulWidget {
@@ -21,9 +22,12 @@ class _SearchResultPageState extends State<SearchResultPage>
     with TickerProviderStateMixin {
   late TabController tabController;
   TextEditingController searchInputController = TextEditingController();
-  List<Product> searchedProductData = ProductService.searchedProductData;
+  //List<Product> searchedProductData = ProductService.searchedProductData;
+
+  List<Article> searchedArticleData = [];
 
   List<String> search = [];
+  String verein = '';
 
   @override
   void initState() {
@@ -45,7 +49,34 @@ class _SearchResultPageState extends State<SearchResultPage>
       Map<String, dynamic> userData = snapshot.data() ?? {};
       setState(() {
         search = List<String>.from(userData['search'] ?? []);
+        verein = userData['club'] ?? '';
       });
+    }
+    fetchArticles();
+  }
+
+  Future<void> fetchArticles() async {
+    if (verein != '' && verein.isNotEmpty) {
+      QuerySnapshot<Map<String, dynamic>> articleSnapshot =
+          await FirebaseFirestore.instance
+              .collection('articles')
+              .where('title', isGreaterThanOrEqualTo: widget.searchKeyword)
+              .get();
+
+      List<Article> articles = [];
+
+      // Die abgerufenen Artikel in Artikelobjekte umwandeln
+      //for (QueryDocumentSnapshot doc in articleSnapshot.docs) {
+      for (QueryDocumentSnapshot doc in articleSnapshot.docs) {
+        articles.add(Article.fromFirestore(doc));
+      }
+
+      setState(() {
+        searchedArticleData = articles;
+      });
+    } else {
+      print("fetchArticles: Verein ist leer");
+      //TODO error handling
     }
   }
 
@@ -171,9 +202,9 @@ class _SearchResultPageState extends State<SearchResultPage>
                   spacing: 16,
                   runSpacing: 16,
                   children: List.generate(
-                    searchedProductData.length,
+                    searchedArticleData.length,
                     (index) => ItemCard(
-                      product: searchedProductData[index],
+                      article: searchedArticleData[index],
                     ),
                   ),
                 ),

@@ -475,6 +475,7 @@ class _SellPageState extends State<SellPage> {
         imageUrls = await uploadFiles(images);
       }
 
+      // TODO - create Article object in /models/article.dart
       // Create a map with article data
       Map<String, dynamic> articleData = {
         'title': title,

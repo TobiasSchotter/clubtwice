@@ -7,12 +7,11 @@ import 'package:clubtwice/views/widgets/filter_tile_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
-import 'package:clubtwice/core/model/Product.dart';
-import 'package:clubtwice/core/services/ProductService.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
 import 'package:flutter/services.dart';
 
 import '../../core/model/Search.dart';
+import '../../core/model/article.dart';
 import '../../core/services/SearchService.dart';
 import '../widgets/search_field_tile.dart';
 
@@ -25,9 +24,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Product> productData = ProductService.productData;
+  //List<Product> productData = ProductService.productData;
   String verein = '';
   String sportart = '';
+  List<Article> articleData = [];
 
   List<SearchHistory> listSearchHistory = SearchService.listSearchHistory;
   List<String> search = [];
@@ -69,6 +69,33 @@ class _HomePageState extends State<HomePage> {
         sportart = userData['sport'] ?? '';
         search = List<String>.from(userData['search'] ?? []);
       });
+
+      fetchArticles();
+    }
+  }
+
+  Future<void> fetchArticles() async {
+    if (verein != '' && verein.isNotEmpty) {
+      // Alle Artikel mit dem entsprechenden Sportverein des aktuellen Nutzers abrufen
+      QuerySnapshot articleSnapshot = await FirebaseFirestore.instance
+          .collection('articles')
+          .where('club', isEqualTo: verein)
+          .get();
+
+      List<Article> articles = [];
+
+      // Die abgerufenen Artikel in Artikelobjekte umwandeln
+      //for (QueryDocumentSnapshot doc in articleSnapshot.docs) {
+      for (QueryDocumentSnapshot doc in articleSnapshot.docs) {
+        articles.add(Article.fromFirestore(doc));
+      }
+
+      setState(() {
+        articleData = articles;
+      });
+    } else {
+      print("fetchArticles: Verein ist leer");
+      //TODO error handling
     }
   }
 
@@ -108,19 +135,45 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     Widget content;
     if (verein.isNotEmpty && verein != "Keine Auswahl") {
-      content = Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Wrap(
-          spacing: 16,
-          runSpacing: 16,
-          children: List.generate(
-            productData.length,
-            (index) => ItemCard(
-              product: productData[index],
+      if (articleData.isNotEmpty) {
+        content = Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Wrap(
+            spacing: 16,
+            runSpacing: 16,
+            children: List.generate(
+              articleData.length,
+              (index) => ItemCard(
+                article: articleData[index],
+              ),
             ),
           ),
-        ),
-      );
+        );
+      } else {
+        content = Container(
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: 160,
+              ),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: const Center(
+                  child: Text(
+                    'Aktuell gibt es noch keine Artikel von deinem Verein.\n Sobald es welche gibt, werden sie hier angezeigt.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
+          ),
+        );
+      }
     } else {
       content = Container(
         alignment: Alignment.center,

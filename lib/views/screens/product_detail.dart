@@ -5,10 +5,15 @@ import 'package:clubtwice/views/screens/image_viewer.dart';
 import 'package:flutter/services.dart';
 import 'package:money2/money2.dart';
 
-class ProductDetail extends StatefulWidget {
-  final Product product;
-  const ProductDetail({super.key, required this.product});
+import '../../core/model/article.dart';
 
+class ProductDetail extends StatefulWidget {
+  //final Product product;
+  final Article article;
+  const ProductDetail(
+      //{super.key, required this.product});
+      {super.key,
+      required this.article});
   @override
   // ignore: library_private_types_in_public_api
   _ProductDetailState createState() => _ProductDetailState();
@@ -19,14 +24,15 @@ class _ProductDetailState extends State<ProductDetail> {
   Currency euro = Currency.create('EUR', 2, symbol: '€');
   @override
   Widget build(BuildContext context) {
-    Product product = widget.product;
+    //Product product = widget.product;
+    Article article = widget.article;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Text(product.name),
+        title: Text(article.title),
         foregroundColor: Colors.black,
         leading: IconButton(
           onPressed: () {
@@ -89,7 +95,7 @@ class _ProductDetailState extends State<ProductDetail> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) =>
-                          ImageViewer(imageUrl: product.image),
+                          ImageViewer(imageUrl: article.images),
                     ),
                   );
                 },
@@ -101,9 +107,9 @@ class _ProductDetailState extends State<ProductDetail> {
                     physics: const BouncingScrollPhysics(),
                     controller: productImageSlider,
                     children: List.generate(
-                      product.image.length,
+                      article.images.length,
                       (index) => Image.asset(
-                        product.image[index],
+                        article.images[index],
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -128,7 +134,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     children: [
                       Expanded(
                         child: Text(
-                          product.name,
+                          article.title,
                           style: const TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.w700,
@@ -142,7 +148,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 Container(
                   margin: const EdgeInsets.only(bottom: 14),
                   child: Text(
-                    Money.fromIntWithCurrency(product.price, euro).toString(),
+                    Money.fromIntWithCurrency(article.price, euro).toString(),
                     style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,

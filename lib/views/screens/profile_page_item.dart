@@ -7,6 +7,7 @@ import 'package:clubtwice/core/model/Product.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
 import 'package:flutter/services.dart';
 
+import '../../core/model/article.dart';
 import '../widgets/profile_tile_widget.dart';
 
 class ProfilePageItem extends StatefulWidget {
@@ -23,7 +24,9 @@ class ProfilePageItem extends StatefulWidget {
 }
 
 class _ProfilePageItemState extends State<ProfilePageItem> {
-  List<Product> productData = ProductService.productData;
+  //List<Product> productData = ProductService.productData;
+
+  List<Article> articleData = [];
 
   @override
   Widget build(BuildContext context) {
@@ -72,9 +75,9 @@ class _ProfilePageItemState extends State<ProfilePageItem> {
               spacing: 16,
               runSpacing: 16,
               children: List.generate(
-                productData.length,
+                articleData.length,
                 (index) => ItemCard(
-                  product: productData[index],
+                  article: articleData[index],
                 ),
               ),
             ),
