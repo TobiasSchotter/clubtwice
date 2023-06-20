@@ -3,6 +3,7 @@ import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/core/model/Product.dart';
 import 'package:clubtwice/views/screens/product_detail.dart';
 import 'package:money2/money2.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import '../../core/model/article.dart';
 
@@ -46,10 +47,9 @@ class ItemCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 image: DecorationImage(
                   image: article.images.isNotEmpty
-                      ? AssetImage(article.images[0])
-                      : const AssetImage(
-                          //'../../../assets/images/placeholder.jpg'), // Placeholder image path
-                          'assets/images/placeholder.jpg'), // Placeholder image path
+                      ? NetworkImage(article.images[0])
+                      : const AssetImage('assets/images/placeholder.jpg')
+                          as ImageProvider,
                   fit: BoxFit.cover,
                 ),
               ),
