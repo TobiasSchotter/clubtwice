@@ -75,9 +75,13 @@ class _SellPageState extends State<SellPage> {
 
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false, // den Zurück-Button deaktivieren
+        automaticallyImplyLeading: false,
         backgroundColor: AppColor.primary,
-        title: const Text('Vereinskleidung verkaufen'),
+        title: const Text(
+          'Vereinskleidung verkaufen',
+          style: TextStyle(fontSize: 15), // Schriftgröße anpassen
+        ),
+        centerTitle: true, // Titel mittig ausrichten
       ),
       body: SingleChildScrollView(
         child: Padding(
