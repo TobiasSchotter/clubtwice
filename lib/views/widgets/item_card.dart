@@ -73,7 +73,8 @@ class ItemCard extends StatelessWidget {
                   Container(
                     margin: const EdgeInsets.only(top: 2, bottom: 8),
                     child: Text(
-                      Money.fromIntWithCurrency(article.price, euro).toString(),
+                      Money.fromIntWithCurrency(article.price as int, euro)
+                          .toString(),
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
-import 'package:clubtwice/core/model/Product.dart';
-import 'package:clubtwice/views/screens/image_viewer.dart';
 import 'package:flutter/services.dart';
 import 'package:money2/money2.dart';
-
+import 'package:carousel_slider/carousel_slider.dart';
 import '../../core/model/article.dart';
 
 class ProductDetail extends StatefulWidget {
@@ -90,32 +88,39 @@ class _ProductDetailState extends State<ProductDetail> {
             alignment: Alignment.topCenter,
             children: [
               // product image
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          ImageViewer(imageUrl: article.images),
-                    ),
-                  );
-                },
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 400,
-                  color: Colors.white,
-                  child: PageView(
-                    physics: const BouncingScrollPhysics(),
-                    controller: productImageSlider,
-                    children: List.generate(
-                      article.images.length,
-                      (index) => Image.asset(
-                        article.images[index],
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
+              CarouselSlider(
+                options: CarouselOptions(
+                  aspectRatio: 16 / 9, // Seitenverhältnis der Bilder
+                  autoPlay: true, // Automatische Wiedergabe aktivieren
+                  enlargeCenterPage: true, // Aktives Bild vergrößern
                 ),
-              ),
+                items: article.images.isNotEmpty
+                    ? article.images.map((imageUrl) {
+                        return Builder(
+                          builder: (BuildContext context) {
+                            return Container(
+                              width: MediaQuery.of(context).size.width,
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 5.0),
+                              child: Image.network(
+                                imageUrl,
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          },
+                        );
+                      }).toList()
+                    : [
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                          child: Image.asset(
+                            'assets/images/placeholder.jpg',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ],
+              )
             ],
           ),
           // Section 2 - product info
@@ -148,7 +153,8 @@ class _ProductDetailState extends State<ProductDetail> {
                 Container(
                   margin: const EdgeInsets.only(bottom: 14),
                   child: Text(
-                    Money.fromIntWithCurrency(article.price, euro).toString(),
+                    Money.fromIntWithCurrency(article.price as int, euro)
+                        .toString(),
                     style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
