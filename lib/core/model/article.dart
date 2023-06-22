@@ -13,7 +13,7 @@ class Article {
   String userId;
   bool isSold;
   bool isDeleted;
-  double price;
+  int price;
   Timestamp updatedAt;
   Timestamp createdAt;
   bool isIndividuallyWearable;

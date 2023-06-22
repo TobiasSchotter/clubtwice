@@ -379,7 +379,7 @@ class _SellPageState extends State<SellPage> {
                       brand: _selectedBrand,
                       club: _selectedClub,
                       sport: _selectedSport,
-                      price: double.parse(price),
+                      price: int.parse(price),
                       isIndividuallyWearable: _isIndividuallyWearable,
                       images: selectedImages,
                       context: context,
@@ -427,7 +427,7 @@ class _SellPageState extends State<SellPage> {
   Future<void> saveArticleToFirebase({
     required String title,
     required String description,
-    required double price,
+    required int price,
     required String brand,
     required String club,
     required String sport,
