@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:clubtwice/constant/app_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:clubtwice/views/screens/page_switcher.dart';
@@ -21,7 +22,6 @@ class _SellPageState extends State<SellPage> {
 
   List<XFile> selectedImages = [];
   bool _isIndividuallyWearable = false;
-  bool _isPriceValid = false;
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -105,22 +105,6 @@ class _SellPageState extends State<SellPage> {
                 decoration: const InputDecoration(
                   hintText: 'z.B. Aufwärmshirt Kurzarm',
                 ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Bitte geben Sie einen Titel ein';
-                  } else {
-                    int letterCount = 0;
-                    for (int i = 0; i < value.length; i++) {
-                      if (value[i].trim().isNotEmpty) {
-                        letterCount++;
-                      }
-                    }
-                    if (letterCount < 3) {
-                      return 'Der Titel muss mindestens 3 Buchstaben haben';
-                    }
-                  }
-                  return null;
-                },
               ),
               Container(
                 margin: const EdgeInsets.only(top: 20, bottom: 0),
@@ -380,65 +364,58 @@ class _SellPageState extends State<SellPage> {
                   suffixText: '€',
                   hintText: 'z.B. 5',
                 ),
-                onChanged: (value) {
-                  setState(() {
-                    if (value.isEmpty) {
-                      _isPriceValid = false;
-                    } else {
-                      _isPriceValid = true;
-                    }
-                  });
-                },
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Bitte geben Sie einen Preis ein';
-                  }
-                  return null;
-                },
               ),
               Container(
                 height: 16,
               ),
-              ElevatedButton(
-                onPressed:
-                    _titleController.text.trim().length >= 3 && _isPriceValid
-                        ? () {
-                            // // Navigator.of(context).pop();
-                            // Navigator.of(context).push(MaterialPageRoute(
-                            //     builder: (context) => PageSwitcher(
-                            //           selectedIndex: 0,
-                            //         )));
-                            saveArticleToFirebase(
-                                title: _titleController.text,
-                                description: _descriptionController.text,
-                                brand: _selectedBrand,
-                                club: _selectedClub,
-                                sport: _selectedSport,
-                                price: double.parse(_priceController.text),
-                                isIndividuallyWearable: _isIndividuallyWearable,
-                                images: selectedImages,
-                                context: context,
-                                condition: _selectedCondition,
-                                size: _selectedSize,
-                                type: _selectedType,
-                                userId: user?.uid);
-                            // ScaffoldMessenger.of(context).showSnackBar(
-                            //   const SnackBar(
-                            //     content: Text('Erfolgreich eingestellt'),
-                            //   ),
-                            // );
-                          }
-                        : null,
-                style: ElevatedButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
-                  backgroundColor: AppColor.primary,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16)),
-                  elevation: 0,
-                  shadowColor: Colors.transparent,
-                ),
-                child: const Text('Artikel einstellen'),
+              CustomButton(
+                onPressed: () {
+                  String title = _titleController.text.trim();
+                  String price = _priceController.text.trim();
+                  if (title.length >= 3 && price.isNotEmpty) {
+                    saveArticleToFirebase(
+                      title: title,
+                      description: _descriptionController.text,
+                      brand: _selectedBrand,
+                      club: _selectedClub,
+                      sport: _selectedSport,
+                      price: double.parse(price),
+                      isIndividuallyWearable: _isIndividuallyWearable,
+                      images: selectedImages,
+                      context: context,
+                      condition: _selectedCondition,
+                      size: _selectedSize,
+                      type: _selectedType,
+                      userId: user?.uid,
+                    );
+                  } else {
+                    if (title.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Titel darf nicht leer sein'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    } else if (title.length < 3) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content:
+                              Text('Titel muss mindestens 3 Zeichen enthalten'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                    if (price.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Preis darf nicht leer sein'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  }
+                },
+                buttonText: 'Artikel einstellen',
               ),
             ],
           ),
