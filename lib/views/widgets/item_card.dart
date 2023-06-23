@@ -73,8 +73,10 @@ class ItemCard extends StatelessWidget {
                   Container(
                     margin: const EdgeInsets.only(top: 2, bottom: 8),
                     child: Text(
-                      Money.fromIntWithCurrency(article.price as int, euro)
-                          .toString(),
+                      Money.fromIntWithCurrency(article.price * 100, euro)
+                              .toString()
+                              .split('.')[
+                          0], // Anpassung: Entfernen der Dezimalstellen
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
