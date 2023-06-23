@@ -90,6 +90,8 @@ class _HomePageState extends State<HomePage> {
         articles.add(Article.fromFirestore(doc));
       }
 
+      articles.sort((b, a) => a.createdAt.compareTo(b.createdAt));
+
       setState(() {
         articleData = articles;
       });
