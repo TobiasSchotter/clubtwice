@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clubtwice/constant/app_button.dart';
-import 'package:clubtwice/views/screens/otp_verification_page.dart';
 import 'package:clubtwice/views/screens/profile_page_club.dart';
 import 'package:clubtwice/views/screens/search_result_page.dart';
 import 'package:clubtwice/views/widgets/filter_tile_widget.dart';
@@ -9,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
 import 'package:flutter/services.dart';
-
 import '../../core/model/Search.dart';
 import '../../core/model/article.dart';
 import '../../core/services/SearchService.dart';

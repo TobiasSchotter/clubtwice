@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
-import 'package:clubtwice/core/model/Product.dart';
 import 'package:clubtwice/views/screens/product_detail.dart';
 import 'package:money2/money2.dart';
 import 'package:firebase_storage/firebase_storage.dart';
