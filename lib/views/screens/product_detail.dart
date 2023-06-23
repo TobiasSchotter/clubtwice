@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:flutter/services.dart';
@@ -20,10 +21,13 @@ class ProductDetail extends StatefulWidget {
 class _ProductDetailState extends State<ProductDetail> {
   PageController productImageSlider = PageController();
   Currency euro = Currency.create('EUR', 2, symbol: '€');
+
   @override
   Widget build(BuildContext context) {
     //Product product = widget.product;
     Article article = widget.article;
+    Timestamp firebaseTimestamp = article.updatedAt;
+    DateTime dateTime = firebaseTimestamp.toDate();
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -153,8 +157,9 @@ class _ProductDetailState extends State<ProductDetail> {
                 Container(
                   margin: const EdgeInsets.only(bottom: 14),
                   child: Text(
-                    Money.fromIntWithCurrency(article.price as int, euro)
-                        .toString(),
+                    Money.fromIntWithCurrency(article.price * 100, euro)
+                        .toString()
+                        .split('.')[0],
                     style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
@@ -163,11 +168,42 @@ class _ProductDetailState extends State<ProductDetail> {
                   ),
                 ),
                 Text(
-                  'Bringing a new look to the Waffle sneaker family, the Nike Waffle One balances everything you love about heritage Nike running with fresh innovations.',
+                  (article.description),
                   style: TextStyle(
                       color: AppColor.secondary.withOpacity(0.7),
                       height: 150 / 100),
                 ),
+                Text(
+                  (article.condition),
+                  style: TextStyle(
+                      color: AppColor.secondary.withOpacity(0.7),
+                      height: 150 / 100),
+                ),
+                Text(
+                  (article.size),
+                  style: TextStyle(
+                      color: AppColor.secondary.withOpacity(0.7),
+                      height: 150 / 100),
+                ),
+                Text(
+                  (article.brand),
+                  style: TextStyle(
+                      color: AppColor.secondary.withOpacity(0.7),
+                      height: 150 / 100),
+                ),
+                Text(
+                  (article.type),
+                  style: TextStyle(
+                      color: AppColor.secondary.withOpacity(0.7),
+                      height: 150 / 100),
+                ),
+                Text(
+                  "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}",
+                  style: TextStyle(
+                    color: AppColor.secondary.withOpacity(0.7),
+                    height: 150 / 100,
+                  ),
+                )
               ],
             ),
           ),
