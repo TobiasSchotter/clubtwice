@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:flutter/services.dart';
-import 'package:money2/money2.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../../core/model/article.dart';
 
@@ -20,7 +19,6 @@ class ProductDetail extends StatefulWidget {
 
 class _ProductDetailState extends State<ProductDetail> {
   PageController productImageSlider = PageController();
-  Currency euro = Currency.create('EUR', 2, symbol: '€');
 
   @override
   Widget build(BuildContext context) {
@@ -157,9 +155,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 Container(
                   margin: const EdgeInsets.only(bottom: 14),
                   child: Text(
-                    Money.fromIntWithCurrency(article.price * 100, euro)
-                        .toString()
-                        .split('.')[0],
+                    "${article.price} €",
                     style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,

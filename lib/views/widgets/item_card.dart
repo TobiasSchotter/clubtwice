@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/screens/product_detail.dart';
-import 'package:money2/money2.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-
 import '../../core/model/article.dart';
 
 // ignore: must_be_immutable
@@ -12,7 +9,6 @@ class ItemCard extends StatelessWidget {
   final Article article;
   final Color titleColor;
   final Color priceColor;
-  Currency euro = Currency.create('EUR', 2, symbol: '€');
 
   ItemCard({
     super.key,
@@ -72,10 +68,7 @@ class ItemCard extends StatelessWidget {
                   Container(
                     margin: const EdgeInsets.only(top: 2, bottom: 8),
                     child: Text(
-                      Money.fromIntWithCurrency(article.price * 100, euro)
-                              .toString()
-                              .split('.')[
-                          0], // Anpassung: Entfernen der Dezimalstellen
+                      "${article.price} €",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
