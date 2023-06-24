@@ -12,6 +12,7 @@ class ProductDetail extends StatefulWidget {
       //{super.key, required this.product});
       {super.key,
       required this.article});
+
   @override
   // ignore: library_private_types_in_public_api
   _ProductDetailState createState() => _ProductDetailState();
@@ -19,6 +20,39 @@ class ProductDetail extends StatefulWidget {
 
 class _ProductDetailState extends State<ProductDetail> {
   PageController productImageSlider = PageController();
+  String profileImageUrl = '';
+  String userName = '';
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData();
+  }
+
+  void fetchUserData() async {
+    try {
+      String userId = widget.article.userId; // UserID aus dem Artikel
+      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+      if (userSnapshot.exists) {
+        Map<String, dynamic>? userData =
+            userSnapshot.data() as Map<String, dynamic>?;
+        if (userData != null) {
+          setState(() {
+            profileImageUrl = userData.containsKey('profileImageUrl')
+                ? userData['profileImageUrl']
+                : '';
+            userName =
+                userData.containsKey('username') ? userData['username'] : '';
+          });
+        }
+      }
+    } catch (error) {
+      print('Error fetching user data: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,10 +126,11 @@ class _ProductDetailState extends State<ProductDetail> {
               // product image
               CarouselSlider(
                 options: CarouselOptions(
-                  aspectRatio: 16 / 9, // Seitenverhältnis der Bilder
-                  autoPlay: true, // Automatische Wiedergabe aktivieren
-                  enlargeCenterPage: true, // Aktives Bild vergrößern
-                ),
+                    aspectRatio: 16 / 9, // Seitenverhältnis der Bilder
+                    autoPlay: true, // Automatische Wiedergabe aktivieren
+                    enlargeCenterPage: true,
+                    height: 300 // Aktives Bild vergrößern
+                    ),
                 items: article.images.isNotEmpty
                     ? article.images.map((imageUrl) {
                         return Builder(
@@ -157,49 +192,118 @@ class _ProductDetailState extends State<ProductDetail> {
                   child: Text(
                     "${article.price} €",
                     style: const TextStyle(
-                        fontSize: 16,
+                        fontSize: 20,
                         fontWeight: FontWeight.w700,
                         fontFamily: 'poppins',
                         color: AppColor.primary),
                   ),
                 ),
+                if (profileImageUrl.isNotEmpty)
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        CircleAvatar(
+                          radius: 20,
+                          backgroundImage: NetworkImage(profileImageUrl),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          userName,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                Container(
+                  height: 1,
+                  color: Colors.grey,
+                  margin: EdgeInsets.symmetric(vertical: 8),
+                ),
                 Text(
                   (article.description),
                   style: TextStyle(
                       color: AppColor.secondary.withOpacity(0.7),
+                      fontSize: 18,
                       height: 150 / 100),
                 ),
-                Text(
-                  (article.condition),
-                  style: TextStyle(
-                      color: AppColor.secondary.withOpacity(0.7),
-                      height: 150 / 100),
+                // Separator line
+                Container(
+                  height: 1,
+                  color: Colors.grey,
+                  margin: EdgeInsets.symmetric(vertical: 8),
+                ),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: article.condition,
+                        style: TextStyle(
+                          color: AppColor.secondary.withOpacity(0.7),
+                          height: 150 / 100,
+                        ),
+                      ),
+                      TextSpan(
+                        text: ' • ',
+                        style: TextStyle(
+                          color: AppColor.secondary.withOpacity(0.7),
+                          height: 150 / 100,
+                        ),
+                      ),
+                      TextSpan(
+                        text: article.size,
+                        style: TextStyle(
+                          color: AppColor.secondary.withOpacity(0.7),
+                          height: 150 / 100,
+                        ),
+                      ),
+                      TextSpan(
+                        text: ' • ',
+                        style: TextStyle(
+                          color: AppColor.secondary.withOpacity(0.7),
+                          height: 150 / 100,
+                        ),
+                      ),
+                      TextSpan(
+                          text: article.type,
+                          style: TextStyle(
+                            color: AppColor.secondary.withOpacity(0.7),
+                            height: 150 / 100,
+                          )),
+                      TextSpan(
+                        text: ' • ',
+                        style: TextStyle(
+                          color: AppColor.secondary.withOpacity(0.7),
+                          height: 150 / 100,
+                        ),
+                      ),
+                      TextSpan(
+                        text: article.brand,
+                        style: TextStyle(
+                          color: AppColor.secondary.withOpacity(0.7),
+                          height: 150 / 100,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: 1,
+                  color: Colors.grey,
+                  margin: EdgeInsets.symmetric(vertical: 8),
                 ),
                 Text(
-                  (article.size),
-                  style: TextStyle(
-                      color: AppColor.secondary.withOpacity(0.7),
-                      height: 150 / 100),
-                ),
-                Text(
-                  (article.brand),
-                  style: TextStyle(
-                      color: AppColor.secondary.withOpacity(0.7),
-                      height: 150 / 100),
-                ),
-                Text(
-                  (article.type),
-                  style: TextStyle(
-                      color: AppColor.secondary.withOpacity(0.7),
-                      height: 150 / 100),
-                ),
-                Text(
-                  "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}",
+                  "${dateTime.day.toString().padLeft(2, '0')}.${dateTime.month.toString().padLeft(2, '0')}.${dateTime.year}, ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}",
                   style: TextStyle(
                     color: AppColor.secondary.withOpacity(0.7),
                     height: 150 / 100,
                   ),
-                )
+                ),
               ],
             ),
           ),
