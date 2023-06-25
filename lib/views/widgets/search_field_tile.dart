@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 
 class SearchField extends StatelessWidget {
   final Function(String) onSubmitted;
+  final String hintText;
 
-  const SearchField({Key? key, required this.onSubmitted}) : super(key: key);
+  const SearchField(
+      {Key? key, required this.onSubmitted, required this.hintText})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +17,7 @@ class SearchField extends StatelessWidget {
       decoration: InputDecoration(
         hintStyle:
             TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.3)),
-        hintText: 'Suche Vereinskleidung aller Vereine',
+        hintText: hintText,
         prefixIcon: Container(
           padding: const EdgeInsets.all(10),
           child:

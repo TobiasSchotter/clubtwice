@@ -52,7 +52,7 @@ class ItemCard extends StatelessWidget {
 
             // item details
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 2),
+              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,21 +60,62 @@ class ItemCard extends StatelessWidget {
                   Text(
                     article.title,
                     style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
                       color: titleColor,
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.only(top: 2, bottom: 8),
+                    margin: const EdgeInsets.only(top: 0, bottom: 0),
                     child: Text(
                       "${article.price} €",
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.w700,
                         fontFamily: 'Poppins',
                         color: priceColor,
                       ),
+                    ),
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: article.condition,
+                          style: TextStyle(
+                              color: AppColor.secondary.withOpacity(0.7),
+                              height: 150 / 100,
+                              fontSize: 12),
+                        ),
+                        TextSpan(
+                          text: ' • ',
+                          style: TextStyle(
+                              color: AppColor.secondary.withOpacity(0.7),
+                              height: 150 / 100,
+                              fontSize: 12),
+                        ),
+                        TextSpan(
+                          text: article.size,
+                          style: TextStyle(
+                              color: AppColor.secondary.withOpacity(0.7),
+                              height: 150 / 100,
+                              fontSize: 12),
+                        ),
+                        TextSpan(
+                          text: ' • ',
+                          style: TextStyle(
+                              color: AppColor.secondary.withOpacity(0.7),
+                              height: 150 / 100,
+                              fontSize: 12),
+                        ),
+                        TextSpan(
+                          text: article.brand,
+                          style: TextStyle(
+                              color: AppColor.secondary.withOpacity(0.7),
+                              height: 150 / 100,
+                              fontSize: 12),
+                        ),
+                      ],
                     ),
                   ),
                 ],

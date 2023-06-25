@@ -89,6 +89,7 @@ class _SearchPageState extends State<SearchPage> {
         title: Container(
           height: 40,
           child: SearchField(
+            hintText: 'Suche Vereinskleidung aller Vereine',
             onSubmitted: (searchTerm) {
               updateSearchList(searchTerm);
               saveChanges();

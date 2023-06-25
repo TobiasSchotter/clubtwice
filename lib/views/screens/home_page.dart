@@ -1,16 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clubtwice/constant/app_button.dart';
 import 'package:clubtwice/views/screens/profile_page_club.dart';
-import 'package:clubtwice/views/screens/search_result_page.dart';
 import 'package:clubtwice/views/widgets/filter_tile_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
 import 'package:flutter/services.dart';
-import '../../core/model/Search.dart';
 import '../../core/model/article.dart';
-import '../../core/services/SearchService.dart';
 import '../widgets/search_field_tile.dart';
 
 class HomePage extends StatefulWidget {
@@ -26,9 +23,7 @@ class _HomePageState extends State<HomePage> {
   String verein = '';
   String sportart = '';
   List<Article> articleData = [];
-
-  List<SearchHistory> listSearchHistory = SearchService.listSearchHistory;
-  List<String> search = [];
+  String searchTerm = '';
 
   @override
   void initState() {
@@ -65,25 +60,26 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         verein = userData['club'] ?? '';
         sportart = userData['sport'] ?? '';
-        search = List<String>.from(userData['search'] ?? []);
       });
 
-      fetchArticles();
+      fetchArticles(searchTerm);
     }
   }
 
-  Future<void> fetchArticles() async {
+  Future<void> fetchArticles(String searchTerm) async {
     if (verein != '' && verein.isNotEmpty) {
-      // Alle Artikel mit dem entsprechenden Sportverein des aktuellen Nutzers abrufen
-      QuerySnapshot articleSnapshot = await FirebaseFirestore.instance
+      Query articlesQuery = FirebaseFirestore.instance
           .collection('articles')
-          .where('club', isEqualTo: verein)
-          .get();
+          .where('club', isEqualTo: verein);
+
+      if (searchTerm.isNotEmpty) {
+        articlesQuery = articlesQuery.where('title', isEqualTo: searchTerm);
+      }
+
+      QuerySnapshot articleSnapshot = await articlesQuery.get();
 
       List<Article> articles = [];
 
-      // Die abgerufenen Artikel in Artikelobjekte umwandeln
-      //for (QueryDocumentSnapshot doc in articleSnapshot.docs) {
       for (QueryDocumentSnapshot doc in articleSnapshot.docs) {
         articles.add(Article.fromFirestore(doc));
       }
@@ -95,40 +91,8 @@ class _HomePageState extends State<HomePage> {
       });
     } else {
       print("fetchArticles: Verein ist leer");
-      //TODO error handling
+      // TODO: error handling
     }
-  }
-
-  Future<void> saveChanges() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      String userId = user.uid;
-      await updateUserData(userId);
-    }
-  }
-
-  Future<void> updateUserData(String userId) async {
-    await FirebaseFirestore.instance.collection('users').doc(userId).update({
-      'search': search,
-    });
-  }
-
-  void updateSearchList(String searchTerm) {
-    setState(() {
-      if (search.length >= 7) {
-        // Remove the oldest search term
-        search.removeAt(0);
-      }
-      search.add(searchTerm);
-    });
-    saveChanges();
-  }
-
-  Future<void> clearSearchHistory() async {
-    setState(() {
-      search = [];
-    });
-    saveChanges();
   }
 
   @override
@@ -218,17 +182,9 @@ class _HomePageState extends State<HomePage> {
         title: Container(
           height: 40,
           child: SearchField(
+            hintText: 'Suche Vereinskleidung deines Vereins',
             onSubmitted: (searchTerm) {
-              updateSearchList(searchTerm);
-              saveChanges();
-
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => SearchResultPage(
-                    searchKeyword: searchTerm,
-                  ),
-                ),
-              );
+              fetchArticles(searchTerm);
             },
           ),
         ),
