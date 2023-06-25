@@ -35,6 +35,8 @@ class _LoginPageState extends State<RegisterPage> {
               _passwordController.text, _confirmPasswordController.text) &&
           passwordRequirement(_passwordController.text)) {
         emailConfirm(_emailController.text);
+        firstnameConfirm(_firstNameController.text);
+        usernameConfirm(_userNameController.text);
 
         // Create user
         UserCredential userCredential =
@@ -130,6 +132,38 @@ class _LoginPageState extends State<RegisterPage> {
     if (user != null && user.isNotEmpty) {
       setState(() {
         errorMessage = 'Die eingegebene E-Mail-Adresse existiert bereits.';
+      });
+      // Show error message as snack bar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage!),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+  }
+
+  Future firstnameConfirm(firstName) async {
+    if (firstName.isEmpty) {
+      setState(() {
+        errorMessage = 'Der Vorname darf nicht leer sein.';
+      });
+      // Show error message as snack bar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage!),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+  }
+
+  Future<void> usernameConfirm(String userName) async {
+    if (userName.isEmpty) {
+      setState(() {
+        errorMessage = 'Der Nutzername darf nicht leer sein.';
       });
       // Show error message as snack bar
       ScaffoldMessenger.of(context).showSnackBar(
