@@ -120,7 +120,6 @@ class _SellPageState extends State<SellPage> {
                 cursorColor: AppColor.primarySoft,
                 decoration: const InputDecoration(
                     hintText: 'z.B. nur einmal getragen',
-                    //labelText: 'Description',
                     fillColor: Colors.black),
                 maxLines: 3,
               ),
@@ -477,11 +476,34 @@ class _SellPageState extends State<SellPage> {
         'isDeleted': false,
       };
 
-      // Save the article data to Firestore
+      // Save the article data to Firestore and get the auto-generated document ID
+      // DocumentReference documentReference = await FirebaseFirestore.instance
+      //   .collection('articles')
+      //   .add(articleData);
+      // String articleId = documentReference.id;
+
+      // Update the article data with the generated articleId
+      //articleData['articleId'] = articleId;
+
+      // Update the Firestore document with the articleId
+      //await documentReference.update({'articleId': articleId});
+
+// Get the total number of existing articles
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('articles').get();
+      int articleCount = querySnapshot.size;
+
+// Generate the article ID by incrementing the total count by 1
+      int articleId = articleCount + 1;
+
+// Update the article data with the generated articleId
+      articleData['articleId'] = articleId.toString();
+
+// Add the articleData to Firestore
       await FirebaseFirestore.instance.collection('articles').add(articleData);
 
       // Hide loading indicator
-      //Navigator.of(context).pop();
+      Navigator.of(context).pop();
 
       // Show snackbar and navigate to home screen
       ScaffoldMessenger.of(context).showSnackBar(
@@ -492,9 +514,10 @@ class _SellPageState extends State<SellPage> {
       );
 
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const PageSwitcher(
-                selectedIndex: 0,
-              )));
+        builder: (context) => const PageSwitcher(
+          selectedIndex: 0,
+        ),
+      ));
     } catch (error) {
       // Hide loading indicator
       Navigator.of(context).pop();

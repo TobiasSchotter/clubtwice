@@ -107,7 +107,6 @@ class _ProductDetailState extends State<ProductDetail> {
                   onPressed: () {},
                   icon: const Icon(
                     Icons.chat_bubble_sharp,
-                    //child: Icon(Icons.chat_bubble_sharp),
                   ),
                   label: const Text('Bei Verkäufer anfragen'),
                 ),
@@ -161,6 +160,7 @@ class _ProductDetailState extends State<ProductDetail> {
             ],
           ),
           // Section 2 - product info
+
           Container(
             width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
@@ -188,7 +188,7 @@ class _ProductDetailState extends State<ProductDetail> {
                   ),
                 ),
                 Container(
-                  margin: const EdgeInsets.only(bottom: 14),
+                  margin: const EdgeInsets.only(bottom: 2),
                   child: Text(
                     "${article.price} €",
                     style: const TextStyle(
@@ -198,9 +198,14 @@ class _ProductDetailState extends State<ProductDetail> {
                         color: AppColor.primary),
                   ),
                 ),
+                Container(
+                  height: 1,
+                  color: Colors.grey,
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                ),
                 if (profileImageUrl.isNotEmpty)
                   Container(
-                    padding: const EdgeInsets.all(16),
+                    // padding: const EdgeInsets.all(16),
                     alignment: Alignment.centerLeft,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -223,7 +228,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 Container(
                   height: 1,
                   color: Colors.grey,
-                  margin: EdgeInsets.symmetric(vertical: 8),
+                  margin: const EdgeInsets.symmetric(vertical: 8),
                 ),
                 Text(
                   (article.description),
@@ -236,7 +241,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 Container(
                   height: 1,
                   color: Colors.grey,
-                  margin: EdgeInsets.symmetric(vertical: 8),
+                  margin: const EdgeInsets.symmetric(vertical: 8),
                 ),
                 RichText(
                   text: TextSpan(
@@ -245,48 +250,48 @@ class _ProductDetailState extends State<ProductDetail> {
                         text: article.condition,
                         style: TextStyle(
                           color: AppColor.secondary.withOpacity(0.7),
-                          height: 150 / 100,
+                          height: 1.5,
                         ),
                       ),
                       TextSpan(
                         text: ' • ',
                         style: TextStyle(
                           color: AppColor.secondary.withOpacity(0.7),
-                          height: 150 / 100,
+                          height: 1.5,
                         ),
                       ),
                       TextSpan(
                         text: article.size,
                         style: TextStyle(
                           color: AppColor.secondary.withOpacity(0.7),
-                          height: 150 / 100,
+                          height: 1.5,
                         ),
                       ),
                       TextSpan(
                         text: ' • ',
                         style: TextStyle(
                           color: AppColor.secondary.withOpacity(0.7),
-                          height: 150 / 100,
+                          height: 1.5,
                         ),
                       ),
                       TextSpan(
                           text: article.type,
                           style: TextStyle(
                             color: AppColor.secondary.withOpacity(0.7),
-                            height: 150 / 100,
+                            height: 1.5,
                           )),
                       TextSpan(
                         text: ' • ',
                         style: TextStyle(
                           color: AppColor.secondary.withOpacity(0.7),
-                          height: 150 / 100,
+                          height: 1.5,
                         ),
                       ),
                       TextSpan(
                         text: article.brand,
                         style: TextStyle(
                           color: AppColor.secondary.withOpacity(0.7),
-                          height: 150 / 100,
+                          height: 1.5,
                         ),
                       ),
                     ],
@@ -295,15 +300,79 @@ class _ProductDetailState extends State<ProductDetail> {
                 Container(
                   height: 1,
                   color: Colors.grey,
-                  margin: EdgeInsets.symmetric(vertical: 8),
+                  margin: const EdgeInsets.symmetric(vertical: 8),
                 ),
-                Text(
-                  "${dateTime.day.toString().padLeft(2, '0')}.${dateTime.month.toString().padLeft(2, '0')}.${dateTime.year}, ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}",
-                  style: TextStyle(
-                    color: AppColor.secondary.withOpacity(0.7),
-                    height: 150 / 100,
+
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: article.club,
+                        style: TextStyle(
+                          color: AppColor.secondary.withOpacity(0.7),
+                          height: 1.5,
+                        ),
+                      ),
+                      TextSpan(
+                        text: ' • ',
+                        style: TextStyle(
+                          color: AppColor.secondary.withOpacity(0.7),
+                          height: 1.5,
+                        ),
+                      ),
+                      TextSpan(
+                        text: article.sport,
+                        style: TextStyle(
+                          color: AppColor.secondary.withOpacity(0.7),
+                          height: 1.5,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+
+                Container(
+                  height: 1,
+                  color: Colors.grey,
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                ),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text:
+                            "Artikel individuell tragabar: ${article.isIndividuallyWearable ? 'Ja' : 'Nein'}",
+                        style: TextStyle(
+                          color: AppColor.secondary.withOpacity(0.7),
+                          height: 1.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: 1,
+                  color: Colors.grey,
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                ),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.calendar_today,
+                      color: Colors.grey,
+                      size: 18,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      "${dateTime.day.toString().padLeft(2, '0')}.${dateTime.month.toString().padLeft(2, '0')}",
+                      style: TextStyle(
+                        color: AppColor.secondary.withOpacity(0.7),
+                        fontSize: 16,
+                        height: 1.5,
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
           ),
