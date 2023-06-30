@@ -26,17 +26,44 @@ class _LoginPageState extends State<RegisterPage> {
 
   final TextEditingController _confirmPasswordController =
       TextEditingController();
+  final TextEditingController _confirmemailController = TextEditingController();
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _userNameController = TextEditingController();
 
   Future<void> createUserWithEmailAndPassword() async {
     try {
-      if (passwordConfirm(
+      if (_firstNameController.text.trim().isEmpty) {
+        setState(() {
+          errorMessage = 'Der Vorname darf nicht leer sein.';
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMessage!),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
+      if (_userNameController.text.trim().isEmpty) {
+        setState(() {
+          errorMessage = 'Der Nutzername darf nicht leer sein.';
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMessage!),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
+      if (emailConfirmation(
+              _emailController.text, _confirmemailController.text) &&
+          passwordConfirm(
               _passwordController.text, _confirmPasswordController.text) &&
           passwordRequirement(_passwordController.text)) {
         emailConfirm(_emailController.text);
-        firstnameConfirm(_firstNameController.text);
-        usernameConfirm(_userNameController.text);
 
         // Create user
         UserCredential userCredential =
@@ -57,7 +84,6 @@ class _LoginPageState extends State<RegisterPage> {
         if (user != null && !user.emailVerified) {
           await user.sendEmailVerification();
 
-          // ignore: use_build_context_synchronously
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -69,7 +95,6 @@ class _LoginPageState extends State<RegisterPage> {
         setState(() {
           errorMessage = 'Die Passwörter stimmen nicht überein.';
         });
-        // Show error message as snack bar
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(errorMessage!),
@@ -82,6 +107,12 @@ class _LoginPageState extends State<RegisterPage> {
         errorMessage = e.message;
       });
       // Show error message as snack bar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage!),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
@@ -144,42 +175,29 @@ class _LoginPageState extends State<RegisterPage> {
     }
   }
 
-  Future firstnameConfirm(firstName) async {
-    if (firstName.isEmpty) {
-      setState(() {
-        errorMessage = 'Der Vorname darf nicht leer sein.';
-      });
-      // Show error message as snack bar
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(errorMessage!),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-  }
-
-  Future<void> usernameConfirm(String userName) async {
-    if (userName.isEmpty) {
-      setState(() {
-        errorMessage = 'Der Nutzername darf nicht leer sein.';
-      });
-      // Show error message as snack bar
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(errorMessage!),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-  }
-
   bool passwordConfirm(pw, pwToConfirm) {
     if (pw == pwToConfirm) {
       return true;
     } else {
+      return false;
+    }
+  }
+
+  bool emailConfirmation(email, confirmEmail) {
+    if (email == confirmEmail) {
+      return true;
+    } else {
+      setState(() {
+        errorMessage =
+            'Die eingegebenen E-Mail-Adressen stimmen nicht überein.';
+      });
+      // Show error message as snack bar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage!),
+          backgroundColor: Colors.red,
+        ),
+      );
       return false;
     }
   }
@@ -349,6 +367,32 @@ class _LoginPageState extends State<RegisterPage> {
           TextField(
             autofocus: false,
             controller: _emailController,
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(
+              hintText: 'E-Mail',
+              prefixIcon: Container(
+                padding: const EdgeInsets.all(12),
+                child: SvgPicture.asset('assets/icons/Message.svg',
+                    color: AppColor.primary),
+              ),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: AppColor.border, width: 1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: AppColor.primary, width: 1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              fillColor: AppColor.primarySoft,
+              filled: true,
+            ),
+          ),
+          const SizedBox(height: 16),
+          TextField(
+            autofocus: false,
+            controller: _confirmemailController,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
               hintText: 'E-Mail',
