@@ -54,15 +54,17 @@ class _SearchResultPageState extends State<SearchResultPage>
 
   Future<void> fetchArticles() async {
     QuerySnapshot<Map<String, dynamic>> articleSnapshot =
-        await FirebaseFirestore.instance
-            .collection('articles')
-            .where('title', isGreaterThanOrEqualTo: widget.searchKeyword)
-            .get();
+        await FirebaseFirestore.instance.collection('articles').get();
 
     List<Article> articles = [];
 
     for (QueryDocumentSnapshot doc in articleSnapshot.docs) {
-      articles.add(Article.fromFirestore(doc));
+      Article article = Article.fromFirestore(doc);
+      if (article.title
+          .toLowerCase()
+          .contains(widget.searchKeyword.toLowerCase())) {
+        articles.add(article);
+      }
     }
 
     setState(() {
