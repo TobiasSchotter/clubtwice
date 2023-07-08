@@ -26,7 +26,6 @@ class _SearchResultPageState extends State<SearchResultPage>
   List<Article> searchedArticleData = [];
 
   List<String> search = [];
-  String verein = '';
 
   @override
   void initState() {
@@ -48,35 +47,27 @@ class _SearchResultPageState extends State<SearchResultPage>
       Map<String, dynamic> userData = snapshot.data() ?? {};
       setState(() {
         search = List<String>.from(userData['search'] ?? []);
-        verein = userData['club'] ?? '';
       });
     }
     fetchArticles();
   }
 
   Future<void> fetchArticles() async {
-    if (verein != '' && verein.isNotEmpty) {
-      QuerySnapshot<Map<String, dynamic>> articleSnapshot =
-          await FirebaseFirestore.instance
-              .collection('articles')
-              .where('title', isGreaterThanOrEqualTo: widget.searchKeyword)
-              .get();
+    QuerySnapshot<Map<String, dynamic>> articleSnapshot =
+        await FirebaseFirestore.instance
+            .collection('articles')
+            .where('title', isGreaterThanOrEqualTo: widget.searchKeyword)
+            .get();
 
-      List<Article> articles = [];
+    List<Article> articles = [];
 
-      // Die abgerufenen Artikel in Artikelobjekte umwandeln
-      //for (QueryDocumentSnapshot doc in articleSnapshot.docs) {
-      for (QueryDocumentSnapshot doc in articleSnapshot.docs) {
-        articles.add(Article.fromFirestore(doc));
-      }
-
-      setState(() {
-        searchedArticleData = articles;
-      });
-    } else {
-      print("fetchArticles: Verein ist leer");
-      //TODO error handling
+    for (QueryDocumentSnapshot doc in articleSnapshot.docs) {
+      articles.add(Article.fromFirestore(doc));
     }
+
+    setState(() {
+      searchedArticleData = articles;
+    });
   }
 
   Future<void> saveChanges() async {
@@ -95,16 +86,16 @@ class _SearchResultPageState extends State<SearchResultPage>
 
   void updateSearchList(String searchTerm) {
     if (searchTerm.trim().isEmpty) {
-// Ignore empty or whitespace-only search terms
+      // Ignore empty or whitespace-only search terms
       return;
     }
 
     setState(() {
       if (search.contains(searchTerm)) {
-// Remove the duplicated search term
+        // Remove the duplicated search term
         search.remove(searchTerm);
       } else if (search.length >= 7) {
-// Remove the oldest search term
+        // Remove the oldest search term
         search.removeAt(6);
       }
       search.insert(
