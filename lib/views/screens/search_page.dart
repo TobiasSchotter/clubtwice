@@ -57,6 +57,11 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   void updateSearchList(String searchTerm) {
+    if (searchTerm.trim().isEmpty) {
+// Ignore empty or whitespace-only search terms
+      return;
+    }
+
     setState(() {
       if (search.contains(searchTerm)) {
 // Remove the duplicated search term
@@ -68,6 +73,7 @@ class _SearchPageState extends State<SearchPage> {
       search.insert(
           0, searchTerm); // Insert the newest search term at the beginning
     });
+
     saveChanges();
   }
 

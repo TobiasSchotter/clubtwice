@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +8,7 @@ import 'package:clubtwice/views/widgets/item_card.dart';
 
 import '../../core/model/article.dart';
 import '../widgets/filter_tile_widget.dart';
+import '../widgets/search_field_tile.dart';
 
 class SearchResultPage extends StatefulWidget {
   final String searchKeyword;
@@ -20,7 +22,6 @@ class _SearchResultPageState extends State<SearchResultPage>
     with TickerProviderStateMixin {
   late TabController tabController;
   TextEditingController searchInputController = TextEditingController();
-  //List<Product> searchedProductData = ProductService.searchedProductData;
 
   List<Article> searchedArticleData = [];
 
@@ -31,7 +32,7 @@ class _SearchResultPageState extends State<SearchResultPage>
   void initState() {
     super.initState();
     searchInputController.text = widget.searchKeyword;
-    tabController = TabController(length: 4, vsync: this);
+    tabController = TabController(length: 1, vsync: this);
     fetchUserData();
   }
 
@@ -93,13 +94,23 @@ class _SearchResultPageState extends State<SearchResultPage>
   }
 
   void updateSearchList(String searchTerm) {
+    if (searchTerm.trim().isEmpty) {
+// Ignore empty or whitespace-only search terms
+      return;
+    }
+
     setState(() {
-      if (search.length >= 7) {
-        // Remove the oldest search term
-        search.removeAt(0);
+      if (search.contains(searchTerm)) {
+// Remove the duplicated search term
+        search.remove(searchTerm);
+      } else if (search.length >= 7) {
+// Remove the oldest search term
+        search.removeAt(6);
       }
-      search.add(searchTerm);
+      search.insert(
+          0, searchTerm); // Insert the newest search term at the beginning
     });
+
     saveChanges();
   }
 
@@ -113,13 +124,18 @@ class _SearchResultPageState extends State<SearchResultPage>
         elevation: 0,
         leading: IconButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => const PageSwitcher(
+                selectedIndex: 1,
+              ),
+            ));
           },
           icon: const Icon(Icons.arrow_back),
         ),
         title: SizedBox(
           height: 40,
-          child: TextField(
+          child: SearchField(
+            hintText: 'Suche Vereinskleidung aller Vereine',
             onSubmitted: (searchTerm) {
               updateSearchList(searchTerm);
               saveChanges();
@@ -132,33 +148,6 @@ class _SearchResultPageState extends State<SearchResultPage>
                 ),
               );
             },
-            autofocus: false,
-            controller: searchInputController,
-            style: const TextStyle(fontSize: 14, color: Colors.white),
-            decoration: InputDecoration(
-              hintStyle:
-                  TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.3)),
-              hintText: 'Finde Vereinskleidung aller Vereine',
-              prefixIcon: Container(
-                  padding: const EdgeInsets.all(10),
-                  child: const Icon(Icons.search, color: Colors.white)
-                  //color: Colors.white),
-                  ),
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-              enabledBorder: OutlineInputBorder(
-                borderSide:
-                    const BorderSide(color: Colors.transparent, width: 1),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: Colors.white.withOpacity(0.1), width: 1),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              fillColor: Colors.white.withOpacity(0.1),
-              filled: true,
-            ),
           ),
         ),
         systemOverlayStyle: SystemUiOverlayStyle.light,
@@ -189,7 +178,7 @@ class _SearchResultPageState extends State<SearchResultPage>
                   'Suchergebnisse zu ${widget.searchKeyword}',
                   style: const TextStyle(
                       color: Colors.grey,
-                      fontSize: 12,
+                      fontSize: 14,
                       fontWeight: FontWeight.w400),
                 ),
               ),
@@ -209,9 +198,6 @@ class _SearchResultPageState extends State<SearchResultPage>
               ),
             ],
           ),
-          const SizedBox(),
-          const SizedBox(),
-          const SizedBox(),
         ],
       ),
     );
