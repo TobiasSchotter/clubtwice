@@ -72,16 +72,15 @@ class _HomePageState extends State<HomePage> {
           .collection('articles')
           .where('club', isEqualTo: verein);
 
-      if (searchTerm.isNotEmpty) {
-        articlesQuery = articlesQuery.where('title', isEqualTo: searchTerm);
-      }
-
       QuerySnapshot articleSnapshot = await articlesQuery.get();
 
       List<Article> articles = [];
 
       for (QueryDocumentSnapshot doc in articleSnapshot.docs) {
-        articles.add(Article.fromFirestore(doc));
+        Article article = Article.fromFirestore(doc);
+        if (article.title.toLowerCase().contains(searchTerm.toLowerCase())) {
+          articles.add(article);
+        }
       }
 
       articles.sort((b, a) => a.createdAt.compareTo(b.createdAt));
