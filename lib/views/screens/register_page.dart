@@ -395,7 +395,7 @@ class _LoginPageState extends State<RegisterPage> {
             controller: _confirmemailController,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-              hintText: 'E-Mail',
+              hintText: 'E-Mail wiederholen',
               prefixIcon: Container(
                 padding: const EdgeInsets.all(12),
                 child: SvgPicture.asset('assets/icons/Message.svg',

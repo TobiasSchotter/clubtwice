@@ -19,7 +19,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  //List<Product> productData = ProductService.productData;
   String verein = '';
   String sportart = '';
   List<Article> articleData = [];
@@ -193,7 +192,6 @@ class _HomePageState extends State<HomePage> {
         shrinkWrap: true,
         physics: const BouncingScrollPhysics(),
         children: [
-          // Section 1
           Container(
             height: 45,
             width: MediaQuery.of(context).size.width,
@@ -240,10 +238,8 @@ class _HomePageState extends State<HomePage> {
               FilterWidget(
                 selectedIndex: 0,
               ),
-              // FilterWidget2(),
             ],
           ),
-          // Section 5 - product list
           content,
         ],
       ),
