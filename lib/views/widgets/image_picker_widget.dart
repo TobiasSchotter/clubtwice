@@ -108,6 +108,9 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                   ),
                 ),
         ),
+        Container(
+          height: 6,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [

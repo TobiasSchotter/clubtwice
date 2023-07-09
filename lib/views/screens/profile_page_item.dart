@@ -28,7 +28,6 @@ class _ProfilePageItemState extends State<ProfilePageItem> {
   List<Article> articleData = [];
   String verein = '';
   String sportart = '';
-
   String searchTerm = '';
 
   @override

@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:flutter/services.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import '../../constant/app_button.dart';
 import '../../core/model/article.dart';
 
 class ProductDetail extends StatefulWidget {
@@ -74,6 +76,7 @@ class _ProductDetailState extends State<ProductDetail> {
           },
           icon: const Icon(Icons.arrow_back_outlined),
           color: Colors.black,
+          alignment: Alignment.center,
         ),
         actions: [
           PopupMenuButton<String>(
@@ -84,32 +87,50 @@ class _ProductDetailState extends State<ProductDetail> {
               } else if (value == 'edit') {
                 // Perform edit operation
               } else if (value == 'report') {
-                // Perform share operation
+                // Perform report operation
               }
             },
-            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-              const PopupMenuItem<String>(
-                value: 'delete',
-                child: ListTile(
-                  leading: Icon(Icons.delete),
-                  title: Text('Artikel löschen'),
+            itemBuilder: (BuildContext context) {
+              // Check if the article belongs to the current user
+              bool isCurrentUserArticle =
+                  FirebaseAuth.instance.currentUser?.uid == article.userId;
+
+              // Create a list of PopupMenuEntry based on the conditions
+              List<PopupMenuEntry<String>> menuItems = [];
+
+              if (isCurrentUserArticle) {
+                menuItems.add(
+                  const PopupMenuItem<String>(
+                    value: 'delete',
+                    child: ListTile(
+                      leading: Icon(Icons.delete),
+                      title: Text('Artikel löschen'),
+                    ),
+                  ),
+                );
+                menuItems.add(
+                  const PopupMenuItem<String>(
+                    value: 'edit',
+                    child: ListTile(
+                      leading: Icon(Icons.edit),
+                      title: Text('Artikel bearbeiten'),
+                    ),
+                  ),
+                );
+              }
+
+              menuItems.add(
+                const PopupMenuItem<String>(
+                  value: 'report',
+                  child: ListTile(
+                    leading: Icon(Icons.report),
+                    title: Text('Artikel melden'),
+                  ),
                 ),
-              ),
-              const PopupMenuItem<String>(
-                value: 'edit',
-                child: ListTile(
-                  leading: Icon(Icons.edit),
-                  title: Text('Artikel bearbeiten'),
-                ),
-              ),
-              const PopupMenuItem<String>(
-                value: 'report',
-                child: ListTile(
-                  leading: Icon(Icons.report),
-                  title: Text('Artikel melden'),
-                ),
-              ),
-            ],
+              );
+
+              return menuItems;
+            },
             icon: Icon(Icons.more_horiz),
           ),
         ],
@@ -138,21 +159,11 @@ class _ProductDetailState extends State<ProductDetail> {
               child: Container(
                 height: 40,
                 margin: const EdgeInsets.only(right: 14),
-                child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColor.primary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    elevation: 0,
-                  ),
+                child: CustomButton(
                   onPressed: () {
                     // Implementiere die Logik für die Anfragen-Funktion hier
                   },
-                  icon: Icon(
-                    Icons.chat_bubble_sharp,
-                  ),
-                  label: Text('Bei Verkäufer anfragen'),
+                  buttonText: 'Bei Verkäufer anfragen',
                 ),
               ),
             ),
