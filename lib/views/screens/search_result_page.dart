@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
-
 import '../../core/model/article.dart';
 import '../widgets/filter_tile_widget.dart';
 import '../widgets/search_field_tile.dart';

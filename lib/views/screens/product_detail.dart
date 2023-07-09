@@ -76,11 +76,41 @@ class _ProductDetailState extends State<ProductDetail> {
           color: Colors.black,
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.bookmark_add_outlined),
-            onPressed: () {
-              // Hier wird Code ausgeführt, wenn der rechte Button gedrückt wird
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              // Handle different options based on the selected value
+              if (value == 'delete') {
+                // Perform delete operation
+              } else if (value == 'edit') {
+                // Perform edit operation
+              } else if (value == 'report') {
+                // Perform share operation
+              }
             },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'delete',
+                child: ListTile(
+                  leading: Icon(Icons.delete),
+                  title: Text('Artikel löschen'),
+                ),
+              ),
+              const PopupMenuItem<String>(
+                value: 'edit',
+                child: ListTile(
+                  leading: Icon(Icons.edit),
+                  title: Text('Artikel bearbeiten'),
+                ),
+              ),
+              const PopupMenuItem<String>(
+                value: 'report',
+                child: ListTile(
+                  leading: Icon(Icons.report),
+                  title: Text('Artikel melden'),
+                ),
+              ),
+            ],
+            icon: Icon(Icons.more_horiz),
           ),
         ],
         systemOverlayStyle: SystemUiOverlayStyle.light,
@@ -92,23 +122,49 @@ class _ProductDetailState extends State<ProductDetail> {
         padding: const EdgeInsets.all(16),
         child: Row(
           children: [
+            Container(
+              width: 40,
+              margin: const EdgeInsets.only(right: 14),
+              child: IconButton(
+                onPressed: () {
+                  // Implementiere die Logik für die Favorisieren-Funktion hier
+                },
+                icon: Icon(
+                  Icons.share_outlined,
+                ),
+              ),
+            ),
             Expanded(
               child: Container(
-                //width: 400,
                 height: 40,
                 margin: const EdgeInsets.only(right: 14),
                 child: ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColor.primary,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16)),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                     elevation: 0,
                   ),
-                  onPressed: () {},
-                  icon: const Icon(
+                  onPressed: () {
+                    // Implementiere die Logik für die Anfragen-Funktion hier
+                  },
+                  icon: Icon(
                     Icons.chat_bubble_sharp,
                   ),
-                  label: const Text('Bei Verkäufer anfragen'),
+                  label: Text('Bei Verkäufer anfragen'),
+                ),
+              ),
+            ),
+            Container(
+              width: 40,
+              margin: const EdgeInsets.only(right: 14),
+              child: IconButton(
+                onPressed: () {
+                  // Implementiere die Logik für die Teilen-Funktion hier
+                },
+                icon: Icon(
+                  Icons.favorite_border,
                 ),
               ),
             ),
