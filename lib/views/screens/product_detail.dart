@@ -163,7 +163,7 @@ class _ProductDetailState extends State<ProductDetail> {
                   onPressed: () {
                     // Implementiere die Logik für die Anfragen-Funktion hier
                   },
-                  buttonText: 'Bei Verkäufer anfragen',
+                  buttonText: 'Anfragen',
                 ),
               ),
             ),

@@ -21,7 +21,7 @@ class _WidgetTreeState extends State<WidgetTree> {
 
   void _hideSplash() async {
     await Future.delayed(
-        const Duration(seconds: 2)); // Wartezeit für den Splashscreen
+        const Duration(seconds: 0)); // Wartezeit für den Splashscreen
     setState(() {
       _showSplash = false;
     });
