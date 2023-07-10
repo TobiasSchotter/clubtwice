@@ -104,7 +104,6 @@ class _ProfilePageItemState extends State<ProfilePageItem> {
         ),
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
-      // bottomNavigationBar: PageSwitcher(),
       body: ListView(
         shrinkWrap: true,
         physics: const BouncingScrollPhysics(),

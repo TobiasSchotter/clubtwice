@@ -109,7 +109,7 @@ class _SellPageState extends State<SellPage> {
               Container(
                 margin: const EdgeInsets.only(top: 20, bottom: 0),
                 child: Text(
-                  'Beschreibe deinen Artikel',
+                  'Beschreibe deinen Artikel *',
                   style: TextStyle(
                     color: AppColor.secondary.withOpacity(0.7),
                   ),
@@ -131,6 +131,10 @@ class _SellPageState extends State<SellPage> {
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Typ',
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 10.0,
+                    vertical: 0,
+                  ),
                 ),
                 onChanged: (newValue) {
                   setState(() {
@@ -153,6 +157,10 @@ class _SellPageState extends State<SellPage> {
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Größe',
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 10.0,
+                    vertical: 0,
+                  ),
                 ),
                 onChanged: (newValue) {
                   setState(() {
@@ -174,6 +182,10 @@ class _SellPageState extends State<SellPage> {
                   decoration: const InputDecoration(
                     labelText: 'Zustand auswählen',
                     border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 10.0,
+                      vertical: 0,
+                    ),
                   ),
                   items: _conditionOptions
                       .map<DropdownMenuItem<String>>((String value) {
@@ -195,6 +207,10 @@ class _SellPageState extends State<SellPage> {
                 decoration: const InputDecoration(
                   labelText: 'Marke auswählen',
                   border: OutlineInputBorder(),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 10.0,
+                    vertical: 0,
+                  ),
                 ),
                 items: [
                   const DropdownMenuItem<String>(
@@ -261,6 +277,10 @@ class _SellPageState extends State<SellPage> {
                   decoration: const InputDecoration(
                     labelText: 'Verein auswählen',
                     border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 10.0,
+                      vertical: 0,
+                    ),
                   ),
                   items: <String>['SG Quelle', 'SGV Nürnberg Fürth']
                       .map<DropdownMenuItem<String>>((String value) {
@@ -281,11 +301,12 @@ class _SellPageState extends State<SellPage> {
                   focusColor: AppColor.primarySoft,
                   value: _selectedSport,
                   decoration: const InputDecoration(
-                    //contentPadding: EdgeInsets.symmetric(horizontal: 8),
-                    //border: InputBorder.none,
                     labelText: 'Sportart auswählen',
-
                     border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 10.0,
+                      vertical: 0,
+                    ),
                   ),
                   items: <String>['Fußball', 'Basketball']
                       .map<DropdownMenuItem<String>>((String value) {
