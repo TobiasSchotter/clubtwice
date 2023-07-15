@@ -113,9 +113,9 @@ class _ProfilePageItemState extends State<ProfilePageItem> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             height: 46,
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              children: const [
                 Text(
                   'Meine Anzeigen',
                   style: TextStyle(
