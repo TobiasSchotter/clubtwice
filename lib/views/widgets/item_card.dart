@@ -10,7 +10,7 @@ class ItemCard extends StatelessWidget {
   final Color titleColor;
   final Color priceColor;
 
-  ItemCard({
+  const ItemCard({
     super.key,
     //required this.product,
     required this.article,

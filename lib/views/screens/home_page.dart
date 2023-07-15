@@ -1,8 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clubtwice/constant/app_button.dart';
+import 'package:clubtwice/core/services/articles_service.dart';
+import 'package:clubtwice/core/services/user_service.dart';
 import 'package:clubtwice/views/screens/profile_page_club.dart';
 import 'package:clubtwice/views/widgets/filter_tile_widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
@@ -23,21 +23,40 @@ class _HomePageState extends State<HomePage> {
   String sportart = '';
   List<Article> articleData = [];
   String searchTerm = '';
+  final UserService userService = UserService();
+  final ArticleService articleService = ArticleService();
 
   @override
   void initState() {
     super.initState();
-    fetchUserData();
-    //checkUserVerification();
+    loadData();
+  }
+
+  Future<void> loadData() async {
+    List vereinSportartList = await userService.fetchUserData(searchTerm);
+
+    if (vereinSportartList.isNotEmpty) {
+      setState(() {
+        verein = vereinSportartList[0];
+        sportart = vereinSportartList[1];
+      });
+    }
+
+    List<Article> articleList =
+        await articleService.fetchArticles(searchTerm, verein);
+
+    if (articleList.isNotEmpty) {
+      setState(() {
+        articleData = articleList;
+      });
+    }
   }
 
   // void checkUserVerification() async {
   //   User? currentUser = FirebaseAuth.instance.currentUser;
-
   //   if (currentUser != null && !currentUser.emailVerified) {
   //     await Future.delayed(const Duration(
   //         milliseconds: 500)); // Verzögerung von 500 Millisekunden
-
   //     // Benutzer ist eingeloggt, aber nicht verifiziert
   //     Navigator.pushReplacement(
   //       context,
@@ -45,54 +64,6 @@ class _HomePageState extends State<HomePage> {
   //     );
   //   }
   // }
-
-  Future<void> fetchUserData() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      String userId = user.uid;
-      DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
-          .instance
-          .collection('users')
-          .doc(userId)
-          .get();
-      Map<String, dynamic> userData = snapshot.data() ?? {};
-      setState(() {
-        verein = userData['club'] ?? '';
-        sportart = userData['sport'] ?? '';
-      });
-
-      fetchArticles(searchTerm);
-    }
-  }
-
-  Future<void> fetchArticles(String searchTerm) async {
-    if (verein != '' && verein.isNotEmpty) {
-      Query articlesQuery = FirebaseFirestore.instance
-          .collection('articles')
-          .where('club', isEqualTo: verein)
-          .where('isSold', isEqualTo: false);
-
-      QuerySnapshot articleSnapshot = await articlesQuery.get();
-
-      List<Article> articles = [];
-
-      for (QueryDocumentSnapshot doc in articleSnapshot.docs) {
-        Article article = Article.fromFirestore(doc);
-        if (article.title.toLowerCase().contains(searchTerm.toLowerCase())) {
-          articles.add(article);
-        }
-      }
-
-      articles.sort((b, a) => a.createdAt.compareTo(b.createdAt));
-
-      setState(() {
-        articleData = articles;
-      });
-    } else {
-      print("fetchArticles: Verein ist leer");
-      // TODO: error handling
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -182,8 +153,14 @@ class _HomePageState extends State<HomePage> {
           height: 40,
           child: SearchField(
             hintText: 'Suche Vereinskleidung deines Vereins',
-            onSubmitted: (searchTerm) {
-              fetchArticles(searchTerm);
+            onSubmitted: (searchTerm) async {
+              List<Article> articleList =
+                  await articleService.fetchArticles(searchTerm, verein);
+              if (articleList.isNotEmpty) {
+                setState(() {
+                  articleData = articleList;
+                });
+              }
             },
           ),
         ),
