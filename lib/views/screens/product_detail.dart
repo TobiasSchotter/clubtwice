@@ -82,12 +82,20 @@ class _ProductDetailState extends State<ProductDetail> {
           PopupMenuButton<String>(
             onSelected: (value) {
               // Handle different options based on the selected value
-              if (value == 'delete') {
+              if (value == 'sold') {
+                articleSold();
+              } else if (value == 'reserved') {
+                articleReserved();
+                // Perform delete operation
+              } else if (value == 'delete') {
+                articleDelet();
                 // Perform delete operation
               } else if (value == 'edit') {
+                articleEdit();
                 // Perform edit operation
               } else if (value == 'report') {
                 // Perform report operation
+                articleReport();
               }
             },
             itemBuilder: (BuildContext context) {
@@ -101,9 +109,25 @@ class _ProductDetailState extends State<ProductDetail> {
               if (isCurrentUserArticle) {
                 menuItems.add(
                   const PopupMenuItem<String>(
+                    value: 'sold',
+                    child: ListTile(
+                      title: Text('Verkauft markieren'),
+                    ),
+                  ),
+                );
+                menuItems.add(
+                  const PopupMenuItem<String>(
+                    value: 'reserved',
+                    child: ListTile(
+                      title: Text('Reserviert markieren'),
+                    ),
+                  ),
+                );
+
+                menuItems.add(
+                  const PopupMenuItem<String>(
                     value: 'delete',
                     child: ListTile(
-                      leading: Icon(Icons.delete),
                       title: Text('Artikel löschen'),
                     ),
                   ),
@@ -112,18 +136,15 @@ class _ProductDetailState extends State<ProductDetail> {
                   const PopupMenuItem<String>(
                     value: 'edit',
                     child: ListTile(
-                      leading: Icon(Icons.edit),
                       title: Text('Artikel bearbeiten'),
                     ),
                   ),
                 );
               }
-
               menuItems.add(
                 const PopupMenuItem<String>(
                   value: 'report',
                   child: ListTile(
-                    leading: Icon(Icons.report),
                     title: Text('Artikel melden'),
                   ),
                 ),
@@ -447,4 +468,14 @@ class _ProductDetailState extends State<ProductDetail> {
       ),
     );
   }
+
+  void articleSold() {}
+
+  void articleReserved() {}
+
+  void articleDelet() {}
+
+  void articleEdit() {}
+
+  void articleReport() {}
 }
