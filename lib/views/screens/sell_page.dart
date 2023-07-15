@@ -497,29 +497,6 @@ class _SellPageState extends State<SellPage> {
         'isDeleted': false,
       };
 
-      // Save the article data to Firestore and get the auto-generated document ID
-      // DocumentReference documentReference = await FirebaseFirestore.instance
-      //   .collection('articles')
-      //   .add(articleData);
-      // String articleId = documentReference.id;
-
-      // Update the article data with the generated articleId
-      //articleData['articleId'] = articleId;
-
-      // Update the Firestore document with the articleId
-      //await documentReference.update({'articleId': articleId});
-
-// Get the total number of existing articles
-      QuerySnapshot querySnapshot =
-          await FirebaseFirestore.instance.collection('articles').get();
-      int articleCount = querySnapshot.size;
-
-// Generate the article ID by incrementing the total count by 1
-      int articleId = articleCount + 1;
-
-// Update the article data with the generated articleId
-      articleData['articleId'] = articleId.toString();
-
 // Add the articleData to Firestore
       await FirebaseFirestore.instance.collection('articles').add(articleData);
 

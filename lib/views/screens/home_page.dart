@@ -69,7 +69,8 @@ class _HomePageState extends State<HomePage> {
     if (verein != '' && verein.isNotEmpty) {
       Query articlesQuery = FirebaseFirestore.instance
           .collection('articles')
-          .where('club', isEqualTo: verein);
+          .where('club', isEqualTo: verein)
+          .where('isSold', isEqualTo: false);
 
       QuerySnapshot articleSnapshot = await articlesQuery.get();
 
