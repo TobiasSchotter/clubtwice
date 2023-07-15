@@ -72,8 +72,6 @@ class _PageSwitcherState extends State<PageSwitcher> {
               label: 'Profil',
             ),
           ],
-        )
-        // : null,
-        );
+        ));
   }
 }

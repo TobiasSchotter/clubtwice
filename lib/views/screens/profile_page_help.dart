@@ -31,8 +31,6 @@ class _ProfilePageHelpState extends State<ProfilePageHelp> {
         ),
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
-
-      // Full Name
     );
   }
 }

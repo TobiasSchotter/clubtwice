@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:flutter/material.dart';
@@ -114,9 +113,9 @@ class _ProfilePageItemState extends State<ProfilePageItem> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             height: 46,
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Text(
                   'Meine Anzeigen',
                   style: TextStyle(

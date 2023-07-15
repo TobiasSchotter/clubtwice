@@ -16,14 +16,12 @@ class WelcomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Section 1 - Illustration
             Container(
               margin: const EdgeInsets.only(top: 150),
               width: MediaQuery.of(context).size.width,
               //height:
               child: Image.asset('assets/images/logo.png'),
             ),
-            // Section 2 - clubtwice with Caption
             Column(
               children: [
                 Container(
@@ -46,7 +44,6 @@ class WelcomePage extends StatelessWidget {
                 ),
               ],
             ),
-            // Section 3 - Get Started Button
             Container(
               width: MediaQuery.of(context).size.width,
               padding: const EdgeInsets.symmetric(horizontal: 16),

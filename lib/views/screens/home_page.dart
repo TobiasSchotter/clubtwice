@@ -177,7 +177,7 @@ class _HomePageState extends State<HomePage> {
         centerTitle: false,
         backgroundColor: AppColor.primary,
         elevation: 0,
-        title: Container(
+        title: SizedBox(
           height: 40,
           child: SearchField(
             hintText: 'Suche Vereinskleidung deines Vereins',

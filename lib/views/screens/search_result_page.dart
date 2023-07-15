@@ -161,7 +161,6 @@ class _SearchResultPageState extends State<SearchResultPage>
                   FilterWidget(
                     selectedIndex: 1,
                   ),
-                  // FilterWidget2(),
                 ],
               ),
               Padding(

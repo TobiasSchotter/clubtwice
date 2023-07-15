@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,7 +21,6 @@ class ProfilePageFav extends StatefulWidget {
 }
 
 class _ProfilePageFavState extends State<ProfilePageFav> {
-  //List<Product> productData = ProductService.productData;
   List<Article> articleData = [];
 
   @override
@@ -42,7 +40,6 @@ class _ProfilePageFavState extends State<ProfilePageFav> {
         ),
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
-      // bottomNavigationBar: PageSwitcher(),
       body: ListView(
         shrinkWrap: true,
         physics: const BouncingScrollPhysics(),
@@ -53,9 +50,9 @@ class _ProfilePageFavState extends State<ProfilePageFav> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             height: 46,
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Text(
                   'Deine Favoriten',
                   style: TextStyle(
