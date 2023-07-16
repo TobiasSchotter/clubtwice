@@ -99,98 +99,26 @@ class ItemCard extends StatelessWidget {
                       ),
                     ),
                   ),
-
-                Stack(
-                  children: [
-                    // item image
-                    Container(
+                if (article.isDeleted == true)
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
                       width: MediaQuery.of(context).size.width / 2 - 16 - 8,
                       height: MediaQuery.of(context).size.width / 2 - 16 - 8,
-                      padding: const EdgeInsets.all(10),
-                      alignment: Alignment.topLeft,
                       decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.5),
                         borderRadius: BorderRadius.circular(16),
-                        image: DecorationImage(
-                          image: article.images.isNotEmpty
-                              ? NetworkImage(article.images[0])
-                              : const AssetImage(
-                                      'assets/images/placeholder.jpg')
-                                  as ImageProvider,
-                          fit: BoxFit.cover,
-                        ),
+                      ),
+                      alignment: Alignment.center,
+                      child: const Icon(
+                        Icons.delete,
+                        color: Colors.white,
+                        size: 40,
                       ),
                     ),
-                    if (article.isReserved == true)
-                      Positioned(
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(16),
-                              bottomRight: Radius.circular(16),
-                            ),
-                            color: Colors.grey,
-                          ),
-                          alignment: Alignment.center,
-                          child: const Text(
-                            'Reserviert',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    if (article.isSold == true)
-                      Positioned(
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(16),
-                              bottomRight: Radius.circular(16),
-                            ),
-                            color: Colors.green,
-                          ),
-                          alignment: Alignment.center,
-                          child: const Text(
-                            'Verkauft',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    if (article.isDeleted == true)
-                      Positioned(
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: Container(
-                          width: MediaQuery.of(context).size.width / 2 - 16 - 8,
-                          height:
-                              MediaQuery.of(context).size.width / 2 - 16 - 8,
-                          decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          alignment: Alignment.center,
-                          child: const Icon(
-                            Icons.delete,
-                            color: Colors.white,
-                            size: 40,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
+                  ),
               ],
             ),
             // item details
