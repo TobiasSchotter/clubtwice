@@ -112,10 +112,23 @@ class ItemCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16),
                       ),
                       alignment: Alignment.center,
-                      child: const Icon(
-                        Icons.delete,
-                        color: Colors.white,
-                        size: 40,
+                      child: const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                            size: 40,
+                          ),
+                          SizedBox(height: 8), // Gap between icon and text
+                          Text(
+                            'Gelöscht',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
