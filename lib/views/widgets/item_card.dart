@@ -7,6 +7,7 @@ import '../../core/model/article.dart';
 class ItemCard extends StatelessWidget {
   //final Product product;
   final Article article;
+  final String articleId;
   final Color titleColor;
   final Color priceColor;
 
@@ -14,6 +15,7 @@ class ItemCard extends StatelessWidget {
     super.key,
     //required this.product,
     required this.article,
+    required this.articleId,
     this.titleColor = Colors.black,
     this.priceColor = AppColor.primary,
   });
@@ -24,7 +26,8 @@ class ItemCard extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
             //builder: (context) => ProductDetail(product: product)));
-            builder: (context) => ProductDetail(article: article)));
+            builder: (context) =>
+                ProductDetail(article: article, id: articleId)));
       },
       child: SizedBox(
         width: MediaQuery.of(context).size.width / 2 - 16 - 8,

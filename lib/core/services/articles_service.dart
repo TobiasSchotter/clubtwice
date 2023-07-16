@@ -1,8 +1,35 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../model/article.dart';
 
+class ArticleWithId {
+  final String id;
+  final Article article;
+
+  ArticleWithId({required this.id, required this.article});
+}
+
 class ArticleService {
-  Future<List<Article>> fetchArticles(String searchTerm, String verein) async {
+  Future<List<ArticleWithId>> _fetchArticles(
+      Query articlesQuery, String searchTerm) async {
+    QuerySnapshot articleSnapshot = await articlesQuery.get();
+
+    List<ArticleWithId> articles = [];
+
+    for (QueryDocumentSnapshot doc in articleSnapshot.docs) {
+      Article article = Article.fromFirestore(doc);
+      if (article.title.toLowerCase().contains(searchTerm.toLowerCase())) {
+        articles.add(ArticleWithId(id: doc.id, article: article));
+      }
+    }
+
+    articles.sort((b, a) => a.article.createdAt.compareTo(b.article.createdAt));
+
+    return articles;
+  }
+
+  Future<List<ArticleWithId>> fetchArticles(
+      String searchTerm, String verein) async {
     if (verein != '' && verein.isNotEmpty) {
       Query articlesQuery = FirebaseFirestore.instance
           .collection('articles')
@@ -11,24 +38,37 @@ class ArticleService {
           .where('isReserved', isEqualTo: false)
           .where('isDeleted', isEqualTo: false);
 
-      QuerySnapshot articleSnapshot = await articlesQuery.get();
-
-      List<Article> articles = [];
-
-      for (QueryDocumentSnapshot doc in articleSnapshot.docs) {
-        Article article = Article.fromFirestore(doc);
-        if (article.title.toLowerCase().contains(searchTerm.toLowerCase())) {
-          articles.add(article);
-        }
-      }
-
-      articles.sort((b, a) => a.createdAt.compareTo(b.createdAt));
-
-      return articles;
+      return _fetchArticles(articlesQuery, searchTerm);
     } else {
       print("fetchArticles: Verein ist leer");
       // TODO: error handling
       return [];
     }
+  }
+
+  Future<List<ArticleWithId>> fetchUserArticles(
+      String searchTerm, String verein) async {
+    if (verein != '' && verein.isNotEmpty) {
+      Query articlesQuery = FirebaseFirestore.instance
+          .collection('articles')
+          .where('club', isEqualTo: verein)
+          .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid);
+
+      return _fetchArticles(articlesQuery, searchTerm);
+    } else {
+      print("fetchArticles: Verein ist leer");
+      // TODO: error handling
+      return [];
+    }
+  }
+
+  Future<List<ArticleWithId>> fetchArticlesClubWide(String searchTerm) async {
+    Query articlesQuery = FirebaseFirestore.instance
+        .collection('articles')
+        .where('isSold', isEqualTo: false)
+        .where('isReserved', isEqualTo: false)
+        .where('isDeleted', isEqualTo: false);
+
+    return _fetchArticles(articlesQuery, searchTerm);
   }
 }

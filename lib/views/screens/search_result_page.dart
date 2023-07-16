@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
+import 'package:clubtwice/core/services/articles_service.dart';
+import 'package:clubtwice/core/services/user_service.dart';
 import '../../core/model/article.dart';
 import '../widgets/filter_tile_widget.dart';
 import '../widgets/search_field_tile.dart';
@@ -22,53 +24,36 @@ class _SearchResultPageState extends State<SearchResultPage>
   late TabController tabController;
   TextEditingController searchInputController = TextEditingController();
 
-  List<Article> searchedArticleData = [];
+  List<ArticleWithId> articlesWithID = [];
+  List<String> searchHistory = [];
 
-  List<String> search = [];
+  final UserService userService = UserService();
+  final ArticleService articleService = ArticleService();
 
   @override
   void initState() {
     super.initState();
     searchInputController.text = widget.searchKeyword;
     tabController = TabController(length: 1, vsync: this);
-    fetchUserData();
+    loadData();
   }
 
-  Future<void> fetchUserData() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      String userId = user.uid;
-      DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
-          .instance
-          .collection('users')
-          .doc(userId)
-          .get();
-      Map<String, dynamic> userData = snapshot.data() ?? {};
+  Future<void> loadData() async {
+    List<String> search = await userService.fetchUserSearchHistory();
+
+    if (search.isNotEmpty) {
       setState(() {
-        search = List<String>.from(userData['search'] ?? []);
+        searchHistory = search;
       });
     }
-    fetchArticles();
-  }
 
-  Future<void> fetchArticles() async {
-    QuerySnapshot<Map<String, dynamic>> articleSnapshot =
-        await FirebaseFirestore.instance.collection('articles').get();
-
-    List<Article> articles = [];
-
-    for (QueryDocumentSnapshot doc in articleSnapshot.docs) {
-      Article article = Article.fromFirestore(doc);
-      if (article.title
-          .toLowerCase()
-          .contains(widget.searchKeyword.toLowerCase())) {
-        articles.add(article);
-      }
+    List<ArticleWithId> articleList =
+        await articleService.fetchArticlesClubWide(widget.searchKeyword);
+    if (articleList.isNotEmpty) {
+      setState(() {
+        articlesWithID = articleList;
+      });
     }
-
-    setState(() {
-      searchedArticleData = articles;
-    });
   }
 
   Future<void> saveChanges() async {
@@ -81,7 +66,7 @@ class _SearchResultPageState extends State<SearchResultPage>
 
   Future<void> updateUserData(String userId) async {
     await FirebaseFirestore.instance.collection('users').doc(userId).update({
-      'search': search,
+      'search': searchHistory,
     });
   }
 
@@ -92,14 +77,14 @@ class _SearchResultPageState extends State<SearchResultPage>
     }
 
     setState(() {
-      if (search.contains(searchTerm)) {
+      if (searchHistory.contains(searchTerm)) {
         // Remove the duplicated search term
-        search.remove(searchTerm);
-      } else if (search.length >= 7) {
+        searchHistory.remove(searchTerm);
+      } else if (searchHistory.length >= 7) {
         // Remove the oldest search term
-        search.removeAt(6);
+        searchHistory.removeAt(6);
       }
-      search.insert(
+      searchHistory.insert(
           0, searchTerm); // Insert the newest search term at the beginning
     });
 
@@ -180,9 +165,10 @@ class _SearchResultPageState extends State<SearchResultPage>
                   spacing: 16,
                   runSpacing: 16,
                   children: List.generate(
-                    searchedArticleData.length,
+                    articlesWithID.length,
                     (index) => ItemCard(
-                      article: searchedArticleData[index],
+                      article: articlesWithID[index].article,
+                      articleId: articlesWithID[index].id,
                     ),
                   ),
                 ),

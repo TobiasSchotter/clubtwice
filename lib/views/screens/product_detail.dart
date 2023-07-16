@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:flutter/services.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:clubtwice/core/services/user_service.dart';
 import '../../constant/app_button.dart';
 import '../../core/model/article.dart';
 
 class ProductDetail extends StatefulWidget {
   final Article article;
-  const ProductDetail({super.key, required this.article});
+  final String id;
+  const ProductDetail({super.key, required this.article, required this.id});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -20,35 +22,23 @@ class _ProductDetailState extends State<ProductDetail> {
   PageController productImageSlider = PageController();
   String profileImageUrl = '';
   String userName = '';
+  final UserService userService = UserService();
 
   @override
   void initState() {
     super.initState();
-    fetchUserData();
+    loadData();
   }
 
-  void fetchUserData() async {
-    try {
-      String userId = widget.article.userId; // UserID aus dem Artikel
-      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .get();
-      if (userSnapshot.exists) {
-        Map<String, dynamic>? userData =
-            userSnapshot.data() as Map<String, dynamic>?;
-        if (userData != null) {
-          setState(() {
-            profileImageUrl = userData.containsKey('profileImageUrl')
-                ? userData['profileImageUrl']
-                : '';
-            userName =
-                userData.containsKey('username') ? userData['username'] : '';
-          });
-        }
-      }
-    } catch (error) {
-      print('Error fetching user data: $error');
+  Future<void> loadData() async {
+    List<String> dataList =
+        await userService.fetchUserProfileImageUrl(widget.article.userId);
+
+    if (dataList.isNotEmpty) {
+      setState(() {
+        profileImageUrl = dataList[0];
+        userName = dataList[1];
+      });
     }
   }
 
