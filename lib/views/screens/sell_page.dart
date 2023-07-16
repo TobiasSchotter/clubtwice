@@ -494,6 +494,7 @@ class _SellPageState extends State<SellPage> {
         'updatedAt': Timestamp.now(),
         'userId': userId,
         'isSold': false,
+        'isReserved': false,
         'isDeleted': false,
       };
 

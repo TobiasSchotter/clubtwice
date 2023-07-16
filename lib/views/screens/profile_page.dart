@@ -29,7 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(toolbarHeight: 0, backgroundColor: Colors.red),
+      appBar: AppBar(toolbarHeight: 0, backgroundColor: Colors.blue),
       body: Column(
         children: [
           // Section 1 - Profile Picture - Username - Name

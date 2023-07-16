@@ -7,7 +7,9 @@ class ArticleService {
       Query articlesQuery = FirebaseFirestore.instance
           .collection('articles')
           .where('club', isEqualTo: verein)
-          .where('isSold', isEqualTo: false);
+          .where('isSold', isEqualTo: false)
+          .where('isReserved', isEqualTo: false)
+          .where('isDeleted', isEqualTo: false);
 
       QuerySnapshot articleSnapshot = await articlesQuery.get();
 

@@ -12,6 +12,7 @@ class Article {
   String type;
   String userId;
   bool isSold;
+  bool isReserved;
   bool isDeleted;
   int price;
   Timestamp updatedAt;
@@ -30,6 +31,7 @@ class Article {
       required this.type,
       required this.userId,
       required this.isSold,
+      required this.isReserved,
       required this.isDeleted,
       required this.price,
       required this.updatedAt,
@@ -52,6 +54,7 @@ class Article {
           type: data['type'],
           userId: data['userId'],
           isSold: data['isSold'],
+          isReserved: data['isReserved'],
           isDeleted: data['isDeleted'],
           price: data['price'],
           updatedAt: data['updatedAt'],

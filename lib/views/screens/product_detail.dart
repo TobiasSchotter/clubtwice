@@ -8,12 +8,8 @@ import '../../constant/app_button.dart';
 import '../../core/model/article.dart';
 
 class ProductDetail extends StatefulWidget {
-  //final Product product;
   final Article article;
-  const ProductDetail(
-      //{super.key, required this.product});
-      {super.key,
-      required this.article});
+  const ProductDetail({super.key, required this.article});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -169,7 +165,7 @@ class _ProductDetailState extends State<ProductDetail> {
               margin: const EdgeInsets.only(right: 14),
               child: IconButton(
                 onPressed: () {
-                  // Implementiere die Logik für die Favorisieren-Funktion hier
+                  favoriteArticle();
                 },
                 icon: Icon(
                   Icons.share_outlined,
@@ -193,7 +189,7 @@ class _ProductDetailState extends State<ProductDetail> {
               margin: const EdgeInsets.only(right: 14),
               child: IconButton(
                 onPressed: () {
-                  // Implementiere die Logik für die Teilen-Funktion hier
+                  shareArticle();
                 },
                 icon: Icon(
                   Icons.favorite_border,
@@ -468,6 +464,10 @@ class _ProductDetailState extends State<ProductDetail> {
       ),
     );
   }
+
+  void favoriteArticle() {}
+
+  void shareArticle() {}
 
   void articleSold() {}
 
