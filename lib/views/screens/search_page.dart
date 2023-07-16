@@ -7,7 +7,7 @@ import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/core/services/SearchService.dart';
 import 'package:clubtwice/views/screens/search_result_page.dart';
 import 'package:clubtwice/views/widgets/search_history_tile.dart';
-
+import 'package:clubtwice/core/services/user_service.dart';
 import '../widgets/search_field_tile.dart';
 
 class SearchPage extends StatefulWidget {
@@ -17,27 +17,21 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   List<SearchHistory> listSearchHistory = SearchService.listSearchHistory;
-
-  List<String> search = [];
+  List<String> searchHistory = [];
+  final UserService userService = UserService();
 
   @override
   void initState() {
     super.initState();
-    fetchUserData();
+    loadData();
   }
 
-  Future<void> fetchUserData() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      String userId = user.uid;
-      DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
-          .instance
-          .collection('users')
-          .doc(userId)
-          .get();
-      Map<String, dynamic> userData = snapshot.data() ?? {};
+  Future<void> loadData() async {
+    List<String> search = await userService.fetchUserSearchHistory();
+
+    if (search.isNotEmpty) {
       setState(() {
-        search = List<String>.from(userData['search'] ?? []);
+        searchHistory = search;
       });
     }
   }
@@ -46,40 +40,32 @@ class _SearchPageState extends State<SearchPage> {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       String userId = user.uid;
-      await updateUserData(userId);
+      await userService.updateUserSearchHistory(userId, searchHistory);
     }
   }
 
-  Future<void> updateUserData(String userId) async {
-    await FirebaseFirestore.instance.collection('users').doc(userId).update({
-      'search': search,
-    });
-  }
-
+  // Ignore empty or whitespace-only search terms
   void updateSearchList(String searchTerm) {
     if (searchTerm.trim().isEmpty) {
-// Ignore empty or whitespace-only search terms
       return;
     }
-
     setState(() {
-      if (search.contains(searchTerm)) {
-// Remove the duplicated search term
-        search.remove(searchTerm);
-      } else if (search.length >= 7) {
-// Remove the oldest search term
-        search.removeAt(6);
+      if (searchHistory.contains(searchTerm)) {
+        // Remove the duplicated search term
+        searchHistory.remove(searchTerm);
+      } else if (searchHistory.length >= 7) {
+        // Remove the oldest search term
+        searchHistory.removeAt(6);
       }
-      search.insert(
-          0, searchTerm); // Insert the newest search term at the beginning
+      // Insert the newest search term at the beginning
+      searchHistory.insert(0, searchTerm);
     });
-
     saveChanges();
   }
 
   Future<void> clearSearchHistory() async {
     setState(() {
-      search = [];
+      searchHistory = [];
     });
     saveChanges();
   }
@@ -133,9 +119,10 @@ class _SearchPageState extends State<SearchPage> {
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: search.length, // Use the length of the 'search' list
+                itemCount:
+                    searchHistory.length, // Use the length of the 'search' list
                 itemBuilder: (context, index) {
-                  String searchTerm = search[
+                  String searchTerm = searchHistory[
                       index]; // Get the search term from the 'search' list
                   return SearchHistoryTile(
                     data: SearchHistory(

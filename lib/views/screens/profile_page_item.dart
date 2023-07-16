@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
 import 'package:flutter/services.dart';
-
+import 'package:clubtwice/core/services/articles_service.dart';
+import 'package:clubtwice/core/services/user_service.dart';
 import '../../core/model/article.dart';
 import '../widgets/profile_tile_widget.dart';
 
@@ -24,65 +25,36 @@ class ProfilePageItem extends StatefulWidget {
 class _ProfilePageItemState extends State<ProfilePageItem> {
   //List<Product> productData = ProductService.productData;
 
-  List<Article> articleData = [];
+  List<ArticleWithId> articlesWithID = [];
   String verein = '';
   String sportart = '';
   String searchTerm = '';
+  final UserService userService = UserService();
+  final ArticleService articleService = ArticleService();
 
   @override
   void initState() {
     super.initState();
-    fetchUserData();
-    //checkUserVerification();
+    loadData();
   }
 
-  Future<void> fetchUserData() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      String userId = user.uid;
-      DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
-          .instance
-          .collection('users')
-          .doc(userId)
-          .get();
-      Map<String, dynamic> userData = snapshot.data() ?? {};
-      setState(() {
-        verein = userData['club'] ?? '';
-        sportart = userData['sport'] ?? '';
-      });
+  Future<void> loadData() async {
+    List vereinSportartList = await userService.fetchUserClubInformation();
 
-      fetchArticles(searchTerm);
+    if (vereinSportartList.isNotEmpty) {
+      setState(() {
+        verein = vereinSportartList[0];
+        sportart = vereinSportartList[1];
+      });
     }
-  }
 
-  Future<void> fetchArticles(String searchTerm) async {
-    if (verein != '' && verein.isNotEmpty) {
-      Query articlesQuery = FirebaseFirestore.instance
-          .collection('articles')
-          .where('club', isEqualTo: verein)
-          .where('userId',
-              isEqualTo: FirebaseAuth.instance.currentUser!
-                  .uid); // Nur Artikel des aktuellen Benutzers abrufen
+    List<ArticleWithId> articleList =
+        await articleService.fetchUserArticles(searchTerm, verein);
 
-      QuerySnapshot articleSnapshot = await articlesQuery.get();
-
-      List<Article> articles = [];
-
-      for (QueryDocumentSnapshot doc in articleSnapshot.docs) {
-        Article article = Article.fromFirestore(doc);
-        if (article.title.toLowerCase().contains(searchTerm.toLowerCase())) {
-          articles.add(article);
-        }
-      }
-
-      articles.sort((b, a) => a.createdAt.compareTo(b.createdAt));
-
+    if (articleList.isNotEmpty) {
       setState(() {
-        articleData = articles;
+        articlesWithID = articleList;
       });
-    } else {
-      print("fetchArticles: Verein ist leer");
-      // TODO: error handling
     }
   }
 
@@ -132,9 +104,10 @@ class _ProfilePageItemState extends State<ProfilePageItem> {
               spacing: 16,
               runSpacing: 16,
               children: List.generate(
-                articleData.length,
+                articlesWithID.length,
                 (index) => ItemCard(
-                  article: articleData[index],
+                  article: articlesWithID[index].article,
+                  articleId: articlesWithID[index].id,
                 ),
               ),
             ),

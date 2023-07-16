@@ -2,9 +2,9 @@ import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:clubtwice/constant/app_color.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../constant/app_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:clubtwice/core/services/user_service.dart';
 
 class ProfilePageClub extends StatefulWidget {
   const ProfilePageClub({Key? key}) : super(key: key);
@@ -16,26 +16,21 @@ class ProfilePageClub extends StatefulWidget {
 class _ProfilePageClubState extends State<ProfilePageClub> {
   String verein = '';
   String sportart = '';
+  final UserService userService = UserService();
 
   @override
   void initState() {
     super.initState();
-    fetchUserData();
+    loadData();
   }
 
-  Future<void> fetchUserData() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      String userId = user.uid;
-      DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
-          .instance
-          .collection('users')
-          .doc(userId)
-          .get();
-      Map<String, dynamic> userData = snapshot.data() ?? {};
+  Future<void> loadData() async {
+    List vereinSportartList = await userService.fetchUserClubInformation();
+
+    if (vereinSportartList.isNotEmpty) {
       setState(() {
-        verein = userData['club'] ?? '';
-        sportart = userData['sport'] ?? '';
+        verein = vereinSportartList[0];
+        sportart = vereinSportartList[1];
       });
     }
   }
@@ -44,16 +39,8 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       String userId = user.uid;
-      updateUserData(userId, verein, sportart);
+      userService.updateUserClubInformation(userId, verein, sportart);
     }
-  }
-
-  Future<void> updateUserData(
-      String userId, String verein, String sportart) async {
-    await FirebaseFirestore.instance.collection('users').doc(userId).update({
-      'club': verein,
-      'sport': sportart,
-    });
   }
 
   @override

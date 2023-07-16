@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
 import 'package:flutter/services.dart';
-
-import '../../core/model/article.dart';
+import 'package:clubtwice/core/services/articles_service.dart';
 import '../widgets/profile_tile_widget.dart';
 
 class ProfilePageFav extends StatefulWidget {
@@ -21,7 +20,7 @@ class ProfilePageFav extends StatefulWidget {
 }
 
 class _ProfilePageFavState extends State<ProfilePageFav> {
-  List<Article> articleData = [];
+  List<ArticleWithId> articlesWithID = [];
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +68,10 @@ class _ProfilePageFavState extends State<ProfilePageFav> {
               spacing: 16,
               runSpacing: 16,
               children: List.generate(
-                articleData.length,
+                articlesWithID.length,
                 (index) => ItemCard(
-                  article: articleData[index],
+                  article: articlesWithID[index].article,
+                  articleId: articlesWithID[index].id,
                 ),
               ),
             ),

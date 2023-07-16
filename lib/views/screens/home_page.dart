@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
 import 'package:flutter/services.dart';
-import '../../core/model/article.dart';
 import '../widgets/search_field_tile.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,7 +20,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String verein = '';
   String sportart = '';
-  List<Article> articleData = [];
+  List<ArticleWithId> articlesWithID = [];
   String searchTerm = '';
   final UserService userService = UserService();
   final ArticleService articleService = ArticleService();
@@ -33,7 +32,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> loadData() async {
-    List vereinSportartList = await userService.fetchUserData(searchTerm);
+    List vereinSportartList = await userService.fetchUserClubInformation();
 
     if (vereinSportartList.isNotEmpty) {
       setState(() {
@@ -42,13 +41,15 @@ class _HomePageState extends State<HomePage> {
       });
     }
 
-    List<Article> articleList =
+    List<ArticleWithId> articleList =
         await articleService.fetchArticles(searchTerm, verein);
 
     if (articleList.isNotEmpty) {
       setState(() {
-        articleData = articleList;
+        articlesWithID = articleList;
       });
+      //example needs to be removed
+      print(articlesWithID[0].id);
     }
   }
 
@@ -69,16 +70,17 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     Widget content;
     if (verein.isNotEmpty && verein != "Keine Auswahl") {
-      if (articleData.isNotEmpty) {
+      if (articlesWithID.isNotEmpty) {
         content = Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Wrap(
             spacing: 16,
             runSpacing: 16,
             children: List.generate(
-              articleData.length,
+              articlesWithID.length,
               (index) => ItemCard(
-                article: articleData[index],
+                article: articlesWithID[index].article,
+                articleId: articlesWithID[index].id,
               ),
             ),
           ),
@@ -154,11 +156,11 @@ class _HomePageState extends State<HomePage> {
           child: SearchField(
             hintText: 'Suche Vereinskleidung deines Vereins',
             onSubmitted: (searchTerm) async {
-              List<Article> articleList =
+              List<ArticleWithId> articleList =
                   await articleService.fetchArticles(searchTerm, verein);
               if (articleList.isNotEmpty) {
                 setState(() {
-                  articleData = articleList;
+                  articlesWithID = articleList;
                 });
               }
             },
