@@ -51,7 +51,6 @@ class ArticleService {
     if (verein != '' && verein.isNotEmpty) {
       Query articlesQuery = FirebaseFirestore.instance
           .collection('articles')
-          .where('club', isEqualTo: verein)
           .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid);
 
       return _fetchArticles(articlesQuery, searchTerm);
