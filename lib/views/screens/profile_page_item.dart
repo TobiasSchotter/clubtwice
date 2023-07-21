@@ -1,12 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clubtwice/constant/app_color.dart';
+import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
 import 'package:flutter/services.dart';
 import 'package:clubtwice/core/services/articles_service.dart';
 import 'package:clubtwice/core/services/user_service.dart';
-import '../../core/model/article.dart';
 import '../widgets/profile_tile_widget.dart';
 
 class ProfilePageItem extends StatefulWidget {
@@ -68,7 +67,11 @@ class _ProfilePageItemState extends State<ProfilePageItem> {
         elevation: 0,
         leading: IconButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => const PageSwitcher(
+                selectedIndex: 4,
+              ),
+            ));
           },
           icon: const Icon(Icons.arrow_back_outlined),
           color: Colors.white,

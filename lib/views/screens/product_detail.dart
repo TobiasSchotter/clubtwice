@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:clubtwice/views/screens/profile_page_item.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:flutter/services.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:clubtwice/core/services/user_service.dart';
+import 'package:share/share.dart';
 import '../../constant/app_button.dart';
 import '../../core/model/article.dart';
 
@@ -69,12 +71,19 @@ class _ProductDetailState extends State<ProductDetail> {
             onSelected: (value) {
               // Handle different options based on the selected value
               if (value == 'sold') {
-                articleSold();
+                if (article.isSold == true) {
+                  articleNotSold();
+                } else {
+                  articleSold();
+                }
               } else if (value == 'reserved') {
-                articleReserved();
-                // Perform delete operation
+                if (article.isReserved == true) {
+                  articleNotReserved();
+                } else {
+                  articleReserved();
+                }
               } else if (value == 'delete') {
-                articleDelet();
+                articleDelete();
                 // Perform delete operation
               } else if (value == 'edit') {
                 articleEdit();
@@ -92,46 +101,59 @@ class _ProductDetailState extends State<ProductDetail> {
               // Create a list of PopupMenuEntry based on the conditions
               List<PopupMenuEntry<String>> menuItems = [];
 
-              if (isCurrentUserArticle) {
-                menuItems.add(
-                  const PopupMenuItem<String>(
-                    value: 'sold',
-                    child: ListTile(
-                      title: Text('Verkauft markieren'),
+              if (!article.isDeleted) {
+                // Check if the article is not deleted
+                if (isCurrentUserArticle) {
+                  menuItems.add(
+                    PopupMenuItem<String>(
+                      value: 'sold',
+                      child: ListTile(
+                        title: Text(
+                            article.isSold ? 'Nicht Verkauft' : 'Verkauft'),
+                      ),
                     ),
-                  ),
-                );
-                menuItems.add(
-                  const PopupMenuItem<String>(
-                    value: 'reserved',
-                    child: ListTile(
-                      title: Text('Reserviert markieren'),
-                    ),
-                  ),
-                );
+                  );
 
-                menuItems.add(
-                  const PopupMenuItem<String>(
-                    value: 'delete',
-                    child: ListTile(
-                      title: Text('Artikel löschen'),
+                  if (!article.isSold) {
+                    menuItems.add(
+                      PopupMenuItem<String>(
+                        value: 'reserved',
+                        child: ListTile(
+                          title: Text(
+                            article.isReserved ? 'Aktivieren' : 'Reservieren',
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+
+                  menuItems.add(
+                    const PopupMenuItem<String>(
+                      value: 'delete',
+                      child: ListTile(
+                        title: Text('Löschen'),
+                      ),
                     ),
-                  ),
-                );
-                menuItems.add(
-                  const PopupMenuItem<String>(
-                    value: 'edit',
-                    child: ListTile(
-                      title: Text('Artikel bearbeiten'),
-                    ),
-                  ),
-                );
+                  );
+
+                  if (!article.isSold) {
+                    menuItems.add(
+                      const PopupMenuItem<String>(
+                        value: 'edit',
+                        child: ListTile(
+                          title: Text('Bearbeiten'),
+                        ),
+                      ),
+                    );
+                  }
+                }
               }
+
               menuItems.add(
                 const PopupMenuItem<String>(
                   value: 'report',
                   child: ListTile(
-                    title: Text('Artikel melden'),
+                    title: Text('Melden'),
                   ),
                 ),
               );
@@ -155,7 +177,7 @@ class _ProductDetailState extends State<ProductDetail> {
               margin: const EdgeInsets.only(right: 14),
               child: IconButton(
                 onPressed: () {
-                  favoriteArticle();
+                  shareArticle();
                 },
                 icon: Icon(
                   Icons.share_outlined,
@@ -179,7 +201,7 @@ class _ProductDetailState extends State<ProductDetail> {
               margin: const EdgeInsets.only(right: 14),
               child: IconButton(
                 onPressed: () {
-                  shareArticle();
+                  favoriteArticle();
                 },
                 icon: Icon(
                   Icons.favorite_border,
@@ -457,13 +479,98 @@ class _ProductDetailState extends State<ProductDetail> {
 
   void favoriteArticle() {}
 
-  void shareArticle() {}
+  void shareArticle() {
+    if (widget.article.images.isNotEmpty) {
+      String imageUrl =
+          widget.article.images[0]; // Share the first image in the list
 
-  void articleSold() {}
+      Share.share('Check out this article!\n'
+          'Title: ${widget.article.title}\n'
+          'Description: ${widget.article.description}\n'
+          'Price: ${widget.article.price} €\n'
+          // 'Image: $imageUrl', // You can add more details as needed
+          );
+    } else {
+      // If there are no images, share the article without an image
+      Share.share(
+        'Check out this article!\n'
+        'Title: ${widget.article.title}\n'
+        'Description: ${widget.article.description}\n'
+        'Price: ${widget.article.price} €\n',
+      );
+    }
+  }
 
-  void articleReserved() {}
+  void updateArticleStatus(String field, bool value, String successMessage,
+      String errorMessage) async {
+    // Get a reference to the Firestore collection
+    CollectionReference articlesRef =
+        FirebaseFirestore.instance.collection('articles');
 
-  void articleDelet() {}
+    try {
+      // Update the document in Firestore with the new data
+      await articlesRef.doc(widget.id).update({field: value});
+
+      // Show a success message to the user, if desired
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(successMessage)),
+      );
+
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => ProfilePageItem()));
+    } catch (error) {
+      // Handle any errors that occurred during the update process
+      print('Error marking article as sold: $error');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errorMessage)),
+      );
+    }
+  }
+
+  void articleSold() {
+    updateArticleStatus(
+      'isSold',
+      true,
+      'Artikel verkauft',
+      'Artikel konnte nicht verkauft werden',
+    );
+  }
+
+  void articleNotSold() {
+    updateArticleStatus(
+      'isSold',
+      false,
+      'Artikel wiedereinstellen',
+      'Artikel konnte nicht wiedereingestellt werden',
+    );
+  }
+
+  void articleReserved() {
+    updateArticleStatus(
+      'isReserved',
+      true,
+      'Artikel reserviert',
+      'Artikel konnte nicht reserviert werden',
+    );
+  }
+
+  void articleNotReserved() {
+    updateArticleStatus(
+      'isReserved',
+      false,
+      'Artikel aktiviert',
+      'Artikel konnte nicht aktviert werden',
+    );
+  }
+
+  void articleDelete() {
+    updateArticleStatus(
+      'isDeleted',
+      true,
+      'Artikel wurde gelöscht',
+      'Artikel konnte nicht gelöscht werden',
+    );
+  }
 
   void articleEdit() {}
 

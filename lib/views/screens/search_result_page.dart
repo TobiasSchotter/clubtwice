@@ -7,7 +7,6 @@ import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
 import 'package:clubtwice/core/services/articles_service.dart';
 import 'package:clubtwice/core/services/user_service.dart';
-import '../../core/model/article.dart';
 import '../widgets/filter_tile_widget.dart';
 import '../widgets/search_field_tile.dart';
 
