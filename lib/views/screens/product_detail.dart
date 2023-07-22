@@ -523,7 +523,74 @@ class _ProductDetailState extends State<ProductDetail> {
     );
   }
 
-  void favoriteArticle() {}
+  void favoriteArticle() async {
+    // Check if the user is authenticated
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      // User is not logged in, show a message or navigate to login screen
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please log in to add to favorites')),
+      );
+      return;
+    }
+    // Get the user's ID
+    String userId = user.uid;
+
+    try {
+      // Get a reference to the Firestore collection for users
+      CollectionReference usersRef =
+          FirebaseFirestore.instance.collection('users');
+
+      // Get the user document from Firestore
+      DocumentSnapshot userSnapshot = await usersRef.doc(userId).get();
+
+      // Check if the user document exists and contains the "favorites" field
+      if (userSnapshot.exists && userSnapshot.data() != null) {
+        List<String> favoritesList = [];
+
+        // Check if the "favorites" field exists and is of type List
+        dynamic favoritesData = userSnapshot.data()!;
+        if (favoritesData is List) {
+          // If "Favorites" field exists and is of type List, convert to List<String>
+          favoritesList = favoritesData.map((id) => id.toString()).toList();
+        }
+
+        // Check if the article ID is not already in favorites
+        if (!favoritesList.contains(widget.id)) {
+          favoritesList.add(widget.id);
+
+          // Update the user document with the updated favorites list
+          await usersRef.doc(userId).set(
+            {'favorites': FieldValue.arrayUnion(favoritesList)},
+            // Using FieldValue.arrayUnion to merge new favorites with existing ones
+            SetOptions(merge: true),
+          );
+        } else {
+          // Article ID is already in favorites list, show a message
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Article is already in favorites')),
+          );
+          return;
+        }
+      } else {
+        // If the user document doesn't exist or data is null, create a new user document with the "Favorites" field
+        await usersRef.doc(userId).set({
+          'favorites': [widget.id], // Add the article ID to favorites list
+        });
+      }
+
+      // Show a success message to the user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Article added to favorites')),
+      );
+    } catch (error) {
+      // Handle any errors that occurred during the process
+      print('Error adding article to favorites: $error');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to add article to favorites')),
+      );
+    }
+  }
 
   void shareArticle() {
     if (widget.article.images.isNotEmpty) {
