@@ -55,17 +55,13 @@ class _ProductDetailState extends State<ProductDetail> {
 
   @override
   Widget build(BuildContext context) {
-    Article article = widget.article;
-    Timestamp firebaseTimestamp = article.updatedAt;
-    DateTime dateTime = firebaseTimestamp.toDate();
-
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Text(article.title),
+        title: Text(widget.article.title),
         foregroundColor: Colors.black,
         leading: IconButton(
           onPressed: () {
