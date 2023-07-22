@@ -48,8 +48,6 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         articlesWithID = articleList;
       });
-      //example needs to be removed
-      print(articlesWithID[0].id);
     }
   }
 

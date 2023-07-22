@@ -16,13 +16,15 @@ class ProductDetail extends StatefulWidget {
   final String id;
 
   const ProductDetail({
-    super.key,
+    Key? key,
     required this.article,
     required this.id,
-  });
+  }) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
+  // Warning: Invalid use of a private type in a public API.
+  // Theoreitsch müssten _ProductDetailState und ProductDetail in zwei verschiedene Dateien, da (Unterstrich) Aussagt, dass die State private ist. Heißt Es ist nur in dieser File erlaubt aber die
+  // folgende Zeile erstellt einen State des Widgets ProductDetails was quasi eine Reference außerhalb dieser File macht.
   _ProductDetailState createState() => _ProductDetailState();
 }
 
@@ -53,7 +55,6 @@ class _ProductDetailState extends State<ProductDetail> {
 
   @override
   Widget build(BuildContext context) {
-    //Product product = widget.product;
     Article article = widget.article;
     Timestamp firebaseTimestamp = article.updatedAt;
     DateTime dateTime = firebaseTimestamp.toDate();
@@ -75,447 +76,157 @@ class _ProductDetailState extends State<ProductDetail> {
           alignment: Alignment.center,
         ),
         actions: [
-          PopupMenuButton<String>(
-            onSelected: (value) {
-              // Definiere Aktionen für jeden Wert in einem Dictionary
-              final actions = {
-                'sold': () => article.isSold ? articleNotSold() : articleSold(),
-                'reserved': () => article.isReserved
-                    ? articleNotReserved()
-                    : articleReserved(),
-                'delete': articleDelete,
-                'edit': articleEdit,
-                'report': articleReport,
-              };
-
-              // Rufe die entsprechende Aktion basierend auf dem ausgewählten Wert auf
-              if (actions.containsKey(value)) {
-                actions[value]!();
-              }
-            },
-            itemBuilder: (BuildContext context) {
-              // Check if the article belongs to the current user
-              bool isCurrentUserArticle =
-                  FirebaseAuth.instance.currentUser?.uid == article.userId;
-
-              // Create a list of PopupMenuEntry based on the conditions
-              List<PopupMenuEntry<String>> menuItems = [];
-
-              if (!article.isDeleted) {
-                // Check if the article is not deleted
-                if (isCurrentUserArticle) {
-                  menuItems.add(
-                    PopupMenuItem<String>(
-                      value: 'sold',
-                      child: ListTile(
-                        title: Text(
-                            article.isSold ? 'Nicht Verkauft' : 'Verkauft'),
-                      ),
-                    ),
-                  );
-
-                  if (!article.isSold) {
-                    menuItems.add(
-                      PopupMenuItem<String>(
-                        value: 'reserved',
-                        child: ListTile(
-                          title: Text(
-                            article.isReserved ? 'Aktivieren' : 'Reservieren',
-                          ),
-                        ),
-                      ),
-                    );
-                  }
-
-                  menuItems.add(
-                    const PopupMenuItem<String>(
-                      value: 'delete',
-                      child: ListTile(
-                        title: Text('Löschen'),
-                      ),
-                    ),
-                  );
-
-                  if (!article.isSold) {
-                    menuItems.add(
-                      const PopupMenuItem<String>(
-                        value: 'edit',
-                        child: ListTile(
-                          title: Text('Bearbeiten'),
-                        ),
-                      ),
-                    );
-                  }
-                }
-              }
-
-              menuItems.add(
-                const PopupMenuItem<String>(
-                  value: 'report',
-                  child: ListTile(
-                    title: Text('Melden'),
-                  ),
-                ),
+          Builder(
+            builder: (BuildContext context) {
+              return PopupMenuButton<String>(
+                onSelected: (value) => handlePopupMenuSelection(value),
+                itemBuilder: (BuildContext context) => buildPopupMenuItems(),
+                icon: const Icon(Icons.more_horiz),
               );
-
-              return menuItems;
             },
-            icon: const Icon(Icons.more_horiz),
           ),
         ],
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
       extendBodyBehindAppBar: true,
       extendBody: true,
-      bottomNavigationBar: Container(
-        width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            Container(
-              width: 40,
-              margin: const EdgeInsets.only(right: 14),
-              child: IconButton(
-                onPressed: () {
-                  shareArticle();
-                },
-                icon: const Icon(
-                  Icons.share_outlined,
-                ),
+      bottomNavigationBar: buildBottomNavigationBar(context),
+      body: Builder(
+        builder: (BuildContext context) {
+          DateTime dateTime = widget.article.updatedAt.toDate();
+          return ListView(
+            children: [
+              // ... existing widgets ...
+              buildBodyContent(dateTime),
+              // ... Other widgets ...
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  // Functions for handling popup menu item selection
+
+  void handlePopupMenuSelection(String value) {
+    final actions = {
+      'sold': () => widget.article.isSold ? articleNotSold() : articleSold(),
+      'reserved': () =>
+          widget.article.isReserved ? articleNotReserved() : articleReserved(),
+      'delete': articleDelete,
+      'edit': articleEdit,
+      'report': articleReport,
+    };
+
+    if (actions.containsKey(value)) {
+      actions[value]!();
+    }
+  }
+
+  // Helper methods to build UI elements
+
+  List<PopupMenuEntry<String>> buildPopupMenuItems() {
+    bool isCurrentUserArticle =
+        FirebaseAuth.instance.currentUser?.uid == widget.article.userId;
+
+    List<PopupMenuEntry<String>> menuItems = [];
+
+    if (!widget.article.isDeleted && isCurrentUserArticle) {
+      menuItems.add(
+        PopupMenuItem<String>(
+          value: 'sold',
+          child: ListTile(
+            title: Text(widget.article.isSold ? 'Nicht Verkauft' : 'Verkauft'),
+          ),
+        ),
+      );
+
+      if (!widget.article.isSold) {
+        menuItems.add(
+          PopupMenuItem<String>(
+            value: 'reserved',
+            child: ListTile(
+              title: Text(
+                widget.article.isReserved ? 'Aktivieren' : 'Reservieren',
               ),
             ),
-            Expanded(
-              child: Container(
-                height: 40,
-                margin: const EdgeInsets.only(right: 14),
-                child: CustomButton(
-                  onPressed: () {
-                    // Implementiere die Logik für die Anfragen-Funktion hier
-                  },
-                  buttonText: 'Anfragen',
-                ),
-              ),
+          ),
+        );
+      }
+
+      menuItems.add(
+        const PopupMenuItem<String>(
+          value: 'delete',
+          child: ListTile(
+            title: Text('Löschen'),
+          ),
+        ),
+      );
+
+      if (!widget.article.isSold) {
+        menuItems.add(
+          const PopupMenuItem<String>(
+            value: 'edit',
+            child: ListTile(
+              title: Text('Bearbeiten'),
             ),
-            Container(
-              width: 40,
-              margin: const EdgeInsets.only(right: 14),
-              child: IconButton(
-                onPressed: () {
-                  favoriteArticle();
-                },
-                icon: const Icon(
-                  Icons.favorite_border,
-                ),
-              ),
-            ),
-          ],
+          ),
+        );
+      }
+    }
+
+    menuItems.add(
+      const PopupMenuItem<String>(
+        value: 'report',
+        child: ListTile(
+          title: Text('Melden'),
         ),
       ),
-      body: ListView(
-        shrinkWrap: true,
-        physics: const BouncingScrollPhysics(),
+    );
+
+    return menuItems;
+  }
+
+  Widget buildBottomNavigationBar(context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.all(16),
+      child: Row(
         children: [
-          Stack(
-            alignment: Alignment.topCenter,
-            children: [
-              // product image
-              CarouselSlider(
-                options: CarouselOptions(
-                    aspectRatio: 16 / 9, // Seitenverhältnis der Bilder
-                    autoPlay: true, // Automatische Wiedergabe aktivieren
-                    enlargeCenterPage: true,
-                    height: 300 // Aktives Bild vergrößern
-                    ),
-                items: article.images.isNotEmpty
-                    ? article.images.map((imageUrl) {
-                        return Builder(
-                          builder: (BuildContext context) {
-                            return Container(
-                              width: MediaQuery.of(context).size.width,
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 5.0),
-                              child: Image.network(
-                                imageUrl,
-                                fit: BoxFit.cover,
-                              ),
-                            );
-                          },
-                        );
-                      }).toList()
-                    : [
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                          child: Image.asset(
-                            'assets/images/placeholder.jpg',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ],
-              )
-            ],
-          ),
-          // Section 2 - product info
-
           Container(
-            width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(bottom: 4),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          article.title,
-                          style: const TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: 'poppins',
-                              color: AppColor.secondary),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(bottom: 2),
-                  child: Text(
-                    "${article.price} €",
-                    style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: 'poppins',
-                        color: AppColor.primary),
-                  ),
-                ),
-                Container(
-                  height: 1,
-                  color: Colors.grey,
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                ),
-
-                if (profileImageUrl.isNotEmpty)
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => UserPage()),
-                      );
-                    },
-                    child: Container(
-                      // padding: const EdgeInsets.all(16),
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          CircleAvatar(
-                            radius: 20,
-                            backgroundImage: NetworkImage(profileImageUrl),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            userName,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment
-                                  .end, // Align children to the right
-                              children: [
-                                const Text(
-                                  'Weitere ',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                Text(
-                                  '$articleCount',
-                                  // '${widget.articleCount}',
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColor.primary,
-                                  ),
-                                ),
-                                const Text(
-                                  ' Artikel',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                const Icon(
-                                  Icons.arrow_forward,
-                                  color: Colors.black,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                Container(
-                  height: 1,
-                  color: Colors.grey,
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                ),
-                Text(
-                  (article.description),
-                  style: TextStyle(
-                      color: AppColor.secondary.withOpacity(0.7),
-                      fontSize: 18,
-                      height: 150 / 100),
-                ),
-                // Separator line
-                Container(
-                  height: 1,
-                  color: Colors.grey,
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                ),
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: article.condition,
-                        style: TextStyle(
-                          color: AppColor.secondary.withOpacity(0.7),
-                          height: 1.5,
-                        ),
-                      ),
-                      TextSpan(
-                        text: ' • ',
-                        style: TextStyle(
-                          color: AppColor.secondary.withOpacity(0.7),
-                          height: 1.5,
-                        ),
-                      ),
-                      TextSpan(
-                        text: article.size,
-                        style: TextStyle(
-                          color: AppColor.secondary.withOpacity(0.7),
-                          height: 1.5,
-                        ),
-                      ),
-                      TextSpan(
-                        text: ' • ',
-                        style: TextStyle(
-                          color: AppColor.secondary.withOpacity(0.7),
-                          height: 1.5,
-                        ),
-                      ),
-                      TextSpan(
-                          text: article.type,
-                          style: TextStyle(
-                            color: AppColor.secondary.withOpacity(0.7),
-                            height: 1.5,
-                          )),
-                      TextSpan(
-                        text: ' • ',
-                        style: TextStyle(
-                          color: AppColor.secondary.withOpacity(0.7),
-                          height: 1.5,
-                        ),
-                      ),
-                      TextSpan(
-                        text: article.brand,
-                        style: TextStyle(
-                          color: AppColor.secondary.withOpacity(0.7),
-                          height: 1.5,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 1,
-                  color: Colors.grey,
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                ),
-
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: article.club,
-                        style: TextStyle(
-                          color: AppColor.secondary.withOpacity(0.7),
-                          height: 1.5,
-                        ),
-                      ),
-                      TextSpan(
-                        text: ' • ',
-                        style: TextStyle(
-                          color: AppColor.secondary.withOpacity(0.7),
-                          height: 1.5,
-                        ),
-                      ),
-                      TextSpan(
-                        text: article.sport,
-                        style: TextStyle(
-                          color: AppColor.secondary.withOpacity(0.7),
-                          height: 1.5,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 1,
-                  color: Colors.grey,
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                ),
-                // RichText(
-                //  text: TextSpan(
-                //    children: [
-                //     TextSpan(
-                //     text:
-                //       "Artikel individuell tragabar: ${article.isIndividuallyWearable ? 'Ja' : 'Nein'}",
-                //   style: TextStyle(
-                //     color: AppColor.secondary.withOpacity(0.7),
-                //    height: 1.5,
-                //    ),
-                //   ),
-                //   ],
-                //   ),
-                //   ),
-                // Container(
-                //  height: 1,
-                //   color: Colors.grey,
-                //   margin: const EdgeInsets.symmetric(vertical: 8),
-                // ),
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.calendar_today,
-                      color: Colors.grey,
-                      size: 18,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      "${dateTime.day.toString().padLeft(2, '0')}.${dateTime.month.toString().padLeft(2, '0')}",
-                      style: TextStyle(
-                        color: AppColor.secondary.withOpacity(0.7),
-                        fontSize: 16,
-                        height: 1.5,
-                      ),
-                    ),
-                  ],
-                )
-              ],
+            width: 40,
+            margin: const EdgeInsets.only(right: 14),
+            child: IconButton(
+              onPressed: () {
+                shareArticle();
+              },
+              icon: const Icon(
+                Icons.share_outlined,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              height: 40,
+              margin: const EdgeInsets.only(right: 14),
+              child: CustomButton(
+                onPressed: () {
+                  // Implement the logic for the requests function here
+                },
+                buttonText: 'Anfragen',
+              ),
+            ),
+          ),
+          Container(
+            width: 40,
+            margin: const EdgeInsets.only(right: 14),
+            child: IconButton(
+              onPressed: () {
+                favoriteArticle(context);
+              },
+              icon: const Icon(
+                Icons.favorite_border,
+              ),
             ),
           ),
         ],
@@ -523,16 +234,275 @@ class _ProductDetailState extends State<ProductDetail> {
     );
   }
 
-  void favoriteArticle() async {
+  ListView buildBodyContent(DateTime dateTime) {
+    return ListView(
+      shrinkWrap: true,
+      physics: const BouncingScrollPhysics(),
+      children: [
+        Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            CarouselSlider(
+              options: CarouselOptions(
+                aspectRatio: 16 / 9,
+                autoPlay: true,
+                enlargeCenterPage: true,
+                height: 300,
+              ),
+              items: widget.article.images.isNotEmpty
+                  ? widget.article.images.map((imageUrl) {
+                      return Builder(
+                        builder: (BuildContext context) {
+                          return Container(
+                            width: MediaQuery.of(context).size.width,
+                            margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                            child: Image.network(
+                              imageUrl,
+                              fit: BoxFit.cover,
+                            ),
+                          );
+                        },
+                      );
+                    }).toList()
+                  : [
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                        child: Image.asset(
+                          'assets/images/placeholder.jpg',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ],
+            )
+          ],
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(bottom: 4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        widget.article.title,
+                        style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'poppins',
+                            color: AppColor.secondary),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 2),
+                child: Text(
+                  "${widget.article.price} €",
+                  style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'poppins',
+                      color: AppColor.primary),
+                ),
+              ),
+              Container(
+                height: 1,
+                color: Colors.grey,
+                margin: const EdgeInsets.symmetric(vertical: 8),
+              ),
+              if (profileImageUrl.isNotEmpty) buildUserProfileSection(),
+              Container(
+                height: 1,
+                color: Colors.grey,
+                margin: const EdgeInsets.symmetric(vertical: 8),
+              ),
+              Text(
+                widget.article.description,
+                style: TextStyle(
+                    color: AppColor.secondary.withOpacity(0.7),
+                    fontSize: 18,
+                    height: 150 / 100),
+              ),
+              Container(
+                height: 1,
+                color: Colors.grey,
+                margin: const EdgeInsets.symmetric(vertical: 8),
+              ),
+              buildRichTextInfo(widget.article),
+              Container(
+                height: 1,
+                color: Colors.grey,
+                margin: const EdgeInsets.symmetric(vertical: 8),
+              ),
+              Row(
+                children: [
+                  const Icon(
+                    Icons.calendar_today,
+                    color: Colors.grey,
+                    size: 18,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    "${dateTime.day.toString().padLeft(2, '0')}.${dateTime.month.toString().padLeft(2, '0')}",
+                    style: TextStyle(
+                      color: AppColor.secondary.withOpacity(0.7),
+                      fontSize: 16,
+                      height: 1.5,
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  GestureDetector buildUserProfileSection() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => UserPage()),
+        );
+      },
+      child: Container(
+        alignment: Alignment.centerLeft,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            CircleAvatar(
+              radius: 20,
+              backgroundImage: NetworkImage(profileImageUrl),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              userName,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  const Text(
+                    'Weitere ',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
+                    ),
+                  ),
+                  Text(
+                    '$articleCount',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: AppColor.primary,
+                    ),
+                  ),
+                  const Text(
+                    ' Artikel',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const Icon(
+                    Icons.arrow_forward,
+                    color: Colors.black,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  RichText buildRichTextInfo(Article article) {
+    return RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(
+            text: article.condition,
+            style: TextStyle(
+              color: AppColor.secondary.withOpacity(0.7),
+              height: 1.5,
+            ),
+          ),
+          TextSpan(
+            text: ' • ',
+            style: TextStyle(
+              color: AppColor.secondary.withOpacity(0.7),
+              height: 1.5,
+            ),
+          ),
+          TextSpan(
+            text: article.size,
+            style: TextStyle(
+              color: AppColor.secondary.withOpacity(0.7),
+              height: 1.5,
+            ),
+          ),
+          TextSpan(
+            text: ' • ',
+            style: TextStyle(
+              color: AppColor.secondary.withOpacity(0.7),
+              height: 1.5,
+            ),
+          ),
+          TextSpan(
+              text: article.type,
+              style: TextStyle(
+                color: AppColor.secondary.withOpacity(0.7),
+                height: 1.5,
+              )),
+          TextSpan(
+            text: ' • ',
+            style: TextStyle(
+              color: AppColor.secondary.withOpacity(0.7),
+              height: 1.5,
+            ),
+          ),
+          TextSpan(
+            text: article.brand,
+            style: TextStyle(
+              color: AppColor.secondary.withOpacity(0.7),
+              height: 1.5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Functions for article actions
+
+  void favoriteArticle(context) async {
     // Check if the user is authenticated
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      // User is not logged in, show a message or navigate to login screen
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please log in to add to favorites')),
+        const SnackBar(content: Text('Please log in to add to favorites')),
       );
       return;
     }
+
     // Get the user's ID
     String userId = user.uid;
 
@@ -562,13 +532,14 @@ class _ProductDetailState extends State<ProductDetail> {
           // Update the user document with the updated favorites list
           await usersRef.doc(userId).set(
             {'favorites': FieldValue.arrayUnion(favoritesList)},
-            // Using FieldValue.arrayUnion to merge new favorites with existing ones
-            SetOptions(merge: true),
+            SetOptions(
+                merge:
+                    true), // Using FieldValue.arrayUnion to merge new favorites with existing ones
           );
         } else {
           // Article ID is already in favorites list, show a message
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Article is already in favorites')),
+            const SnackBar(content: Text('Article is already in favorites')),
           );
           return;
         }
@@ -581,13 +552,13 @@ class _ProductDetailState extends State<ProductDetail> {
 
       // Show a success message to the user
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Article added to favorites')),
+        const SnackBar(content: Text('Article added to favorites')),
       );
     } catch (error) {
       // Handle any errors that occurred during the process
       print('Error adding article to favorites: $error');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to add article to favorites')),
+        const SnackBar(content: Text('Failed to add article to favorites')),
       );
     }
   }
@@ -616,23 +587,20 @@ class _ProductDetailState extends State<ProductDetail> {
 
   void updateArticleStatus(String field, bool value, String successMessage,
       String errorMessage) async {
-    // Get a reference to the Firestore collection
     CollectionReference articlesRef =
         FirebaseFirestore.instance.collection('articles');
 
     try {
-      // Update the document in Firestore with the new data
       await articlesRef.doc(widget.id).update({field: value});
 
-      // Show a success message to the user, if desired
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(successMessage)),
       );
 
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => ProfilePageItem()));
+        MaterialPageRoute(builder: (context) => ProfilePageItem()),
+      );
     } catch (error) {
-      // Handle any errors that occurred during the update process
       print('Error marking article as sold: $error');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(errorMessage)),
