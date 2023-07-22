@@ -115,9 +115,9 @@ class ItemCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16),
                       ),
                       alignment: Alignment.center,
-                      child: const Column(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
+                        children: const [
                           Icon(
                             Icons.delete,
                             color: Colors.white,

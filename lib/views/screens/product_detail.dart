@@ -77,28 +77,20 @@ class _ProductDetailState extends State<ProductDetail> {
         actions: [
           PopupMenuButton<String>(
             onSelected: (value) {
-              // Handle different options based on the selected value
-              if (value == 'sold') {
-                if (article.isSold == true) {
-                  articleNotSold();
-                } else {
-                  articleSold();
-                }
-              } else if (value == 'reserved') {
-                if (article.isReserved == true) {
-                  articleNotReserved();
-                } else {
-                  articleReserved();
-                }
-              } else if (value == 'delete') {
-                articleDelete();
-                // Perform delete operation
-              } else if (value == 'edit') {
-                articleEdit();
-                // Perform edit operation
-              } else if (value == 'report') {
-                // Perform report operation
-                articleReport();
+              // Definiere Aktionen für jeden Wert in einem Dictionary
+              final actions = {
+                'sold': () => article.isSold ? articleNotSold() : articleSold(),
+                'reserved': () => article.isReserved
+                    ? articleNotReserved()
+                    : articleReserved(),
+                'delete': articleDelete,
+                'edit': articleEdit,
+                'report': articleReport,
+              };
+
+              // Rufe die entsprechende Aktion basierend auf dem ausgewählten Wert auf
+              if (actions.containsKey(value)) {
+                actions[value]!();
               }
             },
             itemBuilder: (BuildContext context) {

@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
 import 'package:flutter/services.dart';
 import 'package:clubtwice/core/services/articles_service.dart';
-import '../widgets/profile_tile_widget.dart';
 
 class UserPage extends StatefulWidget {
   UserPage({super.key});
@@ -49,9 +48,9 @@ class _UserPageState extends State<UserPage> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             height: 46,
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              children: const [
                 Text(
                   'Anzeigen von',
                   style: TextStyle(
