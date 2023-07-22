@@ -13,7 +13,12 @@ import '../../core/model/article.dart';
 class ProductDetail extends StatefulWidget {
   final Article article;
   final String id;
-  const ProductDetail({super.key, required this.article, required this.id});
+
+  const ProductDetail({
+    super.key,
+    required this.article,
+    required this.id,
+  });
 
   @override
   // ignore: library_private_types_in_public_api
@@ -25,6 +30,7 @@ class _ProductDetailState extends State<ProductDetail> {
   String profileImageUrl = '';
   String userName = '';
   final UserService userService = UserService();
+  int articleCount = 10;
 
   @override
   void initState() {
@@ -50,6 +56,7 @@ class _ProductDetailState extends State<ProductDetail> {
     Article article = widget.article;
     Timestamp firebaseTimestamp = article.updatedAt;
     DateTime dateTime = firebaseTimestamp.toDate();
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -160,7 +167,7 @@ class _ProductDetailState extends State<ProductDetail> {
 
               return menuItems;
             },
-            icon: Icon(Icons.more_horiz),
+            icon: const Icon(Icons.more_horiz),
           ),
         ],
         systemOverlayStyle: SystemUiOverlayStyle.light,
@@ -179,7 +186,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 onPressed: () {
                   shareArticle();
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.share_outlined,
                 ),
               ),
@@ -203,7 +210,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 onPressed: () {
                   favoriteArticle();
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.favorite_border,
                 ),
               ),
@@ -299,28 +306,71 @@ class _ProductDetailState extends State<ProductDetail> {
                   color: Colors.grey,
                   margin: const EdgeInsets.symmetric(vertical: 8),
                 ),
+
                 if (profileImageUrl.isNotEmpty)
-                  Container(
-                    // padding: const EdgeInsets.all(16),
-                    alignment: Alignment.centerLeft,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        CircleAvatar(
-                          radius: 20,
-                          backgroundImage: NetworkImage(profileImageUrl),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          userName,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      // padding: const EdgeInsets.all(16),
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          CircleAvatar(
+                            radius: 20,
+                            backgroundImage: NetworkImage(profileImageUrl),
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 8),
+                          Text(
+                            userName,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment
+                                  .end, // Align children to the right
+                              children: [
+                                const Text(
+                                  'Weitere ',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Text(
+                                  '$articleCount',
+                                  // '${widget.articleCount}',
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blue,
+                                  ),
+                                ),
+                                const Text(
+                                  ' Artikel',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                const Icon(
+                                  Icons.arrow_forward,
+                                  color: Colors.black,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
+
                 Container(
                   height: 1,
                   color: Colors.grey,
@@ -426,31 +476,30 @@ class _ProductDetailState extends State<ProductDetail> {
                     ],
                   ),
                 ),
-
                 Container(
                   height: 1,
                   color: Colors.grey,
                   margin: const EdgeInsets.symmetric(vertical: 8),
                 ),
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text:
-                            "Artikel individuell tragabar: ${article.isIndividuallyWearable ? 'Ja' : 'Nein'}",
-                        style: TextStyle(
-                          color: AppColor.secondary.withOpacity(0.7),
-                          height: 1.5,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 1,
-                  color: Colors.grey,
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                ),
+                // RichText(
+                //  text: TextSpan(
+                //    children: [
+                //     TextSpan(
+                //     text:
+                //       "Artikel individuell tragabar: ${article.isIndividuallyWearable ? 'Ja' : 'Nein'}",
+                //   style: TextStyle(
+                //     color: AppColor.secondary.withOpacity(0.7),
+                //    height: 1.5,
+                //    ),
+                //   ),
+                //   ],
+                //   ),
+                //   ),
+                // Container(
+                //  height: 1,
+                //   color: Colors.grey,
+                //   margin: const EdgeInsets.symmetric(vertical: 8),
+                // ),
                 Row(
                   children: [
                     const Icon(
