@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clubtwice/views/screens/profile_page_item.dart';
+import 'package:clubtwice/views/screens/user_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
@@ -309,7 +310,11 @@ class _ProductDetailState extends State<ProductDetail> {
 
                 if (profileImageUrl.isNotEmpty)
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => UserPage()),
+                      );
+                    },
                     child: Container(
                       // padding: const EdgeInsets.all(16),
                       alignment: Alignment.centerLeft,
@@ -348,7 +353,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                   style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.blue,
+                                    color: AppColor.primary,
                                   ),
                                 ),
                                 const Text(

@@ -49,7 +49,6 @@ class FilterWidget extends StatelessWidget {
                           ),
                         );
                       },
-                      icon: const Icon(Icons.group),
                       iconDisabledColor: Colors.white,
                       iconEnabledColor: Colors.white,
                       iconSize: 15.0,
@@ -73,7 +72,6 @@ class FilterWidget extends StatelessWidget {
                   ),
                   // Filteroptionen für die Sportart
                   DropdownButton<String>(
-                    icon: const Icon(Icons.directions_run),
                     iconSize: 15.0,
                     elevation: 16,
                     style: const TextStyle(color: Colors.black),
@@ -107,7 +105,6 @@ class FilterWidget extends StatelessWidget {
                   SizedBox(
                     width: 77,
                     child: DropdownButton<String>(
-                      icon: const Icon(Icons.type_specimen),
                       iconSize: 15.0,
                       elevation: 16,
                       style: const TextStyle(color: Colors.black),
@@ -130,7 +127,6 @@ class FilterWidget extends StatelessWidget {
                   ),
                   // Filteroptionen für die Größe
                   DropdownButton<String>(
-                    icon: const Icon(Icons.height_outlined),
                     iconSize: 15.0,
                     elevation: 16,
                     style: const TextStyle(color: Colors.black),
@@ -150,7 +146,6 @@ class FilterWidget extends StatelessWidget {
                   ),
                   // Filteroptionen für die Marke
                   DropdownButton<String>(
-                    icon: const Icon(Icons.label),
                     iconSize: 15.0,
                     elevation: 16,
                     style: const TextStyle(color: Colors.black),
