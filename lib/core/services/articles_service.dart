@@ -29,11 +29,11 @@ class ArticleService {
   }
 
   Future<List<ArticleWithId>> fetchArticles(
-      String searchTerm, String verein) async {
-    if (verein != '' && verein.isNotEmpty) {
+      String searchTerm, String club) async {
+    if (club != '' && club.isNotEmpty) {
       Query articlesQuery = FirebaseFirestore.instance
           .collection('articles')
-          .where('club', isEqualTo: verein)
+          .where('club', isEqualTo: club)
           .where('isSold', isEqualTo: false)
           .where('isReserved', isEqualTo: false)
           .where('isDeleted', isEqualTo: false);
@@ -47,8 +47,8 @@ class ArticleService {
   }
 
   Future<List<ArticleWithId>> fetchUserArticles(
-      String searchTerm, String verein) async {
-    if (verein != '' && verein.isNotEmpty) {
+      String searchTerm, String club) async {
+    if (club != '' && club.isNotEmpty) {
       Query articlesQuery = FirebaseFirestore.instance
           .collection('articles')
           .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid);
