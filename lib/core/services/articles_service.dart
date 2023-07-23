@@ -70,4 +70,26 @@ class ArticleService {
 
     return _fetchArticles(articlesQuery, searchTerm);
   }
+
+  Future<List<ArticleWithId>> fetchArticlesByIds(
+      List<String> articleIds) async {
+    List<ArticleWithId> articles = [];
+
+    for (String articleId in articleIds) {
+      DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+          .instance
+          .collection('articles')
+          .doc(articleId)
+          .get();
+
+      if (snapshot.exists) {
+        Article article = Article.fromFirestore(snapshot);
+        if (!article.isSold && !article.isReserved && !article.isDeleted) {
+          articles.add(ArticleWithId(id: snapshot.id, article: article));
+        }
+      }
+    }
+
+    return articles;
+  }
 }

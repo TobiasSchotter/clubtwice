@@ -5,6 +5,8 @@ import 'package:clubtwice/views/widgets/item_card.dart';
 import 'package:flutter/services.dart';
 import 'package:clubtwice/core/services/articles_service.dart';
 import '../widgets/profile_tile_widget.dart';
+import 'package:clubtwice/core/model/UserModel.dart';
+import 'package:clubtwice/core/services/user_service.dart';
 
 class ProfilePageFav extends StatefulWidget {
   ProfilePageFav({super.key});
@@ -21,6 +23,30 @@ class ProfilePageFav extends StatefulWidget {
 
 class _ProfilePageFavState extends State<ProfilePageFav> {
   List<ArticleWithId> articlesWithID = [];
+  final UserService userService = UserService();
+  final ArticleService articleService = ArticleService();
+  UserModel? userModel;
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  Future<void> loadData() async {
+    userModel = await userService.fetchUserData();
+
+    List<String> favoriteArticleIds = userModel?.favorites ?? [];
+
+    List<ArticleWithId> articleList =
+        await articleService.fetchArticlesByIds(favoriteArticleIds);
+
+    if (articleList.isNotEmpty) {
+      setState(() {
+        articlesWithID = articleList;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
