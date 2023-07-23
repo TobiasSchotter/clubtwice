@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/screens/product_detail.dart';
-import '../../core/model/article.dart';
+import '../../core/model/Article.dart';
 
 // ignore: must_be_immutable
 class ItemCard extends StatelessWidget {

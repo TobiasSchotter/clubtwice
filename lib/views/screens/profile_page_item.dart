@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:clubtwice/core/services/articles_service.dart';
 import 'package:clubtwice/core/services/user_service.dart';
 import '../widgets/profile_tile_widget.dart';
+import 'package:clubtwice/core/model/UserModel.dart';
 
 class ProfilePageItem extends StatefulWidget {
   ProfilePageItem({super.key});
@@ -25,11 +26,12 @@ class _ProfilePageItemState extends State<ProfilePageItem> {
   //List<Product> productData = ProductService.productData;
 
   List<ArticleWithId> articlesWithID = [];
-  String verein = '';
-  String sportart = '';
+  String club = '';
+  String sport = '';
   String searchTerm = '';
   final UserService userService = UserService();
   final ArticleService articleService = ArticleService();
+  UserModel? userModel;
 
   @override
   void initState() {
@@ -38,17 +40,15 @@ class _ProfilePageItemState extends State<ProfilePageItem> {
   }
 
   Future<void> loadData() async {
-    List vereinSportartList = await userService.fetchUserClubInformation();
+    userModel = await userService.fetchUserData();
 
-    if (vereinSportartList.isNotEmpty) {
-      setState(() {
-        verein = vereinSportartList[0];
-        sportart = vereinSportartList[1];
-      });
-    }
+    setState(() {
+      club = userModel!.club;
+      sport = userModel!.sport;
+    });
 
     List<ArticleWithId> articleList =
-        await articleService.fetchUserArticles(searchTerm, verein);
+        await articleService.fetchUserArticles(searchTerm, club);
 
     if (articleList.isNotEmpty) {
       setState(() {

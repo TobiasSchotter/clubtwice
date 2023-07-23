@@ -9,6 +9,7 @@ import 'package:clubtwice/core/services/articles_service.dart';
 import 'package:clubtwice/core/services/user_service.dart';
 import '../widgets/filter_tile_widget.dart';
 import '../widgets/search_field_tile.dart';
+import 'package:clubtwice/core/model/UserModel.dart';
 
 class SearchResultPage extends StatefulWidget {
   final String searchKeyword;
@@ -25,6 +26,7 @@ class _SearchResultPageState extends State<SearchResultPage>
 
   List<ArticleWithId> articlesWithID = [];
   List<String> searchHistory = [];
+  UserModel? userModel;
 
   final UserService userService = UserService();
   final ArticleService articleService = ArticleService();
@@ -38,13 +40,11 @@ class _SearchResultPageState extends State<SearchResultPage>
   }
 
   Future<void> loadData() async {
-    List<String> search = await userService.fetchUserSearchHistory();
+    userModel = await userService.fetchUserData();
 
-    if (search.isNotEmpty) {
-      setState(() {
-        searchHistory = search;
-      });
-    }
+    setState(() {
+      searchHistory = userModel?.search ?? [];
+    });
 
     List<ArticleWithId> articleList =
         await articleService.fetchArticlesClubWide(widget.searchKeyword);

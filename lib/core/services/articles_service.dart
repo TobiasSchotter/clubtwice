@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../model/article.dart';
+import '../model/Article.dart';
 
 class ArticleWithId {
   final String id;

@@ -8,6 +8,7 @@ import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
 import 'package:flutter/services.dart';
 import '../widgets/search_field_tile.dart';
+import 'package:clubtwice/core/model/UserModel.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,12 +19,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String verein = '';
+  String club = '';
   String sportart = '';
   List<ArticleWithId> articlesWithID = [];
   String searchTerm = '';
   final UserService userService = UserService();
   final ArticleService articleService = ArticleService();
+  UserModel? userModel;
 
   @override
   void initState() {
@@ -32,17 +34,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> loadData() async {
-    List vereinSportartList = await userService.fetchUserClubInformation();
+    userModel = await userService.fetchUserData();
 
-    if (vereinSportartList.isNotEmpty) {
-      setState(() {
-        verein = vereinSportartList[0];
-        sportart = vereinSportartList[1];
-      });
-    }
+    setState(() {
+      club = userModel!.club;
+      sportart = userModel!.sport;
+    });
 
     List<ArticleWithId> articleList =
-        await articleService.fetchArticles(searchTerm, verein);
+        await articleService.fetchArticles(searchTerm, club);
 
     if (articleList.isNotEmpty) {
       setState(() {
@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Widget content;
-    if (verein.isNotEmpty && verein != "Keine Auswahl") {
+    if (club.isNotEmpty && club != "Keine Auswahl") {
       if (articlesWithID.isNotEmpty) {
         content = Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -155,7 +155,7 @@ class _HomePageState extends State<HomePage> {
             hintText: 'Suche Vereinskleidung deines Vereins',
             onSubmitted: (searchTerm) async {
               List<ArticleWithId> articleList =
-                  await articleService.fetchArticles(searchTerm, verein);
+                  await articleService.fetchArticles(searchTerm, club);
               if (articleList.isNotEmpty) {
                 setState(() {
                   articlesWithID = articleList;

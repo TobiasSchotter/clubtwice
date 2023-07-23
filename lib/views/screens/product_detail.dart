@@ -9,7 +9,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:clubtwice/core/services/user_service.dart';
 import 'package:share/share.dart';
 import '../../constant/app_button.dart';
-import '../../core/model/article.dart';
+import '../../core/model/Article.dart';
+import 'package:clubtwice/core/model/UserModel.dart';
 
 class ProductDetail extends StatefulWidget {
   final Article article;
@@ -30,10 +31,11 @@ class ProductDetail extends StatefulWidget {
 
 class _ProductDetailState extends State<ProductDetail> {
   PageController productImageSlider = PageController();
-  String profileImageUrl = '';
-  String userName = '';
+  String? profileImageUrl = '';
+  String? userName = '';
   final UserService userService = UserService();
   int articleCount = 10;
+  UserModel? userModel;
 
   @override
   void initState() {
@@ -42,15 +44,13 @@ class _ProductDetailState extends State<ProductDetail> {
   }
 
   Future<void> loadData() async {
-    List<String> dataList =
-        await userService.fetchUserProfileImageUrl(widget.article.userId);
+    userModel = await userService.fetchUserData();
 
-    if (dataList.isNotEmpty) {
-      setState(() {
-        profileImageUrl = dataList[0];
-        userName = dataList[1];
-      });
-    }
+    setState(() {
+      profileImageUrl =
+          userModel?.profileImageUrl ?? 'clubtwice/assets/images/pp.png';
+      userName = userModel!.username;
+    });
   }
 
   @override
@@ -218,7 +218,7 @@ class _ProductDetailState extends State<ProductDetail> {
             margin: const EdgeInsets.only(right: 14),
             child: IconButton(
               onPressed: () {
-                favoriteArticle(context);
+                addFavoriteArticle(context);
               },
               icon: const Icon(
                 Icons.favorite_border,
@@ -315,7 +315,8 @@ class _ProductDetailState extends State<ProductDetail> {
                 color: Colors.grey,
                 margin: const EdgeInsets.symmetric(vertical: 8),
               ),
-              if (profileImageUrl.isNotEmpty) buildUserProfileSection(),
+              if (profileImageUrl != null && profileImageUrl!.isNotEmpty)
+                buildUserProfileSection(),
               Container(
                 height: 1,
                 color: Colors.grey,
@@ -378,11 +379,12 @@ class _ProductDetailState extends State<ProductDetail> {
           children: [
             CircleAvatar(
               radius: 20,
-              backgroundImage: NetworkImage(profileImageUrl),
+              backgroundImage: NetworkImage(
+                  profileImageUrl ?? "clubtwice/assets/images/pp.png"),
             ),
             const SizedBox(width: 8),
             Text(
-              userName,
+              userName!,
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -489,7 +491,7 @@ class _ProductDetailState extends State<ProductDetail> {
 
   // Functions for article actions
 
-  void favoriteArticle(context) async {
+  void addFavoriteArticle(context) async {
     // Check if the user is authenticated
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {

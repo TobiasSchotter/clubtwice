@@ -5,6 +5,7 @@ import 'package:clubtwice/constant/app_color.dart';
 import '../../constant/app_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:clubtwice/core/services/user_service.dart';
+import 'package:clubtwice/core/model/UserModel.dart';
 
 class ProfilePageClub extends StatefulWidget {
   const ProfilePageClub({Key? key}) : super(key: key);
@@ -14,9 +15,10 @@ class ProfilePageClub extends StatefulWidget {
 }
 
 class _ProfilePageClubState extends State<ProfilePageClub> {
-  String verein = '';
-  String sportart = '';
+  String club = '';
+  String sport = '';
   final UserService userService = UserService();
+  UserModel? userModel;
 
   @override
   void initState() {
@@ -25,21 +27,19 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
   }
 
   Future<void> loadData() async {
-    List vereinSportartList = await userService.fetchUserClubInformation();
+    userModel = await userService.fetchUserData();
 
-    if (vereinSportartList.isNotEmpty) {
-      setState(() {
-        verein = vereinSportartList[0];
-        sportart = vereinSportartList[1];
-      });
-    }
+    setState(() {
+      club = userModel!.club;
+      sport = userModel!.sport;
+    });
   }
 
   Future<void> saveChanges() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       String userId = user.uid;
-      userService.updateUserClubInformation(userId, verein, sportart);
+      userService.updateUserClubInformation(userId, club, sport);
     }
   }
 
@@ -95,7 +95,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
               labelText: 'Verein auswählen',
               border: OutlineInputBorder(),
             ),
-            value: verein.isNotEmpty ? verein : null, // Set the initial value
+            value: club.isNotEmpty ? club : null, // Set the initial value
             items: <String>['Keine Auswahl', 'SG Quelle', 'SGV Nürnberg Fürth']
                 .map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
@@ -105,7 +105,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
             }).toList(),
             onChanged: (newValue) {
               setState(() {
-                verein = newValue!;
+                club = newValue!;
               });
             },
           ),
@@ -118,8 +118,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
               labelText: 'Sportart auswählen',
               border: OutlineInputBorder(),
             ),
-            value:
-                sportart.isNotEmpty ? sportart : null, // Set the initial value
+            value: sport.isNotEmpty ? sport : null, // Set the initial value
             items: <String>['Keine Auswahl', 'Fußball', 'Basketball']
                 .map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
@@ -129,7 +128,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
             }).toList(),
             onChanged: (newValue) {
               setState(() {
-                sportart = newValue!;
+                sport = newValue!;
               });
             },
           ),

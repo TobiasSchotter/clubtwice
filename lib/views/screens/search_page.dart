@@ -8,6 +8,7 @@ import 'package:clubtwice/views/screens/search_result_page.dart';
 import 'package:clubtwice/views/widgets/search_history_tile.dart';
 import 'package:clubtwice/core/services/user_service.dart';
 import '../widgets/search_field_tile.dart';
+import 'package:clubtwice/core/model/UserModel.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -18,6 +19,7 @@ class _SearchPageState extends State<SearchPage> {
   List<SearchHistory> listSearchHistory = SearchService.listSearchHistory;
   List<String> searchHistory = [];
   final UserService userService = UserService();
+  UserModel? userModel;
 
   @override
   void initState() {
@@ -26,13 +28,11 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Future<void> loadData() async {
-    List<String> search = await userService.fetchUserSearchHistory();
+    userModel = await userService.fetchUserData();
 
-    if (search.isNotEmpty) {
-      setState(() {
-        searchHistory = search;
-      });
-    }
+    setState(() {
+      searchHistory = userModel?.search ?? [];
+    });
   }
 
   Future<void> saveChanges() async {
