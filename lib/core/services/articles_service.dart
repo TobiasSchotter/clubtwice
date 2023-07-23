@@ -47,11 +47,11 @@ class ArticleService {
   }
 
   Future<List<ArticleWithId>> fetchUserArticles(
-      String searchTerm, String club) async {
+      String searchTerm, String club, userId) async {
     if (club != '' && club.isNotEmpty) {
       Query articlesQuery = FirebaseFirestore.instance
           .collection('articles')
-          .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid);
+          .where('userId', isEqualTo: userId);
 
       return _fetchArticles(articlesQuery, searchTerm);
     } else {

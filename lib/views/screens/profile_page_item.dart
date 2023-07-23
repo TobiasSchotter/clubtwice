@@ -47,8 +47,8 @@ class _ProfilePageItemState extends State<ProfilePageItem> {
       sport = userModel!.sport;
     });
 
-    List<ArticleWithId> articleList =
-        await articleService.fetchUserArticles(searchTerm, club);
+    List<ArticleWithId> articleList = await articleService.fetchUserArticles(
+        searchTerm, club, widget.user!.uid);
 
     if (articleList.isNotEmpty) {
       setState(() {
