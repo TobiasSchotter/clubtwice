@@ -251,6 +251,7 @@ class _SellPageState extends State<SellPage> {
               ),
               DropdownButtonFormField<String>(
                   value: _selectedClub,
+                  //hier müsste fetch hin
                   decoration: const InputDecoration(
                     labelText: 'Verein auswählen',
                     border: OutlineInputBorder(),
@@ -277,6 +278,7 @@ class _SellPageState extends State<SellPage> {
               DropdownButtonFormField<String>(
                   focusColor: AppColor.primarySoft,
                   value: _selectedSport,
+                  //hier müsste fetch hin
                   decoration: const InputDecoration(
                     labelText: 'Sportart auswählen',
                     border: OutlineInputBorder(),
