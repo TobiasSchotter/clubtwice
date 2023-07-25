@@ -1,3 +1,4 @@
+import 'package:clubtwice/core/services/option_service.dart';
 import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -96,7 +97,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
               border: OutlineInputBorder(),
             ),
             value: club.isNotEmpty ? club : null, // Set the initial value
-            items: <String>['Keine Auswahl', 'SG Quelle', 'SGV Nürnberg Fürth']
+            items: DropdownOptions.clubOptions
                 .map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
@@ -119,7 +120,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
               border: OutlineInputBorder(),
             ),
             value: sport.isNotEmpty ? sport : null, // Set the initial value
-            items: <String>['Keine Auswahl', 'Fußball', 'Basketball']
+            items: DropdownOptions.sportOptions
                 .map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,

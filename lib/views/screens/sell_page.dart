@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clubtwice/constant/app_button.dart';
+import 'package:clubtwice/core/services/option_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:clubtwice/views/screens/page_switcher.dart';
@@ -30,44 +31,11 @@ class _SellPageState extends State<SellPage> {
   String _selectedSport = "Fußball";
   String _selectedClub = "SG Quelle";
   String _selectedType = "Kids";
-  String _selectedSize = '140';
+  String _selectedSize = '152';
   String _selectedBrand = "Adidas";
-  String _selectedCondition = "Neu";
+  String _selectedCondition = "Sehr gut";
 
   User? user = FirebaseAuth.instance.currentUser;
-
-  final List<String> _typeOptions = ['Kids', 'Erwachsene', 'Universal'];
-  final Map<String, List<String>> _sizeOptions = {
-    'Erwachsene': ['S', 'M', 'L', 'XL', 'XXL'],
-    'Kids': ['140', '164', '170', 'XS'],
-    'Universal': ['Einheitsgröße'],
-  };
-  final List<String> _conditionOptions = [
-    'Neu, mit Etikett',
-    'Neu',
-    'Sehr gut',
-    'Gut',
-    'Zufriedenstellend'
-  ];
-
-  final List<String> _popularBrandOptions = ['Adidas', 'Puma', 'Nike'];
-  final List<String> _lessPopularBrandOptions = [
-    'Asics',
-    'Capelli',
-    'Castore',
-    'Craft',
-    'Fila',
-    'Hummel',
-    'Jako',
-    'Joma',
-    'Kappa',
-    'Macron',
-    'Mizuno',
-    'Reebok',
-    'Saller',
-    'Umbro',
-    'Uhlsport'
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -139,10 +107,11 @@ class _SellPageState extends State<SellPage> {
                 onChanged: (newValue) {
                   setState(() {
                     _selectedType = newValue!;
-                    _selectedSize = _sizeOptions[_selectedType]![0];
+                    _selectedSize =
+                        DropdownOptions.sizeOptions[_selectedType]![0];
                   });
                 },
-                items: _typeOptions
+                items: DropdownOptions.typeOptions
                     .map((option) => DropdownMenuItem<String>(
                           value: option,
                           child: Text(option),
@@ -167,15 +136,23 @@ class _SellPageState extends State<SellPage> {
                     _selectedSize = newValue!;
                   });
                 },
-                items: _sizeOptions[_selectedType]!
+                items: DropdownOptions.sizeOptions[_selectedType]!
                     .map((option) => DropdownMenuItem<String>(
                           value: option,
                           child: Text(option),
                         ))
                     .toList(),
               ),
-              Container(
-                height: 16,
+              const Column(
+                children: <Widget>[
+                  Divider(
+                    color: AppColor.border,
+                    height: 30,
+                    thickness: 1,
+                    indent: 20,
+                    endIndent: 20,
+                  ),
+                ],
               ),
               DropdownButtonFormField<String>(
                   value: _selectedCondition,
@@ -187,7 +164,7 @@ class _SellPageState extends State<SellPage> {
                       vertical: 0,
                     ),
                   ),
-                  items: _conditionOptions
+                  items: DropdownOptions.conditionOptions
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -225,7 +202,7 @@ class _SellPageState extends State<SellPage> {
                       ),
                     ),
                   ),
-                  ..._popularBrandOptions
+                  ...DropdownOptions.popularBrandOptions
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -244,7 +221,7 @@ class _SellPageState extends State<SellPage> {
                       ),
                     ),
                   ),
-                  ..._lessPopularBrandOptions
+                  ...DropdownOptions.lessPopularBrandOptions
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -261,10 +238,10 @@ class _SellPageState extends State<SellPage> {
                   });
                 },
               ),
-              Column(
+              const Column(
                 children: <Widget>[
                   Divider(
-                    color: Colors.grey[400],
+                    color: AppColor.border,
                     height: 30,
                     thickness: 1,
                     indent: 20,
@@ -282,7 +259,7 @@ class _SellPageState extends State<SellPage> {
                       vertical: 0,
                     ),
                   ),
-                  items: <String>['SG Quelle', 'SGV Nürnberg Fürth']
+                  items: DropdownOptions.clubOptions
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -308,7 +285,7 @@ class _SellPageState extends State<SellPage> {
                       vertical: 0,
                     ),
                   ),
-                  items: <String>['Fußball', 'Basketball']
+                  items: DropdownOptions.sportOptions
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
