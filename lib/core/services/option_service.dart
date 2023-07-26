@@ -37,7 +37,17 @@ class DropdownOptions {
   static List<String> clubOptions = [
     'Keine Auswahl',
     'SGV Nürnberg Fürth',
-    'SG Quelle'
+    'SG Quelle',
+    'SC 04 Schwabach',
+    'Post SV Nürnberg',
+    'ATSV Erlangen',
+    'SpVgg Mögeldorf 2000',
+    'ATV 1873 Frankonia',
+    'FSV Erlangen Bruck',
+    'SpVgg Ansbach',
+    'TSV Weißenburg',
+    'DJK Don Bosco Bamberg',
+    'FC Eintracht Bamberg'
   ];
 
   static List<String> sportOptions = [
