@@ -11,6 +11,9 @@ import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/widgets/image_picker_widget.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../core/model/UserModel.dart';
+import '../../core/services/user_service.dart';
+
 class SellPage extends StatefulWidget {
   const SellPage({Key? key}) : super(key: key);
 
@@ -28,14 +31,35 @@ class _SellPageState extends State<SellPage> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
 
-  String _selectedSport = "Fußball";
-  String _selectedClub = "SG Quelle";
+  //String _selectedSport = "Fußball";
+  // String _selectedClub = "SG Quelle";
   String _selectedType = "Kids";
   String _selectedSize = '152';
   String _selectedBrand = "Adidas";
   String _selectedCondition = "Sehr gut";
 
   User? user = FirebaseAuth.instance.currentUser;
+
+  String sportart = '';
+  String club = '';
+  final UserService userService = UserService();
+
+  UserModel? userModel;
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  Future<void> loadData() async {
+    userModel = await userService.fetchUserData();
+
+    setState(() {
+      club = userModel!.club;
+      sportart = userModel!.sport;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -250,8 +274,7 @@ class _SellPageState extends State<SellPage> {
                 ],
               ),
               DropdownButtonFormField<String>(
-                  value: _selectedClub,
-                  //hier müsste fetch hin
+                  value: club,
                   decoration: const InputDecoration(
                     labelText: 'Verein auswählen',
                     border: OutlineInputBorder(),
@@ -269,7 +292,7 @@ class _SellPageState extends State<SellPage> {
                   }).toList(),
                   onChanged: (newValue) {
                     setState(() {
-                      _selectedClub = newValue!;
+                      club = newValue!;
                     });
                   }),
               Container(
@@ -277,8 +300,7 @@ class _SellPageState extends State<SellPage> {
               ),
               DropdownButtonFormField<String>(
                   focusColor: AppColor.primarySoft,
-                  value: _selectedSport,
-                  //hier müsste fetch hin
+                  value: sportart,
                   decoration: const InputDecoration(
                     labelText: 'Sportart auswählen',
                     border: OutlineInputBorder(),
@@ -296,7 +318,7 @@ class _SellPageState extends State<SellPage> {
                   }).toList(),
                   onChanged: (newValue) {
                     setState(() {
-                      _selectedSport = newValue!;
+                      sportart = newValue!;
                     });
                   }),
               ListTile(
@@ -376,8 +398,8 @@ class _SellPageState extends State<SellPage> {
                       title: title,
                       description: _descriptionController.text,
                       brand: _selectedBrand,
-                      club: _selectedClub,
-                      sport: _selectedSport,
+                      club: club,
+                      sport: sportart,
                       price: int.parse(price),
                       isIndividuallyWearable: _isIndividuallyWearable,
                       images: selectedImages,

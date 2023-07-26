@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../constant/app_color.dart';
+import '../../core/services/option_service.dart';
 
 class FilterWidget extends StatelessWidget {
   final int selectedIndex;
@@ -10,6 +11,9 @@ class FilterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<String> allBrands = List.from(popularBrands)
+      ..addAll(lesspopularBrands);
+
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       return Container(); // Handle when user is not logged in
@@ -60,7 +64,7 @@ class FilterWidget extends StatelessWidget {
                       ),
                       items: [
                         DropdownMenuItem(
-                          value: 'verein1',
+                          value: club,
                           child: Text(selectedIndex == 0 ? club : 'Verein 1'),
                         ),
                       ],
@@ -79,17 +83,20 @@ class FilterWidget extends StatelessWidget {
                       height: 0.5,
                       color: Colors.white,
                     ),
-                    items: const [
-                      DropdownMenuItem(
-                          value: 'sportart1', child: Text('Sportart 1')),
-                      DropdownMenuItem(
-                          value: 'sportart2', child: Text('Sportart 2')),
-                      DropdownMenuItem(
-                          value: 'sportart3', child: Text('Sportart 3')),
-                    ],
-                    onChanged: (value) {},
-                    hint: const Text('Sportart',
-                        style: TextStyle(color: AppColor.primarySoft)),
+                    items: sport.map((String sportItem) {
+                      return DropdownMenuItem(
+                        value: sportItem,
+                        child: Text(sportItem),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      // Handle the value when the user selects an item
+                      // You can put your logic here
+                    },
+                    hint: const Text(
+                      'Sportart',
+                      style: TextStyle(color: AppColor.primarySoft),
+                    ),
                     alignment: Alignment.center,
                   ),
                 ],
@@ -112,16 +119,20 @@ class FilterWidget extends StatelessWidget {
                         height: 0,
                         color: Colors.black,
                       ),
-                      items: const [
-                        DropdownMenuItem(value: 'typ1', child: Text('Kids')),
-                        DropdownMenuItem(
-                            value: 'typ2', child: Text('Erwachs.')),
-                        DropdownMenuItem(
-                            value: 'typ3', child: Text('Universal')),
-                      ],
-                      onChanged: (value) {},
-                      hint: const Text('Typ',
-                          style: TextStyle(color: AppColor.primarySoft)),
+                      items: types.map((String typesItem) {
+                        return DropdownMenuItem(
+                          value: typesItem,
+                          child: Text(typesItem),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        // Handle the value when the user selects an item
+                        // You can put your logic here
+                      },
+                      hint: const Text(
+                        'Typ',
+                        style: TextStyle(color: AppColor.primarySoft),
+                      ),
                       alignment: Alignment.center,
                     ),
                   ),
@@ -134,16 +145,18 @@ class FilterWidget extends StatelessWidget {
                       height: 0,
                       color: Colors.black,
                     ),
-                    items: const [
-                      DropdownMenuItem(value: 'größe1', child: Text('Größe 1')),
-                      DropdownMenuItem(value: 'größe2', child: Text('Größe 2')),
-                      DropdownMenuItem(value: 'größe3', child: Text('Größe 3')),
-                    ],
+                    items: sizes[types[1]]!.map((String sizeItem) {
+                      return DropdownMenuItem(
+                        value: sizeItem,
+                        child: Text(sizeItem),
+                      );
+                    }).toList(),
                     onChanged: (value) {},
                     hint: const Text('Größe',
                         style: TextStyle(color: AppColor.primarySoft)),
                     alignment: Alignment.center,
                   ),
+
                   // Filteroptionen für die Marke
                   DropdownButton<String>(
                     iconSize: 15.0,
@@ -153,14 +166,20 @@ class FilterWidget extends StatelessWidget {
                       height: 0,
                       color: Colors.black,
                     ),
-                    items: const [
-                      DropdownMenuItem(value: 'marke1', child: Text('Marke 1')),
-                      DropdownMenuItem(value: 'marke2', child: Text('Marke 2')),
-                      DropdownMenuItem(value: 'marke3', child: Text('Marke 3')),
-                    ],
-                    onChanged: (value) {},
-                    hint: const Text('Marke',
-                        style: TextStyle(color: AppColor.primarySoft)),
+                    items: allBrands.map((String brandItem) {
+                      return DropdownMenuItem(
+                        value: brandItem,
+                        child: Text(brandItem),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      // Handle the value when the user selects an item
+                      // You can put your logic here
+                    },
+                    hint: const Text(
+                      'Marke',
+                      style: TextStyle(color: AppColor.primarySoft),
+                    ),
                     alignment: Alignment.center,
                   ),
                 ],
