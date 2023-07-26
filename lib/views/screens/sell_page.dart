@@ -143,8 +143,8 @@ class _SellPageState extends State<SellPage> {
                         ))
                     .toList(),
               ),
-              const Column(
-                children: <Widget>[
+              Column(
+                children: const <Widget>[
                   Divider(
                     color: AppColor.border,
                     height: 30,
@@ -238,8 +238,8 @@ class _SellPageState extends State<SellPage> {
                   });
                 },
               ),
-              const Column(
-                children: <Widget>[
+              Column(
+                children: const <Widget>[
                   Divider(
                     color: AppColor.border,
                     height: 30,
