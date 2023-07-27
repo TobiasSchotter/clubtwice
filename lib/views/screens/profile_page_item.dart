@@ -14,7 +14,7 @@ class ProfilePageItem extends StatefulWidget {
 
   final User? user = FirebaseAuth.instance.currentUser;
 
-  Future signOut() async {
+  Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
   }
 
@@ -23,7 +23,7 @@ class ProfilePageItem extends StatefulWidget {
 }
 
 class _ProfilePageItemState extends State<ProfilePageItem> {
-  //List<Product> productData = ProductService.productData;
+  // List<Product> productData = ProductService.productData;
 
   List<ArticleWithId> articlesWithID = [];
   String club = '';

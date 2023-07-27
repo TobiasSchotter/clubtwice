@@ -63,8 +63,6 @@ class _SellPageState extends State<SellPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final SellRef = database.child('/Sell');
-
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -82,13 +80,11 @@ class _SellPageState extends State<SellPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               ImagePickerWidget(onImagesSelected: handleImagesSelected),
-              Container(
-                margin: const EdgeInsets.only(top: 20, bottom: 0),
-                child: Text(
-                  'Titel *',
-                  style: TextStyle(
-                    color: AppColor.secondary.withOpacity(0.7),
-                  ),
+              const SizedBox(height: 20),
+              Text(
+                'Titel *',
+                style: TextStyle(
+                  color: AppColor.secondary.withOpacity(0.7),
                 ),
               ),
               TextFormField(
@@ -98,26 +94,23 @@ class _SellPageState extends State<SellPage> {
                   hintText: 'z.B. Aufwärmshirt Kurzarm',
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.only(top: 20, bottom: 0),
-                child: Text(
-                  'Beschreibe deinen Artikel *',
-                  style: TextStyle(
-                    color: AppColor.secondary.withOpacity(0.7),
-                  ),
+              const SizedBox(height: 20),
+              Text(
+                'Beschreibe deinen Artikel *',
+                style: TextStyle(
+                  color: AppColor.secondary.withOpacity(0.7),
                 ),
               ),
               TextFormField(
                 controller: _descriptionController,
                 cursorColor: AppColor.primarySoft,
                 decoration: const InputDecoration(
-                    hintText: 'z.B. nur einmal getragen',
-                    fillColor: Colors.black),
+                  hintText: 'z.B. nur einmal getragen',
+                  fillColor: Colors.black,
+                ),
                 maxLines: 3,
               ),
-              Container(
-                height: 16,
-              ),
+              const SizedBox(height: 16),
               DropdownButtonFormField<String>(
                 value: _selectedType,
                 decoration: const InputDecoration(
@@ -135,16 +128,14 @@ class _SellPageState extends State<SellPage> {
                         DropdownOptions.sizeOptions[_selectedType]![0];
                   });
                 },
-                items: DropdownOptions.typeOptions
-                    .map((option) => DropdownMenuItem<String>(
-                          value: option,
-                          child: Text(option),
-                        ))
-                    .toList(),
+                items: DropdownOptions.typeOptions.map((option) {
+                  return DropdownMenuItem<String>(
+                    value: option,
+                    child: Text(option),
+                  );
+                }).toList(),
               ),
-              Container(
-                height: 16,
-              ),
+              const SizedBox(height: 16),
               DropdownButtonFormField<String>(
                 value: _selectedSize,
                 decoration: const InputDecoration(
@@ -160,49 +151,45 @@ class _SellPageState extends State<SellPage> {
                     _selectedSize = newValue!;
                   });
                 },
-                items: DropdownOptions.sizeOptions[_selectedType]!
-                    .map((option) => DropdownMenuItem<String>(
-                          value: option,
-                          child: Text(option),
-                        ))
-                    .toList(),
+                items:
+                    DropdownOptions.sizeOptions[_selectedType]!.map((option) {
+                  return DropdownMenuItem<String>(
+                    value: option,
+                    child: Text(option),
+                  );
+                }).toList(),
               ),
-              Column(
-                children: const <Widget>[
-                  Divider(
-                    color: AppColor.border,
-                    height: 30,
-                    thickness: 1,
-                    indent: 20,
-                    endIndent: 20,
-                  ),
-                ],
+              const Divider(
+                color: AppColor.border,
+                height: 30,
+                thickness: 1,
+                indent: 20,
+                endIndent: 20,
               ),
               DropdownButtonFormField<String>(
-                  value: _selectedCondition,
-                  decoration: const InputDecoration(
-                    labelText: 'Zustand auswählen',
-                    border: OutlineInputBorder(),
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 10.0,
-                      vertical: 0,
-                    ),
+                value: _selectedCondition,
+                decoration: const InputDecoration(
+                  labelText: 'Zustand auswählen',
+                  border: OutlineInputBorder(),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 10.0,
+                    vertical: 0,
                   ),
-                  items: DropdownOptions.conditionOptions
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectedCondition = newValue!;
-                    });
-                  }),
-              Container(
-                height: 16,
+                ),
+                items: DropdownOptions.conditionOptions
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedCondition = newValue!;
+                  });
+                },
               ),
+              const SizedBox(height: 16),
               DropdownButtonFormField<String>(
                 value: _selectedBrand,
                 decoration: const InputDecoration(
@@ -226,8 +213,7 @@ class _SellPageState extends State<SellPage> {
                       ),
                     ),
                   ),
-                  ...DropdownOptions.popularBrandOptions
-                      .map<DropdownMenuItem<String>>((String value) {
+                  ...DropdownOptions.popularBrandOptions.map((value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
@@ -245,8 +231,7 @@ class _SellPageState extends State<SellPage> {
                       ),
                     ),
                   ),
-                  ...DropdownOptions.lessPopularBrandOptions
-                      .map<DropdownMenuItem<String>>((String value) {
+                  ...DropdownOptions.lessPopularBrandOptions.map((value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(
@@ -262,65 +247,61 @@ class _SellPageState extends State<SellPage> {
                   });
                 },
               ),
-              Column(
-                children: const <Widget>[
-                  Divider(
-                    color: AppColor.border,
-                    height: 30,
-                    thickness: 1,
-                    indent: 20,
-                    endIndent: 20,
-                  ),
-                ],
+              const Divider(
+                color: AppColor.border,
+                height: 30,
+                thickness: 1,
+                indent: 20,
+                endIndent: 20,
               ),
               DropdownButtonFormField<String>(
-                  value: club,
-                  decoration: const InputDecoration(
-                    labelText: 'Verein auswählen',
-                    border: OutlineInputBorder(),
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 10.0,
-                      vertical: 0,
-                    ),
+                value: club,
+                decoration: const InputDecoration(
+                  labelText: 'Verein auswählen',
+                  border: OutlineInputBorder(),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 10.0,
+                    vertical: 0,
                   ),
-                  items: DropdownOptions.clubOptions
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (newValue) {
-                    setState(() {
-                      club = newValue!;
-                    });
-                  }),
-              Container(
-                height: 16,
+                ),
+                items: DropdownOptions.clubOptions
+                    .map<DropdownMenuItem<String>>((value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (newValue) {
+                  setState(() {
+                    club = newValue!;
+                  });
+                },
               ),
+              const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                  focusColor: AppColor.primarySoft,
-                  value: sportart,
-                  decoration: const InputDecoration(
-                    labelText: 'Sportart auswählen',
-                    border: OutlineInputBorder(),
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 10.0,
-                      vertical: 0,
-                    ),
+                focusColor: AppColor.primarySoft,
+                value: sportart,
+                decoration: const InputDecoration(
+                  labelText: 'Sportart auswählen',
+                  border: OutlineInputBorder(),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 10.0,
+                    vertical: 0,
                   ),
-                  items: DropdownOptions.sportOptions
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (newValue) {
-                    setState(() {
-                      sportart = newValue!;
-                    });
-                  }),
+                ),
+                items: DropdownOptions.sportOptions
+                    .map<DropdownMenuItem<String>>((value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (newValue) {
+                  setState(() {
+                    sportart = newValue!;
+                  });
+                },
+              ),
               ListTile(
                 title: const Text(
                   "Artikel unabhängig des Vereins / Sportart nutzbar",
@@ -386,9 +367,7 @@ class _SellPageState extends State<SellPage> {
                   hintText: 'z.B. 5',
                 ),
               ),
-              Container(
-                height: 16,
-              ),
+              const SizedBox(height: 16),
               CustomButton(
                 onPressed: () {
                   String title = _titleController.text.trim();

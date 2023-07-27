@@ -16,7 +16,7 @@ class FilterWidget extends StatelessWidget {
 
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      return Container(); // Handle when user is not logged in
+      return Container(); // Handle when the user is not logged in
     }
 
     return FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
@@ -32,7 +32,8 @@ class FilterWidget extends StatelessWidget {
           return Container(); // Handle when user data is not available
         }
 
-        final club = userData['club'] ?? '';
+        final club = userData['club'] as String? ??
+            ''; // Use 'as String?' to handle nullable value
 
         return Column(
           children: <Widget>[
@@ -68,7 +69,9 @@ class FilterWidget extends StatelessWidget {
                           child: Text(selectedIndex == 0 ? club : 'Verein 1'),
                         ),
                       ],
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        // No need to do anything here since the value is not changed
+                      },
                       hint: const Text('Verein',
                           style: TextStyle(color: AppColor.primarySoft)),
                       alignment: Alignment.center,
@@ -83,7 +86,7 @@ class FilterWidget extends StatelessWidget {
                       height: 0.5,
                       color: Colors.white,
                     ),
-                    items: sport.map((String sportItem) {
+                    items: sport.map((sportItem) {
                       return DropdownMenuItem(
                         value: sportItem,
                         child: Text(sportItem),
@@ -93,10 +96,8 @@ class FilterWidget extends StatelessWidget {
                       // Handle the value when the user selects an item
                       // You can put your logic here
                     },
-                    hint: const Text(
-                      'Sportart',
-                      style: TextStyle(color: AppColor.primarySoft),
-                    ),
+                    hint: const Text('Sportart',
+                        style: TextStyle(color: AppColor.primarySoft)),
                     alignment: Alignment.center,
                   ),
                 ],
@@ -119,7 +120,7 @@ class FilterWidget extends StatelessWidget {
                         height: 0,
                         color: Colors.black,
                       ),
-                      items: types.map((String typesItem) {
+                      items: types.map((typesItem) {
                         return DropdownMenuItem(
                           value: typesItem,
                           child: Text(typesItem),
@@ -129,10 +130,8 @@ class FilterWidget extends StatelessWidget {
                         // Handle the value when the user selects an item
                         // You can put your logic here
                       },
-                      hint: const Text(
-                        'Typ',
-                        style: TextStyle(color: AppColor.primarySoft),
-                      ),
+                      hint: const Text('Typ',
+                          style: TextStyle(color: AppColor.primarySoft)),
                       alignment: Alignment.center,
                     ),
                   ),
@@ -145,13 +144,16 @@ class FilterWidget extends StatelessWidget {
                       height: 0,
                       color: Colors.black,
                     ),
-                    items: sizes[types[1]]!.map((String sizeItem) {
+                    items: sizes[types[1]]!.map((sizeItem) {
                       return DropdownMenuItem(
                         value: sizeItem,
                         child: Text(sizeItem),
                       );
                     }).toList(),
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      // Handle the value when the user selects an item
+                      // You can put your logic here
+                    },
                     hint: const Text('Größe',
                         style: TextStyle(color: AppColor.primarySoft)),
                     alignment: Alignment.center,
@@ -166,7 +168,7 @@ class FilterWidget extends StatelessWidget {
                       height: 0,
                       color: Colors.black,
                     ),
-                    items: allBrands.map((String brandItem) {
+                    items: allBrands.map((brandItem) {
                       return DropdownMenuItem(
                         value: brandItem,
                         child: Text(brandItem),
@@ -176,10 +178,8 @@ class FilterWidget extends StatelessWidget {
                       // Handle the value when the user selects an item
                       // You can put your logic here
                     },
-                    hint: const Text(
-                      'Marke',
-                      style: TextStyle(color: AppColor.primarySoft),
-                    ),
+                    hint: const Text('Marke',
+                        style: TextStyle(color: AppColor.primarySoft)),
                     alignment: Alignment.center,
                   ),
                 ],
