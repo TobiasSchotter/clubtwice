@@ -31,14 +31,30 @@ class _SellPageState extends State<SellPage> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
 
-  String _selectedSport = "Fußball";
-  String _selectedClub = "SG Quelle";
+  String _selectedSport = "Keine Auswahl";
+  String _selectedClub = "Keine Auswahl";
   String _selectedType = "Kids";
   String _selectedSize = '152';
   String _selectedBrand = "Adidas";
   String _selectedCondition = "Sehr gut";
 
   User? user = FirebaseAuth.instance.currentUser;
+
+  final UserService userService = UserService();
+  UserModel? userModel;
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  Future<void> loadData() async {
+    userModel = await userService.fetchUserData();
+    setState(() {
+      _selectedClub = userModel!.club;
+      _selectedSport = userModel!.sport;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

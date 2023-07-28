@@ -51,6 +51,7 @@ class DropdownOptions {
   ];
 
   static List<String> sportOptions = [
+    'Keine Auswahl',
     'Fußball',
     'Tennis',
     'Leichtathletik',
@@ -61,7 +62,6 @@ class DropdownOptions {
     'Tischtennis',
     'Badminton',
     'Reitsport',
-    'Keine Auswahl'
   ];
 }
 
