@@ -166,45 +166,19 @@ class ItemCard extends StatelessWidget {
                   ),
                   RichText(
                     text: TextSpan(
+                      style: TextStyle(
+                        color: AppColor.secondary.withOpacity(0.7),
+                        height: 1.5,
+                        fontSize: 12,
+                      ),
                       children: [
-                        TextSpan(
-                          text: article.condition,
-                          style: TextStyle(
-                              color: AppColor.secondary.withOpacity(0.7),
-                              height: 150 / 100,
-                              fontSize: 12),
-                        ),
-                        TextSpan(
-                          text: ' • ',
-                          style: TextStyle(
-                              color: AppColor.secondary.withOpacity(0.7),
-                              height: 150 / 100,
-                              fontSize: 12),
-                        ),
-                        TextSpan(
-                          text: article.size,
-                          style: TextStyle(
-                              color: AppColor.secondary.withOpacity(0.7),
-                              height: 150 / 100,
-                              fontSize: 12),
-                        ),
-                        TextSpan(
-                          text: ' • ',
-                          style: TextStyle(
-                              color: AppColor.secondary.withOpacity(0.7),
-                              height: 150 / 100,
-                              fontSize: 12),
-                        ),
-                        TextSpan(
-                          text: article.brand,
-                          style: TextStyle(
-                              color: AppColor.secondary.withOpacity(0.7),
-                              height: 150 / 100,
-                              fontSize: 12),
-                        ),
+                        TextSpan(text: '${article.club} • '),
+                        TextSpan(text: '${article.condition} • '),
+                        TextSpan(text: '${article.size} • '),
+                        TextSpan(text: '${article.brand}'),
                       ],
                     ),
-                  ),
+                  )
                 ],
               ),
             )
