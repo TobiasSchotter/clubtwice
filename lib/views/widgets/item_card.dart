@@ -164,20 +164,37 @@ class ItemCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  RichText(
-                    text: TextSpan(
-                      style: TextStyle(
-                        color: AppColor.secondary.withOpacity(0.7),
-                        height: 1.5,
-                        fontSize: 12,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          style: TextStyle(
+                            color: AppColor.secondary.withOpacity(0.7),
+                            height: 1.5,
+                            fontSize: 12,
+                          ),
+                          children: [
+                            TextSpan(text: '${article.condition} • '),
+                            TextSpan(text: '${article.size} • '),
+                            TextSpan(text: article.brand),
+                          ],
+                        ),
                       ),
-                      children: [
-                        TextSpan(text: '${article.club} • '),
-                        TextSpan(text: '${article.condition} • '),
-                        TextSpan(text: '${article.size} • '),
-                        TextSpan(text: '${article.brand}'),
-                      ],
-                    ),
+                      RichText(
+                        text: TextSpan(
+                          style: TextStyle(
+                            color: AppColor.secondary.withOpacity(0.7),
+                            height: 1.5,
+                            fontSize: 12,
+                          ),
+                          children: [
+                            TextSpan(text: '${article.club} • '),
+                            TextSpan(text: article.sport),
+                          ],
+                        ),
+                      ),
+                    ],
                   )
                 ],
               ),

@@ -399,7 +399,7 @@ class _ProductDetailState extends State<ProductDetail> {
       text: TextSpan(
         children: [
           TextSpan(text: '${article.club} • ', style: style),
-          TextSpan(text: '${article.isIndividuallyWearable}', style: style),
+          TextSpan(text: article.sport, style: style),
         ],
       ),
     );

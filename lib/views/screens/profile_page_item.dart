@@ -60,33 +60,33 @@ class _ProfilePageItemState extends State<ProfilePageItem> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        backgroundColor: AppColor.primary,
-        elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (context) => const PageSwitcher(
-                selectedIndex: 4,
-              ),
-            ));
-          },
-          icon: const Icon(Icons.arrow_back_outlined),
-          color: Colors.white,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(192),
+        child: AppBar(
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          backgroundColor: AppColor.primary,
+          elevation: 0,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: const Icon(Icons.arrow_back_outlined),
+            color: Colors.white,
+          ),
+          systemOverlayStyle: SystemUiOverlayStyle.light,
+          flexibleSpace: const MyProfileWidget(),
         ),
-        systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
       body: ListView(
         shrinkWrap: true,
         physics: const BouncingScrollPhysics(),
         children: [
-          // Section 1 - Profile Picture - Username - Name
-          const MyProfileWidget(),
-
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 12,
+            ),
             height: 46,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
