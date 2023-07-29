@@ -340,6 +340,12 @@ class _ProductDetailState extends State<ProductDetail> {
                 color: Colors.grey,
                 margin: const EdgeInsets.symmetric(vertical: 8),
               ),
+              buildRichTextInfo2(widget.article),
+              Container(
+                height: 1,
+                color: Colors.grey,
+                margin: const EdgeInsets.symmetric(vertical: 8),
+              ),
               Row(
                 children: [
                   const Icon(
@@ -362,6 +368,40 @@ class _ProductDetailState extends State<ProductDetail> {
           ),
         ),
       ],
+    );
+  }
+
+  RichText buildRichTextInfo(Article article) {
+    final style = TextStyle(
+      color: AppColor.secondary.withOpacity(0.7),
+      height: 1.5,
+    );
+
+    return RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(text: '${article.condition} • ', style: style),
+          TextSpan(text: '${article.size} • ', style: style),
+          TextSpan(text: '${article.type} • ', style: style),
+          TextSpan(text: article.brand, style: style),
+        ],
+      ),
+    );
+  }
+
+  RichText buildRichTextInfo2(Article article) {
+    final style = TextStyle(
+      color: AppColor.secondary.withOpacity(0.7),
+      height: 1.5,
+    );
+
+    return RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(text: '${article.club} • ', style: style),
+          TextSpan(text: '${article.isIndividuallyWearable}', style: style),
+        ],
+      ),
     );
   }
 
@@ -428,24 +468,6 @@ class _ProductDetailState extends State<ProductDetail> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  RichText buildRichTextInfo(Article article) {
-    final style = TextStyle(
-      color: AppColor.secondary.withOpacity(0.7),
-      height: 1.5,
-    );
-
-    return RichText(
-      text: TextSpan(
-        children: [
-          TextSpan(text: '${article.condition} • ', style: style),
-          TextSpan(text: '${article.size} • ', style: style),
-          TextSpan(text: '${article.type} • ', style: style),
-          TextSpan(text: article.brand, style: style),
-        ],
       ),
     );
   }
