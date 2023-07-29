@@ -433,57 +433,18 @@ class _ProductDetailState extends State<ProductDetail> {
   }
 
   RichText buildRichTextInfo(Article article) {
+    final style = TextStyle(
+      color: AppColor.secondary.withOpacity(0.7),
+      height: 1.5,
+    );
+
     return RichText(
       text: TextSpan(
         children: [
-          TextSpan(
-            text: article.condition,
-            style: TextStyle(
-              color: AppColor.secondary.withOpacity(0.7),
-              height: 1.5,
-            ),
-          ),
-          TextSpan(
-            text: ' • ',
-            style: TextStyle(
-              color: AppColor.secondary.withOpacity(0.7),
-              height: 1.5,
-            ),
-          ),
-          TextSpan(
-            text: article.size,
-            style: TextStyle(
-              color: AppColor.secondary.withOpacity(0.7),
-              height: 1.5,
-            ),
-          ),
-          TextSpan(
-            text: ' • ',
-            style: TextStyle(
-              color: AppColor.secondary.withOpacity(0.7),
-              height: 1.5,
-            ),
-          ),
-          TextSpan(
-              text: article.type,
-              style: TextStyle(
-                color: AppColor.secondary.withOpacity(0.7),
-                height: 1.5,
-              )),
-          TextSpan(
-            text: ' • ',
-            style: TextStyle(
-              color: AppColor.secondary.withOpacity(0.7),
-              height: 1.5,
-            ),
-          ),
-          TextSpan(
-            text: article.brand,
-            style: TextStyle(
-              color: AppColor.secondary.withOpacity(0.7),
-              height: 1.5,
-            ),
-          ),
+          TextSpan(text: '${article.condition} • ', style: style),
+          TextSpan(text: '${article.size} • ', style: style),
+          TextSpan(text: '${article.type} • ', style: style),
+          TextSpan(text: article.brand, style: style),
         ],
       ),
     );
