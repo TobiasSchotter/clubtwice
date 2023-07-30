@@ -15,15 +15,37 @@ class ArticleService {
     QuerySnapshot articleSnapshot = await articlesQuery.get();
 
     List<ArticleWithId> articles = [];
+    List<ArticleWithId> soldArticles = [];
+    List<ArticleWithId> deletedArticles = [];
 
     for (QueryDocumentSnapshot doc in articleSnapshot.docs) {
       Article article = Article.fromFirestore(doc);
       if (article.title.toLowerCase().contains(searchTerm.toLowerCase())) {
-        articles.add(ArticleWithId(id: doc.id, article: article));
+        ArticleWithId articleWithId =
+            ArticleWithId(id: doc.id, article: article);
+        if (article.isSold) {
+          soldArticles.add(articleWithId);
+        } else if (article.isDeleted) {
+          deletedArticles.add(articleWithId);
+        } else {
+          articles.add(articleWithId);
+        }
       }
     }
 
+    // Sort the non-sold and non-deleted articles based on createdAt in descending order
     articles.sort((b, a) => a.article.createdAt.compareTo(b.article.createdAt));
+    // Sort the sold articles based on createdAt in descending order
+    soldArticles
+        .sort((b, a) => a.article.createdAt.compareTo(b.article.createdAt));
+    // Sort the deleted articles based on createdAt in descending order
+    deletedArticles
+        .sort((b, a) => a.article.createdAt.compareTo(b.article.createdAt));
+
+    // Concatenate the lists with non-sold and non-deleted articles first,
+    // followed by sold articles, and then deleted articles
+    articles.addAll(soldArticles);
+    articles.addAll(deletedArticles);
 
     return articles;
   }
