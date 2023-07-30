@@ -69,18 +69,12 @@ class ArticleService {
   }
 
   Future<List<ArticleWithId>> fetchUserArticles(
-      String searchTerm, String club, String userId) async {
-    if (club != '' && club.isNotEmpty) {
-      Query articlesQuery = FirebaseFirestore.instance
-          .collection('articles')
-          .where('userId', isEqualTo: userId);
+      String searchTerm, String userId) async {
+    Query articlesQuery = FirebaseFirestore.instance
+        .collection('articles')
+        .where('userId', isEqualTo: userId);
 
-      return _fetchArticles(articlesQuery, searchTerm);
-    } else {
-      print("fetchArticles: Verein ist leer");
-      // TODO: error handling
-      return [];
-    }
+    return _fetchArticles(articlesQuery, searchTerm);
   }
 
   Future<List<ArticleWithId>> fetchArticlesClubWide(String searchTerm) async {

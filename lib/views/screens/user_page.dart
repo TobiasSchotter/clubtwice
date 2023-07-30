@@ -20,6 +20,25 @@ class UserPage extends StatefulWidget {
 
 class _UserPageState extends State<UserPage> {
   List<ArticleWithId> articlesWithID = [];
+  String searchTerm = '';
+  final ArticleService articleService = ArticleService();
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  Future<void> loadData() async {
+    List<ArticleWithId> articleList =
+        await articleService.fetchUserArticles(searchTerm, widget.user!.uid);
+
+    if (articleList.isNotEmpty) {
+      setState(() {
+        articlesWithID = articleList;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
