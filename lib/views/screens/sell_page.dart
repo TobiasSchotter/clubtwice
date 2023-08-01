@@ -92,24 +92,36 @@ class _SellPageState extends State<SellPage> {
                   LengthLimitingTextInputFormatter(50),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               Text(
                 'Beschreibe deinen Artikel *',
                 style: TextStyle(
                   color: AppColor.secondary.withOpacity(0.7),
                 ),
               ),
-              TextFormField(
-                controller: _descriptionController,
-                cursorColor: AppColor.primarySoft,
-                decoration: const InputDecoration(
-                  hintText: 'z.B. nur einmal getragen',
-                  fillColor: Colors.black,
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                      color: Colors.grey), // Add a border to the TextFormField
+                  borderRadius: BorderRadius.circular(
+                      8), // Add rounded corners to the TextFormField
                 ),
-                maxLines: 3,
-                inputFormatters: [
-                  LengthLimitingTextInputFormatter(200),
-                ],
+                child: TextFormField(
+                  controller: _descriptionController,
+                  cursorColor: AppColor.primarySoft,
+                  decoration: InputDecoration(
+                    hintText: 'z.B. nur einmal getragen',
+                    contentPadding: EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 10), // Adjust padding for the TextFormField
+                    border: InputBorder
+                        .none, // Hide the default border of the TextFormField
+                  ),
+                  maxLines: 3,
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(200),
+                  ],
+                ),
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
