@@ -30,8 +30,8 @@ class _UserPageState extends State<UserPage> {
   }
 
   Future<void> loadData() async {
-    List<ArticleWithId> articleList =
-        await articleService.fetchUserArticles(searchTerm, widget.user!.uid);
+    List<ArticleWithId> articleList = await articleService
+        .fetchUserArticlesExtern(searchTerm, widget.user!.uid);
 
     if (articleList.isNotEmpty) {
       setState(() {

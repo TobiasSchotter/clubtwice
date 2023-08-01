@@ -77,6 +77,18 @@ class ArticleService {
     return _fetchArticles(articlesQuery, searchTerm);
   }
 
+  Future<List<ArticleWithId>> fetchUserArticlesExtern(
+      String searchTerm, String userId) async {
+    Query articlesQuery = FirebaseFirestore.instance
+        .collection('articles')
+        .where('userId', isEqualTo: userId)
+        .where('isSold', isEqualTo: false)
+        .where('isReserved', isEqualTo: false)
+        .where('isDeleted', isEqualTo: false);
+
+    return _fetchArticles(articlesQuery, searchTerm);
+  }
+
   Future<List<ArticleWithId>> fetchArticlesClubWide(String searchTerm) async {
     Query articlesQuery = FirebaseFirestore.instance
         .collection('articles')
