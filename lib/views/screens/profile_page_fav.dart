@@ -54,20 +54,19 @@ class _ProfilePageFavState extends State<ProfilePageFav> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(192),
         child: AppBar(
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-          backgroundColor: AppColor.primary,
-          elevation: 0,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(Icons.arrow_back_outlined),
-            color: Colors.white,
-          ),
-          systemOverlayStyle: SystemUiOverlayStyle.light,
-          flexibleSpace: const MyProfileWidget(),
-        ),
+            automaticallyImplyLeading: false,
+            centerTitle: true,
+            backgroundColor: AppColor.primary,
+            elevation: 0,
+            leading: IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(Icons.arrow_back_outlined),
+              color: Colors.white,
+            ),
+            systemOverlayStyle: SystemUiOverlayStyle.light,
+            flexibleSpace: const MyProfileWidget(showCameraIcon: false)),
       ),
       body: ListView(
         shrinkWrap: true,

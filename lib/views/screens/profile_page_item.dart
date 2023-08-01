@@ -47,8 +47,8 @@ class _ProfilePageItemState extends State<ProfilePageItem> {
       sport = userModel!.sport;
     });
 
-    List<ArticleWithId> articleList = await articleService.fetchUserArticles(
-        searchTerm, widget.user!.uid);
+    List<ArticleWithId> articleList =
+        await articleService.fetchUserArticles(searchTerm, widget.user!.uid);
 
     if (articleList.isNotEmpty) {
       setState(() {
@@ -63,20 +63,19 @@ class _ProfilePageItemState extends State<ProfilePageItem> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(192),
         child: AppBar(
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-          backgroundColor: AppColor.primary,
-          elevation: 0,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(Icons.arrow_back_outlined),
-            color: Colors.white,
-          ),
-          systemOverlayStyle: SystemUiOverlayStyle.light,
-          flexibleSpace: const MyProfileWidget(),
-        ),
+            automaticallyImplyLeading: false,
+            centerTitle: true,
+            backgroundColor: AppColor.primary,
+            elevation: 0,
+            leading: IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(Icons.arrow_back_outlined),
+              color: Colors.white,
+            ),
+            systemOverlayStyle: SystemUiOverlayStyle.light,
+            flexibleSpace: const MyProfileWidget(showCameraIcon: false)),
       ),
       body: ListView(
         shrinkWrap: true,
