@@ -7,7 +7,11 @@ import 'package:path/path.dart' as path;
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class MyProfileWidget extends StatefulWidget {
-  const MyProfileWidget({Key? key}) : super(key: key);
+  final bool
+      showCameraIcon; // Add this parameter for controlling icon visibility
+
+  const MyProfileWidget({Key? key, this.showCameraIcon = true})
+      : super(key: key);
 
   @override
   _MyProfileWidgetState createState() => _MyProfileWidgetState();
@@ -217,60 +221,67 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                 ),
                 child: Align(
                   alignment: Alignment.bottomRight,
-                  child: IconButton(
-                    iconSize: 14,
-                    icon: const Icon(Icons.camera_alt_rounded),
-                    color: Colors.white,
-                    onPressed: () async {
-                      // Image picking logic
-                      final pickedFile = await showModalBottomSheet(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return SafeArea(
-                            child: Wrap(
-                              children: [
-                                ListTile(
-                                  leading: const Icon(Icons.photo_library),
-                                  title: const Text('Galerie'),
-                                  onTap: () async {
-                                    final picker = ImagePicker();
-                                    final pickedImage = await picker.pickImage(
-                                      source: ImageSource.gallery,
-                                      maxWidth: 400,
-                                    );
-                                    Navigator.of(context).pop(pickedImage);
-                                  },
-                                ),
-                                ListTile(
-                                  leading: const Icon(Icons.camera_alt),
-                                  title: const Text('Kamera'),
-                                  onTap: () async {
-                                    final picker = ImagePicker();
-                                    final pickedImage = await picker.pickImage(
-                                      source: ImageSource.camera,
-                                      maxWidth: 400,
-                                    );
-                                    Navigator.of(context).pop(pickedImage);
-                                  },
-                                ),
-                                ListTile(
-                                  leading: const Icon(Icons.delete),
-                                  title: const Text('Bild löschen'),
-                                  onTap: () {
-                                    Navigator.of(context).pop(null);
-                                    _deleteImage();
-                                  },
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                      if (pickedFile != null) {
-                        await _uploadImage(File(pickedFile.path));
-                      }
-                    },
-                  ),
+                  child: widget
+                          .showCameraIcon // Use the showCameraIcon parameter to conditionally show the camera icon
+                      ? IconButton(
+                          iconSize: 14,
+                          icon: const Icon(Icons.camera_alt_rounded),
+                          color: Colors.white,
+                          onPressed: () async {
+                            final pickedFile = await showModalBottomSheet(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return SafeArea(
+                                  child: Wrap(
+                                    children: [
+                                      ListTile(
+                                        leading:
+                                            const Icon(Icons.photo_library),
+                                        title: const Text('Galerie'),
+                                        onTap: () async {
+                                          final picker = ImagePicker();
+                                          final pickedImage =
+                                              await picker.pickImage(
+                                            source: ImageSource.gallery,
+                                            maxWidth: 400,
+                                          );
+                                          Navigator.of(context)
+                                              .pop(pickedImage);
+                                        },
+                                      ),
+                                      ListTile(
+                                        leading: const Icon(Icons.camera_alt),
+                                        title: const Text('Kamera'),
+                                        onTap: () async {
+                                          final picker = ImagePicker();
+                                          final pickedImage =
+                                              await picker.pickImage(
+                                            source: ImageSource.camera,
+                                            maxWidth: 400,
+                                          );
+                                          Navigator.of(context)
+                                              .pop(pickedImage);
+                                        },
+                                      ),
+                                      ListTile(
+                                        leading: const Icon(Icons.delete),
+                                        title: const Text('Bild löschen'),
+                                        onTap: () {
+                                          Navigator.of(context).pop(null);
+                                          _deleteImage();
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                            if (pickedFile != null) {
+                              await _uploadImage(File(pickedFile.path));
+                            }
+                          },
+                        )
+                      : const SizedBox(), // If showCameraIcon is false, show an empty SizedBox
                 ),
               ),
               // Fullname
