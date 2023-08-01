@@ -130,6 +130,9 @@ class _ResetPageState extends State<ResetPage> {
               fillColor: AppColor.primarySoft,
               filled: true,
             ),
+            inputFormatters: [
+              LengthLimitingTextInputFormatter(70),
+            ],
           ),
           const SizedBox(height: 16),
 

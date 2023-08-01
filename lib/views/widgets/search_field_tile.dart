@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class SearchField extends StatelessWidget {
   final Function(String) onSubmitted;
@@ -36,6 +37,9 @@ class SearchField extends StatelessWidget {
         fillColor: Colors.white.withOpacity(0.1),
         filled: true,
       ),
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(50),
+      ],
     );
   }
 }

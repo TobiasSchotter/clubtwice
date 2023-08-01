@@ -335,6 +335,9 @@ class _LoginPageState extends State<RegisterPage> {
               fillColor: AppColor.primarySoft,
               filled: true,
             ),
+            inputFormatters: [
+              LengthLimitingTextInputFormatter(30),
+            ],
           ),
           const SizedBox(height: 16),
           // Username
@@ -361,6 +364,9 @@ class _LoginPageState extends State<RegisterPage> {
               fillColor: AppColor.primarySoft,
               filled: true,
             ),
+            inputFormatters: [
+              LengthLimitingTextInputFormatter(30),
+            ],
           ),
           const SizedBox(height: 16),
           // Email
@@ -388,6 +394,9 @@ class _LoginPageState extends State<RegisterPage> {
               fillColor: AppColor.primarySoft,
               filled: true,
             ),
+            inputFormatters: [
+              LengthLimitingTextInputFormatter(70),
+            ],
           ),
           const SizedBox(height: 16),
           TextField(
@@ -414,6 +423,9 @@ class _LoginPageState extends State<RegisterPage> {
               fillColor: AppColor.primarySoft,
               filled: true,
             ),
+            inputFormatters: [
+              LengthLimitingTextInputFormatter(70),
+            ],
           ),
           const SizedBox(height: 16),
           // Password
@@ -454,6 +466,9 @@ class _LoginPageState extends State<RegisterPage> {
                         color: AppColor.primary.withOpacity(0.5), size: 20),
               ),
             ),
+            inputFormatters: [
+              LengthLimitingTextInputFormatter(30),
+            ],
           ),
           const SizedBox(height: 16),
           // Repeat Password
@@ -494,6 +509,9 @@ class _LoginPageState extends State<RegisterPage> {
                         color: AppColor.primary.withOpacity(0.5), size: 20),
               ),
             ),
+            inputFormatters: [
+              LengthLimitingTextInputFormatter(30),
+            ],
           ),
           const SizedBox(height: 24),
           // Sign Up Button

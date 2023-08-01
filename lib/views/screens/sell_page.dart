@@ -88,6 +88,9 @@ class _SellPageState extends State<SellPage> {
                 decoration: const InputDecoration(
                   hintText: 'z.B. Aufwärmshirt Kurzarm',
                 ),
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(50),
+                ],
               ),
               const SizedBox(height: 20),
               Text(
@@ -104,6 +107,9 @@ class _SellPageState extends State<SellPage> {
                   fillColor: Colors.black,
                 ),
                 maxLines: 3,
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(200),
+                ],
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
@@ -354,8 +360,9 @@ class _SellPageState extends State<SellPage> {
                 cursorColor: AppColor.primarySoft,
                 keyboardType: TextInputType.number,
                 inputFormatters: [
-                  FilteringTextInputFormatter
-                      .digitsOnly // Nur ganze Zahlen erlauben
+                  FilteringTextInputFormatter.digitsOnly,
+                  // Nur ganze Zahlen erlauben
+                  LengthLimitingTextInputFormatter(3)
                 ],
                 decoration: const InputDecoration(
                   suffixText: '€',

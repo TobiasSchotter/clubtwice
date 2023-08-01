@@ -130,6 +130,9 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
                   fillColor: AppColor.primarySoft,
                   filled: true,
                 ),
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(30),
+                ],
               ),
 
               const SizedBox(height: 8),
@@ -173,6 +176,9 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
                   fillColor: AppColor.primarySoft,
                   filled: true,
                 ),
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(30),
+                ],
               ),
               const SizedBox(height: 16),
 

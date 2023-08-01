@@ -178,6 +178,9 @@ class _LoginPageState extends State<LoginPage> {
               fillColor: AppColor.primarySoft,
               filled: true,
             ),
+            inputFormatters: [
+              LengthLimitingTextInputFormatter(70),
+            ],
           ),
           const SizedBox(height: 16),
           // Password
@@ -220,6 +223,9 @@ class _LoginPageState extends State<LoginPage> {
                         color: AppColor.primary.withOpacity(0.5), size: 20),
               ),
             ),
+            inputFormatters: [
+              LengthLimitingTextInputFormatter(30),
+            ],
           ),
           // Forgot Passowrd
           Container(

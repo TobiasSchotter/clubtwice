@@ -123,6 +123,9 @@ class _PWChangePageState extends State<PWChangePage> {
                         color: AppColor.primary.withOpacity(0.5), size: 20),
               ),
             ),
+            inputFormatters: [
+              LengthLimitingTextInputFormatter(30),
+            ],
           ),
           const SizedBox(height: 16),
 
@@ -163,6 +166,9 @@ class _PWChangePageState extends State<PWChangePage> {
                         color: AppColor.primary.withOpacity(0.5), size: 20),
               ),
             ),
+            inputFormatters: [
+              LengthLimitingTextInputFormatter(30),
+            ],
           ),
           const SizedBox(height: 16),
           // Repeat Password
@@ -203,6 +209,9 @@ class _PWChangePageState extends State<PWChangePage> {
                         color: AppColor.primary.withOpacity(0.5), size: 20),
               ),
             ),
+            inputFormatters: [
+              LengthLimitingTextInputFormatter(30),
+            ],
           ),
           const SizedBox(height: 24),
           CustomButton(
