@@ -155,12 +155,14 @@ class ItemCard extends StatelessWidget {
                   Container(
                     margin: const EdgeInsets.only(top: 0, bottom: 0),
                     child: Text(
-                      "${article.price} €",
+                      article.price == 0
+                          ? "Zu verschenken"
+                          : "${article.price} €",
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                         fontFamily: 'Poppins',
-                        color: priceColor,
+                        color: article.price == 0 ? Colors.green : priceColor,
                       ),
                     ),
                   ),

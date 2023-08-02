@@ -44,6 +44,7 @@ class _UserPageState extends State<UserPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: const Text("Weitere Artikel"),
         automaticallyImplyLeading: false,
         centerTitle: true,
         backgroundColor: AppColor.primary,
@@ -61,9 +62,7 @@ class _UserPageState extends State<UserPage> {
         shrinkWrap: true,
         physics: const BouncingScrollPhysics(),
         children: [
-          // Section 1 - Profile Picture - Username - Name
           // const MyProfileWidget(),
-
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             height: 46,

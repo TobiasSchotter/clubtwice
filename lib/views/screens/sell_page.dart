@@ -10,7 +10,6 @@ import 'package:flutter/services.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/widgets/image_picker_widget.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../../core/model/UserModel.dart';
 import '../../core/services/user_service.dart';
 
@@ -109,7 +108,7 @@ class _SellPageState extends State<SellPage> {
                 child: TextFormField(
                   controller: _descriptionController,
                   cursorColor: AppColor.primarySoft,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: 'z.B. nur einmal getragen',
                     contentPadding: EdgeInsets.symmetric(
                         horizontal: 12,
@@ -119,7 +118,7 @@ class _SellPageState extends State<SellPage> {
                   ),
                   maxLines: 3,
                   inputFormatters: [
-                    LengthLimitingTextInputFormatter(200),
+                    LengthLimitingTextInputFormatter(300),
                   ],
                 ),
               ),

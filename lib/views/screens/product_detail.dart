@@ -302,12 +302,17 @@ class _ProductDetailState extends State<ProductDetail> {
               Container(
                 margin: const EdgeInsets.only(bottom: 2),
                 child: Text(
-                  "${widget.article.price} €",
-                  style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      fontFamily: 'poppins',
-                      color: AppColor.primary),
+                  widget.article.price == 0
+                      ? "Zu verschenken"
+                      : "${widget.article.price} €",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Poppins',
+                    color: widget.article.price == 0
+                        ? Colors.green
+                        : AppColor.primary,
+                  ),
                 ),
               ),
               Container(

@@ -1,5 +1,4 @@
 import 'package:clubtwice/constant/app_color.dart';
-import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
@@ -91,7 +90,7 @@ class _ProfilePageItemState extends State<ProfilePageItem> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
                 Text(
-                  'Meine Anzeigen',
+                  'Deine Anzeigen',
                   style: TextStyle(
                       color: AppColor.border,
                       fontSize: 16,
