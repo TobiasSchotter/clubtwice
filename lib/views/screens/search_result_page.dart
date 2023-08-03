@@ -22,11 +22,11 @@ class SearchResultPage extends StatefulWidget {
 class _SearchResultPageState extends State<SearchResultPage>
     with TickerProviderStateMixin {
   late TabController tabController;
-  TextEditingController searchInputController = TextEditingController();
 
   List<ArticleWithId> articlesWithID = [];
   List<String> searchHistory = [];
   UserModel? userModel;
+  String currentSearchKeyword = "";
 
   final UserService userService = UserService();
   final ArticleService articleService = ArticleService();
@@ -34,8 +34,8 @@ class _SearchResultPageState extends State<SearchResultPage>
   @override
   void initState() {
     super.initState();
-    searchInputController.text = widget.searchKeyword;
     tabController = TabController(length: 1, vsync: this);
+    currentSearchKeyword = widget.searchKeyword;
     loadData();
   }
 
@@ -90,6 +90,41 @@ class _SearchResultPageState extends State<SearchResultPage>
     saveChanges();
   }
 
+  Future<void> performSearch(String searchTerm) async {
+    if (searchTerm.trim().isEmpty) {
+      // Ignore empty or whitespace-only search terms
+      return;
+    }
+
+    // Update the search keyword in the UI
+    setState(() {
+      currentSearchKeyword = searchTerm;
+    });
+
+    // Update the search history
+    setState(() {
+      if (searchHistory.contains(searchTerm)) {
+        // Remove the duplicated search term
+        searchHistory.remove(searchTerm);
+      } else if (searchHistory.length >= 7) {
+        // Remove the oldest search term
+        searchHistory.removeAt(6);
+      }
+      searchHistory.insert(
+          0, searchTerm); // Insert the newest search term at the beginning
+    });
+
+    // Save changes to Firestore
+    saveChanges();
+
+    // Perform the search and update the search results
+    List<ArticleWithId> articleList =
+        await articleService.fetchArticlesClubWide(searchTerm);
+    setState(() {
+      articlesWithID = articleList;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,18 +147,7 @@ class _SearchResultPageState extends State<SearchResultPage>
           height: 40,
           child: SearchField(
             hintText: 'Suche Vereinskleidung aller Vereine',
-            onSubmitted: (searchTerm) {
-              updateSearchList(searchTerm);
-              saveChanges();
-
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => SearchResultPage(
-                    searchKeyword: searchTerm,
-                  ),
-                ),
-              );
-            },
+            onSubmitted: performSearch,
           ),
         ),
         systemOverlayStyle: SystemUiOverlayStyle.light,
@@ -150,7 +174,7 @@ class _SearchResultPageState extends State<SearchResultPage>
               Padding(
                 padding: const EdgeInsets.only(left: 16, top: 16),
                 child: Text(
-                  'Suchergebnisse zu ${widget.searchKeyword}',
+                  'Suchergebnisse zu $currentSearchKeyword',
                   style: const TextStyle(
                       color: Colors.grey,
                       fontSize: 14,
