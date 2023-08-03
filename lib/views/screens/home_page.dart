@@ -142,6 +142,30 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     }
+    if (articlesWithID.isEmpty) {
+      content = Container(
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: 160,
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: const Center(
+                child: Text(
+                  'Zu deiner Suche gab es kein Ergebnis. Bitte ändere deine Suche',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 15),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -157,6 +181,10 @@ class _HomePageState extends State<HomePage> {
               List<ArticleWithId> articleList =
                   await articleService.fetchArticles(searchTerm, club);
               if (articleList.isNotEmpty) {
+                setState(() {
+                  articlesWithID = articleList;
+                });
+              } else if (articleList.isEmpty) {
                 setState(() {
                   articlesWithID = articleList;
                 });
