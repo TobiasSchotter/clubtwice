@@ -231,6 +231,7 @@ class _ProductDetailState extends State<ProductDetail> {
   }
 
   ListView buildBodyContent(DateTime dateTime) {
+    int currentImageIndex = 1;
     return ListView(
       shrinkWrap: true,
       physics: const BouncingScrollPhysics(),
@@ -240,10 +241,18 @@ class _ProductDetailState extends State<ProductDetail> {
           children: [
             CarouselSlider(
               options: CarouselOptions(
-                aspectRatio: 16 / 9,
+                aspectRatio: 4 / 3,
                 autoPlay: true,
                 enlargeCenterPage: true,
-                height: 300,
+                height: 350,
+                enableInfiniteScroll: false,
+                onPageChanged: (index, reason) {
+                  setState(() {
+                    currentImageIndex = index;
+                    print(currentImageIndex);
+                    print(index);
+                  });
+                },
               ),
               items: widget.article.images.isNotEmpty
                   ? widget.article.images.map((imageUrl) {
@@ -254,7 +263,7 @@ class _ProductDetailState extends State<ProductDetail> {
                             margin: const EdgeInsets.symmetric(horizontal: 5.0),
                             child: Image.network(
                               imageUrl,
-                              fit: BoxFit.cover,
+                              fit: BoxFit.contain,
                             ),
                           );
                         },
@@ -266,11 +275,33 @@ class _ProductDetailState extends State<ProductDetail> {
                         margin: const EdgeInsets.symmetric(horizontal: 5.0),
                         child: Image.asset(
                           'assets/images/placeholder.jpg',
-                          fit: BoxFit.cover,
+                          fit: BoxFit.contain,
                         ),
                       ),
                     ],
-            )
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: widget.article.images.isNotEmpty
+                    ? widget.article.images.asMap().entries.map((entry) {
+                        int index = entry.key;
+                        return Container(
+                          width: 8.0,
+                          height: 8.0,
+                          margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: currentImageIndex == index
+                                ? AppColor.primary
+                                : AppColor.primarySoft,
+                          ),
+                        );
+                      }).toList()
+                    : [],
+              ),
+            ),
           ],
         ),
         Container(
