@@ -142,7 +142,7 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     }
-    if (articlesWithID.isEmpty) {
+    if (articlesWithID.isEmpty && club.isNotEmpty && club != "Keine Auswahl") {
       content = Container(
         alignment: Alignment.center,
         child: Column(
