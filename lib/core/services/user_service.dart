@@ -65,8 +65,12 @@ class UserService {
           FirebaseFirestore.instance.collection('articles');
 
       // Query the collection to get all articles with the specified userId
-      QuerySnapshot querySnapshot =
-          await articlesRef.where('userId', isEqualTo: userId).get();
+      QuerySnapshot querySnapshot = await articlesRef
+          .where('userId', isEqualTo: userId)
+          .where('isSold', isEqualTo: false)
+          .where('isReserved', isEqualTo: false)
+          .where('isDeleted', isEqualTo: false)
+          .get();
 
       // Return the count of articles for the user
       return querySnapshot.size;
