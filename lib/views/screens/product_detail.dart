@@ -245,7 +245,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 autoPlay: true,
                 enlargeCenterPage: true,
                 height: 350,
-                enableInfiniteScroll: false,
+                // enableInfiniteScroll: false,
                 onPageChanged: (index, reason) {
                   setState(() {
                     currentImageIndex = index;

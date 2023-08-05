@@ -24,8 +24,11 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
     _firstNameController.dispose();
     // _lastNameController.dispose();
     _userNameController.dispose();
+
     super.dispose();
   }
+
+  bool changesMade = false;
 
   @override
   Widget build(BuildContext context) {
@@ -72,15 +75,15 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
             ),
             leading: IconButton(
               onPressed: () async {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                if (changesMade) {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => const PageSwitcher(
-                          selectedIndex: 4,
-                        )));
-
-                // if (shouldRefresh == true) {
-                // Führe die Aktualisierungslogik aus
-                // ...
-                //   }
+                      selectedIndex: 4,
+                    ),
+                  ));
+                } else {
+                  Navigator.of(context).pop();
+                }
               },
               icon: const Icon(Icons.arrow_back_outlined),
               color: Colors.black,
@@ -189,19 +192,17 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
                   // final newLastName = _lastNameController.text.trim();
                   final newUserName = _userNameController.text.trim();
 
-                  if (newFirstName.isNotEmpty &&
-                      //  newLastName.isNotEmpty &&
-                      newUserName.isNotEmpty) {
-                    if (newFirstName != firstName ||
-                        //  newLastName != lastName ||
-                        newUserName != userName) {
+                  if (newFirstName.isNotEmpty && newUserName.isNotEmpty) {
+                    if (newFirstName != firstName || newUserName != userName) {
+                      // Set changesMade to true if changes are detected
+                      changesMade = true;
+
                       // Update user data in Firebase
                       FirebaseFirestore.instance
                           .collection('users')
                           .doc(user.uid)
                           .update({
                         'first Name': newFirstName,
-                        // 'last Name': newLastName,
                         'username': newUserName,
                       }).then((_) {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -223,21 +224,20 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
                         const SnackBar(
                           content:
                               Text('Es wurden keine Änderungen vorgenommen'),
-                          backgroundColor: Colors.red,
                         ),
                       );
                     }
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content:
-                            Text('Vorname und Nachname dürfen nicht leer sein'),
+                        content: Text(
+                            'Vorname und Benutzername dürfen nicht leer sein'),
                         backgroundColor: Colors.red,
                       ),
                     );
                   }
                 },
-              )
+              ),
             ],
           ),
         );

@@ -1,12 +1,13 @@
-import 'package:clubtwice/core/services/option_service.dart';
-import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:clubtwice/constant/app_color.dart';
-import '../../constant/app_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:clubtwice/core/services/user_service.dart';
 import 'package:clubtwice/core/model/UserModel.dart';
+import 'package:clubtwice/views/screens/page_switcher.dart';
+import 'package:clubtwice/constant/app_color.dart';
+import 'package:clubtwice/constant/app_button.dart';
+
+import '../../core/services/option_service.dart';
 
 class ProfilePageClub extends StatefulWidget {
   const ProfilePageClub({Key? key}) : super(key: key);
@@ -18,8 +19,11 @@ class ProfilePageClub extends StatefulWidget {
 class _ProfilePageClubState extends State<ProfilePageClub> {
   String club = '';
   String sport = '';
+  String originalClub = '';
+  String originalSport = '';
   final UserService userService = UserService();
   UserModel? userModel;
+  bool changesMade = false;
 
   @override
   void initState() {
@@ -33,6 +37,8 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
     setState(() {
       club = userModel!.club;
       sport = userModel!.sport;
+      originalClub = club;
+      originalSport = sport;
     });
   }
 
@@ -62,10 +68,15 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
         ),
         leading: IconButton(
           onPressed: () async {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
+            if (changesMade) {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (context) => const PageSwitcher(
-                      selectedIndex: 4,
-                    )));
+                  selectedIndex: 4,
+                ),
+              ));
+            } else {
+              Navigator.of(context).pop();
+            }
           },
           icon: const Icon(Icons.arrow_back_outlined),
           color: Colors.black,
@@ -136,13 +147,24 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
           const SizedBox(height: 16),
           CustomButton(
             buttonText: 'Speichern',
-            onPressed: () {
-              saveChanges();
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Erfolgreich gespeichert'),
-                ),
-              );
+            onPressed: () async {
+              if (club != originalClub || sport != originalSport) {
+                await saveChanges();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Erfolgreich gespeichert'),
+                  ),
+                );
+                setState(() {
+                  changesMade = true;
+                });
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Keine Änderungen vorgenommen'),
+                  ),
+                );
+              }
             },
           ),
         ],
