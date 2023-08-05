@@ -34,7 +34,8 @@ class _ProfilePageFavState extends State<ProfilePageFav> {
   }
 
   Future<void> loadData() async {
-    userModel = await userService.fetchUserData();
+    String? userId = userService.getCurrentUserId();
+    userModel = await userService.fetchUserData(userId);
 
     List<String> favoriteArticleIds = userModel?.favorites ?? [];
 

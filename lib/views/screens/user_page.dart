@@ -6,9 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:clubtwice/core/services/articles_service.dart';
 
 class UserPage extends StatefulWidget {
-  UserPage({super.key});
+  const UserPage({super.key, required this.userId});
 
-  final User? user = FirebaseAuth.instance.currentUser;
+  final String userId;
 
   Future signOut() async {
     await FirebaseAuth.instance.signOut();
@@ -30,8 +30,8 @@ class _UserPageState extends State<UserPage> {
   }
 
   Future<void> loadData() async {
-    List<ArticleWithId> articleList = await articleService
-        .fetchUserArticlesExtern(searchTerm, widget.user!.uid);
+    List<ArticleWithId> articleList =
+        await articleService.fetchUserArticlesExtern(searchTerm, widget.userId);
 
     if (articleList.isNotEmpty) {
       setState(() {

@@ -39,7 +39,8 @@ class _ProfilePageItemState extends State<ProfilePageItem> {
   }
 
   Future<void> loadData() async {
-    userModel = await userService.fetchUserData();
+    String? userId = userService.getCurrentUserId();
+    userModel = await userService.fetchUserData(userId);
 
     setState(() {
       club = userModel!.club;

@@ -40,7 +40,8 @@ class _SearchResultPageState extends State<SearchResultPage>
   }
 
   Future<void> loadData() async {
-    userModel = await userService.fetchUserData();
+    String? userId = userService.getCurrentUserId();
+    userModel = await userService.fetchUserData(userId);
 
     setState(() {
       searchHistory = userModel?.search ?? [];

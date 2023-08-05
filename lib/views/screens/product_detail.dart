@@ -31,24 +31,30 @@ class ProductDetail extends StatefulWidget {
 
 class _ProductDetailState extends State<ProductDetail> {
   PageController productImageSlider = PageController();
-  String? profileImageUrl = '';
+  String profileImageUrl = '';
   String? userName = '';
+
+  // Services
   final UserService userService = UserService();
-  int articleCount = 10;
   UserModel? userModel;
+
+  // params for additional articles
+  int articleCount = 0;
+  bool isFetching = true;
 
   @override
   void initState() {
     super.initState();
     loadData();
+    fetchArticleCount();
   }
 
   Future<void> loadData() async {
-    userModel = await userService.fetchUserData();
+    // user Daten des Erstellers des Artikels
+    userModel = await userService.fetchUserData(widget.article.userId);
 
     setState(() {
-      profileImageUrl =
-          userModel?.profileImageUrl ?? 'clubtwice/assets/images/pp.png';
+      profileImageUrl = userModel?.profileImageUrl ?? '';
       userName = userModel!.username;
     });
   }
@@ -249,8 +255,8 @@ class _ProductDetailState extends State<ProductDetail> {
                 onPageChanged: (index, reason) {
                   setState(() {
                     currentImageIndex = index;
-                    print(currentImageIndex);
-                    print(index);
+                    // print(currentImageIndex);
+                    // print(index);
                   });
                 },
               ),
@@ -351,8 +357,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 color: Colors.grey,
                 margin: const EdgeInsets.symmetric(vertical: 8),
               ),
-              if (profileImageUrl != null && profileImageUrl!.isNotEmpty)
-                buildUserProfileSection(),
+              buildUserProfileSection(),
               Container(
                 height: 1,
                 color: Colors.grey,
@@ -443,11 +448,15 @@ class _ProductDetailState extends State<ProductDetail> {
 
   GestureDetector buildUserProfileSection() {
     return GestureDetector(
-      onTap: () {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => UserPage()),
-        );
-      },
+      onTap: articleCount > 0
+          ? () {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => UserPage(userId: widget.article.userId),
+                ),
+              );
+            }
+          : null, // Disable onTap if articleCount is 0
       child: Container(
         alignment: Alignment.centerLeft,
         child: Row(
@@ -455,8 +464,7 @@ class _ProductDetailState extends State<ProductDetail> {
           children: [
             CircleAvatar(
               radius: 20,
-              backgroundImage: NetworkImage(
-                  profileImageUrl ?? "clubtwice/assets/images/pp.png"),
+              backgroundImage: getImageProvider(profileImageUrl),
             ),
             const SizedBox(width: 8),
             Text(
@@ -467,45 +475,70 @@ class _ProductDetailState extends State<ProductDetail> {
               ),
             ),
             const SizedBox(width: 8),
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  const Text(
-                    'Weitere ',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.black,
+            articleCount > 0
+                ? Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const Text(
+                          'Weitere ',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            isFetching
+                                ? const CircularProgressIndicator()
+                                : Text(
+                                    '$articleCount',
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColor.primary,
+                                    ),
+                                  ),
+                          ],
+                        ),
+                        const Text(
+                          ' Artikel',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const Icon(
+                          Icons.arrow_forward,
+                          color: Colors.black,
+                        ),
+                      ],
                     ),
-                  ),
-                  Text(
-                    '$articleCount',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: AppColor.primary,
-                    ),
-                  ),
-                  const Text(
-                    ' Artikel',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const Icon(
-                    Icons.arrow_forward,
-                    color: Colors.black,
-                  ),
-                ],
-              ),
-            ),
+                  )
+                : const SizedBox(), // Hide the part with "Weitere [articleCount] Artikel" if articleCount is 0
           ],
         ),
       ),
     );
+  }
+
+  ImageProvider getImageProvider(String imageUrl) {
+    if (imageUrl.isNotEmpty) {
+      return NetworkImage(imageUrl);
+    } else {
+      return const AssetImage("assets/images/pp.png");
+    }
+  }
+
+  void fetchArticleCount() async {
+    int count = await userService.getArticleCountForUser(widget.article.userId);
+    setState(() {
+      articleCount = count - 1;
+      isFetching = false;
+    });
   }
 
   // Functions for article actions

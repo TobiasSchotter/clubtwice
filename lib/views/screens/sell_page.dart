@@ -48,7 +48,8 @@ class _SellPageState extends State<SellPage> {
   }
 
   Future<void> loadData() async {
-    userModel = await userService.fetchUserData();
+    String? userId = userService.getCurrentUserId();
+    userModel = await userService.fetchUserData(userId);
     setState(() {
       _selectedClub = userModel!.club;
       _selectedSport = userModel!.sport;
