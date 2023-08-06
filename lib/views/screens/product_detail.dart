@@ -33,6 +33,7 @@ class _ProductDetailState extends State<ProductDetail> {
   PageController productImageSlider = PageController();
   String profileImageUrl = '';
   String? userName = '';
+  bool isArticleFavorite = false; // Track whether the article is in favorites
 
   // Services
   final UserService userService = UserService();
@@ -47,6 +48,7 @@ class _ProductDetailState extends State<ProductDetail> {
     super.initState();
     loadData();
     fetchArticleCount();
+    checkAndSetIsArticleFavorite(widget.id);
   }
 
   Future<void> loadData() async {
@@ -220,17 +222,18 @@ class _ProductDetailState extends State<ProductDetail> {
             ),
           ),
           Container(
-            width: 40,
-            margin: const EdgeInsets.only(right: 14),
-            child: IconButton(
-              onPressed: () {
-                addFavoriteArticle(context);
-              },
-              icon: const Icon(
-                Icons.favorite_border,
-              ),
-            ),
-          ),
+              width: 40,
+              margin: const EdgeInsets.only(right: 14),
+              child: IconButton(
+                onPressed: () {
+                  toggleFavoriteArticle(
+                      context); // Pass the current isArticleFavorite value
+                },
+                icon: Icon(
+                  isArticleFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: isArticleFavorite ? Colors.red : null,
+                ),
+              )),
         ],
       ),
     );
@@ -245,46 +248,50 @@ class _ProductDetailState extends State<ProductDetail> {
         Stack(
           alignment: Alignment.topCenter,
           children: [
-            CarouselSlider(
-              options: CarouselOptions(
-                aspectRatio: 4 / 3,
-                autoPlay: true,
-                enlargeCenterPage: true,
-                height: 350,
-                // enableInfiniteScroll: false,
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    currentImageIndex = index;
-                    // print(currentImageIndex);
-                    // print(index);
-                  });
-                },
-              ),
-              items: widget.article.images.isNotEmpty
-                  ? widget.article.images.map((imageUrl) {
-                      return Builder(
-                        builder: (BuildContext context) {
-                          return Container(
+            Builder(
+              // Wrap the CarouselSlider with Builder widget
+              builder: (BuildContext context) {
+                return CarouselSlider(
+                  options: CarouselOptions(
+                    aspectRatio: 4 / 3,
+                    autoPlay: true,
+                    enlargeCenterPage: true,
+                    height: 350,
+                    // enableInfiniteScroll: false,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        currentImageIndex = index;
+                      });
+                    },
+                  ),
+                  items: widget.article.images.isNotEmpty
+                      ? widget.article.images.map((imageUrl) {
+                          return Builder(
+                            builder: (BuildContext context) {
+                              return Container(
+                                width: MediaQuery.of(context).size.width,
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 5.0),
+                                child: Image.network(
+                                  imageUrl,
+                                  fit: BoxFit.contain,
+                                ),
+                              );
+                            },
+                          );
+                        }).toList()
+                      : [
+                          Container(
                             width: MediaQuery.of(context).size.width,
                             margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                            child: Image.network(
-                              imageUrl,
+                            child: Image.asset(
+                              'assets/images/placeholder.jpg',
                               fit: BoxFit.contain,
                             ),
-                          );
-                        },
-                      );
-                    }).toList()
-                  : [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                        child: Image.asset(
-                          'assets/images/placeholder.jpg',
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ],
+                          ),
+                        ],
+                );
+              },
             ),
             Padding(
               padding: const EdgeInsets.only(top: 10.0),
@@ -541,9 +548,7 @@ class _ProductDetailState extends State<ProductDetail> {
     });
   }
 
-  // Functions for article actions
-
-  void addFavoriteArticle(context) async {
+  void toggleFavoriteArticle(BuildContext context) async {
     // Check if the user is authenticated
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -564,52 +569,125 @@ class _ProductDetailState extends State<ProductDetail> {
       // Get the user document from Firestore
       DocumentSnapshot userSnapshot = await usersRef.doc(userId).get();
 
-      // Check if the user document exists and contains the "favorites" field
       if (userSnapshot.exists && userSnapshot.data() != null) {
-        List<String> favoritesList = [];
+        Map<String, dynamic>? userData =
+            userSnapshot.data() as Map<String, dynamic>?;
 
-        // Check if the "favorites" field exists and is of type List
-        dynamic favoritesData = userSnapshot.data()!;
-        if (favoritesData is List) {
-          // If "Favorites" field exists and is of type List, convert to List<String>
-          favoritesList = favoritesData.map((id) => id.toString()).toList();
-        }
+        if (userData != null &&
+            userData.containsKey('favorites') &&
+            userData['favorites'] is List) {
+          List<String> favoritesList = List<String>.from(userData['favorites']);
 
-        // Check if the article ID is not already in favorites
-        if (!favoritesList.contains(widget.id)) {
-          favoritesList.add(widget.id);
+          // Check if the article ID is in the favorites list
+          bool isFavorite = favoritesList.contains(widget.id);
+
+          if (isFavorite) {
+            // If the article is already in favorites, remove it
+            favoritesList.remove(widget.id);
+          } else {
+            // If the article is not in favorites, add it
+            if (!isFavorite) {
+              favoritesList.add(widget.id);
+            }
+          }
 
           // Update the user document with the updated favorites list
           await usersRef.doc(userId).set(
-            {'favorites': FieldValue.arrayUnion(favoritesList)},
+            {'favorites': favoritesList},
             SetOptions(
-                merge:
-                    true), // Using FieldValue.arrayUnion to merge new favorites with existing ones
+                merge: true), // Using merge: true to merge with existing data
           );
+
+          setState(() {
+            isArticleFavorite = !isFavorite; // Toggle the state value
+          });
         } else {
-          // Article ID is already in favorites list, show a message
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Article is already in favorites')),
+          // If the "favorites" field is missing or not a List, add the "favorites" field to the user document
+          List<String> favoritesList = [widget.id];
+          await usersRef.doc(userId).set(
+            {'favorites': favoritesList},
+            SetOptions(
+                merge: true), // Using merge: true to merge with existing data
           );
-          return;
+
+          setState(() {
+            isArticleFavorite = true; // Update the state
+          });
         }
       } else {
-        // If the user document doesn't exist or data is null, create a new user document with the "Favorites" field
-        await usersRef.doc(userId).set({
-          'favorites': [widget.id], // Add the article ID to favorites list
-        });
+        // If the user document doesn't exist or data is null, handle the error accordingly
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to toggle article favorite')),
+        );
       }
-
-      // Show a success message to the user
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Article added to favorites')),
-      );
     } catch (error) {
       // Handle any errors that occurred during the process
-      print('Error adding article to favorites: $error');
+      print('Error toggling article favorite: $error');
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to add article to favorites')),
+        const SnackBar(content: Text('Failed to toggle article favorite')),
       );
+    }
+  }
+
+  Future<void> checkAndSetIsArticleFavorite(String articleId) async {
+    // Check if the user is authenticated
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      setState(() {
+        isArticleFavorite =
+            false; // If the user is not logged in, the article cannot be in favorites
+      });
+      return;
+    }
+
+    // Get the user's ID
+    String userId = user.uid;
+
+    try {
+      // Get a reference to the Firestore collection for users
+      CollectionReference usersRef =
+          FirebaseFirestore.instance.collection('users');
+
+      // Get the user document from Firestore
+      DocumentSnapshot userSnapshot = await usersRef.doc(userId).get();
+
+      if (userSnapshot.exists && userSnapshot.data() != null) {
+        Map<String, dynamic>? userData =
+            userSnapshot.data() as Map<String, dynamic>?;
+
+        if (userData != null &&
+            userData.containsKey('favorites') &&
+            userData['favorites'] is List) {
+          List<String> favoritesList = List<String>.from(userData['favorites']);
+
+          // Check if the article ID is in the favorites list
+          bool isFavorite = favoritesList.contains(articleId);
+
+          setState(() {
+            isArticleFavorite = isFavorite;
+          });
+        } else {
+          // If the "favorites" field is missing or not a List, check if it's an empty list
+          // If it's empty, the article is not in favorites; otherwise, it's assumed to be not in favorites
+          bool isEmptyFavorites = (userData != null &&
+              userData['favorites'] is List &&
+              userData['favorites'].isEmpty);
+          setState(() {
+            isArticleFavorite = !isEmptyFavorites;
+          });
+        }
+      } else {
+        setState(() {
+          isArticleFavorite =
+              false; // If the user document doesn't exist or data is null, the article cannot be in favorites
+        });
+      }
+    } catch (error) {
+      print('Error checking if article is in favorites: $error');
+      setState(() {
+        isArticleFavorite =
+            false; // Handle any errors and assume the article is not in favorites
+      });
     }
   }
 
