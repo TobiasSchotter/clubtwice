@@ -32,9 +32,7 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(toolbarHeight: 0, backgroundColor: Colors.blue),
       body: Column(
         children: [
-          // Section 1 - Profile Picture - Username - Name
           const MyProfileWidget(),
-
           Expanded(
             child: ListView(
               shrinkWrap: true,
@@ -42,7 +40,7 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  margin: const EdgeInsets.only(top: 24),
+                  margin: const EdgeInsets.only(top: 16),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,7 +58,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       MenuTileWidget(
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ProfilePageSet()));
+                              builder: (context) => const ProfilePageSet()));
                         },
                         margin: const EdgeInsets.only(top: 10),
                         icon: Icon(
@@ -73,7 +71,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       MenuTileWidget(
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ProfilePageClub()));
+                              builder: (context) => const ProfilePageClub()));
                         },
                         margin: const EdgeInsets.only(top: 10),
                         icon: Icon(
@@ -134,7 +132,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       MenuTileWidget(
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => PWChangePage()));
+                              builder: (context) => const PWChangePage()));
                         },
                         margin: const EdgeInsets.only(top: 10),
                         icon: Icon(
@@ -147,7 +145,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       MenuTileWidget(
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ProfilePageMail()));
+                              builder: (context) => const ProfilePageMail()));
                         },
                         margin: const EdgeInsets.only(top: 10),
                         icon: Icon(
@@ -216,7 +214,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                   // ignore: use_build_context_synchronously
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
-                                        builder: (context) => WelcomePage()),
+                                        builder: (context) =>
+                                            const WelcomePage()),
                                   );
                                   widget.signOut();
                                   // ignore: use_build_context_synchronously

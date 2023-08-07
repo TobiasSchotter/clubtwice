@@ -49,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
         print('Unbekannter Fehler: ${e.code}');
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Ein Fehler ist aufgetreten. .'),
+            content: Text('Ein Fehler ist aufgetreten.'),
             backgroundColor: Colors.red,
           ),
         );

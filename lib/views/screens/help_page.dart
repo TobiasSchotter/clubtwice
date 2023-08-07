@@ -19,6 +19,13 @@ class HelpPage extends StatefulWidget {
   State<HelpPage> createState() => _HelpPageState();
 }
 
+void _deleteUser() async {
+  User? currentUser = FirebaseAuth.instance.currentUser;
+  if (currentUser != null) {
+    await currentUser.delete();
+  }
+}
+
 class _HelpPageState extends State<HelpPage> {
   bool confirm = false;
   @override
@@ -183,7 +190,7 @@ class _HelpPageState extends State<HelpPage> {
                             if (user != null) {
                               try {
                                 // Delete user from Firebase
-                                await user.delete();
+                                _deleteUser();
                                 print(const Text('HallO'));
                                 // Navigate to welcome page
                                 Navigator.of(context).push(

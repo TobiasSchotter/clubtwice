@@ -749,7 +749,7 @@ class _ProductDetailState extends State<ProductDetail> {
     updateArticleStatus(
       'isSold',
       false,
-      'Artikel wiedereinstellen',
+      'Artikel wiedereingestellt',
       'Artikel konnte nicht wiedereingestellt werden',
     );
   }

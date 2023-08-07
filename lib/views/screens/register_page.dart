@@ -106,13 +106,8 @@ class _LoginPageState extends State<RegisterPage> {
       setState(() {
         errorMessage = e.message;
       });
+      print(errorMessage);
       // Show error message as snack bar
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(errorMessage!),
-          backgroundColor: Colors.red,
-        ),
-      );
     }
   }
 
@@ -123,6 +118,8 @@ class _LoginPageState extends State<RegisterPage> {
       'first Name': firstName,
       'username': userName,
       'email': email,
+      'club': "Keine Auswahl",
+      'sport': "Keine Auswahl"
     });
   }
 

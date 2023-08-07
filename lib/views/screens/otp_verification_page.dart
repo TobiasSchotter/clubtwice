@@ -60,8 +60,11 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
   Future<void> _sendVerificationEmail() async {
     if (_user != null) {
       await _user!.sendEmailVerification();
-      // Bestätigungsmail gesendet
-      // ...
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Bestätigungsmail wurde erneut gesendet.'),
+        ),
+      );
     }
   }
 
