@@ -457,11 +457,13 @@ class _ProductDetailState extends State<ProductDetail> {
     return GestureDetector(
       onTap: articleCount > 0
           ? () {
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (context) => UserPage(userId: widget.article.userId),
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => UserPage(
+                  userId: widget.article.userId,
+                  userName: userName!,
+                  articleCount: articleCount,
                 ),
-              );
+              ));
             }
           : null, // Disable onTap if articleCount is 0
       child: Container(

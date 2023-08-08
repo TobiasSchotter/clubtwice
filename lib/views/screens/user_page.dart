@@ -6,9 +6,15 @@ import 'package:flutter/services.dart';
 import 'package:clubtwice/core/services/articles_service.dart';
 
 class UserPage extends StatefulWidget {
-  const UserPage({super.key, required this.userId});
+  const UserPage(
+      {super.key,
+      required this.userId,
+      required this.userName,
+      required this.articleCount});
 
   final String userId;
+  final String userName;
+  final int articleCount;
 
   Future signOut() async {
     await FirebaseAuth.instance.signOut();
@@ -21,11 +27,13 @@ class UserPage extends StatefulWidget {
 class _UserPageState extends State<UserPage> {
   List<ArticleWithId> articlesWithID = [];
   String searchTerm = '';
+
   final ArticleService articleService = ArticleService();
 
   @override
   void initState() {
     super.initState();
+
     loadData();
   }
 
@@ -44,7 +52,7 @@ class _UserPageState extends State<UserPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Weitere Artikel"),
+        title: Text("Weitere Artikel von ${widget.userName}"),
         automaticallyImplyLeading: false,
         centerTitle: true,
         backgroundColor: AppColor.primary,
@@ -68,13 +76,14 @@ class _UserPageState extends State<UserPage> {
             height: 46,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Text(
-                  'Anzeigen von',
+                  '${widget.articleCount + 1} Artikel von ${widget.userName} online',
                   style: TextStyle(
-                      color: AppColor.border,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600),
+                    color: AppColor.border,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ],
             ),
