@@ -42,6 +42,7 @@ class _ProductDetailState extends State<ProductDetail> {
   // params for additional articles
   int articleCount = 0;
   bool isFetching = true;
+  int currentImageIndex = 0;
 
   @override
   void initState() {
@@ -64,10 +65,11 @@ class _ProductDetailState extends State<ProductDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(widget.article.title),
         foregroundColor: Colors.black,
@@ -92,7 +94,7 @@ class _ProductDetailState extends State<ProductDetail> {
         ],
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
-      extendBodyBehindAppBar: true,
+      // extendBodyBehindAppBar: true,
       extendBody: true,
       bottomNavigationBar: buildBottomNavigationBar(context),
       body: Builder(
@@ -240,7 +242,6 @@ class _ProductDetailState extends State<ProductDetail> {
   }
 
   ListView buildBodyContent(DateTime dateTime) {
-    int currentImageIndex = 1;
     return ListView(
       shrinkWrap: true,
       physics: const BouncingScrollPhysics(),
@@ -294,7 +295,7 @@ class _ProductDetailState extends State<ProductDetail> {
               },
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 10.0),
+              padding: const EdgeInsets.only(top: 330.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: widget.article.images.isNotEmpty

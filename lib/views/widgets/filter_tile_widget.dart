@@ -111,7 +111,7 @@ class FilterWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   SizedBox(
-                    width: 77,
+                    width: 79,
                     child: DropdownButton<String>(
                       iconSize: 15.0,
                       elevation: 16,
