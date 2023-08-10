@@ -191,11 +191,13 @@ class ItemCard extends StatelessWidget {
                             fontSize: 12,
                           ),
                           children: [
-                            TextSpan(text: '${article.club} • '),
-                            TextSpan(text: article.sport),
+                            if (article.club != "Keine Auswahl")
+                              TextSpan(text: '${article.club} • '),
+                            if (article.sport != "Keine Auswahl")
+                              TextSpan(text: article.sport),
                           ],
                         ),
-                      ),
+                      )
                     ],
                   )
                 ],
