@@ -1,3 +1,5 @@
+import 'package:clubtwice/views/screens/selection_club_page.dart';
+import 'package:clubtwice/views/screens/selection_sport_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,8 +8,6 @@ import 'package:clubtwice/core/model/UserModel.dart';
 import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/constant/app_button.dart';
-
-import '../../core/services/option_service.dart';
 
 class ProfilePageClub extends StatefulWidget {
   const ProfilePageClub({Key? key}) : super(key: key);
@@ -49,6 +49,98 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
       String userId = user.uid;
       userService.updateUserClubInformation(userId, club, sport);
     }
+  }
+
+  Widget _buildSportSelection(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        final selectedSport = await Navigator.push<String>(
+          context,
+          MaterialPageRoute(builder: (context) => SportSelectionPage()),
+        );
+
+        if (selectedSport != null) {
+          setState(() {
+            sport = selectedSport;
+          });
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.grey,
+            width: 1.0,
+          ),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              '  Sport wählen',
+              style: TextStyle(fontSize: 16),
+            ),
+            Row(
+              children: [
+                Text(
+                  sport,
+                  style: const TextStyle(fontSize: 16, color: AppColor.primary),
+                ),
+                const SizedBox(width: 8),
+                const Icon(Icons.keyboard_arrow_right, color: AppColor.primary),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildClubSelection(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        final selectedClub = await Navigator.push<String>(
+          context,
+          MaterialPageRoute(builder: (context) => ClubSelectionPage()),
+        );
+
+        if (selectedClub != null) {
+          setState(() {
+            club = selectedClub;
+          });
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.grey,
+            width: 1.0,
+          ),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              '  Verein wählen',
+              style: TextStyle(fontSize: 16),
+            ),
+            Row(
+              children: [
+                Text(
+                  club,
+                  style: const TextStyle(fontSize: 16, color: AppColor.primary),
+                ),
+                const SizedBox(width: 8),
+                const Icon(Icons.keyboard_arrow_right, color: AppColor.primary),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -103,48 +195,11 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
           Container(
             height: 16,
           ),
-          DropdownButtonFormField<String>(
-            decoration: const InputDecoration(
-              labelText: 'Verein auswählen',
-              border: OutlineInputBorder(),
-            ),
-            value: club.isNotEmpty ? club : null, // Set the initial value
-            items: DropdownOptions.clubOptions
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: (newValue) {
-              setState(() {
-                club = newValue!;
-              });
-            },
-          ),
+          _buildClubSelection(context),
           Container(
             height: 16,
           ),
-          DropdownButtonFormField<String>(
-            focusColor: AppColor.primarySoft,
-            decoration: const InputDecoration(
-              labelText: 'Sportart auswählen',
-              border: OutlineInputBorder(),
-            ),
-            value: sport.isNotEmpty ? sport : null, // Set the initial value
-            items: DropdownOptions.sportOptions
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: (newValue) {
-              setState(() {
-                sport = newValue!;
-              });
-            },
-          ),
+          _buildSportSelection(context),
           const SizedBox(height: 16),
           CustomButton(
             buttonText: 'Speichern',
