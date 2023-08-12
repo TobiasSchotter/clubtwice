@@ -119,24 +119,25 @@ class _SearchPageState extends State<SearchPage> {
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount:
-                    searchHistory.length, // Use the length of the 'search' list
+                itemCount: searchHistory.length,
                 itemBuilder: (context, index) {
-                  String searchTerm = searchHistory[
-                      index]; // Get the search term from the 'search' list
+                  String searchTerm = searchHistory[index];
                   return SearchHistoryTile(
-                    data: SearchHistory(
-                        title:
-                            searchTerm), // Create a SearchHistory object with the search term
+                    data: SearchHistory(title: searchTerm),
                     onTap: () {
                       updateSearchList(searchTerm);
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => SearchResultPage(
-                            searchKeyword: searchTerm,
-                          ),
+                          builder: (context) =>
+                              SearchResultPage(searchKeyword: searchTerm),
                         ),
                       );
+                    },
+                    onDelete: () {
+                      setState(() {
+                        searchHistory.removeAt(index);
+                      });
+                      saveChanges();
                     },
                   );
                 },

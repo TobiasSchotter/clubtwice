@@ -52,7 +52,7 @@ class ArticleService {
 
   Future<List<ArticleWithId>> fetchArticles(
       String searchTerm, String club) async {
-    if (club != '' && club.isNotEmpty) {
+    if (club.isNotEmpty && club != "Keine Auswahl") {
       Query articlesQuery = FirebaseFirestore.instance
           .collection('articles')
           .where('club', isEqualTo: club)

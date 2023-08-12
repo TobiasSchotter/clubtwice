@@ -23,6 +23,7 @@ class _HomePageState extends State<HomePage> {
   String sportart = '';
   List<ArticleWithId> articlesWithID = [];
   String searchTerm = '';
+  bool hasSearchResults = true;
   final UserService userService = UserService();
   final ArticleService articleService = ArticleService();
   UserModel? userModel;
@@ -69,7 +70,31 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     Widget content;
     if (club.isNotEmpty && club != "Keine Auswahl") {
-      if (articlesWithID.isNotEmpty) {
+      if (!hasSearchResults) {
+        content = Container(
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: 160,
+              ),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: const Center(
+                  child: Text(
+                    'Zu deiner Suche gibt es keinen Artikel',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
+          ),
+        );
+      } else if (articlesWithID.isNotEmpty) {
         content = Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Wrap(
@@ -143,30 +168,6 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     }
-    if (articlesWithID.isEmpty && club.isNotEmpty && club != "Keine Auswahl") {
-      content = Container(
-        alignment: Alignment.center,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              height: 160,
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: const Center(
-                child: Text(
-                  'Zu deiner Suche gab es kein Ergebnis. Bitte ändere deine Suche',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 15),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-          ],
-        ),
-      );
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -181,15 +182,10 @@ class _HomePageState extends State<HomePage> {
             onSubmitted: (searchTerm) async {
               List<ArticleWithId> articleList =
                   await articleService.fetchArticles(searchTerm, club);
-              if (articleList.isNotEmpty) {
-                setState(() {
-                  articlesWithID = articleList;
-                });
-              } else if (articleList.isEmpty) {
-                setState(() {
-                  articlesWithID = articleList;
-                });
-              }
+              setState(() {
+                articlesWithID = articleList;
+                hasSearchResults = articleList.isNotEmpty;
+              });
             },
           ),
         ),
