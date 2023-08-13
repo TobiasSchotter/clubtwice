@@ -75,6 +75,7 @@ class _SellPageState extends State<SellPage> {
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16),
+        height: 54,
         decoration: BoxDecoration(
           border: Border.all(
             color: Colors.grey,
@@ -121,6 +122,7 @@ class _SellPageState extends State<SellPage> {
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16),
+        height: 54,
         decoration: BoxDecoration(
           border: Border.all(
             color: Colors.grey,
@@ -167,6 +169,7 @@ class _SellPageState extends State<SellPage> {
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16),
+        height: 54,
         decoration: BoxDecoration(
           border: Border.all(
             color: Colors.grey,
