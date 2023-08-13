@@ -2,33 +2,34 @@ import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/core/services/option_service.dart';
 import 'package:flutter/material.dart';
 
-class SportSelectionPage extends StatefulWidget {
+class BrandSelectionPage extends StatefulWidget {
   @override
-  _SportSelectionPageState createState() => _SportSelectionPageState();
+  _BrandSelectionPageState createState() => _BrandSelectionPageState();
 }
 
-class _SportSelectionPageState extends State<SportSelectionPage> {
-  List<String> sportOptions = DropdownOptions.sportOptions;
+class _BrandSelectionPageState extends State<BrandSelectionPage> {
+  List<String> brandOptions = DropdownOptions.popularBrandOptions +
+      DropdownOptions.lessPopularBrandOptions;
 
-  int selectedSportIndex = -1;
-  List<String> filteredSports = [];
+  int selectedBrandIndex = -1;
+  List<String> filteredBrands = [];
 
   @override
   void initState() {
     super.initState();
-    filteredSports = sportOptions;
+    filteredBrands = brandOptions;
   }
 
-  void filterSports(String query) {
+  void filterBrands(String query) {
     setState(() {
-      filteredSports = sportOptions
-          .where((sport) => sport.toLowerCase().contains(query.toLowerCase()))
+      filteredBrands = brandOptions
+          .where((brand) => brand.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
 
-  void _onSportSelected(String sport) {
-    Navigator.pop(context, sport);
+  void _onBrandSelected(String brand) {
+    Navigator.pop(context, brand);
   }
 
   @override
@@ -37,7 +38,7 @@ class _SportSelectionPageState extends State<SportSelectionPage> {
       appBar: AppBar(
         backgroundColor: AppColor.primary,
         title: const Text(
-          'Sportarten',
+          'Marken',
           style: TextStyle(fontSize: 15),
         ),
         centerTitle: true,
@@ -53,16 +54,16 @@ class _SportSelectionPageState extends State<SportSelectionPage> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
-              onChanged: filterSports,
+              onChanged: filterBrands,
               decoration: const InputDecoration(
-                labelText: 'Suche nach Sportarten',
+                labelText: 'Suche nach Marken',
                 prefixIcon: Icon(Icons.search),
               ),
             ),
           ),
           Expanded(
             child: ListView.separated(
-              itemCount: filteredSports.length,
+              itemCount: filteredBrands.length,
               separatorBuilder: (context, index) => Container(
                 height: 1,
                 color: AppColor.primarySoft,
@@ -70,10 +71,10 @@ class _SportSelectionPageState extends State<SportSelectionPage> {
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(
-                    filteredSports[index],
+                    filteredBrands[index],
                     style: const TextStyle(fontSize: 14),
                   ),
-                  trailing: selectedSportIndex == index
+                  trailing: selectedBrandIndex == index
                       ? const CircleAvatar(
                           radius: 14,
                           backgroundColor: Colors.white,
@@ -84,8 +85,7 @@ class _SportSelectionPageState extends State<SportSelectionPage> {
                         )
                       : null,
                   onTap: () {
-                    _onSportSelected(
-                        filteredSports[index]); // Pass the selected sport
+                    _onBrandSelected(filteredBrands[index]);
                   },
                 );
               },

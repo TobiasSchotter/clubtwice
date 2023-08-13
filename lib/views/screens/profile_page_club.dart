@@ -38,8 +38,6 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
     setState(() {
       club = userModel!.club;
       sport = userModel!.sport;
-      originalClub = club;
-      originalSport = sport;
     });
   }
 

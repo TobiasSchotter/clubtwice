@@ -2,6 +2,9 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clubtwice/constant/app_button.dart';
 import 'package:clubtwice/core/services/option_service.dart';
+import 'package:clubtwice/views/screens/selection_brand_page.dart';
+import 'package:clubtwice/views/screens/selection_club_page.dart';
+import 'package:clubtwice/views/screens/selection_sport_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:clubtwice/views/screens/page_switcher.dart';
@@ -54,6 +57,144 @@ class _SellPageState extends State<SellPage> {
       _selectedClub = userModel!.club;
       _selectedSport = userModel!.sport;
     });
+  }
+
+  Widget _buildSportSelection(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        final selectedSport = await Navigator.push<String>(
+          context,
+          MaterialPageRoute(builder: (context) => SportSelectionPage()),
+        );
+
+        if (selectedSport != null) {
+          setState(() {
+            _selectedSport = selectedSport;
+          });
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.grey,
+            width: 1.0,
+          ),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              '  Sport wählen',
+              style: TextStyle(fontSize: 16),
+            ),
+            Row(
+              children: [
+                Text(
+                  _selectedSport,
+                  style: const TextStyle(fontSize: 16, color: AppColor.primary),
+                ),
+                const SizedBox(width: 8),
+                const Icon(Icons.keyboard_arrow_right, color: AppColor.primary),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildClubSelection(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        final selectedClub = await Navigator.push<String>(
+          context,
+          MaterialPageRoute(builder: (context) => ClubSelectionPage()),
+        );
+
+        if (selectedClub != null) {
+          setState(() {
+            _selectedClub = selectedClub;
+          });
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.grey,
+            width: 1.0,
+          ),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              '  Verein wählen',
+              style: TextStyle(fontSize: 16),
+            ),
+            Row(
+              children: [
+                Text(
+                  _selectedClub,
+                  style: const TextStyle(fontSize: 16, color: AppColor.primary),
+                ),
+                const SizedBox(width: 8),
+                const Icon(Icons.keyboard_arrow_right, color: AppColor.primary),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBrandSelection(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        final selectedBrand = await Navigator.push<String>(
+          context,
+          MaterialPageRoute(builder: (context) => BrandSelectionPage()),
+        );
+
+        if (selectedBrand != null) {
+          setState(() {
+            _selectedBrand = selectedBrand;
+          });
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.grey,
+            width: 1.0,
+          ),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              '  Marke wählen',
+              style: TextStyle(fontSize: 16),
+            ),
+            Row(
+              children: [
+                Text(
+                  _selectedBrand,
+                  style: const TextStyle(fontSize: 16, color: AppColor.primary),
+                ),
+                const SizedBox(width: 8),
+                const Icon(Icons.keyboard_arrow_right, color: AppColor.primary),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -203,63 +344,7 @@ class _SellPageState extends State<SellPage> {
                 },
               ),
               const SizedBox(height: 16),
-              DropdownButtonFormField<String>(
-                value: _selectedBrand,
-                decoration: const InputDecoration(
-                  labelText: 'Marke auswählen',
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 10.0,
-                    vertical: 0,
-                  ),
-                ),
-                items: [
-                  const DropdownMenuItem<String>(
-                    value: null,
-                    enabled: false,
-                    child: Text(
-                      'Beliebtesten Marken',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.underline,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-                  ...DropdownOptions.popularBrandOptions.map((value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }),
-                  const DropdownMenuItem<String>(
-                    value: null,
-                    enabled: false,
-                    child: Text(
-                      'Weitere',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.underline,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-                  ...DropdownOptions.lessPopularBrandOptions.map((value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value,
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                    );
-                  }),
-                ],
-                onChanged: (newValue) {
-                  setState(() {
-                    _selectedBrand = newValue!;
-                  });
-                },
-              ),
+              _buildBrandSelection(context),
               const Divider(
                 color: AppColor.border,
                 height: 30,
@@ -267,54 +352,9 @@ class _SellPageState extends State<SellPage> {
                 indent: 20,
                 endIndent: 20,
               ),
-              DropdownButtonFormField<String>(
-                value: _selectedClub,
-                decoration: const InputDecoration(
-                  labelText: 'Verein auswählen',
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 10.0,
-                    vertical: 0,
-                  ),
-                ),
-                items: DropdownOptions.clubOptions
-                    .map<DropdownMenuItem<String>>((value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (newValue) {
-                  setState(() {
-                    _selectedClub = newValue!;
-                  });
-                },
-              ),
+              _buildClubSelection(context),
               const SizedBox(height: 16),
-              DropdownButtonFormField<String>(
-                focusColor: AppColor.primarySoft,
-                value: _selectedSport,
-                decoration: const InputDecoration(
-                  labelText: 'Sportart auswählen',
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 10.0,
-                    vertical: 0,
-                  ),
-                ),
-                items: DropdownOptions.sportOptions
-                    .map<DropdownMenuItem<String>>((value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (newValue) {
-                  setState(() {
-                    _selectedSport = newValue!;
-                  });
-                },
-              ),
+              _buildSportSelection(context),
               ListTile(
                 title: const Text(
                   "Artikel unabhängig des Vereins / Sportart nutzbar",
