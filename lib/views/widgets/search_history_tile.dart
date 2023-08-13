@@ -27,12 +27,13 @@ class SearchHistoryTile extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('${data.title}'),
+          Text(data.title),
           GestureDetector(
             onTap: onDelete,
-            child: Icon(
+            child: const Icon(
               Icons.close,
               color: Colors.grey,
+              size: 14,
             ),
           ),
         ],
