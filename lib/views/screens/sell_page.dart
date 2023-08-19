@@ -288,7 +288,10 @@ class _SellPageState extends State<SellPage> {
                 items: DropdownOptions.typeOptions.map((option) {
                   return DropdownMenuItem<String>(
                     value: option,
-                    child: Text(option),
+                    child: Text(
+                      option,
+                      style: const TextStyle(fontSize: 16),
+                    ),
                   );
                 }).toList(),
               ),
@@ -312,7 +315,10 @@ class _SellPageState extends State<SellPage> {
                     DropdownOptions.sizeOptions[_selectedType]!.map((option) {
                   return DropdownMenuItem<String>(
                     value: option,
-                    child: Text(option),
+                    child: Text(
+                      option,
+                      style: const TextStyle(fontSize: 16),
+                    ),
                   );
                 }).toList(),
               ),
@@ -337,7 +343,10 @@ class _SellPageState extends State<SellPage> {
                     .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
-                    child: Text(value),
+                    child: Text(
+                      value,
+                      style: const TextStyle(fontSize: 16),
+                    ),
                   );
                 }).toList(),
                 onChanged: (newValue) {
@@ -356,11 +365,11 @@ class _SellPageState extends State<SellPage> {
                 endIndent: 20,
               ),
               _buildClubSelection(context),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
               _buildSportSelection(context),
               ListTile(
                 title: const Text(
-                  "Artikel unabhängig des Vereins / Sportart nutzbar",
+                  "Artikel unabhängig nutzbar",
                   style: TextStyle(fontSize: 15),
                 ),
                 trailing: Row(

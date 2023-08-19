@@ -55,7 +55,7 @@ class _ClubSelectionPageState extends State<ClubSelectionPage> {
             child: TextField(
               onChanged: filterClubs,
               decoration: const InputDecoration(
-                labelText: 'Suche nach Sportarten',
+                labelText: 'Suche nach Vereinen',
                 prefixIcon: Icon(Icons.search),
               ),
             ),

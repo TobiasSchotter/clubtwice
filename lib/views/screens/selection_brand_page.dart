@@ -8,21 +8,32 @@ class BrandSelectionPage extends StatefulWidget {
 }
 
 class _BrandSelectionPageState extends State<BrandSelectionPage> {
-  List<String> brandOptions = DropdownOptions.popularBrandOptions +
+  List<String> popularBrandOptions = DropdownOptions.popularBrandOptions;
+  List<String> lessPopularBrandOptions =
       DropdownOptions.lessPopularBrandOptions;
 
   int selectedBrandIndex = -1;
-  List<String> filteredBrands = [];
+  List<String> filteredPopularBrands = [];
+  List<String> filteredLessPopularBrands = [];
 
   @override
   void initState() {
     super.initState();
-    filteredBrands = brandOptions;
+    filteredPopularBrands = popularBrandOptions;
+    filteredLessPopularBrands = lessPopularBrandOptions;
   }
 
-  void filterBrands(String query) {
+  void filterPopularBrands(String query) {
     setState(() {
-      filteredBrands = brandOptions
+      filteredPopularBrands = popularBrandOptions
+          .where((brand) => brand.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    });
+  }
+
+  void filterLessPopularBrands(String query) {
+    setState(() {
+      filteredLessPopularBrands = lessPopularBrandOptions
           .where((brand) => brand.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
@@ -49,50 +60,76 @@ class _BrandSelectionPageState extends State<BrandSelectionPage> {
           },
         ),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              onChanged: filterBrands,
-              decoration: const InputDecoration(
-                labelText: 'Suche nach Marken',
-                prefixIcon: Icon(Icons.search),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                onChanged: (query) {
+                  filterPopularBrands(query);
+                  filterLessPopularBrands(query);
+                },
+                decoration: const InputDecoration(
+                  labelText: 'Suche nach Marken',
+                  prefixIcon: Icon(Icons.search),
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: ListView.separated(
-              itemCount: filteredBrands.length,
-              separatorBuilder: (context, index) => Container(
-                height: 1,
-                color: AppColor.primarySoft,
-              ),
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(
-                    filteredBrands[index],
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                  trailing: selectedBrandIndex == index
-                      ? const CircleAvatar(
-                          radius: 14,
-                          backgroundColor: Colors.white,
-                          child: Icon(
-                            Icons.check,
-                            color: AppColor.primary,
-                          ),
-                        )
-                      : null,
-                  onTap: () {
-                    _onBrandSelected(filteredBrands[index]);
-                  },
-                );
-              },
+            _buildBrandList("Beliebte Marken", filteredPopularBrands),
+            const Divider(
+              thickness: 1,
+              color: AppColor.primarySoft,
             ),
-          ),
-        ],
+            _buildBrandList("Andere Marken", filteredLessPopularBrands),
+          ],
+        ),
       ),
+    );
+  }
+
+  Widget _buildBrandList(String title, List<String> brands) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
+          child: Text(
+            title,
+            style: TextStyle(fontSize: 12, color: AppColor.primary),
+          ),
+        ),
+        ListView.separated(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: brands.length,
+          separatorBuilder: (context, index) => Divider(
+            height: 1,
+            color: AppColor.primarySoft,
+          ),
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(
+                brands[index],
+                style: const TextStyle(fontSize: 14),
+              ),
+              trailing: selectedBrandIndex == index
+                  ? const CircleAvatar(
+                      radius: 14,
+                      backgroundColor: Colors.white,
+                      child: Icon(
+                        Icons.check,
+                        color: AppColor.primary,
+                      ),
+                    )
+                  : null,
+              onTap: () {
+                _onBrandSelected(brands[index]);
+              },
+            );
+          },
+        ),
+      ],
     );
   }
 }

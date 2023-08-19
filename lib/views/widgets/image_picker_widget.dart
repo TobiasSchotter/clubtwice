@@ -54,6 +54,35 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
     }
   }
 
+  void _showImagePickerMenu() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              //leading: Icon(Icons.camera),
+              title: const Center(child: Text('Kamera')),
+              onTap: () {
+                Navigator.pop(context);
+                pickImages(ImageSource.camera);
+              },
+            ),
+            ListTile(
+              // leading: Icon(Icons.photo_library),
+              title: const Center(child: Text('Galerie')),
+              onTap: () {
+                Navigator.pop(context);
+                pickImages(ImageSource.gallery);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -111,26 +140,10 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
         Container(
           height: 6,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Expanded(
-              child: CustomButton(
-                onPressed: () => pickImages(ImageSource.gallery),
-                buttonText: 'Galerie',
-              ),
-            ),
-            const SizedBox(
-                width:
-                    16), // Fügt einen horizontalen Abstand zwischen den Buttons hinzu
-            Expanded(
-              child: CustomButton(
-                onPressed: () => pickImages(ImageSource.camera),
-                buttonText: 'Kamera',
-              ),
-            ),
-          ],
-        )
+        CustomButton(
+          onPressed: _showImagePickerMenu,
+          buttonText: ('Bild auswählen'),
+        ),
       ],
     );
   }
