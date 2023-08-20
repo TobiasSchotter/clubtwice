@@ -27,6 +27,13 @@ class _SearchResultPageState extends State<SearchResultPage>
   List<String> searchHistory = [];
   UserModel? userModel;
   String currentSearchKeyword = "";
+  bool isExpansionTileOpen = false;
+
+  String club = '';
+  String sportart = '';
+  String typ = '';
+  String groesse = '';
+  String marke = '';
 
   final UserService userService = UserService();
   final ArticleService articleService = ArticleService();
@@ -48,7 +55,8 @@ class _SearchResultPageState extends State<SearchResultPage>
     });
 
     List<ArticleWithId> articleList =
-        await articleService.fetchArticlesClubWide(widget.searchKeyword);
+        await articleService.fetchArticlesClubWide(
+            widget.searchKeyword, club, sportart, typ, groesse, marke);
     if (articleList.isNotEmpty) {
       setState(() {
         articlesWithID = articleList;
@@ -119,11 +127,25 @@ class _SearchResultPageState extends State<SearchResultPage>
     saveChanges();
 
     // Perform the search and update the search results
-    List<ArticleWithId> articleList =
-        await articleService.fetchArticlesClubWide(searchTerm);
+    List<ArticleWithId> articleList = await articleService
+        .fetchArticlesClubWide(searchTerm, club, sportart, typ, groesse, marke);
     setState(() {
       articlesWithID = articleList;
     });
+  }
+
+  // Callback function to update filter values and reload data
+  void applyFilters(String selectedClub, String selectedSportart,
+      String selectedTyp, String selectedGroesse, String selectedMarke) {
+    setState(() {
+      club = selectedClub;
+      sportart = selectedSportart;
+      typ = selectedTyp;
+      groesse = selectedGroesse;
+      marke = selectedMarke;
+    });
+
+    loadData(); // Reload data with the applied filters
   }
 
   @override
@@ -161,14 +183,27 @@ class _SearchResultPageState extends State<SearchResultPage>
             shrinkWrap: true,
             physics: const BouncingScrollPhysics(),
             children: [
-              const ExpansionTile(
+              ExpansionTile(
                 iconColor: Colors.white,
                 textColor: Colors.white,
-                title: Text('Filter'),
+                title: const Text('Filter'),
                 backgroundColor: AppColor.primary,
+                initiallyExpanded: isExpansionTileOpen,
+                onExpansionChanged: (expanded) {
+                  setState(() {
+                    isExpansionTileOpen = expanded;
+                  });
+                },
                 children: <Widget>[
                   FilterWidget(
                     selectedIndex: 1,
+                    applyFilters: applyFilters,
+                    isHomePage: false,
+                    setExpansionTileState: (bool value) {
+                      setState(() {
+                        isExpansionTileOpen = value;
+                      });
+                    },
                   ),
                 ],
               ),

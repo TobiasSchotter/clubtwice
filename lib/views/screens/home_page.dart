@@ -26,6 +26,12 @@ class _HomePageState extends State<HomePage> {
   final UserService userService = UserService();
   final ArticleService articleService = ArticleService();
   UserModel? userModel;
+  bool isExpansionTileOpen = false; // Track the state of the ExpansionTile
+
+  String sportart = '';
+  String typ = '';
+  String groesse = '';
+  String marke = '';
 
   @override
   void initState() {
@@ -41,8 +47,8 @@ class _HomePageState extends State<HomePage> {
       club = userModel!.club;
     });
 
-    List<ArticleWithId> articleList =
-        await articleService.fetchArticles(searchTerm, club);
+    List<ArticleWithId> articleList = await articleService.fetchArticles(
+        searchTerm, club, sportart, typ, groesse, marke);
 
     setState(() {
       articlesWithID = articleList;
@@ -103,8 +109,8 @@ class _HomePageState extends State<HomePage> {
         child: SearchField(
           hintText: 'Suche Vereinskleidung deines Vereins',
           onSubmitted: (searchTerm) async {
-            List<ArticleWithId> articleList =
-                await articleService.fetchArticles(searchTerm, club);
+            List<ArticleWithId> articleList = await articleService
+                .fetchArticles(searchTerm, club, sportart, typ, groesse, marke);
             setState(() {
               articlesWithID = articleList;
               hasSearchResults = articleList.isNotEmpty;
@@ -154,20 +160,47 @@ class _HomePageState extends State<HomePage> {
   }
 
   ExpansionTile buildFilterExpansionTile() {
-    return const ExpansionTile(
+    return ExpansionTile(
       iconColor: Colors.white,
       textColor: Colors.white,
-      title: Text(
+      title: const Text(
         'Filter',
         style: TextStyle(fontSize: 16),
       ),
+      initiallyExpanded: isExpansionTileOpen,
+      onExpansionChanged: (expanded) {
+        setState(() {
+          isExpansionTileOpen = expanded;
+        });
+      },
       backgroundColor: AppColor.primary,
       children: <Widget>[
         FilterWidget(
           selectedIndex: 0,
+          applyFilters: applyFilters,
+          isHomePage: true,
+          setExpansionTileState: (bool value) {
+            setState(() {
+              isExpansionTileOpen = value;
+            });
+          },
         ),
       ],
     );
+  }
+
+  // Callback function to update filter values and reload data
+  void applyFilters(String selectedClub, String selectedSportart,
+      String selectedTyp, String selectedGroesse, String selectedMarke) {
+    setState(() {
+      //club = selectedClub;
+      sportart = selectedSportart;
+      typ = selectedTyp;
+      groesse = selectedGroesse;
+      marke = selectedMarke;
+    });
+
+    loadData(); // Reload data with the applied filters
   }
 
   Widget buildNoSearchResults() {

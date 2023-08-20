@@ -4,13 +4,45 @@ import 'package:flutter/material.dart';
 import '../../constant/app_color.dart';
 import '../../core/services/option_service.dart';
 
-class FilterWidget extends StatelessWidget {
+class FilterWidget extends StatefulWidget {
   final int selectedIndex;
+  final Function(String, String, String, String, String) applyFilters;
+  final bool isHomePage;
+  final Function(bool) setExpansionTileState;
 
-  const FilterWidget({Key? key, required this.selectedIndex}) : super(key: key);
+  const FilterWidget({
+    Key? key,
+    required this.selectedIndex,
+    required this.applyFilters,
+    required this.isHomePage,
+    required this.setExpansionTileState,
+  }) : super(key: key);
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _FilterWidgetState createState() => _FilterWidgetState();
+}
+
+class _FilterWidgetState extends State<FilterWidget>
+    with AutomaticKeepAliveClientMixin<FilterWidget> {
+  String selectedClub = '';
+  String selectedSportart = '';
+  String selectedTyp = '';
+  String selectedGroesse = '';
+  String selectedMarke = '';
+
+  String clubHintText = 'Verein';
+  String sportHintText = 'Sportart';
+  String typHintText = 'Typ';
+  String groesseHintText = 'Größe';
+  String markeHintText = 'Marke';
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     List<String> allBrands = List.from(popularBrands)
       ..addAll(lesspopularBrands);
 
@@ -23,17 +55,12 @@ class FilterWidget extends StatelessWidget {
       future:
           FirebaseFirestore.instance.collection('users').doc(user.uid).get(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator(); // Handle while data is being fetched
-        }
-
         final userData = snapshot.data?.data();
         if (userData == null) {
-          return Container(); // Handle when user data is not available
+          return Container();
         }
 
-        final club = userData['club'] as String? ??
-            ''; // Use 'as String?' to handle nullable value
+        final currentClub = userData['club'] as String? ?? '';
 
         return Column(
           children: <Widget>[
@@ -45,45 +72,48 @@ class FilterWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   SizedBox(
-                    width: 110,
-                    child: DropdownButton<String>(
-                      onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Dein Verein ist fest hinterlegt!'),
+                      width: 175,
+                      child: Center(
+                        child: DropdownButton<String>(
+                          alignment: Alignment.center,
+                          iconDisabledColor: Colors.white,
+                          iconEnabledColor: Colors.white,
+                          iconSize: 15.0,
+                          elevation: 16,
+                          style: const TextStyle(color: Colors.black),
+                          underline: Container(
+                            height: 0,
+                            color: Colors.white,
                           ),
-                        );
-                      },
-                      iconDisabledColor: Colors.white,
-                      iconEnabledColor: Colors.white,
-                      iconSize: 15.0,
-                      elevation: 16,
-                      style: const TextStyle(color: Colors.black),
-                      underline: Container(
-                        height: 0.5,
-                        color: Colors.white,
-                      ),
-                      items: [
-                        DropdownMenuItem(
-                          value: club,
-                          child: Text(selectedIndex == 0 ? club : 'Verein 1'),
+                          items: widget.isHomePage == true
+                              ? [
+                                  DropdownMenuItem(
+                                      value: currentClub,
+                                      child: Text(currentClub))
+                                ]
+                              : club.map((clubItem) {
+                                  return DropdownMenuItem(
+                                    value: clubItem,
+                                    child: Text(clubItem),
+                                  );
+                                }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              selectedClub = value!;
+                              clubHintText = value;
+                            });
+                          },
+                          hint: Text(clubHintText,
+                              style:
+                                  const TextStyle(color: AppColor.primarySoft)),
                         ),
-                      ],
-                      onChanged: (value) {
-                        // No need to do anything here since the value is not changed
-                      },
-                      hint: const Text('Verein',
-                          style: TextStyle(color: AppColor.primarySoft)),
-                      alignment: Alignment.center,
-                    ),
-                  ),
-                  // Filteroptionen für die Sportart
+                      )),
                   DropdownButton<String>(
                     iconSize: 15.0,
                     elevation: 16,
                     style: const TextStyle(color: Colors.black),
                     underline: Container(
-                      height: 0.5,
+                      height: 0,
                       color: Colors.white,
                     ),
                     items: sport.map((sportItem) {
@@ -93,11 +123,13 @@ class FilterWidget extends StatelessWidget {
                       );
                     }).toList(),
                     onChanged: (value) {
-                      // Handle the value when the user selects an item
-                      // You can put your logic here
+                      setState(() {
+                        selectedSportart = value!;
+                        sportHintText = value;
+                      });
                     },
-                    hint: const Text('Sportart',
-                        style: TextStyle(color: AppColor.primarySoft)),
+                    hint: Text(sportHintText,
+                        style: const TextStyle(color: AppColor.primarySoft)),
                     alignment: Alignment.center,
                   ),
                 ],
@@ -121,17 +153,20 @@ class FilterWidget extends StatelessWidget {
                         color: Colors.black,
                       ),
                       items: types.map((typesItem) {
+                        // Filteroptionen für den Typ
                         return DropdownMenuItem(
                           value: typesItem,
                           child: Text(typesItem),
                         );
                       }).toList(),
                       onChanged: (value) {
-                        // Handle the value when the user selects an item
-                        // You can put your logic here
+                        setState(() {
+                          selectedTyp = value!;
+                          typHintText = value;
+                        });
                       },
-                      hint: const Text('Typ',
-                          style: TextStyle(color: AppColor.primarySoft)),
+                      hint: Text(typHintText,
+                          style: const TextStyle(color: AppColor.primarySoft)),
                       alignment: Alignment.center,
                     ),
                   ),
@@ -144,18 +179,25 @@ class FilterWidget extends StatelessWidget {
                       height: 0,
                       color: Colors.black,
                     ),
-                    items: sizes[types[1]]!.map((sizeItem) {
-                      return DropdownMenuItem(
-                        value: sizeItem,
-                        child: Text(sizeItem),
-                      );
-                    }).toList(),
+                    items: selectedTyp == ''
+                        ? [
+                            const DropdownMenuItem(
+                                value: '', child: Text('Wähle Typ'))
+                          ]
+                        : sizes[selectedTyp]!.map((sizeItem) {
+                            return DropdownMenuItem(
+                              value: sizeItem,
+                              child: Text(sizeItem),
+                            );
+                          }).toList(),
                     onChanged: (value) {
-                      // Handle the value when the user selects an item
-                      // You can put your logic here
+                      setState(() {
+                        selectedGroesse = value!;
+                        groesseHintText = value;
+                      });
                     },
-                    hint: const Text('Größe',
-                        style: TextStyle(color: AppColor.primarySoft)),
+                    hint: Text(groesseHintText,
+                        style: const TextStyle(color: AppColor.primarySoft)),
                     alignment: Alignment.center,
                   ),
 
@@ -175,16 +217,41 @@ class FilterWidget extends StatelessWidget {
                       );
                     }).toList(),
                     onChanged: (value) {
-                      // Handle the value when the user selects an item
-                      // You can put your logic here
+                      setState(() {
+                        selectedMarke = value!;
+                        markeHintText = value;
+                      });
                     },
-                    hint: const Text('Marke',
-                        style: TextStyle(color: AppColor.primarySoft)),
+                    hint: Text(markeHintText,
+                        style: const TextStyle(color: AppColor.primarySoft)),
                     alignment: Alignment.center,
                   ),
                 ],
               ),
             ),
+            ElevatedButton(
+              onPressed: () {
+                widget.applyFilters(
+                  selectedClub,
+                  selectedSportart,
+                  selectedTyp,
+                  selectedGroesse,
+                  selectedMarke,
+                );
+
+                widget.setExpansionTileState(false);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColor.primary,
+                foregroundColor: Colors.white,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text('Filter anwenden'),
+            )
           ],
         );
       },

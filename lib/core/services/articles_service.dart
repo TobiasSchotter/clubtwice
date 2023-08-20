@@ -50,8 +50,32 @@ class ArticleService {
     return articles;
   }
 
+  // Future<List<ArticleWithId>> fetchArticles(
+  //     String searchTerm, String club) async {
+  //   if (club.isNotEmpty && club != "Keine Auswahl") {
+  //     Query articlesQuery = FirebaseFirestore.instance
+  //         .collection('articles')
+  //         .where('club', isEqualTo: club)
+  //         .where('isSold', isEqualTo: false)
+  //         .where('isReserved', isEqualTo: false)
+  //         .where('isDeleted', isEqualTo: false);
+
+  //     return _fetchArticles(articlesQuery, searchTerm);
+  //   } else {
+  //     print("fetchArticles: Verein ist leer");
+  //     // TODO: error handling
+  //     return [];
+  //   }
+  // }
+
   Future<List<ArticleWithId>> fetchArticles(
-      String searchTerm, String club) async {
+    String searchTerm,
+    String club,
+    String sportart,
+    String typ,
+    String groesse,
+    String marke,
+  ) async {
     if (club.isNotEmpty && club != "Keine Auswahl") {
       Query articlesQuery = FirebaseFirestore.instance
           .collection('articles')
@@ -60,12 +84,69 @@ class ArticleService {
           .where('isReserved', isEqualTo: false)
           .where('isDeleted', isEqualTo: false);
 
+      // Add additional filters if provided
+
+      if (sportart.isNotEmpty) {
+        articlesQuery = articlesQuery.where('sport', isEqualTo: sportart);
+      }
+
+      if (typ.isNotEmpty) {
+        articlesQuery = articlesQuery.where('type', isEqualTo: typ);
+      }
+
+      if (groesse.isNotEmpty) {
+        articlesQuery = articlesQuery.where('size', isEqualTo: groesse);
+      }
+
+      if (marke.isNotEmpty) {
+        articlesQuery = articlesQuery.where('brand', isEqualTo: marke);
+      }
+
+      // Continue with the searchTerm filtering
       return _fetchArticles(articlesQuery, searchTerm);
     } else {
       print("fetchArticles: Verein ist leer");
       // TODO: error handling
       return [];
     }
+  }
+
+  Future<List<ArticleWithId>> fetchArticlesClubWide(
+    String searchTerm,
+    String club,
+    String sportart,
+    String typ,
+    String groesse,
+    String marke,
+  ) async {
+    Query articlesQuery = FirebaseFirestore.instance
+        .collection('articles')
+        .where('isSold', isEqualTo: false)
+        .where('isReserved', isEqualTo: false)
+        .where('isDeleted', isEqualTo: false);
+
+    // Add additional filters if provided
+    if (club.isNotEmpty) {
+      articlesQuery = articlesQuery.where('club', isEqualTo: club);
+    }
+
+    if (sportart.isNotEmpty) {
+      articlesQuery = articlesQuery.where('sport', isEqualTo: sportart);
+    }
+
+    if (typ.isNotEmpty) {
+      articlesQuery = articlesQuery.where('type', isEqualTo: typ);
+    }
+
+    if (groesse.isNotEmpty) {
+      articlesQuery = articlesQuery.where('size', isEqualTo: groesse);
+    }
+
+    if (marke.isNotEmpty) {
+      articlesQuery = articlesQuery.where('brand', isEqualTo: marke);
+    }
+
+    return _fetchArticles(articlesQuery, searchTerm);
   }
 
   Future<List<ArticleWithId>> fetchUserArticles(
@@ -82,16 +163,6 @@ class ArticleService {
     Query articlesQuery = FirebaseFirestore.instance
         .collection('articles')
         .where('userId', isEqualTo: userId)
-        .where('isSold', isEqualTo: false)
-        .where('isReserved', isEqualTo: false)
-        .where('isDeleted', isEqualTo: false);
-
-    return _fetchArticles(articlesQuery, searchTerm);
-  }
-
-  Future<List<ArticleWithId>> fetchArticlesClubWide(String searchTerm) async {
-    Query articlesQuery = FirebaseFirestore.instance
-        .collection('articles')
         .where('isSold', isEqualTo: false)
         .where('isReserved', isEqualTo: false)
         .where('isDeleted', isEqualTo: false);
