@@ -3,31 +3,37 @@ import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/screens/product_detail.dart';
 import '../../core/model/Article.dart';
 
-// ignore: must_be_immutable
 class ItemCard extends StatelessWidget {
-  //final Product product;
   final Article article;
   final String articleId;
   final Color titleColor;
   final Color priceColor;
 
   const ItemCard({
-    super.key,
-    //required this.product,
+    Key? key,
     required this.article,
     required this.articleId,
     this.titleColor = Colors.black,
     this.priceColor = AppColor.primary,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    String textToDisplay = '';
+
+    if (article.club != "Keine Auswahl" && article.sport != "Keine Auswahl") {
+      textToDisplay = '${article.club} • ${article.sport}';
+    } else if (article.club != "Keine Auswahl") {
+      textToDisplay = article.club;
+    } else if (article.sport != "Keine Auswahl") {
+      textToDisplay = article.sport;
+    }
+
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-            //builder: (context) => ProductDetail(product: product)));
-            builder: (context) =>
-                ProductDetail(article: article, id: articleId)));
+          builder: (context) => ProductDetail(article: article, id: articleId),
+        ));
       },
       child: SizedBox(
         width: MediaQuery.of(context).size.width / 2 - 16 - 8,
@@ -115,9 +121,9 @@ class ItemCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16),
                       ),
                       alignment: Alignment.center,
-                      child: Column(
+                      child: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Icon(
                             Icons.delete,
                             color: Colors.white,
@@ -191,10 +197,7 @@ class ItemCard extends StatelessWidget {
                             fontSize: 12,
                           ),
                           children: [
-                            if (article.club != "Keine Auswahl")
-                              TextSpan(text: '${article.club} • '),
-                            if (article.sport != "Keine Auswahl")
-                              TextSpan(text: article.sport),
+                            TextSpan(text: textToDisplay),
                           ],
                         ),
                       )

@@ -453,12 +453,20 @@ class _ProductDetailState extends State<ProductDetail> {
       height: 1.5,
     );
 
+    List<InlineSpan> children = [];
+
+    if (article.club != "Keine Auswahl" && article.sport != "Keine Auswahl") {
+      children.add(
+          TextSpan(text: '${article.club} • ${article.sport}', style: style));
+    } else if (article.club != "Keine Auswahl") {
+      children.add(TextSpan(text: article.club, style: style));
+    } else if (article.sport != "Keine Auswahl") {
+      children.add(TextSpan(text: article.sport, style: style));
+    }
+
     return RichText(
       text: TextSpan(
-        children: [
-          TextSpan(text: '${article.club} • ', style: style),
-          TextSpan(text: article.sport, style: style),
-        ],
+        children: children,
       ),
     );
   }
