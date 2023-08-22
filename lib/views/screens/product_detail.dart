@@ -371,17 +371,26 @@ class _ProductDetailState extends State<ProductDetail> {
                 color: Colors.grey,
                 margin: const EdgeInsets.symmetric(vertical: 8),
               ),
-              Text(
-                widget.article.description,
-                style: TextStyle(
-                    color: AppColor.secondary.withOpacity(0.7),
-                    fontSize: 18,
-                    height: 150 / 100),
-              ),
-              Container(
-                height: 1,
-                color: Colors.grey,
-                margin: const EdgeInsets.symmetric(vertical: 8),
+              Visibility(
+                visible: widget.article.description.isNotEmpty,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start, // Hier ändern
+                  children: [
+                    Text(
+                      widget.article.description,
+                      style: TextStyle(
+                        color: AppColor.secondary.withOpacity(0.7),
+                        fontSize: 18,
+                        height: 150 / 100,
+                      ),
+                    ),
+                    Container(
+                      height: 1,
+                      color: Colors.grey,
+                      margin: const EdgeInsets.symmetric(vertical: 8),
+                    ),
+                  ],
+                ),
               ),
               buildRichTextInfo(widget.article),
               Container(
