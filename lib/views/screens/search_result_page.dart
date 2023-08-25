@@ -125,13 +125,6 @@ class _SearchResultPageState extends State<SearchResultPage>
 
     // Save changes to Firestore
     saveChanges();
-
-    // Perform the search and update the search results
-    List<ArticleWithId> articleList = await articleService
-        .fetchArticlesClubWide(searchTerm, club, sportart, typ, groesse, marke);
-    setState(() {
-      articlesWithID = articleList;
-    });
   }
 
   // Callback function to update filter values and reload data
@@ -170,7 +163,14 @@ class _SearchResultPageState extends State<SearchResultPage>
           height: 40,
           child: SearchField(
             hintText: 'Suche Vereinskleidung aller Vereine',
-            onSubmitted: performSearch,
+            onSubmitted: (searchTerm) async {
+              List<ArticleWithId> articleList =
+                  await articleService.fetchArticlesClubWide(
+                      searchTerm, club, sportart, typ, groesse, marke);
+              setState(() {
+                articlesWithID = articleList;
+              });
+            },
           ),
         ),
         systemOverlayStyle: SystemUiOverlayStyle.light,
