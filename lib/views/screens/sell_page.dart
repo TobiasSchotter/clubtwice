@@ -28,6 +28,7 @@ class _SellPageState extends State<SellPage> {
 
   List<XFile> selectedImages = [];
   bool _isIndividuallyWearable = false;
+  bool isVerschenkenChecked = false;
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -238,7 +239,7 @@ class _SellPageState extends State<SellPage> {
               ),
               const SizedBox(height: 16),
               Text(
-                'Beschreibe deinen Artikel *',
+                'Beschreibe deinen Artikel',
                 style: TextStyle(
                   color: AppColor.secondary.withOpacity(0.7),
                 ),
@@ -414,24 +415,45 @@ class _SellPageState extends State<SellPage> {
                 ),
               ),
               Text(
-                'Preis *',
+                'Preis*',
                 style: TextStyle(
                   color: AppColor.secondary.withOpacity(0.7),
                 ),
               ),
-              TextFormField(
-                controller: _priceController,
-                cursorColor: AppColor.primarySoft,
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  // Nur ganze Zahlen erlauben
-                  LengthLimitingTextInputFormatter(3)
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _priceController,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(3)
+                      ],
+                      decoration: const InputDecoration(
+                        suffixText: '€',
+                        hintText: 'z.B. 5',
+                      ),
+                      enabled: !isVerschenkenChecked,
+                    ),
+                  ),
+                  Checkbox(
+                    value: isVerschenkenChecked,
+                    onChanged: (newValue) {
+                      assert(newValue != null);
+                      setState(() {
+                        isVerschenkenChecked = newValue!;
+                        if (isVerschenkenChecked) {
+                          _priceController.text = '0';
+                        } else {
+                          _priceController.text =
+                              ''; // Setze den Preiswert auf einen leeren String.
+                        }
+                      });
+                    },
+                  ),
+                  const Text('Zu verschenken'),
                 ],
-                decoration: const InputDecoration(
-                  suffixText: '€',
-                  hintText: 'z.B. 5',
-                ),
               ),
               const SizedBox(height: 16),
               CustomButton(
