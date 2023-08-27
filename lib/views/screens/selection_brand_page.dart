@@ -96,14 +96,17 @@ class _BrandSelectionPageState extends State<BrandSelectionPage> {
           padding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
           child: Text(
             title,
-            style: TextStyle(fontSize: 12, color: AppColor.primary),
+            style: const TextStyle(
+                fontSize: 13,
+                color: AppColor.primary,
+                decoration: TextDecoration.underline),
           ),
         ),
         ListView.separated(
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: brands.length,
-          separatorBuilder: (context, index) => Divider(
+          separatorBuilder: (context, index) => const Divider(
             height: 1,
             color: AppColor.primarySoft,
           ),
