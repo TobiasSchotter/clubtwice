@@ -3,6 +3,10 @@ import 'package:clubtwice/core/services/option_service.dart';
 import 'package:flutter/material.dart';
 
 class ClubSelectionPage extends StatefulWidget {
+  final String selectedClub;
+
+  ClubSelectionPage({required this.selectedClub});
+
   @override
   _ClubSelectionPageState createState() => _ClubSelectionPageState();
 }
@@ -16,7 +20,12 @@ class _ClubSelectionPageState extends State<ClubSelectionPage> {
   @override
   void initState() {
     super.initState();
-    filteredClubs = clubOptions;
+    //filteredClubs = clubOptions;
+    // Erstelle eine Kopie der ursprünglichen Liste
+    filteredClubs = List<String>.from(clubOptions);
+    // Verschiebe den ausgewählten Sport an Position 1
+    filteredClubs.remove(widget.selectedClub);
+    filteredClubs.insert(0, widget.selectedClub);
   }
 
   void filterClubs(String query) {
@@ -29,6 +38,13 @@ class _ClubSelectionPageState extends State<ClubSelectionPage> {
 
   void _onClubSelected(String club) {
     Navigator.pop(context, club); // Pop with the selected sport as a result
+  }
+
+  @override
+  void dispose() {
+    // Setze die Liste zurück, wenn die Seite verlassen wird
+    filteredClubs = clubOptions;
+    super.dispose();
   }
 
   @override
@@ -73,7 +89,7 @@ class _ClubSelectionPageState extends State<ClubSelectionPage> {
                     filteredClubs[index],
                     style: const TextStyle(fontSize: 14),
                   ),
-                  trailing: selectedClubIndex == index
+                  trailing: index == 0
                       ? const CircleAvatar(
                           radius: 14,
                           backgroundColor: Colors.white,

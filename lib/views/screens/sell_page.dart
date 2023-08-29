@@ -66,7 +66,11 @@ class _SellPageState extends State<SellPage> {
       onTap: () async {
         final selectedSport = await Navigator.push<String>(
           context,
-          MaterialPageRoute(builder: (context) => SportSelectionPage()),
+          MaterialPageRoute(
+            builder: (context) => SportSelectionPage(
+              selectedSport: _selectedSport, // Pass the selected sport
+            ),
+          ),
         );
 
         if (selectedSport != null) {
@@ -113,7 +117,10 @@ class _SellPageState extends State<SellPage> {
       onTap: () async {
         final selectedClub = await Navigator.push<String>(
           context,
-          MaterialPageRoute(builder: (context) => ClubSelectionPage()),
+          MaterialPageRoute(
+              builder: (context) => ClubSelectionPage(
+                    selectedClub: _selectedClub,
+                  )),
         );
 
         if (selectedClub != null) {

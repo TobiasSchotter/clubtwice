@@ -3,20 +3,26 @@ import 'package:clubtwice/core/services/option_service.dart';
 import 'package:flutter/material.dart';
 
 class SportSelectionPage extends StatefulWidget {
+  final String selectedSport;
+
+  SportSelectionPage({required this.selectedSport});
+
   @override
   _SportSelectionPageState createState() => _SportSelectionPageState();
 }
 
 class _SportSelectionPageState extends State<SportSelectionPage> {
   List<String> sportOptions = DropdownOptions.sportOptions;
-
-  int selectedSportIndex = -1;
   List<String> filteredSports = [];
 
   @override
   void initState() {
     super.initState();
-    filteredSports = sportOptions;
+    // Erstelle eine Kopie der ursprünglichen Liste
+    filteredSports = List<String>.from(sportOptions);
+    // Verschiebe den ausgewählten Sport an Position 1
+    filteredSports.remove(widget.selectedSport);
+    filteredSports.insert(0, widget.selectedSport);
   }
 
   void filterSports(String query) {
@@ -29,6 +35,13 @@ class _SportSelectionPageState extends State<SportSelectionPage> {
 
   void _onSportSelected(String sport) {
     Navigator.pop(context, sport);
+  }
+
+  @override
+  void dispose() {
+    // Setze die Liste zurück, wenn die Seite verlassen wird
+    filteredSports = sportOptions;
+    super.dispose();
   }
 
   @override
@@ -73,7 +86,7 @@ class _SportSelectionPageState extends State<SportSelectionPage> {
                     filteredSports[index],
                     style: const TextStyle(fontSize: 14),
                   ),
-                  trailing: selectedSportIndex == index
+                  trailing: index == 0
                       ? const CircleAvatar(
                           radius: 14,
                           backgroundColor: Colors.white,
@@ -84,8 +97,7 @@ class _SportSelectionPageState extends State<SportSelectionPage> {
                         )
                       : null,
                   onTap: () {
-                    _onSportSelected(
-                        filteredSports[index]); // Pass the selected sport
+                    _onSportSelected(filteredSports[index]);
                   },
                 );
               },

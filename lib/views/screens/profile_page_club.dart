@@ -54,7 +54,10 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
       onTap: () async {
         final selectedSport = await Navigator.push<String>(
           context,
-          MaterialPageRoute(builder: (context) => SportSelectionPage()),
+          MaterialPageRoute(
+              builder: (context) => SportSelectionPage(
+                    selectedSport: sport,
+                  )),
         );
 
         if (selectedSport != null) {
@@ -100,7 +103,10 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
       onTap: () async {
         final selectedClub = await Navigator.push<String>(
           context,
-          MaterialPageRoute(builder: (context) => ClubSelectionPage()),
+          MaterialPageRoute(
+              builder: (context) => ClubSelectionPage(
+                    selectedClub: club,
+                  )),
         );
 
         if (selectedClub != null) {
