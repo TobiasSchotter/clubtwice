@@ -1,8 +1,13 @@
 import 'package:clubtwice/constant/app_color.dart';
-import 'package:clubtwice/core/services/option_service.dart';
 import 'package:flutter/material.dart';
 
+import '../../core/services/option_service.dart';
+
 class BrandSelectionPage extends StatefulWidget {
+  final String selectedBrand;
+
+  BrandSelectionPage({required this.selectedBrand});
+
   @override
   _BrandSelectionPageState createState() => _BrandSelectionPageState();
 }
@@ -19,8 +24,25 @@ class _BrandSelectionPageState extends State<BrandSelectionPage> {
   @override
   void initState() {
     super.initState();
-    filteredPopularBrands = popularBrandOptions;
-    filteredLessPopularBrands = lessPopularBrandOptions;
+    // Kopiere die Listen, um die ursprüngliche Reihenfolge beizubehalten
+    filteredPopularBrands = List.from(popularBrandOptions);
+    filteredLessPopularBrands = List.from(lessPopularBrandOptions);
+    // Verschiebe das ausgewählte Element nach oben in filteredPopularBrands
+    if (widget.selectedBrand.isNotEmpty) {
+      filteredPopularBrands.remove(widget.selectedBrand);
+      filteredPopularBrands.insert(0, widget.selectedBrand);
+    }
+
+    // Entferne das ausgewählte Element aus filteredLessPopularBrands
+    filteredLessPopularBrands.remove(widget.selectedBrand);
+  }
+
+  @override
+  void dispose() {
+    // Hier können Sie die Listen auf ihren ursprünglichen Zustand zurücksetzen
+    filteredPopularBrands = List.from(popularBrandOptions);
+    filteredLessPopularBrands = List.from(lessPopularBrandOptions);
+    super.dispose();
   }
 
   void filterPopularBrands(String query) {
@@ -116,7 +138,7 @@ class _BrandSelectionPageState extends State<BrandSelectionPage> {
                 brands[index],
                 style: const TextStyle(fontSize: 14),
               ),
-              trailing: selectedBrandIndex == index
+              trailing: widget.selectedBrand == brands[index]
                   ? const CircleAvatar(
                       radius: 14,
                       backgroundColor: Colors.white,

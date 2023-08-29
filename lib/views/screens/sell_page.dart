@@ -39,7 +39,7 @@ class _SellPageState extends State<SellPage> {
   String _selectedClub = "Keine Auswahl";
   String _selectedType = "Kids";
   String _selectedSize = '152';
-  String _selectedBrand = "Adidas";
+  String _selectedBrand = "Keine Auswahl";
   String _selectedCondition = "Sehr gut";
 
   User? user = FirebaseAuth.instance.currentUser;
@@ -217,7 +217,9 @@ class _SellPageState extends State<SellPage> {
       onTap: () async {
         final selectedBrand = await Navigator.push<String>(
           context,
-          MaterialPageRoute(builder: (context) => BrandSelectionPage()),
+          MaterialPageRoute(
+              builder: (context) =>
+                  BrandSelectionPage(selectedBrand: _selectedBrand)),
         );
 
         if (selectedBrand != null) {

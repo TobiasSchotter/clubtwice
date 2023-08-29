@@ -10,28 +10,53 @@ class DropdownOptions {
   static List<String> typeOptions = ['Kids', 'Adults', 'Universal'];
 
   static Map<String, List<String>> sizeOptions = {
-    'Adults': ['S', 'M', 'L', 'XL', 'XXL', '3XL'],
-    'Kids': ['128', '134', '140', '146', '152', '158', '164', '170', '176'],
+    'Adults': ['S', 'M', 'L', 'XL', 'XXL', '3XL', 'Einheitsgröße'],
+    'Kids': [
+      '128',
+      '134',
+      '140',
+      '146',
+      '152',
+      '158',
+      '164',
+      '170',
+      '176',
+      'Einheitsgröße'
+    ],
     'Universal': ['Einheitsgröße'],
   };
 
   static List<String> popularBrandOptions = ['Adidas', 'Puma', 'Nike'];
   static List<String> lessPopularBrandOptions = [
+    'Keine Auswahl',
     'Asics',
+    'Brooks',
     'Capelli',
     'Castore',
+    'Columbia',
+    'Converse',
     'Craft',
+    'Diadora',
     'Fila',
     'Hummel',
     'Jako',
     'Joma',
     'Kappa',
+    'K-Swiss',
     'Macron',
+    'Merrell',
     'Mizuno',
+    'New Balance',
+    'Oakley',
     'Reebok',
     'Saller',
+    'Salomon',
+    'Skechers',
+    'The North Face',
+    'Uhlsport',
     'Umbro',
-    'Uhlsport'
+    'Under Armour',
+    'Wilson'
   ];
 
   static List<String> clubOptions = [
