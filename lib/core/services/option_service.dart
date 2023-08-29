@@ -62,6 +62,20 @@ class DropdownOptions {
     'Tischtennis',
     'Badminton',
     'Reitsport',
+    'Schwimmen',
+    'Radsport',
+    'Golf',
+    'Rugby',
+    'Boxen',
+    'Wassersport',
+    'Fechten',
+    'Turnen',
+    'Rudern',
+    'Judo',
+    'Ski',
+    'Klettern',
+    'Billard',
+    'Bowling',
   ];
 }
 

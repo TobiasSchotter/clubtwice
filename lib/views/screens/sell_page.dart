@@ -4,6 +4,7 @@ import 'package:clubtwice/constant/app_button.dart';
 import 'package:clubtwice/core/services/option_service.dart';
 import 'package:clubtwice/views/screens/selection_brand_page.dart';
 import 'package:clubtwice/views/screens/selection_club_page.dart';
+import 'package:clubtwice/views/screens/selection_size_page.dart';
 import 'package:clubtwice/views/screens/selection_sport_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -142,6 +143,56 @@ class _SellPageState extends State<SellPage> {
               children: [
                 Text(
                   _selectedClub,
+                  style: const TextStyle(fontSize: 16, color: AppColor.primary),
+                ),
+                const SizedBox(width: 8),
+                const Icon(Icons.keyboard_arrow_right, color: AppColor.primary),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSizeSelection(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        final selectedSize = await Navigator.push<String>(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                SizeSelectionPage(selectedType: _selectedType),
+          ),
+        );
+
+        if (selectedSize != null) {
+          setState(() {
+            _selectedSize = selectedSize;
+          });
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        height: 54,
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.grey,
+            width: 1.0,
+          ),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              '  Größe wählen',
+              style: TextStyle(fontSize: 16),
+            ),
+            Row(
+              children: [
+                Text(
+                  _selectedSize,
                   style: const TextStyle(fontSize: 16, color: AppColor.primary),
                 ),
                 const SizedBox(width: 8),
@@ -297,32 +348,7 @@ class _SellPageState extends State<SellPage> {
                 }).toList(),
               ),
               const SizedBox(height: 16),
-              DropdownButtonFormField<String>(
-                value: _selectedSize,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Größe',
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 10.0,
-                    vertical: 0,
-                  ),
-                ),
-                onChanged: (newValue) {
-                  setState(() {
-                    _selectedSize = newValue!;
-                  });
-                },
-                items:
-                    DropdownOptions.sizeOptions[_selectedType]!.map((option) {
-                  return DropdownMenuItem<String>(
-                    value: option,
-                    child: Text(
-                      option,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  );
-                }).toList(),
-              ),
+              _buildSizeSelection(context),
               const Divider(
                 color: AppColor.border,
                 height: 30,
