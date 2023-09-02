@@ -343,7 +343,7 @@ class _SellPageState extends State<SellPage> {
                   setState(() {
                     _selectedType = newValue!;
                     _selectedSize =
-                        DropdownOptions.sizeOptions[_selectedType]![0];
+                        DropdownOptions.sizeOptionsCloth[_selectedType]![0];
                   });
                 },
                 items: DropdownOptions.typeOptions.map((option) {

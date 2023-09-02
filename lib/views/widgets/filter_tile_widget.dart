@@ -184,7 +184,7 @@ class _FilterWidgetState extends State<FilterWidget>
                             const DropdownMenuItem(
                                 value: '', child: Text('Wähle Typ'))
                           ]
-                        : sizes[selectedTyp]!.map((sizeItem) {
+                        : sizesCloth[selectedTyp]!.map((sizeItem) {
                             return DropdownMenuItem(
                               value: sizeItem,
                               child: Text(sizeItem),

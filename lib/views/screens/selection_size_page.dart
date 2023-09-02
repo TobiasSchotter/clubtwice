@@ -3,30 +3,40 @@ import 'package:clubtwice/core/services/option_service.dart';
 import 'package:flutter/material.dart';
 
 class SizeSelectionPage extends StatefulWidget {
-  final String selectedType; // Add this line
+  final String selectedType;
 
-  SizeSelectionPage({required this.selectedType}); // Add this constructor
+  SizeSelectionPage({required this.selectedType});
 
   @override
   _SizeSelectionPageState createState() => _SizeSelectionPageState();
 }
 
 class _SizeSelectionPageState extends State<SizeSelectionPage> {
-  Map<String, List<String>> sizeOptions = DropdownOptions.sizeOptions;
+  Map<String, List<String>> sizeOptionsCloth = DropdownOptions.sizeOptionsCloth;
+  Map<String, List<String>> sizeOptionsShoe = DropdownOptions.sizeOptionsShoe;
 
   int selectedSizeIndex = -1;
-  List<String> filteredSizes = [];
+  List<String> filteredSizesCloth = [];
+  List<String> filteredSizesShoe = [];
 
   @override
   void initState() {
     super.initState();
-    filteredSizes = sizeOptions[widget.selectedType] ?? [];
+    filteredSizesCloth = sizeOptionsCloth[widget.selectedType] ?? [];
+    filteredSizesShoe = sizeOptionsShoe[widget.selectedType] ?? [];
   }
 
-  void filterSizes(String query) {
+  void filterSizesCloth(String query) {
     setState(() {
-      // Filter based on the selected type (sizeOptions[widget.selectedType])
-      filteredSizes = sizeOptions[widget.selectedType]!
+      filteredSizesCloth = sizeOptionsCloth[widget.selectedType]!
+          .where((size) => size.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    });
+  }
+
+  void filterSizesShoe(String query) {
+    setState(() {
+      filteredSizesShoe = sizeOptionsShoe[widget.selectedType]!
           .where((size) => size.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
@@ -42,7 +52,7 @@ class _SizeSelectionPageState extends State<SizeSelectionPage> {
       appBar: AppBar(
         backgroundColor: AppColor.primary,
         title: const Text(
-          'Sportvereine',
+          'Größen',
           style: TextStyle(fontSize: 15),
         ),
         centerTitle: true,
@@ -53,51 +63,83 @@ class _SizeSelectionPageState extends State<SizeSelectionPage> {
           },
         ),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              onChanged: filterSizes,
-              decoration: const InputDecoration(
-                labelText: 'Suche nach Vereinen',
-                prefixIcon: Icon(Icons.search),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                onChanged: (query) {
+                  filterSizesCloth(query);
+
+                  filterSizesShoe(query);
+                },
+                decoration: const InputDecoration(
+                  labelText: 'Suche nach Größen',
+                  prefixIcon: Icon(Icons.search),
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: ListView.separated(
-              itemCount: filteredSizes.length,
-              separatorBuilder: (context, index) => Container(
-                height: 1,
-                color: AppColor.primarySoft,
-              ),
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(
-                    filteredSizes[index],
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                  trailing: selectedSizeIndex == index
-                      ? const CircleAvatar(
-                          radius: 14,
-                          backgroundColor: Colors.white,
-                          child: Icon(
-                            Icons.check,
-                            color: AppColor.primary,
-                          ),
-                        )
-                      : null,
-                  onTap: () {
-                    _onSizeSelected(
-                        filteredSizes[index]); // Pass the selected sport
-                  },
-                );
-              },
+            _buildSizeList("Kleidergrößen", filteredSizesCloth),
+            const Divider(
+              thickness: 1,
+              color: AppColor.primarySoft,
             ),
-          ),
-        ],
+            _buildSizeList("Schuhgrößen", filteredSizesShoe),
+          ],
+        ),
       ),
+    );
+  }
+
+  Widget _buildSizeList(String title, List<String> sizes) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
+          child: Text(
+            title,
+            style: const TextStyle(
+              fontSize: 13,
+              color: AppColor.primary,
+              decoration: TextDecoration.underline,
+            ),
+          ),
+        ),
+        ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: sizes.length,
+          separatorBuilder: (context, index) => const Divider(
+            height: 1,
+            color: AppColor.primarySoft,
+          ),
+          itemBuilder: (context, index) {
+            final selectedSize = sizes[index];
+
+            return ListTile(
+              title: Text(
+                selectedSize,
+                style: const TextStyle(fontSize: 14),
+              ),
+              trailing: selectedSizeIndex == index
+                  ? const CircleAvatar(
+                      radius: 14,
+                      backgroundColor: Colors.white,
+                      child: Icon(
+                        Icons.check,
+                        color: AppColor.primary,
+                      ),
+                    )
+                  : null,
+              onTap: () {
+                _onSizeSelected(selectedSize);
+              },
+            );
+          },
+        ),
+      ],
     );
   }
 }
