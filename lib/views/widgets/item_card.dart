@@ -184,8 +184,9 @@ class ItemCard extends StatelessWidget {
                           ),
                           children: [
                             TextSpan(text: '${article.condition} • '),
-                            TextSpan(text: '${article.size} • '),
-                            TextSpan(text: article.brand),
+                            TextSpan(text: '${article.size} '),
+                            if (article.brand != "Keine Auswahl")
+                              TextSpan(text: '• ${article.brand}'),
                           ],
                         ),
                       ),

@@ -3,9 +3,9 @@ import 'package:clubtwice/core/services/option_service.dart';
 import 'package:flutter/material.dart';
 
 class SizeSelectionPage extends StatefulWidget {
-  final String selectedType;
+  final String selectedSize;
 
-  SizeSelectionPage({required this.selectedType});
+  SizeSelectionPage({required this.selectedSize});
 
   @override
   _SizeSelectionPageState createState() => _SizeSelectionPageState();
@@ -22,13 +22,13 @@ class _SizeSelectionPageState extends State<SizeSelectionPage> {
   @override
   void initState() {
     super.initState();
-    filteredSizesCloth = sizeOptionsCloth[widget.selectedType] ?? [];
-    filteredSizesShoe = sizeOptionsShoe[widget.selectedType] ?? [];
+    filteredSizesCloth = sizeOptionsCloth[widget.selectedSize] ?? [];
+    filteredSizesShoe = sizeOptionsShoe[widget.selectedSize] ?? [];
   }
 
   void filterSizesCloth(String query) {
     setState(() {
-      filteredSizesCloth = sizeOptionsCloth[widget.selectedType]!
+      filteredSizesCloth = sizeOptionsCloth[widget.selectedSize]!
           .where((size) => size.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
@@ -36,7 +36,7 @@ class _SizeSelectionPageState extends State<SizeSelectionPage> {
 
   void filterSizesShoe(String query) {
     setState(() {
-      filteredSizesShoe = sizeOptionsShoe[widget.selectedType]!
+      filteredSizesShoe = sizeOptionsShoe[widget.selectedSize]!
           .where((size) => size.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });

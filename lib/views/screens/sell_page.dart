@@ -169,7 +169,7 @@ class _SellPageState extends State<SellPage> {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                SizeSelectionPage(selectedType: _selectedType),
+                SizeSelectionPage(selectedSize: _selectedType),
           ),
         );
 
