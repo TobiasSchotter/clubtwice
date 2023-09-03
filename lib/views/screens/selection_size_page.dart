@@ -116,14 +116,12 @@ class _SizeSelectionPageState extends State<SizeSelectionPage> {
             color: AppColor.primarySoft,
           ),
           itemBuilder: (context, index) {
-            final selectedSize = sizes[index];
-
             return ListTile(
               title: Text(
-                selectedSize,
+                sizes[index],
                 style: const TextStyle(fontSize: 14),
               ),
-              trailing: selectedSizeIndex == index
+              trailing: widget.selectedSize == sizes[index]
                   ? const CircleAvatar(
                       radius: 14,
                       backgroundColor: Colors.white,
@@ -134,7 +132,7 @@ class _SizeSelectionPageState extends State<SizeSelectionPage> {
                     )
                   : null,
               onTap: () {
-                _onSizeSelected(selectedSize);
+                _onSizeSelected(sizes[index]);
               },
             );
           },
