@@ -57,11 +57,10 @@ class _SearchResultPageState extends State<SearchResultPage>
     List<ArticleWithId> articleList =
         await articleService.fetchArticlesClubWide(
             widget.searchKeyword, club, sportart, typ, groesse, marke);
-    if (articleList.isNotEmpty) {
-      setState(() {
-        articlesWithID = articleList;
-      });
-    }
+
+    setState(() {
+      articlesWithID = articleList;
+    });
   }
 
   Future<void> saveChanges() async {
