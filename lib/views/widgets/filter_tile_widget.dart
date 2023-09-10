@@ -159,7 +159,7 @@ class _FilterWidgetState extends State<FilterWidget>
                               onTap: () {
                                 setState(() {
                                   selectedSportart =
-                                      'Keine Auswahl'; // Setzen Sie den Wert zurück
+                                      ''; // Setzen Sie den Wert zurück
                                   sportHintText = 'Sportart';
                                 });
                               },
