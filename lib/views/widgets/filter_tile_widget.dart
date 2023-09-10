@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../constant/app_color.dart';
 import '../../core/services/option_service.dart';
+import '../screens/selection_sport_page.dart';
 
 class FilterWidget extends StatefulWidget {
   final int selectedIndex;
@@ -19,14 +20,13 @@ class FilterWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _FilterWidgetState createState() => _FilterWidgetState();
 }
 
 class _FilterWidgetState extends State<FilterWidget>
     with AutomaticKeepAliveClientMixin<FilterWidget> {
   String selectedClub = '';
-  String selectedSportart = '';
+  String selectedSportart = 'Keine Auswahl';
   String selectedTyp = '';
   String selectedGroesse = '';
   String selectedMarke = '';
@@ -48,7 +48,7 @@ class _FilterWidgetState extends State<FilterWidget>
 
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      return Container(); // Handle when the user is not logged in
+      return Container();
     }
 
     return FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
@@ -72,65 +72,110 @@ class _FilterWidgetState extends State<FilterWidget>
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   SizedBox(
-                      width: 175,
-                      child: Center(
-                        child: DropdownButton<String>(
-                          alignment: Alignment.center,
-                          iconDisabledColor: Colors.white,
-                          iconEnabledColor: Colors.white,
-                          iconSize: 15.0,
-                          elevation: 16,
-                          style: const TextStyle(color: Colors.black),
-                          underline: Container(
-                            height: 0,
-                            color: Colors.white,
-                          ),
-                          items: widget.isHomePage == true
-                              ? [
-                                  DropdownMenuItem(
-                                      value: currentClub,
-                                      child: Text(currentClub))
-                                ]
-                              : club.map((clubItem) {
-                                  return DropdownMenuItem(
-                                    value: clubItem,
-                                    child: Text(clubItem),
-                                  );
-                                }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              selectedClub = value!;
-                              clubHintText = value;
-                            });
-                          },
-                          hint: Text(clubHintText,
-                              style:
-                                  const TextStyle(color: AppColor.primarySoft)),
+                    width: 175,
+                    child: Center(
+                      child: DropdownButton<String>(
+                        alignment: Alignment.center,
+                        iconDisabledColor: Colors.white,
+                        iconEnabledColor: Colors.white,
+                        iconSize: 15.0,
+                        elevation: 16,
+                        style: const TextStyle(color: Colors.black),
+                        underline: Container(
+                          height: 0,
+                          color: Colors.white,
                         ),
-                      )),
-                  DropdownButton<String>(
-                    iconSize: 15.0,
-                    elevation: 16,
-                    style: const TextStyle(color: Colors.black),
-                    underline: Container(
-                      height: 0,
-                      color: Colors.white,
+                        items: widget.isHomePage == true
+                            ? [
+                                DropdownMenuItem(
+                                  value: currentClub,
+                                  child: Text(currentClub),
+                                )
+                              ]
+                            : club.map((clubItem) {
+                                return DropdownMenuItem(
+                                  value: clubItem,
+                                  child: Text(clubItem),
+                                );
+                              }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedClub = value!;
+                            clubHintText = value;
+                          });
+                        },
+                        hint: Text(
+                          clubHintText,
+                          style: const TextStyle(color: AppColor.primarySoft),
+                        ),
+                      ),
                     ),
-                    items: sport.map((sportItem) {
-                      return DropdownMenuItem(
-                        value: sportItem,
-                        child: Text(sportItem),
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      final selectedSport = await Navigator.push<String>(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SportSelectionPage(
+                            selectedSport: selectedSportart,
+                          ),
+                        ),
                       );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedSportart = value!;
-                        sportHintText = value;
-                      });
+
+                      if (selectedSport != null) {
+                        setState(() {
+                          selectedSportart = selectedSport;
+                          sportHintText = selectedSport;
+                        });
+                      }
                     },
-                    hint: Text(sportHintText,
-                        style: const TextStyle(color: AppColor.primarySoft)),
-                    alignment: Alignment.center,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      height: 54,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          if (selectedSportart == 'Sportart' &&
+                              selectedSportart == "Keine Auswahl")
+                            const Text(
+                              'Sportart',
+                              style:
+                                  TextStyle(fontSize: 15, color: Colors.white),
+                            ),
+                          if (selectedSportart != 'Sportart')
+                            Text(
+                              sportHintText,
+                              style: const TextStyle(
+                                  fontSize: 15, color: Colors.white),
+                            ),
+                          const SizedBox(width: 8),
+                          if (selectedSportart != 'Sportart' &&
+                              selectedSportart != 'Keine Auswahl' &&
+                              selectedSportart.isNotEmpty)
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedSportart =
+                                      'Keine Auswahl'; // Setzen Sie den Wert zurück
+                                  sportHintText = 'Sportart';
+                                });
+                              },
+                              child: const Icon(
+                                Icons.clear,
+                                color: Colors.white,
+                                size: 16,
+                              ),
+                            ),
+                          // const Icon(
+                          //  Icons.keyboard_arrow_right,
+                          //  color: AppColor.primary,
+                          //   ),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -153,7 +198,6 @@ class _FilterWidgetState extends State<FilterWidget>
                         color: Colors.black,
                       ),
                       items: types.map((typesItem) {
-                        // Filteroptionen für den Typ
                         return DropdownMenuItem(
                           value: typesItem,
                           child: Text(typesItem),
@@ -165,12 +209,13 @@ class _FilterWidgetState extends State<FilterWidget>
                           typHintText = value;
                         });
                       },
-                      hint: Text(typHintText,
-                          style: const TextStyle(color: AppColor.primarySoft)),
+                      hint: Text(
+                        typHintText,
+                        style: const TextStyle(color: AppColor.primarySoft),
+                      ),
                       alignment: Alignment.center,
                     ),
                   ),
-                  // Filteroptionen für die Größe
                   DropdownButton<String>(
                     iconSize: 15.0,
                     elevation: 16,
@@ -182,7 +227,9 @@ class _FilterWidgetState extends State<FilterWidget>
                     items: selectedTyp == ''
                         ? [
                             const DropdownMenuItem(
-                                value: '', child: Text('Wähle Typ'))
+                              value: '',
+                              child: Text('Wähle Typ'),
+                            )
                           ]
                         : sizesCloth[selectedTyp]!.map((sizeItem) {
                             return DropdownMenuItem(
@@ -196,12 +243,12 @@ class _FilterWidgetState extends State<FilterWidget>
                         groesseHintText = value;
                       });
                     },
-                    hint: Text(groesseHintText,
-                        style: const TextStyle(color: AppColor.primarySoft)),
+                    hint: Text(
+                      groesseHintText,
+                      style: const TextStyle(color: AppColor.primarySoft),
+                    ),
                     alignment: Alignment.center,
                   ),
-
-                  // Filteroptionen für die Marke
                   DropdownButton<String>(
                     iconSize: 15.0,
                     elevation: 16,
@@ -222,8 +269,10 @@ class _FilterWidgetState extends State<FilterWidget>
                         markeHintText = value;
                       });
                     },
-                    hint: Text(markeHintText,
-                        style: const TextStyle(color: AppColor.primarySoft)),
+                    hint: Text(
+                      markeHintText,
+                      style: const TextStyle(color: AppColor.primarySoft),
+                    ),
                     alignment: Alignment.center,
                   ),
                 ],
