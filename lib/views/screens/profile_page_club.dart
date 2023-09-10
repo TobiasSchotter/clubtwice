@@ -62,7 +62,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
 
         if (selectedSport != null) {
           setState(() {
-            sport = selectedSport;
+            sport = (selectedSport == "Keine Auswahl") ? "" : selectedSport;
           });
         }
       },
@@ -85,7 +85,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
             Row(
               children: [
                 Text(
-                  sport,
+                  sport.isEmpty ? "Keine Auswahl" : sport,
                   style: const TextStyle(fontSize: 16, color: AppColor.primary),
                 ),
                 const SizedBox(width: 8),
@@ -111,7 +111,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
 
         if (selectedClub != null) {
           setState(() {
-            club = selectedClub;
+            club = (selectedClub == "Keine Auswahl") ? "" : selectedClub;
           });
         }
       },
@@ -134,7 +134,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
             Row(
               children: [
                 Text(
-                  club,
+                  club.isEmpty ? "Keine Auswahl" : club,
                   style: const TextStyle(fontSize: 16, color: AppColor.primary),
                 ),
                 const SizedBox(width: 8),
