@@ -11,7 +11,6 @@ import 'package:clubtwice/constant/app_button.dart';
 
 class ProfilePageClub extends StatefulWidget {
   const ProfilePageClub({Key? key}) : super(key: key);
-
   @override
   State<ProfilePageClub> createState() => _ProfilePageClubState();
 }
@@ -24,7 +23,6 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
   final UserService userService = UserService();
   UserModel? userModel;
   bool changesMade = false;
-
   @override
   void initState() {
     super.initState();
@@ -34,7 +32,6 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
   Future<void> loadData() async {
     String? userId = userService.getCurrentUserId();
     userModel = await userService.fetchUserData(userId);
-
     setState(() {
       club = userModel!.club;
       sport = userModel!.sport;
@@ -59,10 +56,9 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
                     selectedSport: sport,
                   )),
         );
-
         if (selectedSport != null) {
           setState(() {
-            sport = (selectedSport == "Keine Auswahl") ? "" : selectedSport;
+            sport = selectedSport;
           });
         }
       },
@@ -85,7 +81,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
             Row(
               children: [
                 Text(
-                  sport.isEmpty ? "Keine Auswahl" : sport,
+                  sport,
                   style: const TextStyle(fontSize: 16, color: AppColor.primary),
                 ),
                 const SizedBox(width: 8),
@@ -108,10 +104,9 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
                     selectedClub: club,
                   )),
         );
-
         if (selectedClub != null) {
           setState(() {
-            club = (selectedClub == "Keine Auswahl") ? "" : selectedClub;
+            club = selectedClub;
           });
         }
       },
@@ -134,7 +129,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
             Row(
               children: [
                 Text(
-                  club.isEmpty ? "Keine Auswahl" : club,
+                  club,
                   style: const TextStyle(fontSize: 16, color: AppColor.primary),
                 ),
                 const SizedBox(width: 8),
