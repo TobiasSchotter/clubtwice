@@ -3,7 +3,7 @@ import 'package:clubtwice/core/services/option_service.dart';
 import 'package:flutter/material.dart';
 
 class ClubSelectionPage extends StatefulWidget {
-  final String selectedClub;
+  late final String selectedClub;
 
   ClubSelectionPage({required this.selectedClub});
 
@@ -20,9 +20,14 @@ class _ClubSelectionPageState extends State<ClubSelectionPage> {
   @override
   void initState() {
     super.initState();
-    //filteredClubs = clubOptions;
     // Erstelle eine Kopie der ursprünglichen Liste
     filteredClubs = List<String>.from(clubOptions);
+
+    // Wenn der ausgewählte Club ein leerer String ist, setze ihn auf "Keine Auswahl"
+    if (widget.selectedClub.isEmpty) {
+      widget.selectedClub = "Keine Auswahl";
+    }
+
     // Verschiebe den ausgewählten Sport an Position 1
     filteredClubs.remove(widget.selectedClub);
     filteredClubs.insert(0, widget.selectedClub);
@@ -37,7 +42,15 @@ class _ClubSelectionPageState extends State<ClubSelectionPage> {
   }
 
   void _onClubSelected(String club) {
-    Navigator.pop(context, club); // Pop with the selected sport as a result
+    String selectedClub = club;
+
+    // Überprüfen, ob "Keine Auswahl" ausgewählt wurde und einen leeren String in Firebase speichern
+    if (selectedClub == "Keine Auswahl") {
+      selectedClub = "";
+    }
+
+    Navigator.pop(context,
+        selectedClub); // Pop mit dem ausgewählten Club (oder leerem String) als Ergebnis
   }
 
   @override

@@ -95,19 +95,25 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
   }
 
   Widget _buildClubSelection(BuildContext context) {
+    String displayClub = club.isEmpty ? 'Keine Auswahl' : club;
+
     return GestureDetector(
       onTap: () async {
         final selectedClub = await Navigator.push<String>(
           context,
           MaterialPageRoute(
-              builder: (context) => ClubSelectionPage(
-                    selectedClub: club,
-                  )),
+            builder: (context) => ClubSelectionPage(
+              selectedClub: club,
+            ),
+          ),
         );
         if (selectedClub != null) {
           setState(() {
             club = selectedClub;
           });
+          displayClub = club.isEmpty
+              ? 'Keine Auswahl'
+              : club; // Aktualisiere die Anzeige des Clubs
         }
       },
       child: Container(
@@ -129,7 +135,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
             Row(
               children: [
                 Text(
-                  club,
+                  displayClub,
                   style: const TextStyle(fontSize: 16, color: AppColor.primary),
                 ),
                 const SizedBox(width: 8),
