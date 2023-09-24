@@ -47,6 +47,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
   }
 
   Widget _buildSportSelection(BuildContext context) {
+    String displaySport = sport.isEmpty ? 'Keine Auswahl' : sport;
     return GestureDetector(
       onTap: () async {
         final selectedSport = await Navigator.push<String>(
@@ -60,6 +61,9 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
           setState(() {
             sport = selectedSport;
           });
+          displaySport = sport.isEmpty
+              ? 'Keine Auswahl'
+              : sport; // Aktualisiere die Anzeige des Sports
         }
       },
       child: Container(
@@ -81,7 +85,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
             Row(
               children: [
                 Text(
-                  sport,
+                  displaySport,
                   style: const TextStyle(fontSize: 16, color: AppColor.primary),
                 ),
                 const SizedBox(width: 8),
@@ -209,7 +213,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
           CustomButton(
             buttonText: 'Speichern',
             onPressed: () async {
-              if (club != originalClub || sport != originalSport) {
+              try {
                 await saveChanges();
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -219,15 +223,16 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
                 setState(() {
                   changesMade = true;
                 });
-              } else {
+              } catch (error) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Keine Änderungen vorgenommen'),
+                  SnackBar(
+                    content: Text('Fehler beim Speichern: $error'),
+                    backgroundColor: Colors.red,
                   ),
                 );
               }
             },
-          ),
+          )
         ],
       ),
     );

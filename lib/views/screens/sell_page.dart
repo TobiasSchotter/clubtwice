@@ -62,6 +62,8 @@ class _SellPageState extends State<SellPage> {
   }
 
   Widget _buildSportSelection(BuildContext context) {
+    String? displaySport =
+        _selectedSport.isEmpty ? 'Keine Auswahl' : _selectedSport;
     return GestureDetector(
       onTap: () async {
         final selectedSport = await Navigator.push<String>(
@@ -77,6 +79,8 @@ class _SellPageState extends State<SellPage> {
           setState(() {
             _selectedSport = selectedSport;
           });
+          displaySport = (_selectedSport.isEmpty ? 'Keine Auswahl' : sport)
+              as String?; // Aktualisiere die Anzeige des Sports
         }
       },
       child: Container(
@@ -99,7 +103,7 @@ class _SellPageState extends State<SellPage> {
             Row(
               children: [
                 Text(
-                  _selectedSport,
+                  displaySport,
                   style: const TextStyle(fontSize: 16, color: AppColor.primary),
                 ),
                 const SizedBox(width: 8),
