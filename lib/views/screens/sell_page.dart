@@ -113,6 +113,8 @@ class _SellPageState extends State<SellPage> {
   }
 
   Widget _buildClubSelection(BuildContext context) {
+    String? displayClub =
+        _selectedClub.isEmpty ? 'Keine Auswahl' : _selectedClub;
     return GestureDetector(
       onTap: () async {
         final selectedClub = await Navigator.push<String>(
@@ -127,6 +129,9 @@ class _SellPageState extends State<SellPage> {
           setState(() {
             _selectedClub = selectedClub;
           });
+
+          displayClub = (_selectedClub.isEmpty ? 'Keine Auswahl' : club)
+              as String?; // Aktualisiere die Anzeige des Clubs
         }
       },
       child: Container(
@@ -149,7 +154,7 @@ class _SellPageState extends State<SellPage> {
             Row(
               children: [
                 Text(
-                  _selectedClub,
+                  displayClub,
                   style: const TextStyle(fontSize: 16, color: AppColor.primary),
                 ),
                 const SizedBox(width: 8),
