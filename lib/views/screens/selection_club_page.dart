@@ -3,7 +3,7 @@ import 'package:clubtwice/core/services/option_service.dart';
 import 'package:flutter/material.dart';
 
 class ClubSelectionPage extends StatefulWidget {
-  late final String selectedClub;
+  late String selectedClub;
 
   ClubSelectionPage({required this.selectedClub});
 
