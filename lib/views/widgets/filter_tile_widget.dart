@@ -138,28 +138,27 @@ class _FilterWidgetState extends State<FilterWidget>
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          if (selectedSportart == 'Sportart' &&
-                              selectedSportart == "Keine Auswahl")
+                          if (selectedSportart == 'Keine Auswahl' ||
+                              selectedSportart.isEmpty)
                             const Text(
                               'Sportart',
                               style:
                                   TextStyle(fontSize: 15, color: Colors.white),
                             ),
-                          if (selectedSportart != 'Sportart')
+                          if (selectedSportart != 'Keine Auswahl' &&
+                              selectedSportart.isNotEmpty)
                             Text(
                               sportHintText,
                               style: const TextStyle(
                                   fontSize: 15, color: Colors.white),
                             ),
                           const SizedBox(width: 8),
-                          if (selectedSportart != 'Sportart' &&
-                              selectedSportart != 'Keine Auswahl' &&
+                          if (selectedSportart != 'Keine Auswahl' &&
                               selectedSportart.isNotEmpty)
                             GestureDetector(
                               onTap: () {
                                 setState(() {
-                                  selectedSportart =
-                                      ''; // Setzen Sie den Wert zurück
+                                  selectedSportart = '';
                                   sportHintText = 'Sportart';
                                 });
                               },
@@ -169,10 +168,6 @@ class _FilterWidgetState extends State<FilterWidget>
                                 size: 16,
                               ),
                             ),
-                          // const Icon(
-                          //  Icons.keyboard_arrow_right,
-                          //  color: AppColor.primary,
-                          //   ),
                         ],
                       ),
                     ),
