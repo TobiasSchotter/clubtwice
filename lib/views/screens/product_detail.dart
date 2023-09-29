@@ -713,8 +713,8 @@ class _ProductDetailState extends State<ProductDetail> {
 
   void shareArticle() {
     if (widget.article.images.isNotEmpty) {
-      String imageUrl =
-          widget.article.images[0]; // Share the first image in the list
+      // String imageUrl =
+      //  widget.article.images[0]; // Share the first image in the list
 
       Share.share('Check out this article!\n'
           'Title: ${widget.article.title}\n'
