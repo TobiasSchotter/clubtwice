@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../core/services/option_service.dart';
 
 class BrandSelectionPage extends StatefulWidget {
-  final String selectedBrand;
+  late String selectedBrand;
 
   BrandSelectionPage({required this.selectedBrand});
 
@@ -27,6 +27,10 @@ class _BrandSelectionPageState extends State<BrandSelectionPage> {
     // Kopiere die Listen, um die ursprüngliche Reihenfolge beizubehalten
     filteredPopularBrands = List.from(popularBrandOptions);
     filteredLessPopularBrands = List.from(lessPopularBrandOptions);
+
+    if (widget.selectedBrand.isEmpty) {
+      widget.selectedBrand = "Keine Auswahl";
+    }
     // Verschiebe das ausgewählte Element nach oben in filteredPopularBrands
     if (widget.selectedBrand.isNotEmpty) {
       filteredPopularBrands.remove(widget.selectedBrand);
@@ -62,7 +66,13 @@ class _BrandSelectionPageState extends State<BrandSelectionPage> {
   }
 
   void _onBrandSelected(String brand) {
-    Navigator.pop(context, brand);
+    String selectetBrand = brand;
+    // Überprüfen, ob "Keine Auswahl" ausgewählt wurde und einen leeren String in Firebase speichern
+    if (selectetBrand == "Keine Auswahl") {
+      selectetBrand = "";
+    }
+    Navigator.pop(context,
+        selectetBrand); // Pop mit dem ausgewählten Sport (oder leerem String) als Ergebnis
   }
 
   @override

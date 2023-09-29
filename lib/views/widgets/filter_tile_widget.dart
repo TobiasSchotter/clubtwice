@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:clubtwice/views/screens/selection_brand_page.dart';
+import 'package:clubtwice/views/screens/selection_club_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../constant/app_color.dart';
@@ -25,11 +27,11 @@ class FilterWidget extends StatefulWidget {
 
 class _FilterWidgetState extends State<FilterWidget>
     with AutomaticKeepAliveClientMixin<FilterWidget> {
-  String selectedClub = '';
-  String selectedSportart = 'Keine Auswahl';
-  String selectedTyp = '';
-  String selectedGroesse = '';
-  String selectedMarke = '';
+  String selectedClubFilter = '';
+  String selectedSportFilter = '';
+  String selectedTypFilter = '';
+  String selectedGroesseFilter = '';
+  String selectedMarkeFilter = '';
 
   String clubHintText = 'Verein';
   String sportHintText = 'Sportart';
@@ -43,8 +45,6 @@ class _FilterWidgetState extends State<FilterWidget>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    List<String> allBrands = List.from(popularBrands)
-      ..addAll(lesspopularBrands);
 
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -72,43 +72,89 @@ class _FilterWidgetState extends State<FilterWidget>
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   SizedBox(
-                    width: 175,
                     child: Center(
-                      child: DropdownButton<String>(
-                        alignment: Alignment.center,
-                        iconDisabledColor: Colors.white,
-                        iconEnabledColor: Colors.white,
-                        iconSize: 15.0,
-                        elevation: 16,
-                        style: const TextStyle(color: Colors.black),
-                        underline: Container(
-                          height: 0,
-                          color: Colors.white,
-                        ),
-                        items: widget.isHomePage == true
-                            ? [
-                                DropdownMenuItem(
-                                  value: currentClub,
-                                  child: Text(currentClub),
-                                )
-                              ]
-                            : club.map((clubItem) {
-                                return DropdownMenuItem(
-                                  value: clubItem,
-                                  child: Text(clubItem),
+                      child: widget.isHomePage == true
+                          ? GestureDetector(
+                              onTap: () {
+                                const snackBar = SnackBar(
+                                  content:
+                                      Text('Dein Verein ist fest hinterlegt'),
                                 );
-                              }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            selectedClub = value!;
-                            clubHintText = value;
-                          });
-                        },
-                        hint: Text(
-                          clubHintText,
-                          style: const TextStyle(color: AppColor.primarySoft),
-                        ),
-                      ),
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              },
+                              child: Text(
+                                currentClub,
+                                style: const TextStyle(
+                                  color: AppColor.primarySoft,
+                                  fontSize: 15.0,
+                                ),
+                              ),
+                            )
+                          : GestureDetector(
+                              onTap: () async {
+                                final selectedClub =
+                                    await Navigator.push<String>(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ClubSelectionPage(
+                                      selectedClub: selectedClubFilter,
+                                    ),
+                                  ),
+                                );
+
+                                if (selectedClub != null) {
+                                  setState(() {
+                                    selectedClubFilter = selectedClub;
+                                    sportHintText = selectedClub;
+                                  });
+                                }
+                              },
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
+                                height: 54,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    if (selectedClubFilter == 'Keine Auswahl' ||
+                                        selectedClubFilter.isEmpty)
+                                      const Text(
+                                        'Verein',
+                                        style: TextStyle(
+                                            fontSize: 15, color: Colors.white),
+                                      ),
+                                    if (selectedClubFilter != 'Keine Auswahl' &&
+                                        selectedClubFilter.isNotEmpty)
+                                      Text(
+                                        sportHintText,
+                                        style: const TextStyle(
+                                            fontSize: 15, color: Colors.white),
+                                      ),
+                                    const SizedBox(width: 8),
+                                    if (selectedClubFilter != 'Keine Auswahl' &&
+                                        selectedClubFilter.isNotEmpty)
+                                      GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            selectedClubFilter = '';
+                                            sportHintText = 'Sportart';
+                                          });
+                                        },
+                                        child: const Icon(
+                                          Icons.clear,
+                                          color: Colors.white,
+                                          size: 16,
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ),
                     ),
                   ),
                   GestureDetector(
@@ -117,14 +163,14 @@ class _FilterWidgetState extends State<FilterWidget>
                         context,
                         MaterialPageRoute(
                           builder: (context) => SportSelectionPage(
-                            selectedSport: selectedSportart,
+                            selectedSport: selectedSportFilter,
                           ),
                         ),
                       );
 
                       if (selectedSport != null) {
                         setState(() {
-                          selectedSportart = selectedSport;
+                          selectedSportFilter = selectedSport;
                           sportHintText = selectedSport;
                         });
                       }
@@ -138,27 +184,27 @@ class _FilterWidgetState extends State<FilterWidget>
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          if (selectedSportart == 'Keine Auswahl' ||
-                              selectedSportart.isEmpty)
+                          if (selectedSportFilter == 'Keine Auswahl' ||
+                              selectedSportFilter.isEmpty)
                             const Text(
                               'Sportart',
                               style:
                                   TextStyle(fontSize: 15, color: Colors.white),
                             ),
-                          if (selectedSportart != 'Keine Auswahl' &&
-                              selectedSportart.isNotEmpty)
+                          if (selectedSportFilter != 'Keine Auswahl' &&
+                              selectedSportFilter.isNotEmpty)
                             Text(
                               sportHintText,
                               style: const TextStyle(
                                   fontSize: 15, color: Colors.white),
                             ),
                           const SizedBox(width: 8),
-                          if (selectedSportart != 'Keine Auswahl' &&
-                              selectedSportart.isNotEmpty)
+                          if (selectedSportFilter != 'Keine Auswahl' &&
+                              selectedSportFilter.isNotEmpty)
                             GestureDetector(
                               onTap: () {
                                 setState(() {
-                                  selectedSportart = '';
+                                  selectedSportFilter = '';
                                   sportHintText = 'Sportart';
                                 });
                               },
@@ -200,7 +246,7 @@ class _FilterWidgetState extends State<FilterWidget>
                       }).toList(),
                       onChanged: (value) {
                         setState(() {
-                          selectedTyp = value!;
+                          selectedTypFilter = value!;
                           typHintText = value;
                         });
                       },
@@ -219,14 +265,14 @@ class _FilterWidgetState extends State<FilterWidget>
                       height: 0,
                       color: Colors.black,
                     ),
-                    items: selectedTyp == ''
+                    items: selectedTypFilter == ''
                         ? [
                             const DropdownMenuItem(
                               value: '',
                               child: Text('Wähle Typ'),
                             )
                           ]
-                        : sizesCloth[selectedTyp]!.map((sizeItem) {
+                        : sizesCloth[selectedTypFilter]!.map((sizeItem) {
                             return DropdownMenuItem(
                               value: sizeItem,
                               child: Text(sizeItem),
@@ -234,7 +280,7 @@ class _FilterWidgetState extends State<FilterWidget>
                           }).toList(),
                     onChanged: (value) {
                       setState(() {
-                        selectedGroesse = value!;
+                        selectedGroesseFilter = value!;
                         groesseHintText = value;
                       });
                     },
@@ -244,31 +290,66 @@ class _FilterWidgetState extends State<FilterWidget>
                     ),
                     alignment: Alignment.center,
                   ),
-                  DropdownButton<String>(
-                    iconSize: 15.0,
-                    elevation: 16,
-                    style: const TextStyle(color: Colors.black),
-                    underline: Container(
-                      height: 0,
-                      color: Colors.black,
-                    ),
-                    items: allBrands.map((brandItem) {
-                      return DropdownMenuItem(
-                        value: brandItem,
-                        child: Text(brandItem),
+                  GestureDetector(
+                    onTap: () async {
+                      final selectedBrand = await Navigator.push<String>(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BrandSelectionPage(
+                            selectedBrand: selectedMarkeFilter,
+                          ),
+                        ),
                       );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedMarke = value!;
-                        markeHintText = value;
-                      });
+
+                      if (selectedBrand != null) {
+                        setState(() {
+                          selectedMarkeFilter = selectedBrand;
+                          sportHintText = selectedBrand;
+                        });
+                      }
                     },
-                    hint: Text(
-                      markeHintText,
-                      style: const TextStyle(color: AppColor.primarySoft),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      height: 54,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          if (selectedMarkeFilter == 'Keine Auswahl' ||
+                              selectedMarkeFilter.isEmpty)
+                            const Text(
+                              'Marke',
+                              style:
+                                  TextStyle(fontSize: 15, color: Colors.white),
+                            ),
+                          if (selectedMarkeFilter != 'Keine Auswahl' &&
+                              selectedMarkeFilter.isNotEmpty)
+                            Text(
+                              sportHintText,
+                              style: const TextStyle(
+                                  fontSize: 15, color: Colors.white),
+                            ),
+                          const SizedBox(width: 8),
+                          if (selectedMarkeFilter != 'Keine Auswahl' &&
+                              selectedMarkeFilter.isNotEmpty)
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedMarkeFilter = '';
+                                  sportHintText = 'Sportart';
+                                });
+                              },
+                              child: const Icon(
+                                Icons.clear,
+                                color: Colors.white,
+                                size: 16,
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
-                    alignment: Alignment.center,
                   ),
                 ],
               ),
@@ -276,11 +357,11 @@ class _FilterWidgetState extends State<FilterWidget>
             ElevatedButton(
               onPressed: () {
                 widget.applyFilters(
-                  selectedClub,
-                  selectedSportart,
-                  selectedTyp,
-                  selectedGroesse,
-                  selectedMarke,
+                  selectedClubFilter,
+                  selectedSportFilter,
+                  selectedTypFilter,
+                  selectedGroesseFilter,
+                  selectedMarkeFilter,
                 );
 
                 widget.setExpansionTileState(false);
