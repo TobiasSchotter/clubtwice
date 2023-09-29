@@ -281,7 +281,7 @@ class _FilterWidgetState extends State<FilterWidget>
                     onChanged: (value) {
                       setState(() {
                         selectedGroesseFilter = value!;
-                        groesseHintText = value;
+                        groesseHintText = value == '' ? 'Größe' : value;
                       });
                     },
                     hint: Text(
