@@ -226,6 +226,8 @@ class _SellPageState extends State<SellPage> {
   }
 
   Widget _buildBrandSelection(BuildContext context) {
+    String? displayBrand =
+        _selectedBrand.isEmpty ? 'Keine Auswahl' : _selectedBrand;
     return GestureDetector(
       onTap: () async {
         final selectedBrand = await Navigator.push<String>(
@@ -239,6 +241,9 @@ class _SellPageState extends State<SellPage> {
           setState(() {
             _selectedBrand = selectedBrand;
           });
+          displayBrand = _selectedBrand.isEmpty
+              ? 'Keine Auswahl'
+              : _selectedBrand; // Aktualisiere die Anzeige des Sports
         }
       },
       child: Container(
@@ -261,7 +266,7 @@ class _SellPageState extends State<SellPage> {
             Row(
               children: [
                 Text(
-                  _selectedBrand,
+                  displayBrand,
                   style: const TextStyle(fontSize: 16, color: AppColor.primary),
                 ),
                 const SizedBox(width: 8),
