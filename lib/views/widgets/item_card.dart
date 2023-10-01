@@ -21,11 +21,11 @@ class ItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     String textToDisplay = '';
 
-    if (article.club != "Keine Auswahl" && article.sport != "Keine Auswahl") {
+    if (article.club != "" && article.sport != "") {
       textToDisplay = '${article.club} • ${article.sport}';
-    } else if (article.club != "Keine Auswahl") {
+    } else if (article.club != "") {
       textToDisplay = article.club;
-    } else if (article.sport != "Keine Auswahl") {
+    } else if (article.sport != "") {
       textToDisplay = article.sport;
     }
 
@@ -185,7 +185,7 @@ class ItemCard extends StatelessWidget {
                           children: [
                             TextSpan(text: '${article.condition} • '),
                             TextSpan(text: '${article.size} '),
-                            if (article.brand != "Keine Auswahl")
+                            if (article.brand != "")
                               TextSpan(text: '• ${article.brand}'),
                           ],
                         ),
