@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clubtwice/views/screens/selection_brand_page.dart';
 import 'package:clubtwice/views/screens/selection_club_page.dart';
+import 'package:clubtwice/views/screens/selection_size_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../constant/app_color.dart';
@@ -71,6 +72,7 @@ class _FilterWidgetState extends State<FilterWidget>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
+                  //Filter für den Verein
                   SizedBox(
                     child: Center(
                       child: widget.isHomePage == true
@@ -157,6 +159,8 @@ class _FilterWidgetState extends State<FilterWidget>
                             ),
                     ),
                   ),
+
+                  //Filter für Sportart
                   GestureDetector(
                     onTap: () async {
                       final selectedSport = await Navigator.push<String>(
@@ -229,7 +233,7 @@ class _FilterWidgetState extends State<FilterWidget>
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   SizedBox(
-                    width: 79,
+                    //Filter für den Typ
                     child: DropdownButton<String>(
                       iconSize: 15.0,
                       elevation: 16,
@@ -257,39 +261,79 @@ class _FilterWidgetState extends State<FilterWidget>
                       alignment: Alignment.center,
                     ),
                   ),
-                  DropdownButton<String>(
-                    iconSize: 15.0,
-                    elevation: 16,
-                    style: const TextStyle(color: Colors.black),
-                    underline: Container(
-                      height: 0,
-                      color: Colors.black,
-                    ),
-                    items: selectedTypFilter == ''
-                        ? [
-                            const DropdownMenuItem(
-                              value: '',
-                              child: Text('Wähle Typ'),
-                            )
-                          ]
-                        : sizesCloth[selectedTypFilter]!.map((sizeItem) {
-                            return DropdownMenuItem(
-                              value: sizeItem,
-                              child: Text(sizeItem),
-                            );
-                          }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedGroesseFilter = value!;
-                        groesseHintText = value == '' ? 'Größe' : value;
-                      });
+
+                  // Filter für die Größe
+                  GestureDetector(
+                    onTap: () async {
+                      if (selectedTypFilter != '') {
+                        final selectedSize = await Navigator.push<String>(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SizeSelectionPage(
+                              selectedSize: selectedTypFilter,
+                            ),
+                          ),
+                        );
+
+                        if (selectedSize != null) {
+                          setState(() {
+                            selectedGroesseFilter = selectedSize;
+                            groesseHintText = selectedSize;
+                          });
+                        }
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text(
+                                  "Bitte wählen Sie zuerst einen Typ aus."),
+                              duration: Duration(seconds: 2)),
+                        );
+                      }
                     },
-                    hint: Text(
-                      groesseHintText,
-                      style: const TextStyle(color: AppColor.primarySoft),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      height: 54,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          if (selectedGroesseFilter == '' ||
+                              selectedGroesseFilter.isEmpty)
+                            const Text(
+                              'Größe',
+                              style:
+                                  TextStyle(fontSize: 15, color: Colors.white),
+                            ),
+                          if (selectedGroesseFilter != '' &&
+                              selectedGroesseFilter.isNotEmpty)
+                            Text(
+                              groesseHintText,
+                              style: const TextStyle(
+                                  fontSize: 15, color: Colors.white),
+                            ),
+                          const SizedBox(width: 8),
+                          if (selectedGroesseFilter != '' &&
+                              selectedGroesseFilter.isNotEmpty)
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedGroesseFilter = '';
+                                  groesseHintText = 'Wähle TypXX';
+                                });
+                              },
+                              child: const Icon(
+                                Icons.clear,
+                                color: Colors.white,
+                                size: 16,
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
-                    alignment: Alignment.center,
                   ),
+                  // Filter für die Marke
                   GestureDetector(
                     onTap: () async {
                       final selectedBrand = await Navigator.push<String>(

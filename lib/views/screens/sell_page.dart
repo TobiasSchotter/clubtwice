@@ -35,11 +35,11 @@ class _SellPageState extends State<SellPage> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
 
-  String _selectedSport = "Keine Auswahl";
-  String _selectedClub = "Keine Auswahl";
+  String _selectedSport = "";
+  String _selectedClub = "";
   String _selectedType = "Kids";
   String _selectedSize = '152';
-  String _selectedBrand = "Keine Auswahl";
+  String _selectedBrand = "";
   String _selectedCondition = "Sehr gut";
 
   User? user = FirebaseAuth.instance.currentUser;
@@ -234,16 +234,25 @@ class _SellPageState extends State<SellPage> {
         final selectedBrand = await Navigator.push<String>(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  BrandSelectionPage(selectedBrand: _selectedBrand)),
+            builder: (context) => BrandSelectionPage(
+              selectedBrand: _selectedBrand.isEmpty ? '' : _selectedBrand,
+            ),
+          ),
         );
 
         if (selectedBrand != null) {
-          setState(() {
-            _selectedBrand = selectedBrand;
-            displayBrand =
-                _selectedBrand.isEmpty ? 'Keine Auswahl' : _selectedBrand;
-          });
+          // Nur aktualisieren, wenn eine Auswahl getroffen wurde
+          if (selectedBrand.isNotEmpty) {
+            setState(() {
+              _selectedBrand = selectedBrand;
+              displayBrand = _selectedBrand;
+            });
+          } else {
+            setState(() {
+              _selectedBrand = ''; // Leerstring setzen
+              displayBrand = 'Keine Auswahl';
+            });
+          }
         }
       },
       child: Container(
