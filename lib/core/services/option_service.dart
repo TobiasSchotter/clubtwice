@@ -69,6 +69,7 @@ class DropdownOptions {
       'EU 37 1/3',
       'EU 38',
       'EU 38 2/3',
+      'Einheitsgröße'
     ],
     'Universal': ['Einheitsgröße'],
   };
