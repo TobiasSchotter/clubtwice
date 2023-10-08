@@ -393,17 +393,9 @@ class _ProductDetailState extends State<ProductDetail> {
                 ),
               ),
               buildRichTextInfo(widget.article),
-              Container(
-                height: 1,
-                color: Colors.grey,
-                margin: const EdgeInsets.symmetric(vertical: 8),
-              ),
-              buildRichTextInfo2(widget.article),
-              Container(
-                height: 1,
-                color: Colors.grey,
-                margin: const EdgeInsets.symmetric(vertical: 8),
-              ),
+              if (widget.article.club.isNotEmpty &&
+                  widget.article.sport.isNotEmpty)
+                buildRichTextInfo2(widget.article),
               Row(
                 children: [
                   const Icon(
@@ -429,25 +421,42 @@ class _ProductDetailState extends State<ProductDetail> {
     );
   }
 
-  RichText buildRichTextInfo(Article article) {
+  Column buildRichTextInfo(Article article) {
     final style = TextStyle(
       color: AppColor.secondary.withOpacity(0.7),
       height: 1.5,
     );
 
-    return RichText(
-      text: TextSpan(
-        children: [
-          TextSpan(text: '${article.condition} • ', style: style),
-          TextSpan(text: '${article.size} • ', style: style),
-          TextSpan(text: '${article.type} • ', style: style),
-          TextSpan(text: article.brand, style: style),
-        ],
-      ),
+    List<InlineSpan> children = [
+      if (article.condition.isNotEmpty)
+        TextSpan(text: '${article.condition} • ', style: style),
+      if (article.size.isNotEmpty)
+        TextSpan(text: '${article.size} • ', style: style),
+      if (article.type.isNotEmpty) TextSpan(text: article.type, style: style),
+      if (article.brand.isNotEmpty)
+        TextSpan(text: ' • ${article.brand}', style: style),
+    ];
+
+    return Column(
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: RichText(
+            text: TextSpan(
+              children: children,
+            ),
+          ),
+        ),
+        Container(
+          height: 1,
+          color: Colors.grey,
+          margin: const EdgeInsets.symmetric(vertical: 8),
+        ),
+      ],
     );
   }
 
-  RichText buildRichTextInfo2(Article article) {
+  Column buildRichTextInfo2(Article article) {
     final style = TextStyle(
       color: AppColor.secondary.withOpacity(0.7),
       height: 1.5,
@@ -455,19 +464,33 @@ class _ProductDetailState extends State<ProductDetail> {
 
     List<InlineSpan> children = [];
 
-    if (article.club != "Keine Auswahl" && article.sport != "Keine Auswahl") {
+    if (article.club.isNotEmpty && article.sport.isNotEmpty) {
       children.add(
-          TextSpan(text: '${article.club} • ${article.sport}', style: style));
-    } else if (article.club != "Keine Auswahl") {
+        TextSpan(text: '${article.club} • ${article.sport}', style: style),
+      );
+    } else if (article.club.isNotEmpty) {
       children.add(TextSpan(text: article.club, style: style));
-    } else if (article.sport != "Keine Auswahl") {
+    } else if (article.sport.isNotEmpty) {
       children.add(TextSpan(text: article.sport, style: style));
     }
 
-    return RichText(
-      text: TextSpan(
-        children: children,
-      ),
+    return Column(
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: RichText(
+            text: TextSpan(
+              children: children,
+            ),
+          ),
+        ),
+        if (article.club.isNotEmpty && article.sport.isNotEmpty)
+          Container(
+            height: 1,
+            color: Colors.grey,
+            margin: const EdgeInsets.symmetric(vertical: 8),
+          ),
+      ],
     );
   }
 
