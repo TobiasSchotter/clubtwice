@@ -7,8 +7,7 @@ import 'package:path/path.dart' as path;
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class MyProfileWidget extends StatefulWidget {
-  final bool
-      showCameraIcon; // Add this parameter for controlling icon visibility
+  final bool showCameraIcon;
 
   const MyProfileWidget({Key? key, this.showCameraIcon = true})
       : super(key: key);
@@ -18,36 +17,15 @@ class MyProfileWidget extends StatefulWidget {
 }
 
 class _MyProfileWidgetState extends State<MyProfileWidget> {
+  bool _isUploading = false;
+  bool _isDeleting = false;
+
   Future<void> _uploadImage(File pickedFile) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
 
     // Get the file name
     String fileName = path.basename(pickedFile.path);
-
-    // Show a loading indicator
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Row(
-            children: const [
-              CircularProgressIndicator(),
-              SizedBox(width: 10),
-              Flexible(
-                child: Text(
-                  'Bild wird hochgeladen...',
-                  maxLines: 2, // Begrenzt den Text auf zwei Zeilen
-                  overflow: TextOverflow
-                      .ellipsis, // Fügt Auslassungszeichen hinzu, wenn der Text abgeschnitten wird
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
 
     // Reference the Firebase storage location where the file will be uploaded
     final firebaseStorageRef = firebase_storage.FirebaseStorage.instance
@@ -70,6 +48,10 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
           .delete();
     }
 
+    setState(() {
+      _isUploading = true; // Zeige den Ladeindikator an
+    });
+
     // Upload the file to Firebase storage
     final uploadTask = firebaseStorageRef.putFile(File(pickedFile.path));
 
@@ -81,11 +63,8 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
       },
     );
 
-    // Wait for a short duration to show the loading indicator
+    // Warte eine kurze Zeit, um den Ladeindikator anzuzeigen
     await Future.delayed(const Duration(milliseconds: 500));
-
-    // Close the loading indicator dialog
-    Navigator.of(context, rootNavigator: true).pop();
 
     // Get the download URL of the uploaded file
     final imageUrl = await (await uploadTask).ref.getDownloadURL();
@@ -96,8 +75,9 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
         .doc(user.uid)
         .update({'profileImageUrl': imageUrl});
 
-    // Refresh the UI
-    setState(() {});
+    setState(() {
+      _isUploading = false; // Verberge den Ladeindikator
+    });
 
     print('Image uploaded. Download URL: $imageUrl');
   }
@@ -116,29 +96,9 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
 
     if (imageUrl == null) return;
 
-    // Show a loading indicator
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Row(
-            children: const [
-              CircularProgressIndicator(),
-              SizedBox(width: 10),
-              Flexible(
-                child: Text(
-                  'Bild wird gelöscht...',
-                  maxLines: 2, // Begrenzt den Text auf zwei Zeilen
-                  overflow: TextOverflow
-                      .ellipsis, // Fügt Auslassungszeichen hinzu, wenn der Text abgeschnitten wird
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
+    setState(() {
+      _isDeleting = true; // Zeige den Ladeindikator an
+    });
 
     // Delete the image from Firebase storage
     final imageRef =
@@ -151,13 +111,11 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
         .doc(user.uid)
         .update({'profileImageUrl': null});
 
-    // Close the loading indicator dialog
-    Navigator.of(context, rootNavigator: true).pop();
+    setState(() {
+      _isDeleting = false; // Verberge den Ladeindikator
+    });
 
     print('Image deleted.');
-
-    // Refresh the UI
-    setState(() {});
   }
 
   @override
@@ -318,6 +276,8 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                   fontSize: 14,
                 ),
               ),
+              if (_isUploading) const CircularProgressIndicator(),
+              if (_isDeleting) const CircularProgressIndicator(),
             ],
           ),
         );
