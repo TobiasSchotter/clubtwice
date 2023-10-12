@@ -232,36 +232,53 @@ class _FilterWidgetState extends State<FilterWidget>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  SizedBox(
-                    //Filter für den Typ
-                    child: DropdownButton<String>(
-                      iconSize: 15.0,
-                      elevation: 16,
-                      style: const TextStyle(color: Colors.black),
-                      underline: Container(
-                        height: 0,
-                        color: Colors.black,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    // Zur Anzeige von Dropdown und Zurücksetzungsbutton nebeneinander
+                    children: [
+                      SizedBox(
+                        // Dropdown für den Typ
+                        child: DropdownButton<String>(
+                          iconSize: 15.0,
+                          elevation: 16,
+                          style: const TextStyle(color: Colors.black),
+                          underline: Container(
+                            height: 0,
+                            color: Colors.black,
+                          ),
+                          items: types.map((typesItem) {
+                            return DropdownMenuItem(
+                              value: typesItem,
+                              child: Text(typesItem),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              selectedTypFilter = value!;
+                              typHintText = value;
+                            });
+                          },
+                          hint: Text(
+                            typHintText,
+                            style: const TextStyle(color: AppColor.primarySoft),
+                          ),
+                          alignment: Alignment.center,
+                        ),
                       ),
-                      items: types.map((typesItem) {
-                        return DropdownMenuItem(
-                          value: typesItem,
-                          child: Text(typesItem),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedTypFilter = value!;
-                          typHintText = value;
-                        });
-                      },
-                      hint: Text(
-                        typHintText,
-                        style: const TextStyle(color: AppColor.primarySoft),
-                      ),
-                      alignment: Alignment.center,
-                    ),
+                      if (selectedTypFilter != '')
+                        IconButton(
+                          icon: const Icon(Icons.close),
+                          color: Colors.white,
+                          iconSize: 16,
+                          onPressed: () {
+                            setState(() {
+                              selectedTypFilter = '';
+                              typHintText = "Typ";
+                            });
+                          },
+                        ),
+                    ],
                   ),
-
                   // Filter für die Größe
                   GestureDetector(
                     onTap: () async {
