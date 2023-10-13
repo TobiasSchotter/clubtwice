@@ -1,3 +1,6 @@
+import 'package:clubtwice/views/screens/help_page/agb_page%20copy.dart';
+import 'package:clubtwice/views/screens/help_page/agb_page.dart';
+import 'package:clubtwice/views/screens/help_page/impressum_page.dart';
 import 'package:clubtwice/views/screens/profile_page/help_page.dart';
 import 'package:clubtwice/views/screens/profile_page/profile_page_club.dart';
 import 'package:clubtwice/views/screens/profile_page/profile_page_fav.dart';
@@ -245,8 +248,11 @@ class _ProfilePageState extends State<ProfilePage> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                // Handle Impressum link tap
-                                // Add your implementation here
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ImpressumPage()),
+                                );
                               },
                               child: const Text(
                                 'Impressum',
@@ -260,8 +266,10 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                // Handle AGB link tap
-                                // Add your implementation here
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => const AgbPage()),
+                                );
                               },
                               child: const Text(
                                 'AGB',
@@ -275,8 +283,11 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                // Handle Daten link tap
-                                // Add your implementation here
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const DatenschutzPage()),
+                                );
                               },
                               child: const Text(
                                 'Datenschutzhinweise',

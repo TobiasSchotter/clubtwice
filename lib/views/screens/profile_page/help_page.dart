@@ -1,4 +1,7 @@
+import 'package:clubtwice/views/screens/help_page/agb_page%20copy.dart';
+import 'package:clubtwice/views/screens/help_page/agb_page.dart';
 import 'package:clubtwice/views/screens/help_page/feedback_page.dart';
+import 'package:clubtwice/views/screens/help_page/impressum_page.dart';
 import 'package:clubtwice/views/screens/help_page/rate_page.dart';
 import 'package:clubtwice/views/screens/welcome_page.dart';
 import 'package:flutter/material.dart';
@@ -108,7 +111,7 @@ class _HelpPageState extends State<HelpPage> {
                 MenuTileWidget(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const RatePage()));
+                        builder: (context) => const AgbPage()));
                   },
                   margin: const EdgeInsets.only(top: 10),
                   icon: Icon(
@@ -121,7 +124,7 @@ class _HelpPageState extends State<HelpPage> {
                 MenuTileWidget(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const RatePage()));
+                        builder: (context) => const DatenschutzPage()));
                   },
                   margin: const EdgeInsets.only(top: 10),
                   icon: Icon(
@@ -134,7 +137,7 @@ class _HelpPageState extends State<HelpPage> {
                 MenuTileWidget(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const RatePage()));
+                        builder: (context) => const ImpressumPage()));
                   },
                   margin: const EdgeInsets.only(top: 10),
                   icon: Icon(
