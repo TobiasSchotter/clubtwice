@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:clubtwice/views/screens/profile_page_item.dart';
+import 'package:clubtwice/views/screens/profile_page/profile_page_item.dart';
 import 'package:clubtwice/views/screens/user_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

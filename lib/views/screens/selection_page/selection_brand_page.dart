@@ -1,7 +1,7 @@
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:flutter/material.dart';
 
-import '../../core/services/option_service.dart';
+import '../../../core/services/option_service.dart';
 
 class BrandSelectionPage extends StatefulWidget {
   late String selectedBrand;

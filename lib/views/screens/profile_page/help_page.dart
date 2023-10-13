@@ -1,10 +1,13 @@
-import 'package:clubtwice/views/screens/profile_page_help.dart';
+import 'package:clubtwice/views/screens/help_page/feedback_page.dart';
+import 'package:clubtwice/views/screens/help_page/rate_page.dart';
 import 'package:clubtwice/views/screens/welcome_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/widgets/menu_tile_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+
+import '../help_page/notiffication_page.dart';
 
 class HelpPage extends StatefulWidget {
   HelpPage({super.key});
@@ -65,7 +68,7 @@ class _HelpPageState extends State<HelpPage> {
                 MenuTileWidget(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const ProfilePageHelp()));
+                        builder: (context) => const NotificationPage()));
                   },
                   margin: const EdgeInsets.only(top: 10),
                   icon: Icon(
@@ -79,7 +82,7 @@ class _HelpPageState extends State<HelpPage> {
                 MenuTileWidget(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const ProfilePageHelp()));
+                        builder: (context) => const RatePage()));
                   },
                   margin: const EdgeInsets.only(top: 10),
                   icon: Icon(
@@ -92,7 +95,7 @@ class _HelpPageState extends State<HelpPage> {
                 MenuTileWidget(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const ProfilePageHelp()));
+                        builder: (context) => const FeedbackPage()));
                   },
                   margin: const EdgeInsets.only(top: 10),
                   icon: Icon(
@@ -105,7 +108,7 @@ class _HelpPageState extends State<HelpPage> {
                 MenuTileWidget(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const ProfilePageHelp()));
+                        builder: (context) => const RatePage()));
                   },
                   margin: const EdgeInsets.only(top: 10),
                   icon: Icon(
@@ -118,7 +121,7 @@ class _HelpPageState extends State<HelpPage> {
                 MenuTileWidget(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const ProfilePageHelp()));
+                        builder: (context) => const RatePage()));
                   },
                   margin: const EdgeInsets.only(top: 10),
                   icon: Icon(
@@ -131,7 +134,7 @@ class _HelpPageState extends State<HelpPage> {
                 MenuTileWidget(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const ProfilePageHelp()));
+                        builder: (context) => const RatePage()));
                   },
                   margin: const EdgeInsets.only(top: 10),
                   icon: Icon(

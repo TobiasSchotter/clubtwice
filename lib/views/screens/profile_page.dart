@@ -1,10 +1,10 @@
-import 'package:clubtwice/views/screens/help_page.dart';
-import 'package:clubtwice/views/screens/profile_page_club.dart';
-import 'package:clubtwice/views/screens/profile_page_fav.dart';
-import 'package:clubtwice/views/screens/profile_page_item.dart';
-import 'package:clubtwice/views/screens/profile_page_mail.dart';
-import 'package:clubtwice/views/screens/profile_page_name.dart';
-import 'package:clubtwice/views/screens/pw_change_page.dart';
+import 'package:clubtwice/views/screens/profile_page/help_page.dart';
+import 'package:clubtwice/views/screens/profile_page/profile_page_club.dart';
+import 'package:clubtwice/views/screens/profile_page/profile_page_fav.dart';
+import 'package:clubtwice/views/screens/profile_page/profile_page_item.dart';
+import 'package:clubtwice/views/screens/profile_page/profile_page_mail.dart';
+import 'package:clubtwice/views/screens/profile_page/profile_page_name.dart';
+import 'package:clubtwice/views/screens/profile_page/pw_change_page.dart';
 import 'package:clubtwice/views/screens/welcome_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';

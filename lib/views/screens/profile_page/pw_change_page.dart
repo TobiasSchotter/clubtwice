@@ -5,8 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../constant/app_button.dart';
-import '../../constant/app_color.dart';
+import '../../../constant/app_button.dart';
+import '../../../constant/app_color.dart';
 
 class PWChangePage extends StatefulWidget {
   const PWChangePage({Key? key}) : super(key: key);

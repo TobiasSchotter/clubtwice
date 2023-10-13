@@ -1,7 +1,7 @@
 import 'package:clubtwice/constant/app_button.dart';
 import 'package:clubtwice/core/services/articles_service.dart';
 import 'package:clubtwice/core/services/user_service.dart';
-import 'package:clubtwice/views/screens/profile_page_club.dart';
+import 'package:clubtwice/views/screens/profile_page/profile_page_club.dart';
 import 'package:clubtwice/views/widgets/filter_tile_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';

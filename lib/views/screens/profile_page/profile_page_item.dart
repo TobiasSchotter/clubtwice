@@ -6,7 +6,7 @@ import 'package:clubtwice/views/widgets/item_card.dart';
 import 'package:flutter/services.dart';
 import 'package:clubtwice/core/services/articles_service.dart';
 import 'package:clubtwice/core/services/user_service.dart';
-import '../widgets/profile_tile_widget.dart';
+import '../../widgets/profile_tile_widget.dart';
 import 'package:clubtwice/core/model/UserModel.dart';
 
 class ProfilePageItem extends StatefulWidget {

@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:clubtwice/views/screens/selection_brand_page.dart';
-import 'package:clubtwice/views/screens/selection_club_page.dart';
-import 'package:clubtwice/views/screens/selection_size_page.dart';
+import 'package:clubtwice/views/screens/selection_page/selection_brand_page.dart';
+import 'package:clubtwice/views/screens/selection_page/selection_club_page.dart';
+import 'package:clubtwice/views/screens/selection_page/selection_size_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../constant/app_color.dart';
 import '../../core/services/option_service.dart';
-import '../screens/selection_sport_page.dart';
+import '../screens/selection_page/selection_sport_page.dart';
 
 class FilterWidget extends StatefulWidget {
   final int selectedIndex;

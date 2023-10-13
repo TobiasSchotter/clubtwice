@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class ProfilePageHelp extends StatefulWidget {
-  const ProfilePageHelp({super.key});
+class FeedbackPage extends StatefulWidget {
+  const FeedbackPage({super.key});
 
   @override
-  State<ProfilePageHelp> createState() => _ProfilePageHelpState();
+  State<FeedbackPage> createState() => _FeedbackPageState();
 }
 
-class _ProfilePageHelpState extends State<ProfilePageHelp> {
+class _FeedbackPageState extends State<FeedbackPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +17,7 @@ class _ProfilePageHelpState extends State<ProfilePageHelp> {
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: const Text('Hilfe ',
+        title: const Text('Feedback',
             style: TextStyle(
                 color: Colors.black,
                 fontSize: 14,
