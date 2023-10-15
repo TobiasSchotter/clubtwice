@@ -9,7 +9,7 @@ import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/widgets/menu_tile_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../help_page/notiffication_page.dart';
 
 class HelpPage extends StatefulWidget {
@@ -28,7 +28,20 @@ class HelpPage extends StatefulWidget {
 void _deleteUser() async {
   User? currentUser = FirebaseAuth.instance.currentUser;
   if (currentUser != null) {
-    await currentUser.delete();
+    try {
+      // Delete the user from Firebase Authentication
+      await currentUser.delete();
+
+      // Now, delete the user's document from Firestore
+      String userUid = currentUser.uid;
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userUid)
+          .delete();
+    } catch (e) {
+      // todo add logging
+      // print("Error deleting user: $e");
+    }
   }
 }
 
