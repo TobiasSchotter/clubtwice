@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:clubtwice/core/model/UserModel.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class UserService {
   Future<UserModel?> fetchUserData(String? userId) async {
@@ -78,6 +79,54 @@ class UserService {
       // Handle any errors that may occur during the Firestore operation
       print('Error getting article count for user: $e');
       return 0; // Return 0 in case of an error
+    }
+  }
+
+  void deleteUser() async {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      try {
+        // Delete the user from Firebase Authentication
+        await currentUser.delete();
+
+        // Now, delete the user's document from Firestore
+        String userUid = currentUser.uid;
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userUid)
+            .delete();
+
+        // Delete articles from Firestore
+        QuerySnapshot articlesSnapshot = await FirebaseFirestore.instance
+            .collection('articles')
+            .where('userID', isEqualTo: userUid)
+            .get();
+
+        if (articlesSnapshot.docs.isNotEmpty) {
+          for (QueryDocumentSnapshot article in articlesSnapshot.docs) {
+            await article.reference.delete();
+          }
+        }
+
+        // Delete images from Firebase Storage
+        final storage = FirebaseStorage.instance;
+
+        // Delete profile image (if any)
+        final profileImageReference =
+            storage.ref().child('profile_images/$userUid');
+        if ((await profileImageReference.listAll()).items.isNotEmpty) {
+          await profileImageReference.delete();
+        }
+
+        // Delete other user-related images (if any)
+        final userImageReference = storage.ref().child('users/$userUid');
+        if ((await userImageReference.listAll()).items.isNotEmpty) {
+          await userImageReference.delete();
+        }
+      } catch (e) {
+        // todo add logging
+        // print("Error deleting user: $e");
+      }
     }
   }
 }

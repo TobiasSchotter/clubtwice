@@ -9,8 +9,8 @@ import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/widgets/menu_tile_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../help_page/notiffication_page.dart';
+import '../../../core/services/user_service.dart';
 
 class HelpPage extends StatefulWidget {
   HelpPage({super.key});
@@ -23,26 +23,6 @@ class HelpPage extends StatefulWidget {
 
   @override
   State<HelpPage> createState() => _HelpPageState();
-}
-
-void _deleteUser() async {
-  User? currentUser = FirebaseAuth.instance.currentUser;
-  if (currentUser != null) {
-    try {
-      // Delete the user from Firebase Authentication
-      await currentUser.delete();
-
-      // Now, delete the user's document from Firestore
-      String userUid = currentUser.uid;
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userUid)
-          .delete();
-    } catch (e) {
-      // todo add logging
-      // print("Error deleting user: $e");
-    }
-  }
 }
 
 class _HelpPageState extends State<HelpPage> {
@@ -209,7 +189,9 @@ class _HelpPageState extends State<HelpPage> {
                             if (user != null) {
                               try {
                                 // Delete user from Firebase
-                                _deleteUser();
+                                UserService userService = UserService();
+                                userService.deleteUser();
+
                                 print(const Text('HallO'));
                                 // Navigate to welcome page
                                 Navigator.of(context).push(
