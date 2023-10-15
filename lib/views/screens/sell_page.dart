@@ -16,6 +16,7 @@ import 'package:clubtwice/views/widgets/image_picker_widget.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../core/model/UserModel.dart';
 import '../../core/services/user_service.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class SellPage extends StatefulWidget {
   const SellPage({Key? key}) : super(key: key);
@@ -662,25 +663,45 @@ class _SellPageState extends State<SellPage> {
   }
 
   Future<List<String>> uploadFiles(List<XFile> images) async {
-    var imageUrls =
-        await Future.wait(images.map((image) => uploadFile(File(image.path))));
+    var imageUrls = await Future.wait(
+        images.map((image) => uploadFileWithCompression(File(image.path))));
 
     List<String> stringList = imageUrls.map((item) => item.toString()).toList();
     return stringList;
   }
 
-  Future<String> uploadFile(File image) async {
-    // Generate a unique filename for the image
-    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+  // Future<String> uploadFile(File image) async {
+  //   // Generate a unique filename for the image
+  //   String fileName = DateTime.now().millisecondsSinceEpoch.toString();
 
+  //   String userID = user!.uid;
+
+  //   // Upload the image file to Firebase Storage
+  //   Reference storageReference =
+  //       FirebaseStorage.instance.ref().child('users/$userID/images/$fileName');
+  //   TaskSnapshot snapshot = await storageReference.putFile(image);
+
+  //   // Get the download URL of the uploaded image
+  //   String downloadUrl = await snapshot.ref.getDownloadURL();s
+  //   return downloadUrl;
+  // }
+
+  Future<String> uploadFileWithCompression(File image) async {
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
     String userID = user!.uid;
 
-    // Upload the image file to Firebase Storage
+    // Compress the image
+    final result = await FlutterImageCompress.compressAndGetFile(
+      image.path, // Use the File object
+      image.path,
+      quality: 75, // Adjust the quality as needed
+    );
+
+    // Upload the compressed image to Firebase Storage
     Reference storageReference =
         FirebaseStorage.instance.ref().child('users/$userID/images/$fileName');
-    TaskSnapshot snapshot = await storageReference.putFile(image);
+    TaskSnapshot snapshot = await storageReference.putFile(result as File);
 
-    // Get the download URL of the uploaded image
     String downloadUrl = await snapshot.ref.getDownloadURL();
     return downloadUrl;
   }
