@@ -1,4 +1,4 @@
-import 'package:clubtwice/views/screens/help_page/agb_page%20copy.dart';
+import 'package:clubtwice/views/screens/help_page/datenschutz.dart';
 import 'package:clubtwice/views/screens/help_page/agb_page.dart';
 import 'package:clubtwice/views/screens/help_page/impressum_page.dart';
 import 'package:clubtwice/views/screens/profile_page/help_page.dart';

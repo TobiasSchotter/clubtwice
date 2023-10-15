@@ -1,5 +1,5 @@
-import 'package:clubtwice/views/screens/help_page/agb_page%20copy.dart';
 import 'package:clubtwice/views/screens/help_page/agb_page.dart';
+import 'package:clubtwice/views/screens/help_page/delete_page.dart';
 import 'package:clubtwice/views/screens/help_page/feedback_page.dart';
 import 'package:clubtwice/views/screens/help_page/impressum_page.dart';
 import 'package:clubtwice/views/screens/help_page/rate_page.dart';
@@ -9,6 +9,7 @@ import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/widgets/menu_tile_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import '../help_page/datenschutz.dart';
 import '../help_page/notiffication_page.dart';
 import '../../../core/services/user_service.dart';
 
@@ -158,66 +159,9 @@ class _HelpPageState extends State<HelpPage> {
                         ),
                       ),
                       MenuTileWidget(
-                        onTap: () async {
-                          // Show a dialog to confirm the sign out
-                          bool confirmDialog = await showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('Löschen'),
-                                content: const Text(
-                                    'Möchtest du deinen Account wirklich löschen?'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(false),
-                                    child: const Text('Abbrechen'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop(true);
-                                    },
-                                    child: const Text('Löschen'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                          // Delete user if confirmed
-                          if (confirmDialog == true) {
-                            User? user = FirebaseAuth.instance.currentUser;
-                            if (user != null) {
-                              try {
-                                // Delete user from Firebase
-                                UserService userService = UserService();
-                                userService.deleteUser();
-
-                                print(const Text('HallO'));
-                                // Navigate to welcome page
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const WelcomePage()),
-                                );
-                                // Sign out any remaining sessions
-                                await FirebaseAuth.instance.signOut();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content:
-                                        Text('Account erfolgreich gelöscht'),
-                                  ),
-                                );
-                              } catch (e) {
-                                print('Error deleting user: $e');
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                        'Fehler beim Löschen des Accounts'),
-                                  ),
-                                );
-                              }
-                            }
-                          }
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const DeletePage()));
                         },
                         icon: Icon(
                           Icons.delete_outline,
