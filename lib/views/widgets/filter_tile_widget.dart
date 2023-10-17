@@ -365,7 +365,7 @@ class _FilterWidgetState extends State<FilterWidget>
                       if (selectedBrand != null) {
                         setState(() {
                           selectedMarkeFilter = selectedBrand;
-                          sportHintText = selectedBrand;
+                          markeHintText = selectedBrand;
                         });
                       }
                     },
@@ -388,7 +388,7 @@ class _FilterWidgetState extends State<FilterWidget>
                           if (selectedMarkeFilter != 'Keine Auswahl' &&
                               selectedMarkeFilter.isNotEmpty)
                             Text(
-                              sportHintText,
+                              markeHintText,
                               style: const TextStyle(
                                   fontSize: 15, color: Colors.white),
                             ),
@@ -399,7 +399,7 @@ class _FilterWidgetState extends State<FilterWidget>
                               onTap: () {
                                 setState(() {
                                   selectedMarkeFilter = '';
-                                  sportHintText = 'Sportart';
+                                  markeHintText = 'Sportart';
                                 });
                               },
                               child: const Icon(
