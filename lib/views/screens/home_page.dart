@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage> {
   String typ = '';
   String groesse = '';
   String marke = '';
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -40,6 +41,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> loadData() async {
+    setState(() {
+      isLoading = true;
+    });
+
     String? userId = userService.getCurrentUserId();
     userModel = await userService.fetchUserData(userId);
 
@@ -53,6 +58,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       articlesWithID = articleList;
       hasSearchResults = articleList.isNotEmpty;
+      isLoading = false;
     });
   }
 
@@ -69,10 +75,12 @@ class _HomePageState extends State<HomePage> {
   //   }
   // }
 
-  @override
   Widget build(BuildContext context) {
     Widget content;
-    if (club.isNotEmpty && club != "Keine Auswahl") {
+    if (isLoading) {
+      // Zeige einen Ladebalken während der Datenabfrage
+      content = const CircularProgressIndicator();
+    } else if (club.isNotEmpty && club != "Keine Auswahl") {
       if (!hasSearchResults) {
         content = buildNoSearchResults();
       } else if (articlesWithID.isNotEmpty) {
