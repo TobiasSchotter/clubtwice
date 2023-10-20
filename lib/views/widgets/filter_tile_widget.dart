@@ -108,7 +108,7 @@ class _FilterWidgetState extends State<FilterWidget>
                                 if (selectedClub != null) {
                                   setState(() {
                                     selectedClubFilter = selectedClub;
-                                    sportHintText = selectedClub;
+                                    clubHintText = selectedClub;
                                   });
                                 }
                               },
@@ -133,7 +133,7 @@ class _FilterWidgetState extends State<FilterWidget>
                                     if (selectedClubFilter != 'Keine Auswahl' &&
                                         selectedClubFilter.isNotEmpty)
                                       Text(
-                                        sportHintText,
+                                        clubHintText,
                                         style: const TextStyle(
                                             fontSize: 15, color: Colors.white),
                                       ),
@@ -144,7 +144,6 @@ class _FilterWidgetState extends State<FilterWidget>
                                         onTap: () {
                                           setState(() {
                                             selectedClubFilter = '';
-                                            sportHintText = 'Sportart';
                                           });
                                         },
                                         child: const Icon(
@@ -209,7 +208,6 @@ class _FilterWidgetState extends State<FilterWidget>
                               onTap: () {
                                 setState(() {
                                   selectedSportFilter = '';
-                                  sportHintText = 'Sportart';
                                 });
                               },
                               child: const Icon(
@@ -274,6 +272,7 @@ class _FilterWidgetState extends State<FilterWidget>
                             setState(() {
                               selectedTypFilter = '';
                               typHintText = "Typ";
+                              selectedGroesseFilter = '';
                             });
                           },
                         ),
@@ -337,7 +336,6 @@ class _FilterWidgetState extends State<FilterWidget>
                               onTap: () {
                                 setState(() {
                                   selectedGroesseFilter = '';
-                                  groesseHintText = 'Wähle TypXX';
                                 });
                               },
                               child: const Icon(
@@ -399,7 +397,6 @@ class _FilterWidgetState extends State<FilterWidget>
                               onTap: () {
                                 setState(() {
                                   selectedMarkeFilter = '';
-                                  markeHintText = 'Sportart';
                                 });
                               },
                               child: const Icon(
