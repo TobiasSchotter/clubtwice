@@ -208,12 +208,26 @@ class _SearchResultPageState extends State<SearchResultPage>
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 16, top: 16),
-                child: Text(
-                  'Suchergebnisse zu $currentSearchKeyword',
-                  style: const TextStyle(
+                child: RichText(
+                  text: TextSpan(
+                    style: const TextStyle(
                       color: Colors.grey,
                       fontSize: 14,
-                      fontWeight: FontWeight.w400),
+                      fontWeight: FontWeight.w400,
+                    ),
+                    children: <TextSpan>[
+                      const TextSpan(
+                        text: 'Suchergebnisse zu ',
+                      ),
+                      TextSpan(
+                        text: currentSearchKeyword,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold, // Fett
+                          fontSize: 16, // Größere Schriftgröße
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Container(

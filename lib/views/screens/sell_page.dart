@@ -183,10 +183,6 @@ class _SellPageState extends State<SellPage> {
           ),
         );
 
-        print('Selected Size: $selectedSize');
-        print('Selected Size: $_selectedType');
-        print('Selected Size: $_selectedSize');
-
         if (selectedSize != null) {
           setState(() {
             _selectedSize = selectedSize;
