@@ -1,4 +1,9 @@
+import 'package:clubtwice/constant/app_button.dart';
 import 'package:clubtwice/constant/app_color.dart';
+import 'package:clubtwice/views/screens/page_switcher.dart';
+import 'package:clubtwice/views/screens/search_page.dart';
+import 'package:clubtwice/views/screens/search_result_page.dart';
+import 'package:clubtwice/views/screens/tab_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
@@ -26,10 +31,12 @@ class _ProfilePageFavState extends State<ProfilePageFav> {
   final UserService userService = UserService();
   final ArticleService articleService = ArticleService();
   UserModel? userModel;
+  bool isLoading = true; // Flag zur Anzeige des Ladebildschirms
 
   @override
   void initState() {
     super.initState();
+    // Setzen Sie isLoading auf true, um den Ladebildschirm zu aktivieren.
     loadData();
   }
 
@@ -42,11 +49,11 @@ class _ProfilePageFavState extends State<ProfilePageFav> {
     List<ArticleWithId> articleList =
         await articleService.fetchArticlesByIds(favoriteArticleIds);
 
-    if (articleList.isNotEmpty) {
-      setState(() {
-        articlesWithID = articleList;
-      });
-    }
+    setState(() {
+      articlesWithID = articleList;
+      isLoading =
+          false; // Daten wurden geladen oder es gab einen Fehler, den Ladebildschirm ausblenden
+    });
   }
 
   @override
@@ -76,9 +83,9 @@ class _ProfilePageFavState extends State<ProfilePageFav> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             height: 46,
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Text(
                   'Deine Favoriten',
                   style: TextStyle(
@@ -91,17 +98,46 @@ class _ProfilePageFavState extends State<ProfilePageFav> {
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Wrap(
-              spacing: 16,
-              runSpacing: 16,
-              children: List.generate(
-                articlesWithID.length,
-                (index) => ItemCard(
-                  article: articlesWithID[index].article,
-                  articleId: articlesWithID[index].id,
-                ),
-              ),
-            ),
+            child: isLoading
+                ? const Center(
+                    child:
+                        CircularProgressIndicator(), // Ladebildschirm anzeigen
+                  )
+                : articlesWithID.isNotEmpty
+                    ? Wrap(
+                        spacing: 16,
+                        runSpacing: 16,
+                        children: List.generate(
+                          articlesWithID.length,
+                          (index) => ItemCard(
+                            article: articlesWithID[index].article,
+                            articleId: articlesWithID[index].id,
+                          ),
+                        ),
+                      )
+                    : Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(height: 160),
+                            const Text(
+                              "Du hast noch keine Artikel favorisiert. \n Markiere deine Favoriten und finde Sie hier wieder.",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 15),
+                            ),
+                            const SizedBox(height: 16),
+                            CustomButton(
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => SearchResultPage(
+                                          searchKeyword: '',
+                                        )));
+                              },
+                              buttonText: 'Jetzt suchen',
+                            ),
+                          ],
+                        ),
+                      ),
           )
         ],
       ),

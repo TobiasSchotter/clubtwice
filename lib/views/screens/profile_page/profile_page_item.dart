@@ -6,6 +6,7 @@ import 'package:clubtwice/views/widgets/item_card.dart';
 import 'package:flutter/services.dart';
 import 'package:clubtwice/core/services/articles_service.dart';
 import 'package:clubtwice/core/services/user_service.dart';
+import '../../../constant/app_button.dart';
 import '../../widgets/profile_tile_widget.dart';
 import 'package:clubtwice/core/model/UserModel.dart';
 
@@ -32,6 +33,7 @@ class _ProfilePageItemState extends State<ProfilePageItem> {
   final UserService userService = UserService();
   final ArticleService articleService = ArticleService();
   UserModel? userModel;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -51,11 +53,10 @@ class _ProfilePageItemState extends State<ProfilePageItem> {
     List<ArticleWithId> articleList =
         await articleService.fetchUserArticles(searchTerm, widget.user!.uid);
 
-    if (articleList.isNotEmpty) {
-      setState(() {
-        articlesWithID = articleList;
-      });
-    }
+    setState(() {
+      articlesWithID = articleList;
+      isLoading = false;
+    });
   }
 
   @override
@@ -92,9 +93,9 @@ class _ProfilePageItemState extends State<ProfilePageItem> {
               vertical: 12,
             ),
             height: 46,
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Text(
                   'Deine Anzeigen',
                   style: TextStyle(
@@ -107,17 +108,46 @@ class _ProfilePageItemState extends State<ProfilePageItem> {
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Wrap(
-              spacing: 16,
-              runSpacing: 16,
-              children: List.generate(
-                articlesWithID.length,
-                (index) => ItemCard(
-                  article: articlesWithID[index].article,
-                  articleId: articlesWithID[index].id,
-                ),
-              ),
-            ),
+            child: isLoading
+                ? const Center(
+                    child:
+                        CircularProgressIndicator(), // Ladebildschirm anzeigen
+                  )
+                : articlesWithID.isNotEmpty
+                    ? Wrap(
+                        spacing: 16,
+                        runSpacing: 16,
+                        children: List.generate(
+                          articlesWithID.length,
+                          (index) => ItemCard(
+                            article: articlesWithID[index].article,
+                            articleId: articlesWithID[index].id,
+                          ),
+                        ),
+                      )
+                    : Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(height: 160),
+                            const Text(
+                              "Du hast noch keine Artikel eingestellt. \n Verkaufe jetzt deine Artikel hier.",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 15),
+                            ),
+                            const SizedBox(height: 16),
+                            CustomButton(
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => const PageSwitcher(
+                                          selectedIndex: 2,
+                                        )));
+                              },
+                              buttonText: 'Jetzt verkaufen',
+                            ),
+                          ],
+                        ),
+                      ),
           )
         ],
       ),
