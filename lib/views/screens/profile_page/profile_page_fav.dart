@@ -1,9 +1,6 @@
 import 'package:clubtwice/constant/app_button.dart';
 import 'package:clubtwice/constant/app_color.dart';
-import 'package:clubtwice/views/screens/page_switcher.dart';
-import 'package:clubtwice/views/screens/search_page.dart';
 import 'package:clubtwice/views/screens/search_result_page.dart';
-import 'package:clubtwice/views/screens/tab_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';

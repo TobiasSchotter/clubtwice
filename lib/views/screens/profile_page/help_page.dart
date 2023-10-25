@@ -11,7 +11,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import '../help_page/datenschutz.dart';
 import '../help_page/notiffication_page.dart';
-import '../../../core/services/user_service.dart';
 
 class HelpPage extends StatefulWidget {
   HelpPage({super.key});
