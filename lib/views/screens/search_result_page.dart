@@ -216,16 +216,22 @@ class _SearchResultPageState extends State<SearchResultPage>
                       fontWeight: FontWeight.w400,
                     ),
                     children: <TextSpan>[
-                      const TextSpan(
-                        text: 'Suchergebnisse zu ',
-                      ),
-                      TextSpan(
-                        text: currentSearchKeyword,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold, // Fett
-                          fontSize: 16, // Größere Schriftgröße
+                      if (currentSearchKeyword.isNotEmpty)
+                        const TextSpan(
+                          text: 'Suchergebnisse zu ',
+                        )
+                      else
+                        const TextSpan(
+                          text: 'Alle aktuellen Artikel',
                         ),
-                      ),
+                      if (currentSearchKeyword.isNotEmpty)
+                        TextSpan(
+                          text: currentSearchKeyword,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
                     ],
                   ),
                 ),

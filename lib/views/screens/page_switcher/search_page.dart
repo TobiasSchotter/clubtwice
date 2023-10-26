@@ -109,7 +109,7 @@ class _SearchPageState extends State<SearchPage> {
               const Padding(
                 padding: EdgeInsets.all(16),
                 child: Text(
-                  'Dein Suchverlauf...',
+                  'Dein Suchverlauf ...',
                   style: TextStyle(
                       color: Colors.grey,
                       fontSize: 12,
