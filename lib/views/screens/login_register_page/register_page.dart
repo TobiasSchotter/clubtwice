@@ -529,7 +529,12 @@ class _LoginPageState extends State<RegisterPage> {
           ),
           // SIgn in With Google
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              const snackBar = SnackBar(
+                content: Text('Funktion akutell nicht verfügbar'),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            },
             style: ElevatedButton.styleFrom(
               foregroundColor: AppColor.primary,
               padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 12),
@@ -565,7 +570,12 @@ class _LoginPageState extends State<RegisterPage> {
 
           // SIgn in With Facebook
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              const snackBar = SnackBar(
+                content: Text('Funktion akutell nicht verfügbar'),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            },
             style: ElevatedButton.styleFrom(
               foregroundColor: AppColor.primary,
               padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 12),
