@@ -1,8 +1,11 @@
+import 'package:clubtwice/constant/app_button.dart';
 import 'package:clubtwice/views/screens/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import '../../constant/app_color.dart';
 
 class OTPVerificationPage extends StatefulWidget {
   const OTPVerificationPage({super.key});
@@ -143,22 +146,107 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              Container(
+                margin: const EdgeInsets.only(top: 20, bottom: 8),
+                child: const Text(
+                  'Bitte bestätige deine E-Mail-Adresse',
+                  style: TextStyle(
+                    color: AppColor.secondary,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'poppins',
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                child: Wrap(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Text(
+                        '- Der Verifizierungs-Code wurde an deine E-Mail Adresse geschickt',
+                        style: TextStyle(
+                          color: AppColor.secondary.withOpacity(0.7),
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Text(
+                        '- Kontrolliere deinen Spam-Ordner',
+                        style: TextStyle(
+                          color: AppColor.secondary.withOpacity(0.7),
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Text(
+                        '- Bitte fordere einen neue Bestätigungsmail an, wenn du die E-Mail weiterhin nicht finden kannst',
+                        style: TextStyle(
+                          color: AppColor.secondary.withOpacity(0.7),
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Text(
+                        '- Nach Bestätigung der Mailadresse kann es noch ein paar Sekunden dauern, bis du automatisch weitergeleitest wirst',
+                        style: TextStyle(
+                          color: AppColor.secondary.withOpacity(0.7),
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                    //   Container(
+                    // margin: const EdgeInsets.only(top: 0, bottom: 20),
+                    //  child: Column(
+                    //   crossAxisAlignment: CrossAxisAlignment.start,
+                    //   children: [
+                    //    TextField(
+                    //      controller: _emailController,
+                    //     decoration: InputDecoration(
+                    // Additional desired settings for the text field decoration
+                    //          ),
+                    //                               ),
+                    // Text(
+                    //   'Bitte prüfe, ob deine E-Mail Adresse richtig ist',
+                    //   style: TextStyle(
+                    //    fontSize: 12,
+                    //    color: Colors.grey,
+                    //   ),
+                    //   ),
+                    //  ],
+                    //  ),
+                    //  ),
+                  ],
+                ),
+              ),
               const Text(
-                'Bitte bestätige deine E-Mail-Adresse.',
+                'Keine E-Mail von uns erhalten?',
                 style: TextStyle(fontSize: 16.0),
               ),
               const SizedBox(height: 16.0),
-              ElevatedButton(
-                  onPressed: !_isEmailVerified ? _sendVerificationEmail : null,
-                  child: const Text('Bestätigungsmail erneut senden')),
+              CustomButton(
+                onPressed: () {
+                  if (!_isEmailVerified) {
+                    _sendVerificationEmail();
+                  }
+                },
+                buttonText: 'Bestätigungsmail erneut senden',
+              ),
               const SizedBox(height: 16.0),
               Text(
                 _isEmailVerified
                     ? 'E-Mail wurde bestätigt.'
                     : 'E-Mail wurde noch nicht bestätigt.',
-                style: const TextStyle(fontSize: 16.0),
+                style: const TextStyle(fontSize: 14.0),
               ),
             ],
           ),

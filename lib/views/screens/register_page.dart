@@ -90,17 +90,6 @@ class _LoginPageState extends State<RegisterPage> {
                 builder: (context) => const OTPVerificationPage()),
           );
         }
-      } else {
-        // Passwörter stimmen nicht überein
-        setState(() {
-          errorMessage = 'Die Passwörter stimmen nicht überein.';
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(errorMessage!),
-            backgroundColor: Colors.red,
-          ),
-        );
       }
     } on FirebaseAuthException catch (e) {
       setState(() {
@@ -172,10 +161,19 @@ class _LoginPageState extends State<RegisterPage> {
     }
   }
 
-  bool passwordConfirm(pw, pwToConfirm) {
+  bool passwordConfirm(String pw, String pwToConfirm) {
     if (pw == pwToConfirm) {
       return true;
     } else {
+      setState(() {
+        errorMessage = 'Die Passwörter stimmen nicht überein.';
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage!),
+          backgroundColor: Colors.red,
+        ),
+      );
       return false;
     }
   }
