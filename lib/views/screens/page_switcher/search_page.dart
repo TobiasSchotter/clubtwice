@@ -7,7 +7,7 @@ import 'package:clubtwice/core/services/SearchService.dart';
 import 'package:clubtwice/views/screens/search_result_page.dart';
 import 'package:clubtwice/views/widgets/search_history_tile.dart';
 import 'package:clubtwice/core/services/user_service.dart';
-import '../widgets/search_field_tile.dart';
+import '../../widgets/search_field_tile.dart';
 import 'package:clubtwice/core/model/UserModel.dart';
 
 class SearchPage extends StatefulWidget {

@@ -14,8 +14,8 @@ import 'package:flutter/services.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/widgets/image_picker_widget.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../core/model/UserModel.dart';
-import '../../core/services/user_service.dart';
+import '../../../core/model/UserModel.dart';
+import '../../../core/services/user_service.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class SellPage extends StatefulWidget {

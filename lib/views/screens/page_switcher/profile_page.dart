@@ -8,12 +8,12 @@ import 'package:clubtwice/views/screens/profile_page/profile_page_item.dart';
 import 'package:clubtwice/views/screens/profile_page/profile_page_mail.dart';
 import 'package:clubtwice/views/screens/profile_page/profile_page_name.dart';
 import 'package:clubtwice/views/screens/profile_page/pw_change_page.dart';
-import 'package:clubtwice/views/screens/welcome_page.dart';
+import 'package:clubtwice/views/screens/login_register_page/welcome_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/widgets/menu_tile_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../widgets/profile_tile_widget.dart';
+import '../../widgets/profile_tile_widget.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({super.key});

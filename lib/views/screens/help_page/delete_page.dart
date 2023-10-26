@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../welcome_page.dart';
+import '../login_register_page/welcome_page.dart';
 
 class DeletePage extends StatefulWidget {
   const DeletePage({super.key});

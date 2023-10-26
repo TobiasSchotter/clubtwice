@@ -1,5 +1,5 @@
-import 'package:clubtwice/views/screens/message_page.dart';
-import 'package:clubtwice/views/screens/notification_page.dart';
+import 'package:clubtwice/views/screens/page_switcher/message_page.dart';
+import 'package:clubtwice/views/screens/page_switcher/notification_page.dart';
 
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';

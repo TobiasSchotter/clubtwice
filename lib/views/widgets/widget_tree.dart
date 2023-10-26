@@ -1,7 +1,7 @@
 import 'package:clubtwice/core/services/auth.dart';
 import 'package:flutter/material.dart';
 import '../screens/page_switcher.dart';
-import '../screens/welcome_page.dart';
+import '../screens/login_register_page/welcome_page.dart';
 
 class WidgetTree extends StatefulWidget {
   const WidgetTree({Key? key}) : super(key: key);

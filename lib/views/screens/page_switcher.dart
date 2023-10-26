@@ -1,10 +1,10 @@
-import 'package:clubtwice/views/screens/search_page.dart';
-import 'package:clubtwice/views/screens/sell_page.dart';
-import 'package:clubtwice/views/screens/tab_page.dart';
+import 'package:clubtwice/views/screens/page_switcher/search_page.dart';
+import 'package:clubtwice/views/screens/page_switcher/sell_page.dart';
+import 'package:clubtwice/views/screens/page_switcher/tab_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
-import 'package:clubtwice/views/screens/home_page.dart';
-import 'package:clubtwice/views/screens/profile_page.dart';
+import 'package:clubtwice/views/screens/page_switcher/home_page.dart';
+import 'package:clubtwice/views/screens/page_switcher/profile_page.dart';
 
 class PageSwitcher extends StatefulWidget {
   final int selectedIndex;

@@ -3,7 +3,7 @@ import 'package:clubtwice/views/screens/help_page/delete_page.dart';
 import 'package:clubtwice/views/screens/help_page/feedback_page.dart';
 import 'package:clubtwice/views/screens/help_page/impressum_page.dart';
 import 'package:clubtwice/views/screens/help_page/rate_page.dart';
-import 'package:clubtwice/views/screens/welcome_page.dart';
+import 'package:clubtwice/views/screens/login_register_page/welcome_page.dart';
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/widgets/menu_tile_widget.dart';

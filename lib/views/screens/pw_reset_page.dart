@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:clubtwice/constant/app_color.dart';
-import 'package:clubtwice/views/screens/register_page.dart';
+import 'package:clubtwice/views/screens/login_register_page/register_page.dart';
 import '../../constant/app_button.dart';
 
 class ResetPage extends StatefulWidget {

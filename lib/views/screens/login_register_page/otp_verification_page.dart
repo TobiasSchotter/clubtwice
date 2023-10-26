@@ -1,11 +1,11 @@
 import 'package:clubtwice/constant/app_button.dart';
-import 'package:clubtwice/views/screens/register_page.dart';
+import 'package:clubtwice/views/screens/login_register_page/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../constant/app_color.dart';
+import '../../../constant/app_color.dart';
 
 class OTPVerificationPage extends StatefulWidget {
   const OTPVerificationPage({super.key});

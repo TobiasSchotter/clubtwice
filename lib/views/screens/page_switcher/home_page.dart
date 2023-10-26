@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
 import 'package:flutter/services.dart';
-import '../widgets/search_field_tile.dart';
+import '../../widgets/search_field_tile.dart';
 import 'package:clubtwice/core/model/UserModel.dart';
 
 class HomePage extends StatefulWidget {

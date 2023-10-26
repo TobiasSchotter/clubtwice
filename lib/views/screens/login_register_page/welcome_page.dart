@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
-import 'package:clubtwice/views/screens/login_page.dart';
+import 'package:clubtwice/views/screens/login_register_page/login_page.dart';
 
-import '../../constant/app_button.dart';
+import '../../../constant/app_button.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
