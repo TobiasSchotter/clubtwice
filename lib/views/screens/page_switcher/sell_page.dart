@@ -415,7 +415,7 @@ class _SellPageState extends State<SellPage> {
                   });
                 },
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
               _buildBrandSelection(context),
               const Divider(
                 color: AppColor.border,
@@ -453,7 +453,7 @@ class _SellPageState extends State<SellPage> {
                           builder: (_) => AlertDialog(
                             title: const Text("Individuell tragbar"),
                             content: const Text(
-                                "Artikel die unabhängig des Vereins und der Sportart getragen werden können, werden allen Benutzer angezeigt."),
+                                "Artikel die kein Vereinslogo und somit auch unabhängig des Vereins getragen werden können, werden in der Suche allen angezeigt."),
                             actions: [
                               ElevatedButton(
                                 onPressed: () {
