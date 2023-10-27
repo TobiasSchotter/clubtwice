@@ -34,6 +34,7 @@ class _SearchResultPageState extends State<SearchResultPage>
   String typ = '';
   String groesse = '';
   String marke = '';
+  String searchResultText = '';
 
   final UserService userService = UserService();
   final ArticleService articleService = ArticleService();
@@ -60,6 +61,8 @@ class _SearchResultPageState extends State<SearchResultPage>
 
     setState(() {
       articlesWithID = articleList;
+      searchResultText =
+          generateSearchResultText(widget.searchKeyword, articleList.length);
     });
   }
 
@@ -140,6 +143,19 @@ class _SearchResultPageState extends State<SearchResultPage>
     loadData(); // Reload data with the applied filters
   }
 
+  String generateSearchResultText(String searchTerm, int resultCount) {
+    String resultCountText =
+        resultCount.toString(); // Convert resultCount to a string
+
+    if (searchTerm.isEmpty) {
+      return 'Alle aktuellen Artikel ($resultCountText)';
+    } else {
+      return resultCount == 1
+          ? '($resultCountText) Suchergebnis zu $searchTerm'
+          : '($resultCountText) Suchergebnisse zu $searchTerm';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -168,6 +184,8 @@ class _SearchResultPageState extends State<SearchResultPage>
                       searchTerm, club, sportart, typ, groesse, marke);
               setState(() {
                 articlesWithID = articleList;
+                searchResultText =
+                    generateSearchResultText(searchTerm, articleList.length);
               });
             },
           ),
@@ -216,22 +234,13 @@ class _SearchResultPageState extends State<SearchResultPage>
                       fontWeight: FontWeight.w400,
                     ),
                     children: <TextSpan>[
-                      if (currentSearchKeyword.isNotEmpty)
-                        const TextSpan(
-                          text: 'Suchergebnisse zu ',
-                        )
-                      else
-                        const TextSpan(
-                          text: 'Alle aktuellen Artikel',
+                      TextSpan(
+                        text: searchResultText,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 14,
                         ),
-                      if (currentSearchKeyword.isNotEmpty)
-                        TextSpan(
-                          text: currentSearchKeyword,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
+                      ),
                     ],
                   ),
                 ),
