@@ -87,7 +87,10 @@ class _LoginPageState extends State<RegisterPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => const OTPVerificationPage()),
+              builder: (context) => OTPVerificationPage(
+                email: _emailController.text,
+              ),
+            ),
           );
         }
       }

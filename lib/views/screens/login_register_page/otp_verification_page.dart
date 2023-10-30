@@ -8,7 +8,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../../constant/app_color.dart';
 
 class OTPVerificationPage extends StatefulWidget {
-  const OTPVerificationPage({super.key});
+  final String email;
+  const OTPVerificationPage({super.key, required this.email});
 
   @override
   State<OTPVerificationPage> createState() => _OTPVerificationPageState();
@@ -167,7 +168,8 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: Text(
-                        '- Der Verifizierungs-Code wurde an deine E-Mail Adresse geschickt',
+                        textAlign: TextAlign.center,
+                        '- Der Verifizierungs-Code wurde an deine E-Mail Adresse geschickt:',
                         style: TextStyle(
                           color: AppColor.secondary.withOpacity(0.7),
                           fontSize: 14,
@@ -176,7 +178,22 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8),
+                      child: RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          text: widget.email,
+                          style: const TextStyle(
+                            color: Colors.blue,
+                            fontSize: 18,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
                       child: Text(
+                        textAlign: TextAlign.center,
                         '- Kontrolliere deinen Spam-Ordner',
                         style: TextStyle(
                           color: AppColor.secondary.withOpacity(0.7),
@@ -187,6 +204,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: Text(
+                        textAlign: TextAlign.center,
                         '- Bitte fordere einen neue Bestätigungsmail an, wenn du die E-Mail weiterhin nicht finden kannst',
                         style: TextStyle(
                           color: AppColor.secondary.withOpacity(0.7),
@@ -197,6 +215,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: Text(
+                        textAlign: TextAlign.center,
                         '- Nach Bestätigung der Mailadresse kann es noch ein paar Sekunden dauern, bis du automatisch weitergeleitest wirst',
                         style: TextStyle(
                           color: AppColor.secondary.withOpacity(0.7),
@@ -204,27 +223,6 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                         ),
                       ),
                     ),
-                    //   Container(
-                    // margin: const EdgeInsets.only(top: 0, bottom: 20),
-                    //  child: Column(
-                    //   crossAxisAlignment: CrossAxisAlignment.start,
-                    //   children: [
-                    //    TextField(
-                    //      controller: _emailController,
-                    //     decoration: InputDecoration(
-                    // Additional desired settings for the text field decoration
-                    //          ),
-                    //                               ),
-                    // Text(
-                    //   'Bitte prüfe, ob deine E-Mail Adresse richtig ist',
-                    //   style: TextStyle(
-                    //    fontSize: 12,
-                    //    color: Colors.grey,
-                    //   ),
-                    //   ),
-                    //  ],
-                    //  ),
-                    //  ),
                   ],
                 ),
               ),
