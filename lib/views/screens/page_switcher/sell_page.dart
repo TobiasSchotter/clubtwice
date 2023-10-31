@@ -666,41 +666,52 @@ class _SellPageState extends State<SellPage> {
     return stringList;
   }
 
+  // Future<String> uploadFile(File image) async {
+  //   // Generate a unique filename for the image
+  //   String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+
+  //   String userID = user!.uid;
+
+  //   // Upload the image file to Firebase Storage
+  //   Reference storageReference =
+  //       FirebaseStorage.instance.ref().child('users/$userID/images/$fileName');
+  //   TaskSnapshot snapshot = await storageReference.putFile(image);
+
+  //   // Get the download URL of the uploaded image
+  //   String downloadUrl = await snapshot.ref.getDownloadURL();
+  //   return downloadUrl;
+  // }
+
   Future<String> uploadFile(File image) async {
     // Generate a unique filename for the image
     String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-
     String userID = user!.uid;
 
-    // Upload the image file to Firebase Storage
+    // Compress the image before uploading
+    final Uint8List? compressedImage =
+        await FlutterImageCompress.compressWithFile(
+      image.absolute.path,
+      quality: 50, // You can adjust the quality as needed (0-100).
+    );
+
+    if (compressedImage == null) {
+      // Handle the case where compression fails.
+      // Log the error and return a placeholder URL or an empty string.
+      // You can also display a message to the user.
+      print("Image compression failed.");
+      return ''; // Placeholder URL or empty string
+    }
+
+    // Upload the compressed image to Firebase Storage
     Reference storageReference =
         FirebaseStorage.instance.ref().child('users/$userID/images/$fileName');
-    TaskSnapshot snapshot = await storageReference.putFile(image);
+    TaskSnapshot snapshot = await storageReference
+        .putData(Uint8List.fromList(compressedImage.toList()));
 
     // Get the download URL of the uploaded image
     String downloadUrl = await snapshot.ref.getDownloadURL();
     return downloadUrl;
   }
-
-  // Future<String> uploadFileWithCompression(File image) async {
-  //   String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-  //   String userID = user!.uid;
-
-  //   // Compress the image
-  //   final result = await FlutterImageCompress.compressAndGetFile(
-  //     image.path, // Use the File object
-  //     image.path,
-  //     quality: 75, // Adjust the quality as needed
-  //   );
-
-  //   // Upload the compressed image to Firebase Storage
-  //   Reference storageReference =
-  //       FirebaseStorage.instance.ref().child('users/$userID/images/$fileName');
-  //   TaskSnapshot snapshot = await storageReference.putFile(result as File);
-
-  //   String downloadUrl = await snapshot.ref.getDownloadURL();
-  //   return downloadUrl;
-  // }
 
   void handleImagesSelected(List<XFile> images) {
     setState(() {
