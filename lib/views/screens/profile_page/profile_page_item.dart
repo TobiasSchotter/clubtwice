@@ -93,9 +93,9 @@ class _ProfilePageItemState extends State<ProfilePageItem> {
               vertical: 12,
             ),
             height: 46,
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              children: const [
                 Text(
                   'Deine Anzeigen',
                   style: TextStyle(

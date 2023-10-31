@@ -80,9 +80,9 @@ class _ProfilePageFavState extends State<ProfilePageFav> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             height: 46,
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              children: const [
                 Text(
                   'Deine Favoriten',
                   style: TextStyle(
