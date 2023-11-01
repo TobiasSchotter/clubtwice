@@ -1,4 +1,4 @@
-import 'package:clubtwice/views/screens/pw_reset_page.dart';
+import 'package:clubtwice/views/screens/login_register_page/pw_reset_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
