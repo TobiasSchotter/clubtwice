@@ -66,6 +66,7 @@ class _ProductDetailState extends State<ProductDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
+      extendBody: true,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: true,
@@ -94,17 +95,13 @@ class _ProductDetailState extends State<ProductDetail> {
         ],
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
-      // extendBodyBehindAppBar: true,
-      extendBody: true,
       bottomNavigationBar: buildBottomNavigationBar(context),
       body: Builder(
         builder: (BuildContext context) {
           DateTime dateTime = widget.article.updatedAt.toDate();
           return ListView(
             children: [
-              // ... existing widgets ...
               buildBodyContent(dateTime),
-              // ... Other widgets ...
             ],
           );
         },
@@ -254,10 +251,10 @@ class _ProductDetailState extends State<ProductDetail> {
               builder: (BuildContext context) {
                 return CarouselSlider(
                   options: CarouselOptions(
-                    aspectRatio: 4 / 3,
+                    aspectRatio: 3 / 4,
                     autoPlay: true,
                     enlargeCenterPage: true,
-                    height: 350,
+                    height: 450,
                     // enableInfiniteScroll: false,
                     onPageChanged: (index, reason) {
                       setState(() {
@@ -295,7 +292,7 @@ class _ProductDetailState extends State<ProductDetail> {
               },
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 330.0),
+              padding: const EdgeInsets.only(top: 430.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: widget.article.images.isNotEmpty
