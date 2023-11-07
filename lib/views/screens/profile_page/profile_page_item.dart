@@ -83,72 +83,82 @@ class _ProfilePageItemState extends State<ProfilePageItem> {
             systemOverlayStyle: SystemUiOverlayStyle.light,
             flexibleSpace: const MyProfileWidget(showCameraIcon: false)),
       ),
-      body: ListView(
-        shrinkWrap: true,
-        physics: const BouncingScrollPhysics(),
+      body: Column(
         children: [
           Container(
             padding: const EdgeInsets.symmetric(
               horizontal: 16,
               vertical: 12,
             ),
-            height: 46,
+            height: 44,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
                 Text(
                   'Deine Anzeigen',
                   style: TextStyle(
-                      color: AppColor.border,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600),
+                    color: AppColor.border,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ],
             ),
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: isLoading
-                ? const Center(
-                    child:
-                        CircularProgressIndicator(), // Ladebildschirm anzeigen
-                  )
-                : articlesWithID.isNotEmpty
-                    ? Wrap(
-                        spacing: 16,
-                        runSpacing: 16,
-                        children: List.generate(
-                          articlesWithID.length,
-                          (index) => ItemCard(
-                            article: articlesWithID[index].article,
-                            articleId: articlesWithID[index].id,
-                          ),
-                        ),
-                      )
-                    : Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(height: 160),
-                            const Text(
-                              "Du hast noch keine Artikel eingestellt. \n Verkaufe jetzt deine Artikel hier.",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 15),
-                            ),
-                            const SizedBox(height: 16),
-                            CustomButton(
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => const PageSwitcher(
+          Expanded(
+            child: ListView(
+              shrinkWrap: true,
+              physics: const BouncingScrollPhysics(),
+              children: [
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  child: isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : articlesWithID.isNotEmpty
+                          ? Wrap(
+                              spacing: 16,
+                              runSpacing: 16,
+                              children: List.generate(
+                                articlesWithID.length,
+                                (index) => ItemCard(
+                                  article: articlesWithID[index].article,
+                                  articleId: articlesWithID[index].id,
+                                ),
+                              ),
+                            )
+                          : Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(height: 160),
+                                  const Text(
+                                    "Du hast noch keine Artikel eingestellt. \n Verkaufe jetzt deine Artikel hier.",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  CustomButton(
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .push(MaterialPageRoute(
+                                        builder: (context) =>
+                                            const PageSwitcher(
                                           selectedIndex: 2,
-                                        )));
-                              },
-                              buttonText: 'Jetzt verkaufen',
+                                        ),
+                                      ));
+                                    },
+                                    buttonText: 'Jetzt verkaufen',
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
-          )
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
