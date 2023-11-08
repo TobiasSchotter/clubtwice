@@ -66,14 +66,11 @@ class _UserPageState extends State<UserPage> {
         ),
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
-      body: ListView(
-        shrinkWrap: true,
-        physics: const BouncingScrollPhysics(),
+      body: Column(
         children: [
-          // const MyProfileWidget(),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            height: 46,
+            height: 44,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -88,20 +85,31 @@ class _UserPageState extends State<UserPage> {
               ],
             ),
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Wrap(
-              spacing: 16,
-              runSpacing: 16,
-              children: List.generate(
-                articlesWithID.length,
-                (index) => ItemCard(
-                  article: articlesWithID[index].article,
-                  articleId: articlesWithID[index].id,
-                ),
-              ),
+          Expanded(
+            child: ListView(
+              shrinkWrap: true,
+              physics: const BouncingScrollPhysics(),
+              children: [
+                // const MyProfileWidget(),
+
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  child: Wrap(
+                    spacing: 16,
+                    runSpacing: 16,
+                    children: List.generate(
+                      articlesWithID.length,
+                      (index) => ItemCard(
+                        article: articlesWithID[index].article,
+                        articleId: articlesWithID[index].id,
+                      ),
+                    ),
+                  ),
+                )
+              ],
             ),
-          )
+          ),
         ],
       ),
     );
