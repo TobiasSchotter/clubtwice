@@ -64,6 +64,7 @@ class _ProductDetailState extends State<ProductDetail> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime dateTime = widget.article.updatedAt.toDate();
     return Scaffold(
       extendBodyBehindAppBar: true,
       extendBody: true,
@@ -95,17 +96,89 @@ class _ProductDetailState extends State<ProductDetail> {
         ],
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
-      bottomNavigationBar: buildBottomNavigationBar(context),
-      body: Builder(
-        builder: (BuildContext context) {
-          DateTime dateTime = widget.article.updatedAt.toDate();
-          return ListView(
-            children: [
-              buildBodyContent(dateTime),
-            ],
-          );
-        },
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Stack(
+              children: [
+                Builder(
+                  builder: (BuildContext context) {
+                    bool enableInfiniteScroll =
+                        widget.article.images.length > 1;
+
+                    return CarouselSlider(
+                      options: CarouselOptions(
+                          //aspectRatio: 3 / 4,
+                          autoPlay: true,
+                          //  enlargeCenterPage: true,
+                          height: 650,
+                          enableInfiniteScroll: enableInfiniteScroll,
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              currentImageIndex = index;
+                            });
+                          },
+                          viewportFraction: 1.0),
+                      items: widget.article.images.isNotEmpty
+                          ? widget.article.images.map((imageUrl) {
+                              return Builder(
+                                builder: (BuildContext context) {
+                                  return SizedBox(
+                                    child: Image.network(
+                                      imageUrl,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  );
+                                },
+                              );
+                            }).toList()
+                          : [
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 5.0),
+                                child: Image.asset(
+                                  'assets/images/placeholder.jpg',
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ],
+                    );
+                  },
+                ),
+                Positioned(
+                  top: 620.0,
+                  left: 0,
+                  right: 0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: widget.article.images.isNotEmpty
+                        ? widget.article.images.asMap().entries.map((entry) {
+                            int index = entry.key;
+                            return Container(
+                              width: 8.0,
+                              height: 8.0,
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: currentImageIndex == index
+                                    ? AppColor.primary
+                                    : AppColor.primarySoft,
+                              ),
+                            );
+                          }).toList()
+                        : [],
+                  ),
+                ),
+              ],
+            ),
+            buildBodyContent(dateTime),
+          ],
+        ),
       ),
+      bottomNavigationBar: buildBottomNavigationBar(context),
     );
   }
 
@@ -190,136 +263,18 @@ class _ProductDetailState extends State<ProductDetail> {
     return menuItems;
   }
 
-  Widget buildBottomNavigationBar(context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      padding: const EdgeInsets.all(16),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            margin: const EdgeInsets.only(right: 14),
-            child: IconButton(
-              onPressed: () {
-                shareArticle();
-              },
-              icon: const Icon(
-                Icons.share_outlined,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              height: 40,
-              margin: const EdgeInsets.only(right: 14),
-              child: CustomButton(
-                onPressed: () {
-                  // Implement the logic for the requests function here
-                },
-                buttonText: 'Anfragen',
-              ),
-            ),
-          ),
-          Container(
-              width: 40,
-              margin: const EdgeInsets.only(right: 14),
-              child: IconButton(
-                onPressed: () {
-                  toggleFavoriteArticle(
-                      context); // Pass the current isArticleFavorite value
-                },
-                icon: Icon(
-                  isArticleFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: isArticleFavorite ? Colors.red : null,
-                ),
-              )),
-        ],
-      ),
-    );
-  }
-
   ListView buildBodyContent(DateTime dateTime) {
     return ListView(
       shrinkWrap: true,
       physics: const BouncingScrollPhysics(),
       children: [
-        Stack(
-          alignment: Alignment.topCenter,
-          children: [
-            Builder(
-              // Wrap the CarouselSlider with Builder widget
-              builder: (BuildContext context) {
-                bool enableInfiniteScroll = widget.article.images.length > 1;
-
-                return CarouselSlider(
-                  options: CarouselOptions(
-                    aspectRatio: 3 / 4,
-                    autoPlay: true,
-                    enlargeCenterPage: true,
-                    height: 450,
-                    enableInfiniteScroll: enableInfiniteScroll,
-                    onPageChanged: (index, reason) {
-                      setState(() {
-                        currentImageIndex = index;
-                      });
-                    },
-                  ),
-                  items: widget.article.images.isNotEmpty
-                      ? widget.article.images.map((imageUrl) {
-                          return Builder(
-                            builder: (BuildContext context) {
-                              return Container(
-                                width: MediaQuery.of(context).size.width,
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 5.0),
-                                child: Image.network(
-                                  imageUrl,
-                                  fit: BoxFit.contain,
-                                ),
-                              );
-                            },
-                          );
-                        }).toList()
-                      : [
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                            child: Image.asset(
-                              'assets/images/placeholder.jpg',
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ],
-                );
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 430.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: widget.article.images.isNotEmpty
-                    ? widget.article.images.asMap().entries.map((entry) {
-                        int index = entry.key;
-                        return Container(
-                          width: 8.0,
-                          height: 8.0,
-                          margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: currentImageIndex == index
-                                ? AppColor.primary
-                                : AppColor.primarySoft,
-                          ),
-                        );
-                      }).toList()
-                    : [],
-              ),
-            ),
-          ],
+        Container(
+          color: Colors.red, // Hinzugefügte Zeile für die rote Linie
+          height: 2, // Hinzugefügte Zeile für die rote Linie
         ),
         Container(
           width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -373,7 +328,7 @@ class _ProductDetailState extends State<ProductDetail> {
               Visibility(
                 visible: widget.article.description.isNotEmpty,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start, // Hier ändern
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       widget.article.description,
@@ -417,6 +372,54 @@ class _ProductDetailState extends State<ProductDetail> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget buildBottomNavigationBar(context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            margin: const EdgeInsets.only(right: 14),
+            child: IconButton(
+              onPressed: () {
+                shareArticle();
+              },
+              icon: const Icon(
+                Icons.share_outlined,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              height: 40,
+              margin: const EdgeInsets.only(right: 14),
+              child: CustomButton(
+                onPressed: () {
+                  // Implement the logic for the requests function here
+                },
+                buttonText: 'Anfragen',
+              ),
+            ),
+          ),
+          Container(
+              width: 40,
+              margin: const EdgeInsets.only(right: 14),
+              child: IconButton(
+                onPressed: () {
+                  toggleFavoriteArticle(
+                      context); // Pass the current isArticleFavorite value
+                },
+                icon: Icon(
+                  isArticleFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: isArticleFavorite ? Colors.red : null,
+                ),
+              )),
+        ],
+      ),
     );
   }
 
