@@ -249,13 +249,15 @@ class _ProductDetailState extends State<ProductDetail> {
             Builder(
               // Wrap the CarouselSlider with Builder widget
               builder: (BuildContext context) {
+                bool enableInfiniteScroll = widget.article.images.length > 1;
+
                 return CarouselSlider(
                   options: CarouselOptions(
                     aspectRatio: 3 / 4,
                     autoPlay: true,
                     enlargeCenterPage: true,
                     height: 450,
-                    // enableInfiniteScroll: false,
+                    enableInfiniteScroll: enableInfiniteScroll,
                     onPageChanged: (index, reason) {
                       setState(() {
                         currentImageIndex = index;
