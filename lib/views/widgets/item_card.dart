@@ -183,10 +183,7 @@ class ItemCard extends StatelessWidget {
                             fontSize: 12,
                           ),
                           children: [
-                            TextSpan(text: '${article.condition} • '),
-                            TextSpan(text: '${article.size} '),
-                            if (article.brand != "")
-                              TextSpan(text: '• ${article.brand}'),
+                            TextSpan(text: textToDisplay),
                           ],
                         ),
                       ),
@@ -198,10 +195,13 @@ class ItemCard extends StatelessWidget {
                             fontSize: 12,
                           ),
                           children: [
-                            TextSpan(text: textToDisplay),
+                            TextSpan(text: '${article.condition} • '),
+                            TextSpan(text: '${article.size} '),
+                            if (article.brand != "")
+                              TextSpan(text: '• ${article.brand}'),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   )
                 ],
