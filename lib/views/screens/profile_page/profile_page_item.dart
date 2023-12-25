@@ -61,105 +61,107 @@ class _ProfilePageItemState extends State<ProfilePageItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(192),
-        child: AppBar(
-            automaticallyImplyLeading: false,
-            centerTitle: true,
-            backgroundColor: AppColor.primary,
-            elevation: 0,
-            leading: IconButton(
-              onPressed: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => const PageSwitcher(
-                    selectedIndex: 4,
+    return SafeArea(
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(220),
+          child: AppBar(
+              automaticallyImplyLeading: false,
+              centerTitle: true,
+              backgroundColor: AppColor.primary,
+              elevation: 0,
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const PageSwitcher(
+                      selectedIndex: 4,
+                    ),
+                  ));
+                },
+                icon: const Icon(Icons.arrow_back_outlined),
+                color: Colors.white,
+              ),
+              systemOverlayStyle: SystemUiOverlayStyle.light,
+              flexibleSpace: const MyProfileWidget(showCameraIcon: false)),
+        ),
+        body: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ),
+              height: 44,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Text(
+                    'Deine Anzeigen',
+                    style: TextStyle(
+                      color: AppColor.border,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ));
-              },
-              icon: const Icon(Icons.arrow_back_outlined),
-              color: Colors.white,
+                ],
+              ),
             ),
-            systemOverlayStyle: SystemUiOverlayStyle.light,
-            flexibleSpace: const MyProfileWidget(showCameraIcon: false)),
-      ),
-      body: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 12,
-            ),
-            height: 44,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
-                  'Deine Anzeigen',
-                  style: TextStyle(
-                    color: AppColor.border,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: ListView(
-              shrinkWrap: true,
-              physics: const BouncingScrollPhysics(),
-              children: [
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  child: isLoading
-                      ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : articlesWithID.isNotEmpty
-                          ? Wrap(
-                              spacing: 16,
-                              runSpacing: 16,
-                              children: List.generate(
-                                articlesWithID.length,
-                                (index) => ItemCard(
-                                  article: articlesWithID[index].article,
-                                  articleId: articlesWithID[index].id,
+            Expanded(
+              child: ListView(
+                shrinkWrap: true,
+                physics: const BouncingScrollPhysics(),
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
+                    child: isLoading
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : articlesWithID.isNotEmpty
+                            ? Wrap(
+                                spacing: 16,
+                                runSpacing: 16,
+                                children: List.generate(
+                                  articlesWithID.length,
+                                  (index) => ItemCard(
+                                    article: articlesWithID[index].article,
+                                    articleId: articlesWithID[index].id,
+                                  ),
+                                ),
+                              )
+                            : Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(height: 160),
+                                    const Text(
+                                      "Du hast noch keine Artikel eingestellt. \n Verkaufe jetzt deine Artikel hier.",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 15),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    CustomButton(
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (context) =>
+                                              const PageSwitcher(
+                                            selectedIndex: 2,
+                                          ),
+                                        ));
+                                      },
+                                      buttonText: 'Jetzt verkaufen',
+                                    ),
+                                  ],
                                 ),
                               ),
-                            )
-                          : Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(height: 160),
-                                  const Text(
-                                    "Du hast noch keine Artikel eingestellt. \n Verkaufe jetzt deine Artikel hier.",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: 15),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  CustomButton(
-                                    onPressed: () {
-                                      Navigator.of(context)
-                                          .push(MaterialPageRoute(
-                                        builder: (context) =>
-                                            const PageSwitcher(
-                                          selectedIndex: 2,
-                                        ),
-                                      ));
-                                    },
-                                    buttonText: 'Jetzt verkaufen',
-                                  ),
-                                ],
-                              ),
-                            ),
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

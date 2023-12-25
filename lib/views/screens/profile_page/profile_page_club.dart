@@ -1,5 +1,3 @@
-import 'package:clubtwice/views/screens/selection_page/selection_club_page.dart';
-import 'package:clubtwice/views/screens/selection_page/selection_sport_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,40 +7,44 @@ import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/constant/app_button.dart';
 
+import '../selection_page/selection_club_page.dart';
+import '../selection_page/selection_sport_page.dart';
+
 class ProfilePageClub extends StatefulWidget {
   const ProfilePageClub({Key? key}) : super(key: key);
+
   @override
   State<ProfilePageClub> createState() => _ProfilePageClubState();
 }
 
 class _ProfilePageClubState extends State<ProfilePageClub> {
+  late Future<UserModel?> _userDataFuture;
   String club = '';
   String sport = '';
-  String originalClub = '';
-  String originalSport = '';
   final UserService userService = UserService();
-  UserModel? userModel;
   bool changesMade = false;
+
   @override
   void initState() {
     super.initState();
-    loadData();
+    _userDataFuture = loadData();
   }
 
-  Future<void> loadData() async {
+  Future<UserModel?> loadData() async {
     String? userId = userService.getCurrentUserId();
-    userModel = await userService.fetchUserData(userId);
+    UserModel? user = await userService.fetchUserData(userId);
     setState(() {
-      club = userModel!.club;
-      sport = userModel!.sport;
+      club = user?.club ?? '';
+      sport = user?.sport ?? '';
     });
+    return user;
   }
 
   Future<void> saveChanges() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       String userId = user.uid;
-      userService.updateUserClubInformation(userId, club, sport);
+      await userService.updateUserClubInformation(userId, club, sport);
     }
   }
 
@@ -53,17 +55,14 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
         final selectedSport = await Navigator.push<String>(
           context,
           MaterialPageRoute(
-              builder: (context) => SportSelectionPage(
-                    selectedSport: sport,
-                  )),
+            builder: (context) => SportSelectionPage(selectedSport: sport),
+          ),
         );
         if (selectedSport != null) {
           setState(() {
             sport = selectedSport;
           });
-          displaySport = sport.isEmpty
-              ? 'Keine Auswahl'
-              : sport; // Aktualisiere die Anzeige des Sports
+          displaySport = sport.isEmpty ? 'Keine Auswahl' : sport;
         }
       },
       child: Container(
@@ -106,18 +105,14 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
         final selectedClub = await Navigator.push<String>(
           context,
           MaterialPageRoute(
-            builder: (context) => ClubSelectionPage(
-              selectedClub: club,
-            ),
+            builder: (context) => ClubSelectionPage(selectedClub: club),
           ),
         );
         if (selectedClub != null) {
           setState(() {
             club = selectedClub;
           });
-          displayClub = club.isEmpty
-              ? 'Keine Auswahl'
-              : club; // Aktualisiere die Anzeige des Clubs
+          displayClub = club.isEmpty ? 'Keine Auswahl' : club;
         }
       },
       child: Container(
@@ -185,55 +180,67 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
         ),
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
-      body: ListView(
-        shrinkWrap: true,
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        physics: const BouncingScrollPhysics(),
-        children: [
-          Container(
-            margin: const EdgeInsets.only(bottom: 0),
-            child: Text(
-              'Deine Startseite wird dir dementsprechend angezeigt. Bei Verkäufen wird dies bereits vorausgefüllt sein.\nDu kannst diese jederzeit ändern.',
-              style: TextStyle(
-                color: AppColor.secondary.withOpacity(0.7),
-                fontSize: 12,
-                height: 150 / 100,
-              ),
-            ),
-          ),
-          Container(
-            height: 16,
-          ),
-          _buildClubSelection(context),
-          Container(
-            height: 16,
-          ),
-          _buildSportSelection(context),
-          const SizedBox(height: 16),
-          CustomButton(
-            buttonText: 'Speichern',
-            onPressed: () async {
-              try {
-                await saveChanges();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Erfolgreich gespeichert'),
+      body: FutureBuilder<UserModel?>(
+        future: _userDataFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(
+                child: Text('Fehler beim Laden der Daten: ${snapshot.error}'));
+          } else {
+            return ListView(
+              shrinkWrap: true,
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              physics: const BouncingScrollPhysics(),
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(bottom: 0),
+                  child: Text(
+                    'Deine Startseite wird dir dementsprechend angezeigt. Bei Verkäufen wird dies bereits vorausgefüllt sein.\nDu kannst diese jederzeit ändern.',
+                    style: TextStyle(
+                      color: AppColor.secondary.withOpacity(0.7),
+                      fontSize: 12,
+                      height: 150 / 100,
+                    ),
                   ),
-                );
-                setState(() {
-                  changesMade = true;
-                });
-              } catch (error) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Fehler beim Speichern: $error'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              }
-            },
-          )
-        ],
+                ),
+                Container(
+                  height: 16,
+                ),
+                _buildClubSelection(context),
+                Container(
+                  height: 16,
+                ),
+                _buildSportSelection(context),
+                const SizedBox(height: 16),
+                CustomButton(
+                  buttonText: 'Speichern',
+                  onPressed: () async {
+                    try {
+                      await saveChanges();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Erfolgreich gespeichert'),
+                        ),
+                      );
+                      setState(() {
+                        changesMade = true;
+                      });
+                    } catch (error) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Fehler beim Speichern: $error'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  },
+                )
+              ],
+            );
+          }
+        },
       ),
     );
   }

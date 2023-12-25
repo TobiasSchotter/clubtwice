@@ -216,7 +216,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                       padding: const EdgeInsets.only(bottom: 8),
                       child: Text(
                         textAlign: TextAlign.center,
-                        '- Nach Bestätigung der Mailadresse kann es noch ein paar Sekunden dauern, bis du automatisch weitergeleitest wirst',
+                        '- Nach Bestätigung der Mailadresse kann es noch bis zu 15 Sekunden dauern, bis du automatisch weitergeleitest wirst',
                         style: TextStyle(
                           color: AppColor.secondary.withOpacity(0.7),
                           fontSize: 14,
