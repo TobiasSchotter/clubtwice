@@ -167,39 +167,50 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8),
-                      child: Text(
-                        textAlign: TextAlign.center,
-                        '- Der Verifizierungs-Code wurde an deine E-Mail Adresse geschickt:',
-                        style: TextStyle(
-                          color: AppColor.secondary.withOpacity(0.7),
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                          text: widget.email,
-                          style: const TextStyle(
-                            color: Colors.blue,
-                            fontSize: 18,
-                            decoration: TextDecoration.underline,
+                      child: Center(
+                        child: Text(
+                          '- Der Verifizierungs-Code wurde an deine E-Mail Adresse geschickt:',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: AppColor.secondary.withOpacity(0.7),
+                            fontSize: 14,
                           ),
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Text(
-                        textAlign: TextAlign.center,
-                        '- Kontrolliere deinen Spam-Ordner',
-                        style: TextStyle(
-                          color: AppColor.secondary.withOpacity(0.7),
-                          fontSize: 14,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Center(
+                            child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                text: widget.email,
+                                style: const TextStyle(
+                                  color: Colors.blue,
+                                  fontSize: 18,
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Center(
+                            child: Text(
+                              '- Kontrolliere deinen Spam-Ordner',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: AppColor.secondary.withOpacity(0.7),
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8),
