@@ -264,6 +264,17 @@ class _ProductDetailState extends State<ProductDetail> {
   }
 
   ListView buildBodyContent(DateTime dateTime) {
+    Widget buildSeparator() {
+      return Container(
+        height: 3,
+        decoration: BoxDecoration(
+          color: Colors.grey,
+          borderRadius: BorderRadius.circular(4),
+        ),
+        margin: const EdgeInsets.symmetric(vertical: 8),
+      );
+    }
+
     return ListView(
       shrinkWrap: true,
       physics: const BouncingScrollPhysics(),
@@ -338,18 +349,14 @@ class _ProductDetailState extends State<ProductDetail> {
                         height: 150 / 100,
                       ),
                     ),
-                    Container(
-                      height: 1,
-                      color: Colors.grey,
-                      margin: const EdgeInsets.symmetric(vertical: 8),
-                    ),
                   ],
                 ),
               ),
+              buildSeparator(),
               buildRichTextInfo(widget.article),
-              if (widget.article.club.isNotEmpty &&
-                  widget.article.sport.isNotEmpty)
-                buildRichTextInfo2(widget.article),
+              buildSeparator(),
+              buildRichTextInfo2(widget.article),
+              buildSeparator(),
               Row(
                 children: [
                   const Icon(
@@ -429,31 +436,55 @@ class _ProductDetailState extends State<ProductDetail> {
       height: 1.5,
     );
 
-    List<InlineSpan> children = [
-      if (article.condition.isNotEmpty)
-        TextSpan(text: '${article.condition} • ', style: style),
-      if (article.size.isNotEmpty)
-        TextSpan(text: '${article.size} • ', style: style),
-      if (article.type.isNotEmpty) TextSpan(text: article.type, style: style),
-      if (article.brand.isNotEmpty)
-        TextSpan(text: ' • ${article.brand}', style: style),
-    ];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        buildRichTextRow("Zustand", article.condition, style),
+        buildRichTextRow("Größe", article.size, style),
+        buildRichTextRow("Typ", article.type, style),
+        buildRichTextRow("Marke", article.brand, style, showDivider: false),
+      ],
+    );
+  }
+
+  Widget buildRichTextRow(String label, String value, TextStyle style,
+      {bool showDivider = true}) {
+    if (value.isEmpty) {
+      // Wert ist leer, also keine Zeile erstellen
+      return Container();
+    }
 
     return Column(
       children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: RichText(
-            text: TextSpan(
-              children: children,
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label,
+                style:
+                    style.copyWith(fontSize: 16, fontWeight: FontWeight.w600)),
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: value,
+                        style: style.copyWith(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
+          ],
+        ),
+        if (showDivider)
+          Container(
+            height: 1,
+            color: Colors.grey,
+            margin: const EdgeInsets.symmetric(vertical: 8),
           ),
-        ),
-        Container(
-          height: 1,
-          color: Colors.grey,
-          margin: const EdgeInsets.symmetric(vertical: 8),
-        ),
       ],
     );
   }
@@ -464,29 +495,48 @@ class _ProductDetailState extends State<ProductDetail> {
       height: 1.5,
     );
 
-    List<InlineSpan> children = [];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        buildRichTextRow2("Verein", article.club, style, showDivider: true),
+        buildRichTextRow2("Sportart", article.sport, style, showDivider: false),
+      ],
+    );
+  }
 
-    if (article.club.isNotEmpty && article.sport.isNotEmpty) {
-      children.add(
-        TextSpan(text: '${article.club} • ${article.sport}', style: style),
-      );
-    } else if (article.club.isNotEmpty) {
-      children.add(TextSpan(text: article.club, style: style));
-    } else if (article.sport.isNotEmpty) {
-      children.add(TextSpan(text: article.sport, style: style));
+  Widget buildRichTextRow2(String label, String value, TextStyle style,
+      {bool showDivider = true}) {
+    if (value.isEmpty) {
+      // Wert ist leer, also keine Zeile erstellen
+      return Container();
     }
 
     return Column(
       children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: RichText(
-            text: TextSpan(
-              children: children,
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label,
+                style:
+                    style.copyWith(fontSize: 16, fontWeight: FontWeight.w600)),
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: value,
+                        style: style.copyWith(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
-          ),
+          ],
         ),
-        if (article.club.isNotEmpty && article.sport.isNotEmpty)
+        if (showDivider)
           Container(
             height: 1,
             color: Colors.grey,
