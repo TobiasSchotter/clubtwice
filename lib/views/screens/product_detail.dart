@@ -67,7 +67,7 @@ class _ProductDetailState extends State<ProductDetail> {
     DateTime dateTime = widget.article.updatedAt.toDate();
     return Scaffold(
       extendBodyBehindAppBar: true,
-      extendBody: true,
+      // extendBody: true,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: true,
@@ -266,7 +266,7 @@ class _ProductDetailState extends State<ProductDetail> {
   ListView buildBodyContent(DateTime dateTime) {
     Widget buildSeparator() {
       return Container(
-        height: 3,
+        height: 2,
         decoration: BoxDecoration(
           color: Colors.grey,
           borderRadius: BorderRadius.circular(4),
@@ -316,7 +316,7 @@ class _ProductDetailState extends State<ProductDetail> {
                       ? "Zu verschenken"
                       : "${widget.article.price} €",
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 22,
                     fontWeight: FontWeight.w700,
                     fontFamily: 'Poppins',
                     color: widget.article.price == 0
@@ -331,17 +331,13 @@ class _ProductDetailState extends State<ProductDetail> {
                 margin: const EdgeInsets.symmetric(vertical: 8),
               ),
               buildUserProfileSection(),
-              Container(
-                height: 1,
-                color: Colors.grey,
-                margin: const EdgeInsets.symmetric(vertical: 8),
-              ),
-              Visibility(
-                visible: widget.article.description.isNotEmpty,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
+              buildSeparator(),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Visibility(
+                    visible: widget.article.description.isNotEmpty,
+                    child: Text(
                       widget.article.description,
                       style: TextStyle(
                         color: AppColor.secondary.withOpacity(0.7),
@@ -349,10 +345,13 @@ class _ProductDetailState extends State<ProductDetail> {
                         height: 150 / 100,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  Visibility(
+                    visible: widget.article.description.isNotEmpty,
+                    child: buildSeparator(),
+                  ),
+                ],
               ),
-              buildSeparator(),
               buildRichTextInfo(widget.article),
               buildSeparator(),
               buildRichTextInfo2(widget.article),
@@ -441,7 +440,8 @@ class _ProductDetailState extends State<ProductDetail> {
       children: [
         buildRichTextRow("Zustand", article.condition, style),
         buildRichTextRow("Größe", article.size, style),
-        buildRichTextRow("Typ", article.type, style),
+        buildRichTextRow("Typ", article.type, style,
+            showDivider: article.brand.isNotEmpty),
         buildRichTextRow("Marke", article.brand, style, showDivider: false),
       ],
     );
@@ -456,34 +456,44 @@ class _ProductDetailState extends State<ProductDetail> {
 
     return Column(
       children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label,
+        Padding(
+          padding: const EdgeInsets.symmetric(
+              horizontal: 3), // Anpassung des Text-Offsets
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
                 style:
-                    style.copyWith(fontSize: 16, fontWeight: FontWeight.w600)),
-            Expanded(
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: value,
-                        style: style.copyWith(fontSize: 16),
-                      ),
-                    ],
+                    style.copyWith(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: value,
+                          style: style.copyWith(fontSize: 16),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-        if (showDivider)
-          Container(
-            height: 1,
-            color: Colors.grey,
-            margin: const EdgeInsets.symmetric(vertical: 8),
+        if (showDivider) // Nur Divider anzeigen, wenn showDivider true ist
+          Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: 3), // Anpassung des Divider-Offsets
+            child: Container(
+              height: 1,
+              color: Colors.grey,
+              margin: const EdgeInsets.symmetric(vertical: 8),
+            ),
           ),
       ],
     );
@@ -513,34 +523,44 @@ class _ProductDetailState extends State<ProductDetail> {
 
     return Column(
       children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label,
+        Padding(
+          padding: const EdgeInsets.symmetric(
+              horizontal: 3), // Anpassung des Text-Offsets
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
                 style:
-                    style.copyWith(fontSize: 16, fontWeight: FontWeight.w600)),
-            Expanded(
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: value,
-                        style: style.copyWith(fontSize: 16),
-                      ),
-                    ],
+                    style.copyWith(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: value,
+                          style: style.copyWith(fontSize: 16),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         if (showDivider)
-          Container(
-            height: 1,
-            color: Colors.grey,
-            margin: const EdgeInsets.symmetric(vertical: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: 3), // Anpassung des Divider-Offsets
+            child: Container(
+              height: 1,
+              color: Colors.grey,
+              margin: const EdgeInsets.symmetric(vertical: 8),
+            ),
           ),
       ],
     );
