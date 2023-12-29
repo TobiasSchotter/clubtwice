@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clubtwice/views/screens/profile_page/profile_page_item.dart';
 import 'package:clubtwice/views/screens/user_page.dart';
+import 'package:clubtwice/views/widgets/affiliation_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
@@ -11,6 +12,8 @@ import 'package:share/share.dart';
 import '../../constant/app_button.dart';
 import '../../core/model/Article.dart';
 import 'package:clubtwice/core/model/UserModel.dart';
+
+import '../widgets/attribute_widget.dart';
 
 class ProductDetail extends StatefulWidget {
   final Article article;
@@ -352,9 +355,9 @@ class _ProductDetailState extends State<ProductDetail> {
                   ),
                 ],
               ),
-              buildRichTextInfo(widget.article),
+              RichTextBuilderAttribute.buildRichTextInfo(widget.article),
               buildSeparator(),
-              buildRichTextInfo2(widget.article),
+              RichTextBuilderAffiliation.buildRichTextInfo2(widget.article),
               buildSeparator(),
               Row(
                 children: [
@@ -426,143 +429,6 @@ class _ProductDetailState extends State<ProductDetail> {
               )),
         ],
       ),
-    );
-  }
-
-  Column buildRichTextInfo(Article article) {
-    final style = TextStyle(
-      color: AppColor.secondary.withOpacity(0.7),
-      height: 1.5,
-    );
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        buildRichTextRow("Zustand", article.condition, style),
-        buildRichTextRow("Größe", article.size, style),
-        buildRichTextRow("Typ", article.type, style,
-            showDivider: article.brand.isNotEmpty),
-        buildRichTextRow("Marke", article.brand, style, showDivider: false),
-      ],
-    );
-  }
-
-  Widget buildRichTextRow(String label, String value, TextStyle style,
-      {bool showDivider = true}) {
-    if (value.isEmpty) {
-      // Wert ist leer, also keine Zeile erstellen
-      return Container();
-    }
-
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(
-              horizontal: 3), // Anpassung des Text-Offsets
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label,
-                style:
-                    style.copyWith(fontSize: 16, fontWeight: FontWeight.w600),
-              ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: value,
-                          style: style.copyWith(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        if (showDivider) // Nur Divider anzeigen, wenn showDivider true ist
-          Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: 3), // Anpassung des Divider-Offsets
-            child: Container(
-              height: 1,
-              color: Colors.grey,
-              margin: const EdgeInsets.symmetric(vertical: 8),
-            ),
-          ),
-      ],
-    );
-  }
-
-  Column buildRichTextInfo2(Article article) {
-    final style = TextStyle(
-      color: AppColor.secondary.withOpacity(0.7),
-      height: 1.5,
-    );
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        buildRichTextRow2("Verein", article.club, style, showDivider: true),
-        buildRichTextRow2("Sportart", article.sport, style, showDivider: false),
-      ],
-    );
-  }
-
-  Widget buildRichTextRow2(String label, String value, TextStyle style,
-      {bool showDivider = true}) {
-    if (value.isEmpty) {
-      // Wert ist leer, also keine Zeile erstellen
-      return Container();
-    }
-
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(
-              horizontal: 3), // Anpassung des Text-Offsets
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label,
-                style:
-                    style.copyWith(fontSize: 16, fontWeight: FontWeight.w600),
-              ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: value,
-                          style: style.copyWith(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        if (showDivider)
-          Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: 3), // Anpassung des Divider-Offsets
-            child: Container(
-              height: 1,
-              color: Colors.grey,
-              margin: const EdgeInsets.symmetric(vertical: 8),
-            ),
-          ),
-      ],
     );
   }
 
