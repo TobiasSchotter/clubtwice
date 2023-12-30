@@ -14,6 +14,7 @@ import '../../core/model/Article.dart';
 import 'package:clubtwice/core/model/UserModel.dart';
 
 import '../widgets/attribute_widget.dart';
+import '../widgets/user_section.dart';
 
 class ProductDetail extends StatefulWidget {
   final Article article;
@@ -432,84 +433,23 @@ class _ProductDetailState extends State<ProductDetail> {
     );
   }
 
-  GestureDetector buildUserProfileSection() {
-    return GestureDetector(
-      onTap: articleCount > 0
-          ? () {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => UserPage(
-                  userId: widget.article.userId,
-                  userName: userName!,
-                  articleCount: articleCount,
-                ),
-              ));
-            }
-          : null, // Disable onTap if articleCount is 0
-      child: Container(
-        alignment: Alignment.centerLeft,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            CircleAvatar(
-              radius: 20,
-              backgroundImage: getImageProvider(profileImageUrl),
+  Widget buildUserProfileSection() {
+    return UserProfileSection(
+      profileImageUrl: profileImageUrl,
+      userName: userName!,
+      articleCount: articleCount,
+      isFetching: isFetching,
+      onTap: () {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => UserPage(
+              userId: widget.article.userId,
+              userName: userName!,
+              articleCount: articleCount,
             ),
-            const SizedBox(width: 8),
-            Text(
-              userName!,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(width: 8),
-            articleCount > 0
-                ? Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        const Text(
-                          'Weitere ',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.black,
-                          ),
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            isFetching
-                                ? const CircularProgressIndicator()
-                                : Text(
-                                    '$articleCount',
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColor.primary,
-                                    ),
-                                  ),
-                          ],
-                        ),
-                        const Text(
-                          ' Artikel',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.black,
-                          ),
-                        ),
-                        const Icon(
-                          Icons.arrow_forward,
-                          color: Colors.black,
-                        ),
-                      ],
-                    ),
-                  )
-                : const SizedBox(), // Hide the part with "Weitere [articleCount] Artikel" if articleCount is 0
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
