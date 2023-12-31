@@ -14,6 +14,7 @@ import '../../core/model/Article.dart';
 import 'package:clubtwice/core/model/UserModel.dart';
 
 import '../widgets/attribute_widget.dart';
+import '../widgets/date_widget.dart';
 import '../widgets/user_section.dart';
 
 class ProductDetail extends StatefulWidget {
@@ -70,8 +71,8 @@ class _ProductDetailState extends State<ProductDetail> {
   Widget build(BuildContext context) {
     DateTime dateTime = widget.article.updatedAt.toDate();
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      // extendBody: true,
+      // extendBodyBehindAppBar: true,
+      extendBody: true,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: true,
@@ -283,10 +284,10 @@ class _ProductDetailState extends State<ProductDetail> {
       shrinkWrap: true,
       physics: const BouncingScrollPhysics(),
       children: [
-        Container(
-          color: Colors.red, // Hinzugefügte Zeile für die rote Linie
-          height: 2, // Hinzugefügte Zeile für die rote Linie
-        ),
+        // Container(
+        //  color: Colors.red, // Hinzugefügte Zeile für die rote Linie
+        //    height: 2, // Hinzugefügte Zeile für die rote Linie
+        //  ),
         Container(
           width: MediaQuery.of(context).size.width,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -329,55 +330,45 @@ class _ProductDetailState extends State<ProductDetail> {
                   ),
                 ),
               ),
-              Container(
-                height: 1,
-                color: Colors.grey,
-                margin: const EdgeInsets.symmetric(vertical: 8),
-              ),
+              buildSeparator(),
               buildUserProfileSection(),
+              buildSeparator(),
+              RichTextBuilderAttribute.buildRichTextInfo(widget.article),
+              buildSeparator(),
+              RichTextBuilderAffiliation.buildRichTextInfo2(widget.article),
               buildSeparator(),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Visibility(
                     visible: widget.article.description.isNotEmpty,
-                    child: Text(
-                      widget.article.description,
-                      style: TextStyle(
-                        color: AppColor.secondary.withOpacity(0.7),
-                        fontSize: 18,
-                        height: 150 / 100,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                      child: Container(
+                        color: const Color.fromARGB(255, 238, 238,
+                            238), // Set the background color to light gray
+                        child: Text(
+                          widget.article.description,
+                          style: TextStyle(
+                            color: AppColor.secondary.withOpacity(0.7),
+                            fontSize: 18,
+                            height: 150 / 100,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                  Visibility(
-                    visible: widget.article.description.isNotEmpty,
-                    child: buildSeparator(),
-                  ),
                 ],
               ),
-              RichTextBuilderAttribute.buildRichTextInfo(widget.article),
-              buildSeparator(),
-              RichTextBuilderAffiliation.buildRichTextInfo2(widget.article),
-              buildSeparator(),
-              Row(
-                children: [
-                  const Icon(
-                    Icons.calendar_today,
-                    color: Colors.grey,
-                    size: 18,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    "${dateTime.day.toString().padLeft(2, '0')}.${dateTime.month.toString().padLeft(2, '0')}",
-                    style: TextStyle(
-                      color: AppColor.secondary.withOpacity(0.7),
-                      fontSize: 16,
-                      height: 1.5,
-                    ),
-                  ),
-                ],
-              )
+              Visibility(
+                visible: widget.article.description.isNotEmpty,
+                child: Container(
+                  height: 1,
+                  color: Colors.grey,
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                ),
+              ),
+              DateWidget(dateTime: dateTime),
             ],
           ),
         ),
