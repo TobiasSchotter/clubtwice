@@ -111,7 +111,8 @@ class _LoginPageState extends State<RegisterPage> {
       'username': userName,
       'email': email,
       'club': "Keine Auswahl",
-      'sport': "Keine Auswahl"
+      'sport': "Keine Auswahl",
+      'favorites': <String>[], // Empty list for favorites
     });
   }
 
