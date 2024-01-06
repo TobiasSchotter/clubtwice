@@ -72,7 +72,7 @@ class _ProfilePageFavState extends State<ProfilePageFav> {
                 color: Colors.white,
               ),
               systemOverlayStyle: SystemUiOverlayStyle.light,
-              flexibleSpace: const MyProfileWidget(showCameraIcon: false)),
+              flexibleSpace: const MyProfileWidget()),
         ),
         body: Column(
           children: [
