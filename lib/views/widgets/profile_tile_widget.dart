@@ -103,6 +103,16 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
     print('Image deleted.');
   }
 
+  Widget _buildUserInfoText(String text) {
+    return Text(
+      text,
+      style: TextStyle(
+        color: Colors.white.withOpacity(0.6),
+        fontSize: 14,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
@@ -210,9 +220,9 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  child: Align(
+                  child: const Align(
                     alignment: Alignment.bottomRight,
-                    child: const SizedBox(),
+                    child: SizedBox(),
                   ),
                 ),
                 Container(
@@ -226,27 +236,9 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                     ),
                   ),
                 ),
-                Text(
-                  '$username',
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.6),
-                    fontSize: 14,
-                  ),
-                ),
-                Text(
-                  '$club',
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.6),
-                    fontSize: 14,
-                  ),
-                ),
-                Text(
-                  '$sport',
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.6),
-                    fontSize: 14,
-                  ),
-                ),
+                _buildUserInfoText('$username'),
+                _buildUserInfoText('$club'),
+                _buildUserInfoText('$sport'),
                 if (_isUploading) const CircularProgressIndicator(),
                 if (_isDeleting) const CircularProgressIndicator(),
               ],
