@@ -220,10 +220,6 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  child: const Align(
-                    alignment: Alignment.bottomRight,
-                    child: SizedBox(),
-                  ),
                 ),
                 Container(
                   margin: const EdgeInsets.only(bottom: 2, top: 7),
