@@ -7,6 +7,7 @@ import 'package:clubtwice/views/screens/profile_page/profile_page_fav.dart';
 import 'package:clubtwice/views/screens/profile_page/profile_page_item.dart';
 import 'package:clubtwice/views/screens/profile_page/profile_page_mail.dart';
 import 'package:clubtwice/views/screens/profile_page/profile_page_name.dart';
+import 'package:clubtwice/views/screens/profile_page/profile_page_notification.dart';
 import 'package:clubtwice/views/screens/profile_page/pw_change_page.dart';
 import 'package:clubtwice/views/screens/login_register_page/welcome_page.dart';
 import 'package:flutter/material.dart';
@@ -109,6 +110,20 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         title: 'Favoriten',
                         subtitle: 'Finde deine Favoriten',
+                      ),
+                      MenuTileWidget(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  const ProfilePageNotification()));
+                        },
+                        margin: const EdgeInsets.only(top: 10),
+                        icon: Icon(
+                          Icons.notification_add,
+                          color: AppColor.secondary.withOpacity(0.5),
+                        ),
+                        title: 'Benachrichtungen',
+                        subtitle: 'Passe deine Benachrichtungen an',
                       ),
                     ],
                   ),
