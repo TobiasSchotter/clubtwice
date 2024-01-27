@@ -45,7 +45,7 @@ class _ProfilePageNotificationState extends State<ProfilePageNotification> {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       String userId = user.uid;
-      await userService.updateUserClubInformation(userId, club, sport);
+      //await userService.updateUserClubInformation(userId, club, sport);
     }
   }
 
