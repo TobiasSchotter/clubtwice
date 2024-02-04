@@ -271,10 +271,6 @@ class _ProductDetailState extends State<ProductDetail> {
       shrinkWrap: true,
       physics: const BouncingScrollPhysics(),
       children: [
-        // Container(
-        //  color: Colors.red, // Hinzugefügte Zeile für die rote Linie
-        //    height: 2, // Hinzugefügte Zeile für die rote Linie
-        //  ),
         Container(
           width: MediaQuery.of(context).size.width,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
