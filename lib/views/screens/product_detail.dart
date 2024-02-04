@@ -91,11 +91,17 @@ class _ProductDetailState extends State<ProductDetail> {
         actions: [
           Builder(
             builder: (BuildContext context) {
-              return PopupMenuButton<String>(
-                onSelected: (value) => handlePopupMenuSelection(value),
-                itemBuilder: (BuildContext context) => buildPopupMenuItems(),
-                icon: const Icon(Icons.more_horiz),
-              );
+              if (widget.article.isDeleted) {
+                // Artikel ist gelöscht, also keine Popup-Menüschaltfläche anzeigen
+                return const SizedBox
+                    .shrink(); // oder eine andere leere Widget-Instanz zurückgeben
+              } else {
+                return PopupMenuButton<String>(
+                  onSelected: (value) => handlePopupMenuSelection(value),
+                  itemBuilder: (BuildContext context) => buildPopupMenuItems(),
+                  icon: const Icon(Icons.more_horiz),
+                );
+              }
             },
           ),
         ],
@@ -206,67 +212,48 @@ class _ProductDetailState extends State<ProductDetail> {
 
   // Helper methods to build UI elements
 
-  List<PopupMenuEntry<String>> buildPopupMenuItems() {
-    bool isCurrentUserArticle =
-        FirebaseAuth.instance.currentUser?.uid == widget.article.userId;
-
-    List<PopupMenuEntry<String>> menuItems = [];
-
-    if (!widget.article.isDeleted && isCurrentUserArticle) {
-      menuItems.add(
-        PopupMenuItem<String>(
-          value: 'sold',
-          child: ListTile(
-            title: Text(widget.article.isSold ? 'Nicht Verkauft' : 'Verkauft'),
-          ),
-        ),
-      );
-
-      if (!widget.article.isSold) {
-        menuItems.add(
+  List<PopupMenuEntry<String>> buildPopupMenuItems() => FirebaseAuth
+                  .instance.currentUser?.uid ==
+              widget.article.userId &&
+          !widget.article.isDeleted
+      ? [
           PopupMenuItem<String>(
-            value: 'reserved',
+            value: 'sold',
             child: ListTile(
-              title: Text(
-                widget.article.isReserved ? 'Aktivieren' : 'Reservieren',
+              title:
+                  Text(widget.article.isSold ? 'Nicht Verkauft' : 'Verkauft'),
+            ),
+          ),
+          if (!widget.article.isSold)
+            PopupMenuItem<String>(
+              value: 'reserved',
+              child: ListTile(
+                title: Text(
+                    widget.article.isReserved ? 'Aktivieren' : 'Reservieren'),
               ),
             ),
-          ),
-        );
-      }
-
-      menuItems.add(
-        const PopupMenuItem<String>(
-          value: 'delete',
-          child: ListTile(
-            title: Text('Löschen'),
-          ),
-        ),
-      );
-
-      if (!widget.article.isSold) {
-        menuItems.add(
           const PopupMenuItem<String>(
-            value: 'edit',
+            value: 'delete',
             child: ListTile(
-              title: Text('Bearbeiten'),
+              title: Text('Löschen'),
             ),
           ),
-        );
-      }
-    }
-
-    menuItems.add(
-      const PopupMenuItem<String>(
-        value: 'report',
-        child: ListTile(
-          title: Text('Melden'),
-        ),
-      ),
-    );
-
-    return menuItems;
-  }
+          if (!widget.article.isSold)
+            const PopupMenuItem<String>(
+              value: 'edit',
+              child: ListTile(
+                title: Text('Bearbeiten'),
+              ),
+            ),
+        ]
+      : [
+          const PopupMenuItem<String>(
+            value: 'report',
+            child: ListTile(
+              title: Text('Melden'),
+            ),
+          ),
+        ];
 
   ListView buildBodyContent(DateTime dateTime) {
     Widget buildSeparator() {
