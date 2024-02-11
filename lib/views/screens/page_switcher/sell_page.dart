@@ -441,18 +441,18 @@ class _SellPageState extends State<SellPage> {
                         value: _selectedClub.isEmpty
                             ? true
                             : _isIndividuallyWearable,
-                        onChanged: _selectedClub.isEmpty
-                            ? (value) {
-                                setState(() {
-                                  _isIndividuallyWearable =
-                                      true; // Wert auf "Ja" setzen
-                                });
-                              }
-                            : (value) {
-                                setState(() {
-                                  _isIndividuallyWearable = value;
-                                });
-                              },
+                        onChanged: (value) {
+                          setState(() {
+                            if (_selectedClub.isEmpty) {
+                            } else {
+                              _isIndividuallyWearable =
+                                  value; // Wert ändern, wenn ein Verein ausgewählt ist
+                            }
+                          });
+                        },
+                        activeTrackColor:
+                            _selectedClub.isEmpty ? Colors.grey : null,
+                        activeColor: _selectedClub.isEmpty ? Colors.grey : null,
                       ),
                     ),
                     GestureDetector(
