@@ -49,24 +49,6 @@ class ArticleService {
     return articles;
   }
 
-  // Future<List<ArticleWithId>> fetchArticles(
-  //     String searchTerm, String club) async {
-  //   if (club.isNotEmpty && club != "Keine Auswahl") {
-  //     Query articlesQuery = FirebaseFirestore.instance
-  //         .collection('articles')
-  //         .where('club', isEqualTo: club)
-  //         .where('isSold', isEqualTo: false)
-  //         .where('isReserved', isEqualTo: false)
-  //         .where('isDeleted', isEqualTo: false);
-
-  //     return _fetchArticles(articlesQuery, searchTerm);
-  //   } else {
-  //     print("fetchArticles: Verein ist leer");
-  //     // TODO: error handling
-  //     return [];
-  //   }
-  // }
-
   Future<List<ArticleWithId>> fetchArticles(
     String searchTerm,
     String club,
@@ -104,8 +86,9 @@ class ArticleService {
       // Continue with the searchTerm filtering
       return _fetchArticles(articlesQuery, searchTerm);
     } else {
+      // ignore: avoid_print
       print("fetchArticles: Verein ist leer");
-      // TODO: error handling
+
       return [];
     }
   }
