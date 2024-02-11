@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/core/model/Notification.dart';
+import 'package:intl/intl.dart';
 
 class NotificationTile extends StatelessWidget {
   final VoidCallback onTap;
@@ -31,7 +32,7 @@ class NotificationTile extends StatelessWidget {
                 color: AppColor.border,
                 borderRadius: BorderRadius.circular(8),
                 image: DecorationImage(
-                    image: AssetImage('${data.imageUrl}'), fit: BoxFit.cover),
+                    image: AssetImage(data.imageUrl), fit: BoxFit.cover),
               ),
               margin: const EdgeInsets.only(right: 16),
             ),
@@ -42,7 +43,7 @@ class NotificationTile extends StatelessWidget {
                 children: [
                   // Title
                   Text(
-                    '${data.title}',
+                    data.title,
                     style: const TextStyle(
                         color: AppColor.secondary,
                         fontFamily: 'poppins',
@@ -52,7 +53,7 @@ class NotificationTile extends StatelessWidget {
                   Container(
                     margin: const EdgeInsets.only(top: 2, bottom: 8),
                     child: Text(
-                      '${data.description}',
+                      data.description,
                       style: TextStyle(
                           color: AppColor.secondary.withOpacity(0.7),
                           fontSize: 12),
@@ -62,15 +63,18 @@ class NotificationTile extends StatelessWidget {
                   Row(
                     children: [
                       const Icon(
-                        Icons.av_timer,
+                        Icons.timer_rounded,
+                        size: 14,
                       ),
                       Container(
-                        margin: const EdgeInsets.only(left: 10),
+                        margin: const EdgeInsets.only(left: 5),
                         child: Text(
-                          '${data.dateTime}',
+                          DateFormat('MM.dd HH:mm')
+                              .format(data.dateTime.toLocal()),
                           style: TextStyle(
-                              color: AppColor.secondary.withOpacity(0.7),
-                              fontSize: 12),
+                            color: AppColor.secondary.withOpacity(0.7),
+                            fontSize: 12,
+                          ),
                         ),
                       ),
                     ],
