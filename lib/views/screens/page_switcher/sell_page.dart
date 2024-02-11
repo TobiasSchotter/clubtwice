@@ -438,12 +438,21 @@ class _SellPageState extends State<SellPage> {
                     Transform.scale(
                       scale: 0.8,
                       child: Switch(
-                        value: _isIndividuallyWearable,
-                        onChanged: (value) {
-                          setState(() {
-                            _isIndividuallyWearable = value;
-                          });
-                        },
+                        value: _selectedClub.isEmpty
+                            ? true
+                            : _isIndividuallyWearable,
+                        onChanged: _selectedClub.isEmpty
+                            ? (value) {
+                                setState(() {
+                                  _isIndividuallyWearable =
+                                      true; // Wert auf "Ja" setzen
+                                });
+                              }
+                            : (value) {
+                                setState(() {
+                                  _isIndividuallyWearable = value;
+                                });
+                              },
                       ),
                     ),
                     GestureDetector(
@@ -453,7 +462,7 @@ class _SellPageState extends State<SellPage> {
                           builder: (_) => AlertDialog(
                             title: const Text("Individuell tragbar"),
                             content: const Text(
-                                "Artikel die kein Vereinslogo und somit auch unabhängig des Vereins getragen werden können, werden in der Suche allen angezeigt."),
+                                "Artikel die kein Vereinslogo und somit auch unabhängig des Vereins getragen werden können, werden in der Suche allen angezeigt. Wird keine Vereinsauswahl getroffen, wird das Feld automatisch aktiviert."),
                             actions: [
                               ElevatedButton(
                                 onPressed: () {
