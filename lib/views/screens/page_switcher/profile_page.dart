@@ -112,20 +112,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         subtitle: 'Finde deine Favoriten',
                       ),
                       MenuTileWidget(
-                        // onTap: () {
-                        //  Navigator.of(context).push(MaterialPageRoute(
-                        //      builder: (context) =>
-                        //         const ProfilePageNotification()));
-                        // },
-
                         onTap: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                  'Diese Funktion ist derzeit nicht verfügbar.'),
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  const ProfilePageNotification()));
                         },
                         margin: const EdgeInsets.only(top: 10),
                         icon: Icon(
@@ -268,14 +258,62 @@ class _ProfilePageState extends State<ProfilePage> {
                       Container(
                         width: MediaQuery.of(context).size.width,
                         margin: const EdgeInsets.only(top: 12, bottom: 12),
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            _buildMenuItem(
-                                context, 'Impressum', const ImpressumPage()),
-                            _buildMenuItem(context, 'AGB', const AgbPage()),
-                            _buildMenuItem(context, 'Datenschutzhinweise',
-                                const DatenschutzPage()),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ImpressumPage()),
+                                );
+                              },
+                              child: const Text(
+                                'Impressum',
+                                style: TextStyle(
+                                  color: Colors
+                                      .grey, // Customize the color as needed
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => const AgbPage()),
+                                );
+                              },
+                              child: const Text(
+                                'AGB',
+                                style: TextStyle(
+                                  color: Colors
+                                      .grey, // Customize the color as needed
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const DatenschutzPage()),
+                                );
+                              },
+                              child: const Text(
+                                'Datenschutzhinweise',
+                                style: TextStyle(
+                                  color: Colors
+                                      .grey, // Customize the color as needed
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -289,25 +327,4 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-}
-
-Widget _buildMenuItem(BuildContext context, String title, Widget page) {
-  return GestureDetector(
-    onTap: () {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => page),
-      );
-    },
-    child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Text(
-        title,
-        style: const TextStyle(
-          color: Colors.grey, // Customize the color as needed
-          fontWeight: FontWeight.normal,
-          fontSize: 10,
-        ),
-      ),
-    ),
-  );
 }
