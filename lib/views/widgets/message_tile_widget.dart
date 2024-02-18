@@ -16,7 +16,11 @@ class MessageTileWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => MessageDetailPage(data: data)));
+            builder: (context) => MessageDetailPage(
+                receiverId: data.receiverID,
+                receiverUsername: data.receiverUsername,
+                senderId: data.senderId,
+                articleId: data.articleId)));
       },
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -35,20 +39,21 @@ class MessageTileWidget extends StatelessWidget {
               margin: const EdgeInsets.only(right: 16),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                image: DecorationImage(image: AssetImage(data.shopLogoUrl)),
+                image: const DecorationImage(
+                    image: AssetImage("assets/images/adidaslogo.jpg")),
               ),
             ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('${data.shopName}',
+                  Text(data.receiverUsername,
                       style: const TextStyle(
                           color: AppColor.secondary,
                           fontFamily: 'poppins',
                           fontWeight: FontWeight.w500)),
                   const SizedBox(height: 2),
-                  Text('${data.message}',
+                  Text(data.message,
                       style: TextStyle(
                           color: AppColor.secondary.withOpacity(0.7),
                           fontSize: 12)),

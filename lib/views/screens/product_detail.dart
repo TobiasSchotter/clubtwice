@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:clubtwice/views/screens/message_detail_page.dart';
 import 'package:clubtwice/views/screens/profile_page/profile_page_item.dart';
 import 'package:clubtwice/views/screens/user_page.dart';
 import 'package:clubtwice/views/widgets/affiliation_widget.dart';
@@ -43,6 +44,9 @@ class _ProductDetailState extends State<ProductDetail> {
   // Services
   final UserService userService = UserService();
   UserModel? userModel;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  // get current userId
+  final String currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
   // params for additional articles
   int articleCount = 0;
@@ -66,6 +70,8 @@ class _ProductDetailState extends State<ProductDetail> {
       userName = userModel!.username;
     });
   }
+
+  // get senderId, receiverId, articleId and receiverUsername
 
   @override
   Widget build(BuildContext context) {
@@ -189,7 +195,9 @@ class _ProductDetailState extends State<ProductDetail> {
           ],
         ),
       ),
-      bottomNavigationBar: buildBottomNavigationBar(context),
+      bottomNavigationBar: widget.article.userId != currentUserId
+          ? buildBottomNavigationBar(context)
+          : null,
     );
   }
 
@@ -383,7 +391,17 @@ class _ProductDetailState extends State<ProductDetail> {
               margin: const EdgeInsets.only(right: 14),
               child: CustomButton(
                 onPressed: () {
-                  // Implement the logic for the requests function here
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MessageDetailPage(
+                        articleId: widget.id,
+                        senderId: currentUserId,
+                        receiverUsername: userName!,
+                        receiverId: widget.article.userId,
+                      ),
+                    ),
+                  );
                 },
                 buttonText: 'Anfragen',
               ),

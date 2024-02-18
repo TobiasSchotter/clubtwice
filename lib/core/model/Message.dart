@@ -1,22 +1,41 @@
 class Message {
-  //final bool isRead;
-  final String shopName;
+  final String senderId;
+  final String receiverID;
   final String message;
-  final String shopLogoUrl;
+  final DateTime timestamp;
+  final String articleId;
+  final String receiverUsername;
+  final String profileImageUrl;
 
-  Message({
-    // this.isRead = false,
-    this.shopLogoUrl = "",
-    this.message = "",
-    this.shopName = "",
-  });
+  Message(
+      {required this.senderId,
+      required this.receiverID,
+      required this.message,
+      required this.timestamp,
+      required this.articleId,
+      required this.receiverUsername,
+      required this.profileImageUrl});
 
-  factory Message.fromJson(Map<String, dynamic> json) {
+  factory Message.fromJson(Map<String, dynamic> json, String articleId) {
     return Message(
-      //isRead: json['is_read'],
-      shopLogoUrl: json['shop_logo_url'],
-      message: json['message'],
-      shopName: json['shop_name'],
-    );
+        senderId: json['senderId'],
+        receiverID: json['receiverID'],
+        message: json['message'],
+        timestamp: DateTime.parse(json['timestamp']),
+        articleId: articleId,
+        receiverUsername: json['receiverUsername'],
+        profileImageUrl: json['profileImageUrl']);
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'senderId': senderId,
+      'receiverID': receiverID,
+      'message': message,
+      'timestamp': timestamp.toIso8601String(),
+      'articleId': articleId,
+      'receiverUsername': receiverUsername,
+      'profileImageUrl': profileImageUrl
+    };
   }
 }
