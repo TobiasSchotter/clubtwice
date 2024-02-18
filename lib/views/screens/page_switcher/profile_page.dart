@@ -112,10 +112,20 @@ class _ProfilePageState extends State<ProfilePage> {
                         subtitle: 'Finde deine Favoriten',
                       ),
                       MenuTileWidget(
+                        //onTap: () {
+                        //  Navigator.of(context).push(MaterialPageRoute(
+                        //      builder: (context) =>
+                        //          const ProfilePageNotification()));
+                        // },
+
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  const ProfilePageNotification()));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  'Diese Funktion ist derzeit nicht verfügbar.'),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
                         },
                         margin: const EdgeInsets.only(top: 10),
                         icon: Icon(

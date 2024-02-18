@@ -21,8 +21,6 @@ class SearchResultPage extends StatefulWidget {
 
 class _SearchResultPageState extends State<SearchResultPage>
     with TickerProviderStateMixin {
-  late TabController tabController;
-
   List<ArticleWithId> articlesWithID = [];
   List<String> searchHistory = [];
   UserModel? userModel;
@@ -42,7 +40,7 @@ class _SearchResultPageState extends State<SearchResultPage>
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 1, vsync: this);
+
     currentSearchKeyword = widget.searchKeyword;
     loadData();
   }
@@ -192,75 +190,68 @@ class _SearchResultPageState extends State<SearchResultPage>
         ),
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
-      body: TabBarView(
-        controller: tabController,
+      body: ListView(
+        shrinkWrap: true,
+        physics: const BouncingScrollPhysics(),
         children: [
-          // 1 - Related
-          ListView(
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
-            children: [
-              ExpansionTile(
-                iconColor: Colors.white,
-                textColor: Colors.white,
-                title: const Text('Filter'),
-                backgroundColor: AppColor.primary,
-                initiallyExpanded: isExpansionTileOpen,
-                onExpansionChanged: (expanded) {
+          ExpansionTile(
+            iconColor: Colors.white,
+            textColor: Colors.white,
+            title: const Text('Filter'),
+            backgroundColor: AppColor.primary,
+            initiallyExpanded: isExpansionTileOpen,
+            onExpansionChanged: (expanded) {
+              setState(() {
+                isExpansionTileOpen = expanded;
+              });
+            },
+            children: <Widget>[
+              FilterWidget(
+                selectedIndex: 1,
+                applyFilters: applyFilters,
+                isHomePage: false,
+                setExpansionTileState: (bool value) {
                   setState(() {
-                    isExpansionTileOpen = expanded;
+                    isExpansionTileOpen = value;
                   });
                 },
-                children: <Widget>[
-                  FilterWidget(
-                    selectedIndex: 1,
-                    applyFilters: applyFilters,
-                    isHomePage: false,
-                    setExpansionTileState: (bool value) {
-                      setState(() {
-                        isExpansionTileOpen = value;
-                      });
-                    },
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 16, top: 16),
+            child: RichText(
+              text: TextSpan(
+                style: const TextStyle(
+                  color: Colors.grey,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: searchResultText,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontSize: 14,
+                    ),
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, top: 16),
-                child: RichText(
-                  text: TextSpan(
-                    style: const TextStyle(
-                      color: Colors.grey,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                    ),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: searchResultText,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
-                  ),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Wrap(
+              spacing: 16,
+              runSpacing: 16,
+              children: List.generate(
+                articlesWithID.length,
+                (index) => ItemCard(
+                  article: articlesWithID[index].article,
+                  articleId: articlesWithID[index].id,
                 ),
               ),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                child: Wrap(
-                  spacing: 16,
-                  runSpacing: 16,
-                  children: List.generate(
-                    articlesWithID.length,
-                    (index) => ItemCard(
-                      article: articlesWithID[index].article,
-                      articleId: articlesWithID[index].id,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ],
       ),
