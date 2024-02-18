@@ -18,6 +18,10 @@ class MessageService {
     final DocumentSnapshot receiverDoc =
         await _firestore.collection('users').doc(receiverID).get();
 
+    //fetch sender username
+    final DocumentSnapshot senderDoc =
+        await _firestore.collection('users').doc(currentUserID).get();
+
     //create a new message
     Message newMessage = Message(
       senderId: currentUserID,
@@ -26,7 +30,7 @@ class MessageService {
       timestamp: timestamp.toDate(),
       articleId: articleId,
       receiverUsername: receiverDoc['username'],
-      profileImageUrl: receiverDoc['profileImageUrl'],
+      senderUsername: senderDoc['username'],
     );
 
     //construct chatID

@@ -5,7 +5,7 @@ class Message {
   final DateTime timestamp;
   final String articleId;
   final String receiverUsername;
-  final String profileImageUrl;
+  final String senderUsername;
 
   Message(
       {required this.senderId,
@@ -14,7 +14,7 @@ class Message {
       required this.timestamp,
       required this.articleId,
       required this.receiverUsername,
-      required this.profileImageUrl});
+      required this.senderUsername});
 
   factory Message.fromJson(Map<String, dynamic> json, String articleId) {
     return Message(
@@ -24,7 +24,7 @@ class Message {
         timestamp: DateTime.parse(json['timestamp']),
         articleId: articleId,
         receiverUsername: json['receiverUsername'],
-        profileImageUrl: json['profileImageUrl']);
+        senderUsername: json['senderUsername']);
   }
 
   Map<String, dynamic> toMap() {
@@ -35,7 +35,7 @@ class Message {
       'timestamp': timestamp.toIso8601String(),
       'articleId': articleId,
       'receiverUsername': receiverUsername,
-      'profileImageUrl': profileImageUrl
+      'senderUsername': senderUsername,
     };
   }
 }
