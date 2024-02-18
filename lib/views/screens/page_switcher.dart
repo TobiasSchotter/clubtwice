@@ -1,5 +1,3 @@
-import 'package:clubtwice/core/model/Message.dart';
-import 'package:clubtwice/core/services/MessageService.dart';
 import 'package:clubtwice/views/screens/page_switcher/search_page.dart';
 import 'package:clubtwice/views/screens/page_switcher/sell_page.dart';
 import 'package:clubtwice/views/screens/page_switcher/tab_page.dart';
