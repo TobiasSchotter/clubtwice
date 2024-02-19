@@ -27,6 +27,22 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
   final TextEditingController _messageController = TextEditingController();
   final MessageService messageService = MessageService();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _messageController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void scrollToBottom() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
 
   void sendMessage() async {
     final String message = _messageController.text;
@@ -35,12 +51,14 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
       await messageService.sendMessage(
           widget.receiverId, message, widget.articleId);
       //clear controller
-      _messageController.clear();
+      //_messageController.clear();
+      // Scroll to bottom after sending message
+      scrollToBottom();
     }
   }
 
   @override
-  Widget build(BuildContext) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -87,35 +105,39 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
         ),
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
-      body: Column(children: [
-        // messages
-        Expanded(
-          child: _buildMessageList(),
-        ),
-        // user input
-        _buildMessageInput(),
-      ]),
-    );
-  }
-
-  // message list
-  Widget _buildMessageList() {
-    return StreamBuilder<QuerySnapshot>(
-      stream: messageService.getMessages(
-          widget.articleId, _firebaseAuth.currentUser!.uid, widget.receiverId),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        }
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Text('Loading...');
-        }
-        return ListView(
-          children: snapshot.data!.docs
-              .map((document) => _buildMessageItem(document))
-              .toList(),
-        );
-      },
+      body: Column(
+        children: [
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: messageService.getMessages(
+                widget.articleId,
+                _firebaseAuth.currentUser!.uid,
+                widget.receiverId,
+              ),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                WidgetsBinding.instance?.addPostFrameCallback((_) {
+                  // Maximale Scrollposition einstellen
+                  _scrollController
+                      .jumpTo(_scrollController.position.maxScrollExtent);
+                });
+                return ListView(
+                  controller: _scrollController,
+                  children: snapshot.data!.docs
+                      .map((document) => _buildMessageItem(document))
+                      .toList(),
+                );
+              },
+            ),
+          ),
+          _buildMessageInput(),
+        ],
+      ),
     );
   }
 
@@ -206,6 +228,7 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
               onPressed: () {
                 messageService.sendMessage(widget.receiverId,
                     _messageController.text, widget.articleId);
+                _messageController.clear();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColor.primary,
