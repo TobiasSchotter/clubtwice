@@ -19,7 +19,7 @@ class MessageTileWidget extends StatelessWidget {
 
     String messagePreview = data.message.split('\n')[0].length <= 50
         ? data.message.split('\n')[0]
-        : data.message.split('\n')[0].substring(0, 50) + '...';
+        : '${data.message.split('\n')[0].substring(0, 50)}...';
 
     return GestureDetector(
       onTap: () {
