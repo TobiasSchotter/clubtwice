@@ -37,11 +37,7 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
   }
 
   void scrollToBottom() {
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOut,
-    );
+    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
   }
 
   void sendMessage() async {
@@ -121,10 +117,10 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                WidgetsBinding.instance?.addPostFrameCallback((_) {
-                  // Maximale Scrollposition einstellen
-                  _scrollController
-                      .jumpTo(_scrollController.position.maxScrollExtent);
+
+                // Hier wird die Scroll-Methode aufgerufen
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  scrollToBottom();
                 });
                 return ListView(
                   controller: _scrollController,
