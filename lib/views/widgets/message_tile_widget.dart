@@ -17,9 +17,9 @@ class MessageTileWidget extends StatelessWidget {
     final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     final String currentUserID = firebaseAuth.currentUser!.uid;
 
-    String messagePreview = data.message.split('\n')[0].length <= 50
+    String messagePreview = data.message.split('\n')[0].length <= 40
         ? data.message.split('\n')[0]
-        : '${data.message.split('\n')[0].substring(0, 50)}...';
+        : '${data.message.split('\n')[0].substring(0, 40)}...';
 
     return GestureDetector(
       onTap: () {
