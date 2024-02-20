@@ -17,6 +17,10 @@ class MessageTileWidget extends StatelessWidget {
     final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     final String currentUserID = firebaseAuth.currentUser!.uid;
 
+    String messagePreview = data.message.split('\n')[0].length <= 50
+        ? data.message.split('\n')[0]
+        : data.message.split('\n')[0].substring(0, 50) + '...';
+
     return GestureDetector(
       onTap: () {
         final String receiverId =
@@ -69,14 +73,15 @@ class MessageTileWidget extends StatelessWidget {
                       color: AppColor.secondary,
                       fontFamily: 'poppins',
                       fontWeight: FontWeight.w500,
+                      fontSize: 14,
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    data.message,
+                    messagePreview,
                     style: TextStyle(
                       color: AppColor.secondary.withOpacity(0.7),
-                      fontSize: 12,
+                      fontSize: 13,
                     ),
                   ),
                 ],
