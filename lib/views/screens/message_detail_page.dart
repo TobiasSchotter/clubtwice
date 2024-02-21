@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clubtwice/core/services/MessageService.dart';
+import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -86,7 +87,10 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
         ),
         leading: IconButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => const PageSwitcher(
+                      selectedIndex: 3,
+                    )));
           },
           icon: const Icon(Icons.arrow_back_outlined),
           color: Colors.black,
