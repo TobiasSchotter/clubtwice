@@ -228,6 +228,12 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
               maxLines: null,
               maxLength: 750,
               inputFormatters: [paragraphLimitFormatter], // Apply the formatter
+              onChanged: (text) {
+                // Adjust scroll position when text changes
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  scrollToBottom();
+                });
+              },
               decoration: InputDecoration(
                 suffixIcon: IconButton(
                   onPressed: () {},
