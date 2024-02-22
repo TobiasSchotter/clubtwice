@@ -7,6 +7,34 @@ import 'package:flutter/services.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:intl/intl.dart';
 
+class ParagraphLimitingTextInputFormatter extends TextInputFormatter {
+  final int maxParagraphs;
+
+  ParagraphLimitingTextInputFormatter(this.maxParagraphs);
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    // Split the new text by paragraph (line breaks)
+    final paragraphs = newValue.text.split('\n');
+    // Check if the number of paragraphs exceeds the limit
+    if (paragraphs.length > maxParagraphs) {
+      // If so, truncate the text to contain only the allowed number of paragraphs
+      final truncatedText = paragraphs.sublist(0, maxParagraphs).join('\n');
+      // Return the truncated text
+      return TextEditingValue(
+        text: truncatedText,
+        selection: newValue.selection.copyWith(
+          baseOffset: truncatedText.length,
+          extentOffset: truncatedText.length,
+        ),
+      );
+    }
+    // If the number of paragraphs is within the limit, allow the edit
+    return newValue;
+  }
+}
+
 class MessageDetailPage extends StatefulWidget {
   final String senderId;
   final String articleId;
@@ -181,6 +209,9 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
 
   // user input
   Widget _buildMessageInput() {
+    // Define a formatter to limit the number of paragraphs
+    final paragraphLimitFormatter = ParagraphLimitingTextInputFormatter(15);
+
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -195,6 +226,8 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
             child: TextField(
               controller: _messageController,
               maxLines: null,
+              maxLength: 750,
+              inputFormatters: [paragraphLimitFormatter], // Apply the formatter
               decoration: InputDecoration(
                 suffixIcon: IconButton(
                   onPressed: () {},
