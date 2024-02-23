@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:clubtwice/core/model/Message.dart';
 import 'package:clubtwice/core/services/MessageService.dart';
@@ -35,7 +36,38 @@ class _MessagePageState extends State<MessagePage> {
             return ListView.builder(
               itemCount: listMessage.length,
               itemBuilder: (context, index) {
-                return MessageTileWidget(data: listMessage[index]);
+                // Perform a query to get the article document by its ID
+                return FutureBuilder<DocumentSnapshot>(
+                  future: FirebaseFirestore.instance
+                      .collection('articles')
+                      .doc(listMessage[index].articleId)
+                      .get(),
+                  builder: (context, articleSnapshot) {
+                    if (articleSnapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return SizedBox(); // Return an empty widget while waiting for the query result
+                    } else if (articleSnapshot.hasError) {
+                      return SizedBox(); // Handle error state
+                    } else if (!articleSnapshot.hasData ||
+                        !articleSnapshot.data!.exists) {
+                      return SizedBox(); // Handle case where the article document does not exist
+                    } else {
+                      // Extract article data from the document snapshot
+                      String articleTitle = articleSnapshot.data!['title'];
+                      List<dynamic> images = articleSnapshot.data!['images'];
+                      String imageUrl = (images.isNotEmpty && images[0] != null)
+                          ? images[0]
+                          : '';
+
+                      // Return the MessageTileWidget with the article data
+                      return MessageTileWidget(
+                        data: listMessage[index],
+                        articleTitle: articleTitle,
+                        articleImageUrl: imageUrl,
+                      );
+                    }
+                  },
+                );
               },
             );
           }

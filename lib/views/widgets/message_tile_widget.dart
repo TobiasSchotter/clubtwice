@@ -6,10 +6,14 @@ import 'package:clubtwice/views/screens/message_detail_page.dart';
 
 class MessageTileWidget extends StatelessWidget {
   final Message data;
+  final String articleTitle;
+  final String articleImageUrl;
 
   const MessageTileWidget({
     Key? key,
     required this.data,
+    required this.articleTitle,
+    required this.articleImageUrl,
   }) : super(key: key);
 
   @override
@@ -37,6 +41,8 @@ class MessageTileWidget extends StatelessWidget {
             receiverUsername: receiverUsername,
             senderId: senderId,
             articleId: data.articleId,
+            articleTitle: articleTitle,
+            articleImageUrl: articleImageUrl,
           ),
         ));
       },
@@ -56,8 +62,13 @@ class MessageTileWidget extends StatelessWidget {
               margin: const EdgeInsets.only(right: 16),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                image: const DecorationImage(
-                  image: AssetImage('assets/images/placeholder.jpg'),
+                image: DecorationImage(
+                  image: articleImageUrl.isNotEmpty
+                      ? NetworkImage(articleImageUrl)
+                      : const AssetImage('assets/images/placeholder.jpg')
+                          as ImageProvider<
+                              Object>, // Cast AssetImage to ImageProvider
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -67,8 +78,8 @@ class MessageTileWidget extends StatelessWidget {
                 children: [
                   Text(
                     data.receiverID == currentUserID
-                        ? data.senderUsername
-                        : data.receiverUsername,
+                        ? '${data.senderUsername} - $articleTitle'
+                        : '${data.receiverUsername} - $articleTitle',
                     style: const TextStyle(
                       color: AppColor.secondary,
                       fontFamily: 'poppins',

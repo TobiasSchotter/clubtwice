@@ -7,46 +7,22 @@ import 'package:flutter/services.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:intl/intl.dart';
 
-class ParagraphLimitingTextInputFormatter extends TextInputFormatter {
-  final int maxParagraphs;
-
-  ParagraphLimitingTextInputFormatter(this.maxParagraphs);
-
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    // Split the new text by paragraph (line breaks)
-    final paragraphs = newValue.text.split('\n');
-    // Check if the number of paragraphs exceeds the limit
-    if (paragraphs.length > maxParagraphs) {
-      // If so, truncate the text to contain only the allowed number of paragraphs
-      final truncatedText = paragraphs.sublist(0, maxParagraphs).join('\n');
-      // Return the truncated text
-      return TextEditingValue(
-        text: truncatedText,
-        selection: newValue.selection.copyWith(
-          baseOffset: truncatedText.length,
-          extentOffset: truncatedText.length,
-        ),
-      );
-    }
-    // If the number of paragraphs is within the limit, allow the edit
-    return newValue;
-  }
-}
-
 class MessageDetailPage extends StatefulWidget {
   final String senderId;
   final String articleId;
   final String receiverUsername;
   final String receiverId;
+  final String articleTitle;
+  final String articleImageUrl;
 
   const MessageDetailPage(
       {super.key,
       required this.receiverId,
       required this.receiverUsername,
       required this.senderId,
-      required this.articleId});
+      required this.articleId,
+      required this.articleTitle,
+      required this.articleImageUrl});
 
   @override
   _MessageDetailPageState createState() => _MessageDetailPageState();
@@ -99,14 +75,17 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
                 color: AppColor.border,
-                image: const DecorationImage(
-                  image:
-                      AssetImage("assets/images/adidaslogo.jpg"), //placeholder
+                image: DecorationImage(
+                  image: widget.articleImageUrl.isNotEmpty
+                      ? NetworkImage(widget.articleImageUrl)
+                      : const AssetImage('assets/images/placeholder.jpg')
+                          as ImageProvider<
+                              Object>, // Cast AssetImage to ImageProvider
                   fit: BoxFit.cover,
                 ),
               ),
             ),
-            Text(widget.receiverUsername,
+            Text('${widget.receiverUsername} - ${widget.articleTitle}',
                 style: const TextStyle(
                     color: Colors.black,
                     fontSize: 14,
@@ -300,5 +279,33 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
         ),
       ),
     );
+  }
+}
+
+class ParagraphLimitingTextInputFormatter extends TextInputFormatter {
+  final int maxParagraphs;
+
+  ParagraphLimitingTextInputFormatter(this.maxParagraphs);
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    // Split the new text by paragraph (line breaks)
+    final paragraphs = newValue.text.split('\n');
+    // Check if the number of paragraphs exceeds the limit
+    if (paragraphs.length > maxParagraphs) {
+      // If so, truncate the text to contain only the allowed number of paragraphs
+      final truncatedText = paragraphs.sublist(0, maxParagraphs).join('\n');
+      // Return the truncated text
+      return TextEditingValue(
+        text: truncatedText,
+        selection: newValue.selection.copyWith(
+          baseOffset: truncatedText.length,
+          extentOffset: truncatedText.length,
+        ),
+      );
+    }
+    // If the number of paragraphs is within the limit, allow the edit
+    return newValue;
   }
 }

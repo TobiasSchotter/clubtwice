@@ -391,6 +391,10 @@ class _ProductDetailState extends State<ProductDetail> {
               margin: const EdgeInsets.only(right: 14),
               child: CustomButton(
                 onPressed: () {
+                  List<dynamic> images = widget.article.images;
+                  String imageUrl = (images.isNotEmpty && images[0] != null)
+                      ? images[0]
+                      : 'assets/images/placeholder.jpg'; // Placeholder URL
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -399,6 +403,8 @@ class _ProductDetailState extends State<ProductDetail> {
                         senderId: currentUserId,
                         receiverUsername: userName!,
                         receiverId: widget.article.userId,
+                        articleTitle: widget.article.title,
+                        articleImageUrl: imageUrl,
                       ),
                     ),
                   );
