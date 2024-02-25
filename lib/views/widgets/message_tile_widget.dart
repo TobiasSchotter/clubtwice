@@ -108,7 +108,9 @@ class MessageTileWidget extends StatelessWidget {
                           ),
                         ),
                         TextSpan(
-                          text: articleTitle,
+                          text: articleTitle.length > 20
+                              ? '${articleTitle.substring(0, 20)}...'
+                              : articleTitle,
                           style: const TextStyle(
                             color: AppColor.secondary,
                             fontFamily: 'poppins',
