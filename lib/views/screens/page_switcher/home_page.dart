@@ -45,21 +45,29 @@ class _HomePageState extends State<HomePage> {
       isLoading = true;
     });
 
-    String? userId = userService.getCurrentUserId();
-    userModel = await userService.fetchUserData(userId);
-
-    setState(() {
+    try {
+      String? userId = userService.getCurrentUserId();
+      userModel = await userService.fetchUserData(userId);
       club = userModel!.club;
-    });
-
-    List<ArticleWithId> articleList = await articleService.fetchArticles(
-        searchTerm, club, sportart, typ, groesse, marke);
-
-    setState(() {
-      articlesWithID = articleList;
-      hasSearchResults = articleList.isNotEmpty;
-      isLoading = false;
-    });
+      List<ArticleWithId> articleList = await articleService.fetchArticles(
+        searchTerm,
+        club,
+        sportart,
+        typ,
+        groesse,
+        marke,
+      );
+      setState(() {
+        articlesWithID = articleList;
+        hasSearchResults = articleList.isNotEmpty;
+        isLoading = false;
+      });
+    } catch (error) {
+      // Handle error
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   // void checkUserVerification() async {
@@ -75,11 +83,11 @@ class _HomePageState extends State<HomePage> {
   //   }
   // }
 
+  @override
   Widget build(BuildContext context) {
     Widget content;
     if (isLoading) {
-      // Zeige einen Ladebalken während der Datenabfrage
-      content = const CircularProgressIndicator();
+      content = const Center(child: CircularProgressIndicator());
     } else if (club.isNotEmpty && club != "Keine Auswahl") {
       if (!hasSearchResults) {
         content = buildNoSearchResults();
@@ -141,11 +149,11 @@ class _HomePageState extends State<HomePage> {
           Container(
             margin: const EdgeInsets.only(top: 8),
             padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Flex(
+            child: const Flex(
               direction: Axis.horizontal,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
+              children: [
                 Expanded(
                   child: Text(
                     'Artikel aus deinem Verein 💪',
