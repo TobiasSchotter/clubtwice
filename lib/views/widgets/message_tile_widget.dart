@@ -62,12 +62,13 @@ class MessageTileWidget extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              width: 46,
+              width: 56,
               height: 56,
               padding: const EdgeInsets.all(10),
               margin: const EdgeInsets.only(right: 16),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
+                shape: BoxShape.circle,
+                //borderRadius: BorderRadius.circular(8),
                 image: DecorationImage(
                   image: articleImageUrl.isNotEmpty
                       ? NetworkImage(articleImageUrl)
@@ -76,7 +77,17 @@ class MessageTileWidget extends StatelessWidget {
                               Object>, // Cast AssetImage to ImageProvider
                   fit: BoxFit.cover,
                 ),
+                color: isSold
+                    ? Colors.grey.withOpacity(0.5)
+                    : null, // Set color if article is sold
               ),
+              child: isSold
+                  ? const Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                      size: 20,
+                    )
+                  : null, // Show delete icon if article is sold
             ),
             Expanded(
               child: Column(
@@ -85,6 +96,30 @@ class MessageTileWidget extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                       children: [
+                        if (isReserved ||
+                            isSold ||
+                            isDeleted) // Check if any of the conditions are true
+                          const TextSpan(
+                            text: 'Gelöscht ', // Prefix with "Gelöscht"
+                            style: TextStyle(
+                              color: AppColor.secondary,
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                        if (isReserved ||
+                            isSold ||
+                            isDeleted) // Check if any of the conditions are true
+                          const TextSpan(
+                            text: '· ',
+                            style: TextStyle(
+                              color: AppColor.secondary,
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
                         TextSpan(
                           text: data.receiverID == currentUserID
                               ? '${data.senderUsername} '
@@ -96,14 +131,12 @@ class MessageTileWidget extends StatelessWidget {
                             fontSize: 15,
                           ),
                         ),
-                        // TextSpan for the dot
                         const TextSpan(
                           text: '· ',
                           style: TextStyle(
                             color: AppColor.secondary,
                             fontFamily: 'poppins',
-                            fontWeight: FontWeight
-                                .bold, // Setting FontWeight.bold for the dot
+                            fontWeight: FontWeight.bold,
                             fontSize: 18,
                           ),
                         ),
