@@ -86,11 +86,13 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
                 ),
               ),
             ),
-            Text('${widget.receiverUsername} - ${widget.articleTitle}',
-                style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600)),
+            Text(
+              '${widget.receiverUsername} - ${widget.articleTitle.length > 15 ? '${widget.articleTitle.substring(0, 15)}...' : widget.articleTitle}',
+              style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600),
+            ),
           ],
         ),
         leading: IconButton(
