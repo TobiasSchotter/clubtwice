@@ -35,29 +35,12 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final ScrollController _scrollController = ScrollController();
 
-  @override
-  void dispose() {
-    _messageController.dispose();
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  void scrollToBottom() {
-    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-  }
-
-  void sendMessage() async {
-    final String message = _messageController.text;
-    //only send message if it is not empty
-    if (message.isNotEmpty) {
-      await messageService.sendMessage(
-          widget.receiverId, message, widget.articleId);
-      //clear controller
-      //_messageController.clear();
-      // Scroll to bottom after sending message
-      scrollToBottom();
-    }
-  }
+  // @override
+  // void dispose() {
+  //   _messageController.dispose();
+  //   _scrollController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -80,8 +63,7 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
                   image: widget.articleImageUrl.isNotEmpty
                       ? NetworkImage(widget.articleImageUrl)
                       : const AssetImage('assets/images/placeholder.jpg')
-                          as ImageProvider<
-                              Object>, // Cast AssetImage to ImageProvider
+                          as ImageProvider<Object>,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -132,7 +114,6 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                // Hier wird die Scroll-Methode aufgerufen
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   scrollToBottom();
                 });
@@ -204,17 +185,16 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          // TextField
           Expanded(
             child: TextField(
               controller: _messageController,
               maxLines: null,
               inputFormatters: [paragraphLimitFormatter], // Apply the formatter
               onChanged: (text) {
-                // Adjust scroll position when text changes
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  scrollToBottom();
-                });
+                // // Adjust scroll position when text changes
+                // WidgetsBinding.instance.addPostFrameCallback((_) {
+                //   scrollToBottom();
+                // });
               },
               decoration: InputDecoration(
                 suffixIcon: IconButton(
@@ -240,17 +220,12 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
               ),
             ),
           ),
-          // Send Button
           Container(
-            margin: const EdgeInsets.only(left: 16),
+            margin: const EdgeInsets.only(left: 12, bottom: 3),
             width: 42,
             height: 42,
             child: ElevatedButton(
-              onPressed: () {
-                messageService.sendMessage(widget.receiverId,
-                    _messageController.text, widget.articleId);
-                _messageController.clear();
-              },
+              onPressed: sendMessage,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColor.primary,
                 padding: const EdgeInsets.all(0),
@@ -265,6 +240,20 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
         ],
       ),
     );
+  }
+
+  void scrollToBottom() {
+    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+  }
+
+  void sendMessage() async {
+    final String message = _messageController.text;
+    if (message.isNotEmpty) {
+      await messageService.sendMessage(
+          widget.receiverId, message, widget.articleId);
+      _messageController.clear();
+      scrollToBottom();
+    }
   }
 
   Widget _chatBubble({required String message, required bool isMe}) {
