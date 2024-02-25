@@ -76,15 +76,41 @@ class MessageTileWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    data.receiverID == currentUserID
-                        ? '${data.senderUsername} - $articleTitle'
-                        : '${data.receiverUsername} - $articleTitle',
-                    style: const TextStyle(
-                      color: AppColor.secondary,
-                      fontFamily: 'poppins',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14,
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: data.receiverID == currentUserID
+                              ? '${data.senderUsername} '
+                              : '${data.receiverUsername} ',
+                          style: const TextStyle(
+                            color: AppColor.secondary,
+                            fontFamily: 'poppins',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                          ),
+                        ),
+                        // TextSpan for the dot
+                        const TextSpan(
+                          text: '· ',
+                          style: TextStyle(
+                            color: AppColor.secondary,
+                            fontFamily: 'poppins',
+                            fontWeight: FontWeight
+                                .bold, // Setting FontWeight.bold for the dot
+                            fontSize: 18,
+                          ),
+                        ),
+                        TextSpan(
+                          text: articleTitle,
+                          style: const TextStyle(
+                            color: AppColor.secondary,
+                            fontFamily: 'poppins',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -92,7 +118,7 @@ class MessageTileWidget extends StatelessWidget {
                     messagePreview,
                     style: TextStyle(
                       color: AppColor.secondary.withOpacity(0.7),
-                      fontSize: 13,
+                      fontSize: 14,
                     ),
                   ),
                 ],
