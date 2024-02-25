@@ -6,6 +6,7 @@ class Message {
   final String articleId;
   final String receiverUsername;
   final String senderUsername;
+  bool isRead;
 
   Message(
       {required this.senderId,
@@ -14,7 +15,8 @@ class Message {
       required this.timestamp,
       required this.articleId,
       required this.receiverUsername,
-      required this.senderUsername});
+      required this.senderUsername,
+      required this.isRead});
 
   factory Message.fromJson(Map<String, dynamic> json, String articleId) {
     return Message(
@@ -24,7 +26,8 @@ class Message {
         timestamp: DateTime.parse(json['timestamp']),
         articleId: articleId,
         receiverUsername: json['receiverUsername'],
-        senderUsername: json['senderUsername']);
+        senderUsername: json['senderUsername'],
+        isRead: json['isRead']);
   }
 
   Map<String, dynamic> toMap() {
@@ -36,6 +39,7 @@ class Message {
       'articleId': articleId,
       'receiverUsername': receiverUsername,
       'senderUsername': senderUsername,
+      'isRead': isRead
     };
   }
 }

@@ -31,6 +31,7 @@ class MessageService {
       articleId: articleId,
       receiverUsername: receiverDoc['username'],
       senderUsername: senderDoc['username'],
+      isRead: false,
     );
 
     //construct chatID
