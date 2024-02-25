@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clubtwice/core/services/MessageService.dart';
 import 'package:clubtwice/views/screens/page_switcher.dart';
@@ -189,7 +190,8 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
   // user input
   Widget _buildMessageInput() {
     // Define a formatter to limit the number of paragraphs
-    final paragraphLimitFormatter = ParagraphLimitingTextInputFormatter(15);
+    final paragraphLimitFormatter =
+        ParagraphLimitingTextInputFormatter(15, 750);
 
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -205,7 +207,6 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
             child: TextField(
               controller: _messageController,
               maxLines: null,
-              maxLength: 750,
               inputFormatters: [paragraphLimitFormatter], // Apply the formatter
               onChanged: (text) {
                 // Adjust scroll position when text changes
@@ -284,13 +285,27 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
 
 class ParagraphLimitingTextInputFormatter extends TextInputFormatter {
   final int maxParagraphs;
+  final int maxCharacters;
 
-  ParagraphLimitingTextInputFormatter(this.maxParagraphs);
+  ParagraphLimitingTextInputFormatter(this.maxParagraphs, this.maxCharacters);
 
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
-    // Split the new text by paragraph (line breaks)
+    // Check if the new text exceeds the maximum allowed characters
+    if (newValue.text.length > maxCharacters) {
+      // If so, truncate the text to contain only the allowed number of characters
+      final truncatedText = newValue.text.substring(0, maxCharacters);
+      // Return the truncated text
+      return TextEditingValue(
+        text: truncatedText,
+        selection: newValue.selection.copyWith(
+          baseOffset: min(truncatedText.length, maxCharacters),
+          extentOffset: min(truncatedText.length, maxCharacters),
+        ),
+      );
+    }
+    // If the new text is within the character limit, split it by paragraph (line breaks)
     final paragraphs = newValue.text.split('\n');
     // Check if the number of paragraphs exceeds the limit
     if (paragraphs.length > maxParagraphs) {
@@ -300,12 +315,12 @@ class ParagraphLimitingTextInputFormatter extends TextInputFormatter {
       return TextEditingValue(
         text: truncatedText,
         selection: newValue.selection.copyWith(
-          baseOffset: truncatedText.length,
-          extentOffset: truncatedText.length,
+          baseOffset: min(truncatedText.length, maxCharacters),
+          extentOffset: min(truncatedText.length, maxCharacters),
         ),
       );
     }
-    // If the number of paragraphs is within the limit, allow the edit
+    // If the text is within both character and paragraph limits, allow the edit
     return newValue;
   }
 }
