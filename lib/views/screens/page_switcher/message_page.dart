@@ -54,6 +54,9 @@ class _MessagePageState extends State<MessagePage> {
                     } else {
                       // Extract article data from the document snapshot
                       String articleTitle = articleSnapshot.data!['title'];
+                      bool isSold = articleSnapshot.data?['isSold'];
+                      bool isDeleted = articleSnapshot.data?['isDeleted'];
+                      bool isReserved = articleSnapshot.data?['isReserved'];
                       List<dynamic> images = articleSnapshot.data!['images'];
                       String imageUrl = (images.isNotEmpty && images[0] != null)
                           ? images[0]
@@ -64,6 +67,9 @@ class _MessagePageState extends State<MessagePage> {
                         data: listMessage[index],
                         articleTitle: articleTitle,
                         articleImageUrl: imageUrl,
+                        isSold: isSold,
+                        isDeleted: isDeleted,
+                        isReserved: isReserved,
                       );
                     }
                   },

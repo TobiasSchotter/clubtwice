@@ -8,12 +8,18 @@ class MessageTileWidget extends StatelessWidget {
   final Message data;
   final String articleTitle;
   final String articleImageUrl;
+  final bool isSold;
+  final bool isDeleted;
+  final bool isReserved;
 
   const MessageTileWidget({
     Key? key,
     required this.data,
     required this.articleTitle,
     required this.articleImageUrl,
+    required this.isSold,
+    required this.isDeleted,
+    required this.isReserved,
   }) : super(key: key);
 
   @override
