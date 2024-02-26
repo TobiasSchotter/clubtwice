@@ -81,13 +81,19 @@ class MessageTileWidget extends StatelessWidget {
                     ? Colors.grey.withOpacity(0.5)
                     : null, // Set color if article is sold
               ),
-              child: isSold
+              child: isSold || isDeleted
                   ? const Icon(
                       Icons.delete,
                       color: Colors.white,
                       size: 20,
                     )
-                  : null, // Show delete icon if article is sold
+                  : isReserved
+                      ? const Icon(
+                          Icons.access_time,
+                          color: Colors.white,
+                          size: 20,
+                        )
+                      : null, // Show delete icon if article is sold or clock icon if reserved
             ),
             Expanded(
               child: Column(
@@ -96,11 +102,20 @@ class MessageTileWidget extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                       children: [
-                        if (isReserved ||
-                            isSold ||
+                        if (isSold ||
                             isDeleted) // Check if any of the conditions are true
                           const TextSpan(
                             text: 'Gelöscht ', // Prefix with "Gelöscht"
+                            style: TextStyle(
+                              color: AppColor.secondary,
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                        if (isReserved) // Check if any of the conditions are true
+                          const TextSpan(
+                            text: 'Reserviert ', // Prefix with "Gelöscht"
                             style: TextStyle(
                               color: AppColor.secondary,
                               fontFamily: 'poppins',
