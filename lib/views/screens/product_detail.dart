@@ -638,7 +638,15 @@ class _ProductDetailState extends State<ProductDetail> {
         FirebaseFirestore.instance.collection('articles');
 
     try {
-      await articlesRef.doc(widget.id).update({field: value});
+      if (field == 'isSold' && value == true) {
+        // Wenn der Artikel als verkauft markiert wird, setze isReserved auf false
+        await articlesRef.doc(widget.id).update({
+          'isSold': true,
+          'isReserved': false,
+        });
+      } else {
+        await articlesRef.doc(widget.id).update({field: value});
+      }
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(successMessage)),
@@ -648,7 +656,7 @@ class _ProductDetailState extends State<ProductDetail> {
         MaterialPageRoute(builder: (context) => ProfilePageItem()),
       );
     } catch (error) {
-      print('Error marking article as sold: $error');
+      print('Error marking article: $error');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(errorMessage)),
       );

@@ -107,7 +107,7 @@ class MessageTileWidget extends StatelessWidget {
                           const TextSpan(
                             text: 'Gelöscht ', // Prefix with "Gelöscht"
                             style: TextStyle(
-                              color: AppColor.secondary,
+                              color: AppColor.icon,
                               fontFamily: 'poppins',
                               fontWeight: FontWeight.w500,
                               fontSize: 15,
@@ -117,7 +117,7 @@ class MessageTileWidget extends StatelessWidget {
                           const TextSpan(
                             text: 'Reserviert ', // Prefix with "Gelöscht"
                             style: TextStyle(
-                              color: AppColor.secondary,
+                              color: AppColor.icon,
                               fontFamily: 'poppins',
                               fontWeight: FontWeight.w500,
                               fontSize: 15,
