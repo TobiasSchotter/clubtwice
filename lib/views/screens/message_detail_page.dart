@@ -232,9 +232,10 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
             width: 42,
             height: 42,
             child: ElevatedButton(
-              onPressed: isDisabled
-                  ? null
-                  : sendMessage, // Disable button if either flag is true
+              // onPressed: isDisabled
+              //     ? null
+              //     : sendMessage, // Disable button if either flag is true
+              onPressed: sendMessage,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColor.primary,
                 padding: const EdgeInsets.all(0),
