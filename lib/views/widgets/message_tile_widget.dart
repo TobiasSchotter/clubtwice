@@ -49,6 +49,8 @@ class MessageTileWidget extends StatelessWidget {
             articleId: data.articleId,
             articleTitle: articleTitle,
             articleImageUrl: articleImageUrl,
+            isDeleted: isDeleted,
+            isSold: isSold,
           ),
         ));
       },

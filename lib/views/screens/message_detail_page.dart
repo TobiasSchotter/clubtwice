@@ -15,6 +15,8 @@ class MessageDetailPage extends StatefulWidget {
   final String receiverId;
   final String articleTitle;
   final String articleImageUrl;
+  final bool isDeleted;
+  final bool isSold;
 
   const MessageDetailPage(
       {super.key,
@@ -23,7 +25,9 @@ class MessageDetailPage extends StatefulWidget {
       required this.senderId,
       required this.articleId,
       required this.articleTitle,
-      required this.articleImageUrl});
+      required this.articleImageUrl,
+      required this.isDeleted,
+      required this.isSold});
 
   @override
   _MessageDetailPageState createState() => _MessageDetailPageState();
@@ -176,6 +180,9 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
     final paragraphLimitFormatter =
         ParagraphLimitingTextInputFormatter(15, 750);
 
+    // Check if either isDeleted or isSold flags are true
+    final bool isDisabled = widget.isDeleted || widget.isSold;
+
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -225,7 +232,9 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
             width: 42,
             height: 42,
             child: ElevatedButton(
-              onPressed: sendMessage,
+              onPressed: isDisabled
+                  ? null
+                  : sendMessage, // Disable button if either flag is true
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColor.primary,
                 padding: const EdgeInsets.all(0),

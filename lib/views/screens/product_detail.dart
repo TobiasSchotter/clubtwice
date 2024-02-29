@@ -405,6 +405,8 @@ class _ProductDetailState extends State<ProductDetail> {
                         receiverId: widget.article.userId,
                         articleTitle: widget.article.title,
                         articleImageUrl: imageUrl,
+                        isSold: widget.article.isSold,
+                        isDeleted: widget.article.isDeleted,
                       ),
                     ),
                   );
