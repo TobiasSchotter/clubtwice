@@ -16,28 +16,41 @@ class _ClubSelectionPageState extends State<ClubSelectionPage> {
 
   int selectedClubIndex = -1;
   List<String> filteredClubs = [];
+  bool isFiltered = false;
 
   @override
   void initState() {
     super.initState();
-    // Erstelle eine Kopie der ursprünglichen Liste
-    filteredClubs = List<String>.from(clubOptions);
 
     // Wenn der ausgewählte Club ein leerer String ist, setze ihn auf "Keine Auswahl"
     if (widget.selectedClub.isEmpty) {
       widget.selectedClub = "Keine Auswahl";
     }
 
-    // Verschiebe den ausgewählten Sport an Position 1
-    filteredClubs.remove(widget.selectedClub);
-    filteredClubs.insert(0, widget.selectedClub);
+    // Füge den ausgewählten Sport hinzu, wenn der Benutzer bereits etwas ausgewählt hat
+    if (widget.selectedClub.isNotEmpty) {
+      filteredClubs.add(
+        widget.selectedClub,
+      );
+    }
   }
 
   void filterClubs(String query) {
     setState(() {
-      filteredClubs = clubOptions
-          .where((club) => club.toLowerCase().contains(query.toLowerCase()))
-          .toList();
+      if (query.isEmpty) {
+        // Wenn die Eingabe leer ist, zeige den ausgewählten Club und füge "Keine Auswahl" nur hinzu, wenn es nicht bereits der ausgewählte Club ist
+        filteredClubs = [
+          if (widget.selectedClub != "Keine Auswahl") widget.selectedClub,
+          "Keine Auswahl",
+        ];
+        isFiltered = false;
+      } else if (query.length >= 3) {
+        filteredClubs = clubOptions
+            .where((club) => club.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+        // Setze isFiltered auf true, um zu kennzeichnen, dass die Liste gefiltert wurde
+        isFiltered = true;
+      }
     });
   }
 
@@ -51,13 +64,6 @@ class _ClubSelectionPageState extends State<ClubSelectionPage> {
 
     Navigator.pop(context,
         selectedClub); // Pop mit dem ausgewählten Club (oder leerem String) als Ergebnis
-  }
-
-  @override
-  void dispose() {
-    // Setze die Liste zurück, wenn die Seite verlassen wird
-    filteredClubs = clubOptions;
-    super.dispose();
   }
 
   @override
@@ -84,7 +90,7 @@ class _ClubSelectionPageState extends State<ClubSelectionPage> {
             child: TextField(
               onChanged: filterClubs,
               decoration: const InputDecoration(
-                labelText: 'Suche nach Vereinen',
+                labelText: 'Suche nach anderen Vereinen',
                 prefixIcon: Icon(Icons.search),
               ),
             ),
@@ -102,7 +108,7 @@ class _ClubSelectionPageState extends State<ClubSelectionPage> {
                     filteredClubs[index],
                     style: const TextStyle(fontSize: 14),
                   ),
-                  trailing: index == 0
+                  trailing: index == 0 && !isFiltered
                       ? const CircleAvatar(
                           radius: 14,
                           backgroundColor: Colors.white,
