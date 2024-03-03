@@ -44,7 +44,6 @@ class _ProfilePageNotificationState extends State<ProfilePageNotification> {
   Future<void> saveChanges() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      String userId = user.uid;
       //await userService.updateUserClubInformation(userId, club, sport);
     }
   }
@@ -185,7 +184,7 @@ class _ProfilePageNotificationState extends State<ProfilePageNotification> {
         future: _userDataFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(
                 child: Text('Fehler beim Laden der Daten: ${snapshot.error}'));

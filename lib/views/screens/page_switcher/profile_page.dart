@@ -7,7 +7,6 @@ import 'package:clubtwice/views/screens/profile_page/profile_page_fav.dart';
 import 'package:clubtwice/views/screens/profile_page/profile_page_item.dart';
 import 'package:clubtwice/views/screens/profile_page/profile_page_mail.dart';
 import 'package:clubtwice/views/screens/profile_page/profile_page_name.dart';
-import 'package:clubtwice/views/screens/profile_page/profile_page_notification.dart';
 import 'package:clubtwice/views/screens/profile_page/pw_change_page.dart';
 import 'package:clubtwice/views/screens/login_register_page/welcome_page.dart';
 import 'package:flutter/material.dart';
