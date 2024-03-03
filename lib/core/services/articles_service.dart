@@ -179,4 +179,19 @@ class ArticleService {
 
     return articles;
   }
+
+  Future<Article> fetchArticleById(String articleId) async {
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection('articles')
+        .doc(articleId)
+        .get();
+
+    if (snapshot.exists) {
+      Article article = Article.fromFirestore(snapshot);
+      return article;
+    } else {
+      throw Exception('Article not found');
+    }
+  }
 }

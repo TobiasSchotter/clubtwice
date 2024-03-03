@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:clubtwice/core/model/Article.dart';
 import 'package:clubtwice/core/services/MessageService.dart';
 import 'package:clubtwice/core/services/articles_service.dart';
 import 'package:clubtwice/views/screens/page_switcher.dart';
@@ -20,16 +21,17 @@ class MessageDetailPage extends StatefulWidget {
   final bool isDeleted;
   final bool isSold;
 
-  const MessageDetailPage(
-      {super.key,
-      required this.receiverId,
-      required this.receiverUsername,
-      required this.senderId,
-      required this.articleId,
-      required this.articleTitle,
-      required this.articleImageUrl,
-      required this.isDeleted,
-      required this.isSold});
+  const MessageDetailPage({
+    Key? key,
+    required this.receiverId,
+    required this.receiverUsername,
+    required this.senderId,
+    required this.articleId,
+    required this.articleTitle,
+    required this.articleImageUrl,
+    required this.isDeleted,
+    required this.isSold,
+  }) : super(key: key);
 
   @override
   _MessageDetailPageState createState() => _MessageDetailPageState();
@@ -40,13 +42,7 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
   final MessageService messageService = MessageService();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final ScrollController _scrollController = ScrollController();
-
-  // @override
-  // void dispose() {
-  //   _messageController.dispose();
-  //   _scrollController.dispose();
-  //   super.dispose();
-  // }
+  final ArticleService articleService = ArticleService();
 
   @override
   Widget build(BuildContext context) {
@@ -56,50 +52,12 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
         centerTitle: false,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => PageSwitcher(selectedIndex: 4)
-                  //    ProductDetail(), // Replace ProductDetail with your actual page
-                  ),
-            );
-          },
-          child: Row(
-            children: [
-              Container(
-                width: 32,
-                height: 32,
-                margin: const EdgeInsets.only(right: 16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  color: AppColor.border,
-                  image: DecorationImage(
-                    image: widget.articleImageUrl.isNotEmpty
-                        ? NetworkImage(widget.articleImageUrl)
-                        : const AssetImage('assets/images/placeholder.jpg')
-                            as ImageProvider<Object>,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Text(
-                '${widget.receiverUsername} - ${widget.articleTitle.length > 15 ? '${widget.articleTitle.substring(0, 15)}...' : widget.articleTitle}',
-                style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600),
-              ),
-            ],
-          ),
-        ),
+        title: _buildAppBarTitle(),
         leading: IconButton(
           onPressed: () {
             Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => const PageSwitcher(
-                      selectedIndex: 3,
-                    )));
+              builder: (context) => const PageSwitcher(selectedIndex: 3),
+            ));
           },
           icon: const Icon(Icons.arrow_back_outlined),
           color: Colors.black,
@@ -131,7 +89,7 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                WidgetsBinding.instance.addPostFrameCallback((_) {
+                WidgetsBinding.instance!.addPostFrameCallback((_) {
                   scrollToBottom();
                 });
                 return ListView(
@@ -149,15 +107,56 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
     );
   }
 
-  // message item
+  Widget _buildAppBarTitle() {
+    return GestureDetector(
+      onTap: _navigateToProductDetail,
+      child: Row(
+        children: [
+          Container(
+            width: 32,
+            height: 32,
+            margin: const EdgeInsets.only(right: 16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              color: AppColor.border,
+              image: DecorationImage(
+                image: widget.articleImageUrl.isNotEmpty
+                    ? NetworkImage(widget.articleImageUrl)
+                    : const AssetImage('assets/images/placeholder.jpg')
+                        as ImageProvider<Object>,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Text(
+            '${widget.receiverUsername} - ${_getShortenedArticleTitle()}',
+            style: const TextStyle(
+                color: Colors.black, fontSize: 14, fontWeight: FontWeight.w600),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _navigateToProductDetail() async {
+    Article currentArticle = await getArticleById(widget.articleId);
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) =>
+          ProductDetail(article: currentArticle, id: widget.articleId),
+    ));
+  }
+
+  String _getShortenedArticleTitle() {
+    return widget.articleTitle.length > 15
+        ? '${widget.articleTitle.substring(0, 15)}...'
+        : widget.articleTitle;
+  }
+
   Widget _buildMessageItem(DocumentSnapshot document) {
     Map<String, dynamic> data = document.data() as Map<String, dynamic>;
 
-    // Assuming timestamp is a string in ISO 8601 format
     String isoTimestampString = data['timestamp'];
-    // Parse the ISO 8601 string into a DateTime object
     DateTime timestamp = DateTime.parse(isoTimestampString);
-    // Format the timestamp
     String formattedTimestamp = DateFormat('dd MMM HH:mm').format(timestamp);
 
     var alignment = data['senderId'] == _firebaseAuth.currentUser!.uid
@@ -165,36 +164,34 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
         : Alignment.centerLeft;
 
     return Container(
-        alignment: alignment,
-        child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment:
-                  data['senderId'] == _firebaseAuth.currentUser!.uid
-                      ? CrossAxisAlignment.end
-                      : CrossAxisAlignment.start,
-              mainAxisAlignment:
-                  data['senderId'] == _firebaseAuth.currentUser!.uid
-                      ? MainAxisAlignment.end
-                      : MainAxisAlignment.start,
-              children: [
-                _chatBubble(
-                    message: data['message'],
-                    isMe: data['senderId'] == _firebaseAuth.currentUser!.uid),
-                const SizedBox(height: 5),
-                Text(formattedTimestamp),
-              ],
-            )));
+      alignment: alignment,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: data['senderId'] == _firebaseAuth.currentUser!.uid
+              ? CrossAxisAlignment.end
+              : CrossAxisAlignment.start,
+          mainAxisAlignment: data['senderId'] == _firebaseAuth.currentUser!.uid
+              ? MainAxisAlignment.end
+              : MainAxisAlignment.start,
+          children: [
+            _chatBubble(
+              message: data['message'],
+              isMe: data['senderId'] == _firebaseAuth.currentUser!.uid,
+            ),
+            const SizedBox(height: 5),
+            Text(formattedTimestamp),
+          ],
+        ),
+      ),
+    );
   }
 
-  // user input
+// user input
   Widget _buildMessageInput() {
-    // Define a formatter to limit the number of paragraphs
+// Define a formatter to limit the number of paragraphs
     final paragraphLimitFormatter =
         ParagraphLimitingTextInputFormatter(15, 750);
-
-    // Check if either isDeleted or isSold flags are true
-    final bool isDisabled = widget.isDeleted || widget.isSold;
 
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -245,15 +242,13 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
             width: 42,
             height: 42,
             child: ElevatedButton(
-              // onPressed: isDisabled
-              //     ? null
-              //     : sendMessage, // Disable button if either flag is true
               onPressed: sendMessage,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColor.primary,
                 padding: const EdgeInsets.all(0),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8)),
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 shadowColor: Colors.transparent,
               ),
               child:
@@ -277,6 +272,11 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
       _messageController.clear();
       scrollToBottom();
     }
+  }
+
+  Future<Article> getArticleById(String articleId) async {
+    final article = await articleService.fetchArticleById(articleId);
+    return article;
   }
 
   Widget _chatBubble({required String message, required bool isMe}) {
@@ -306,11 +306,11 @@ class ParagraphLimitingTextInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
-    // Check if the new text exceeds the maximum allowed characters
+// Check if the new text exceeds the maximum allowed characters
     if (newValue.text.length > maxCharacters) {
-      // If so, truncate the text to contain only the allowed number of characters
+// If so, truncate the text to contain only the allowed number of characters
       final truncatedText = newValue.text.substring(0, maxCharacters);
-      // Return the truncated text
+// Return the truncated text
       return TextEditingValue(
         text: truncatedText,
         selection: newValue.selection.copyWith(
@@ -319,13 +319,13 @@ class ParagraphLimitingTextInputFormatter extends TextInputFormatter {
         ),
       );
     }
-    // If the new text is within the character limit, split it by paragraph (line breaks)
+// If the new text is within the character limit, split it by paragraph (line breaks)
     final paragraphs = newValue.text.split('\n');
-    // Check if the number of paragraphs exceeds the limit
+// Check if the number of paragraphs exceeds the limit
     if (paragraphs.length > maxParagraphs) {
-      // If so, truncate the text to contain only the allowed number of paragraphs
+// If so, truncate the text to contain only the allowed number of paragraphs
       final truncatedText = paragraphs.sublist(0, maxParagraphs).join('\n');
-      // Return the truncated text
+// Return the truncated text
       return TextEditingValue(
         text: truncatedText,
         selection: newValue.selection.copyWith(
@@ -334,7 +334,7 @@ class ParagraphLimitingTextInputFormatter extends TextInputFormatter {
         ),
       );
     }
-    // If the text is within both character and paragraph limits, allow the edit
+// If the text is within both character and paragraph limits, allow the edit
     return newValue;
   }
 }
