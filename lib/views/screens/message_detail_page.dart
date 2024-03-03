@@ -1,7 +1,9 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clubtwice/core/services/MessageService.dart';
+import 'package:clubtwice/core/services/articles_service.dart';
 import 'package:clubtwice/views/screens/page_switcher.dart';
+import 'package:clubtwice/views/screens/product_detail.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -54,32 +56,43 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
         centerTitle: false,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Row(
-          children: [
-            Container(
-              width: 32,
-              height: 32,
-              margin: const EdgeInsets.only(right: 16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
-                color: AppColor.border,
-                image: DecorationImage(
-                  image: widget.articleImageUrl.isNotEmpty
-                      ? NetworkImage(widget.articleImageUrl)
-                      : const AssetImage('assets/images/placeholder.jpg')
-                          as ImageProvider<Object>,
-                  fit: BoxFit.cover,
+        title: GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PageSwitcher(selectedIndex: 4)
+                  //    ProductDetail(), // Replace ProductDetail with your actual page
+                  ),
+            );
+          },
+          child: Row(
+            children: [
+              Container(
+                width: 32,
+                height: 32,
+                margin: const EdgeInsets.only(right: 16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: AppColor.border,
+                  image: DecorationImage(
+                    image: widget.articleImageUrl.isNotEmpty
+                        ? NetworkImage(widget.articleImageUrl)
+                        : const AssetImage('assets/images/placeholder.jpg')
+                            as ImageProvider<Object>,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
-            Text(
-              '${widget.receiverUsername} - ${widget.articleTitle.length > 15 ? '${widget.articleTitle.substring(0, 15)}...' : widget.articleTitle}',
-              style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600),
-            ),
-          ],
+              Text(
+                '${widget.receiverUsername} - ${widget.articleTitle.length > 15 ? '${widget.articleTitle.substring(0, 15)}...' : widget.articleTitle}',
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
         ),
         leading: IconButton(
           onPressed: () {
@@ -211,7 +224,7 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
                     color: AppColor.primary,
                   ),
                 ),
-                hintText: 'Type a message here...',
+                hintText: 'Gebe hier deine Nachricht ein ...',
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
                 enabledBorder: OutlineInputBorder(
