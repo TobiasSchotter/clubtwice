@@ -89,7 +89,7 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                WidgetsBinding.instance!.addPostFrameCallback((_) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
                   scrollToBottom();
                 });
                 return ListView(
