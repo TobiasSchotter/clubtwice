@@ -89,15 +89,17 @@ class _HomePageState extends State<HomePage> {
     if (isLoading) {
       content = const Center(child: CircularProgressIndicator());
     } else if (club.isNotEmpty && club != "Keine Auswahl") {
-      if (!hasSearchResults) {
+      if (articlesWithID.isEmpty) {
         content = buildNoSearchResults();
-      } else if (articlesWithID.isNotEmpty) {
-        content = buildArticleList();
-      } else {
+        print("A");
+      } else if (!hasSearchResults) {
         content = buildNoArticlesMessage();
+        print("B");
+      } else {
+        content = buildArticleList();
       }
     } else {
-      content = buildNoClubMessage();
+      content = buildNoArticlesMessage();
     }
 
     return Scaffold(
