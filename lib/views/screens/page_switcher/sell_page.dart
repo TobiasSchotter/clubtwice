@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/widgets/image_picker_widget.dart';
-import 'package:image_picker/image_picker.dart';
 import '../../../core/model/UserModel.dart';
 import '../../../core/services/user_service.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -612,7 +611,6 @@ class _SellPageState extends State<SellPage> {
         imageUrls = await uploadFiles(images);
       }
 
-      // TODO - create Article object in /models/article.dart
       // Create a map with article data
       Map<String, dynamic> articleData = {
         'title': title,
@@ -634,7 +632,7 @@ class _SellPageState extends State<SellPage> {
         'isDeleted': false,
       };
 
-// Add the articleData to Firestore
+      // Add the articleData to Firestore
       await FirebaseFirestore.instance.collection('articles').add(articleData);
 
       // Hide loading indicator
@@ -674,22 +672,6 @@ class _SellPageState extends State<SellPage> {
     List<String> stringList = imageUrls.map((item) => item.toString()).toList();
     return stringList;
   }
-
-  // Future<String> uploadFile(File image) async {
-  //   // Generate a unique filename for the image
-  //   String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-
-  //   String userID = user!.uid;
-
-  //   // Upload the image file to Firebase Storage
-  //   Reference storageReference =
-  //       FirebaseStorage.instance.ref().child('users/$userID/images/$fileName');
-  //   TaskSnapshot snapshot = await storageReference.putFile(image);
-
-  //   // Get the download URL of the uploaded image
-  //   String downloadUrl = await snapshot.ref.getDownloadURL();
-  //   return downloadUrl;
-  // }
 
   Future<String> uploadFile(File image) async {
     // Generate a unique filename for the image
