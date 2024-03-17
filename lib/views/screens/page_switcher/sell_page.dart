@@ -18,7 +18,28 @@ import '../../../core/services/user_service.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class SellPage extends StatefulWidget {
-  const SellPage({Key? key}) : super(key: key);
+  final String? articleId;
+  final String? title;
+  final String? description;
+  final String? selectedType;
+  final String? selectedSize;
+  final String? selectedCondition;
+  final String? selectedBrand;
+  final bool isIndividuallyWearable;
+  final int? price;
+
+  const SellPage({
+    Key? key,
+    this.articleId,
+    this.title,
+    this.description,
+    this.selectedType,
+    this.selectedSize,
+    this.selectedCondition,
+    this.selectedBrand,
+    required this.isIndividuallyWearable,
+    this.price,
+  }) : super(key: key);
 
   @override
   _SellPageState createState() => _SellPageState();
@@ -27,29 +48,52 @@ class SellPage extends StatefulWidget {
 class _SellPageState extends State<SellPage> {
   // final database = FirebaseDatabase.instance.reference();
 
-  List<XFile> selectedImages = [];
-  bool _isIndividuallyWearable = false;
   bool isVerschenkenChecked = false;
 
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _priceController = TextEditingController();
+  // final TextEditingController _titleController = TextEditingController();
+  // final TextEditingController _descriptionController = TextEditingController();
+  // final TextEditingController _priceController = TextEditingController();
+  //bool _isIndividuallyWearable = false;
+
+  // String _selectedType = "Kids";
+  // String _selectedSize = '152';
+  // String _selectedBrand = "";
+  // String _selectedCondition = "Sehr gut";
 
   String _selectedSport = "";
   String _selectedClub = "";
-  String _selectedType = "Kids";
-  String _selectedSize = '152';
-  String _selectedBrand = "";
-  String _selectedCondition = "Sehr gut";
+  List<XFile> selectedImages = [];
 
   User? user = FirebaseAuth.instance.currentUser;
-
   final UserService userService = UserService();
   UserModel? userModel;
+
+  late TextEditingController _titleController;
+  late TextEditingController _descriptionController;
+  late TextEditingController _priceController;
+  late bool _isIndividuallyWearable;
+
+  late String _selectedType;
+  late String _selectedSize;
+  late String _selectedBrand;
+  late String _selectedCondition;
+
   @override
   void initState() {
     super.initState();
     loadData();
+    _titleController = TextEditingController(text: widget.title ?? '');
+    _descriptionController =
+        TextEditingController(text: widget.description ?? '');
+    _priceController =
+        TextEditingController(text: widget.price?.toString() ?? '');
+    _isIndividuallyWearable = widget.isIndividuallyWearable;
+
+    // Initialize these variables based on optional parameters
+    _selectedType = widget.selectedType ?? "Kids";
+    _selectedSize = widget.selectedSize ?? '152';
+    _selectedBrand = widget.selectedBrand ?? "";
+    _selectedCondition = widget.selectedCondition ?? "Sehr gut";
   }
 
   Future<void> loadData() async {
@@ -288,13 +332,12 @@ class _SellPageState extends State<SellPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         backgroundColor: AppColor.primary,
         title: const Text(
           'Vereinskleidung verkaufen',
-          style: TextStyle(fontSize: 15), // Schriftgröße anpassen
+          style: TextStyle(fontSize: 15),
         ),
-        centerTitle: true, // Titel mittig ausrichten
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -537,6 +580,7 @@ class _SellPageState extends State<SellPage> {
                       price: int.parse(price),
                       isIndividuallyWearable: _isIndividuallyWearable,
                       images: selectedImages,
+                      articleId: widget.articleId,
                       context: context,
                       condition: _selectedCondition,
                       size: _selectedSize,
@@ -579,6 +623,7 @@ class _SellPageState extends State<SellPage> {
     );
   }
 
+  // TODO relocated to service file
   Future<void> saveArticleToFirebase({
     required String title,
     required String description,
@@ -591,6 +636,7 @@ class _SellPageState extends State<SellPage> {
     required String size,
     required String type,
     required List<XFile> images,
+    String? articleId, // Optional parameter for modifying an existing article
     required String? userId,
     required BuildContext context,
   }) async {
@@ -611,7 +657,7 @@ class _SellPageState extends State<SellPage> {
         imageUrls = await uploadFiles(images);
       }
 
-      // Create a map with article data
+      // Create or update article data
       Map<String, dynamic> articleData = {
         'title': title,
         'description': description,
@@ -624,7 +670,6 @@ class _SellPageState extends State<SellPage> {
         'size': size,
         'type': type,
         'images': imageUrls,
-        'createdAt': Timestamp.now(),
         'updatedAt': Timestamp.now(),
         'userId': userId,
         'isSold': false,
@@ -632,8 +677,20 @@ class _SellPageState extends State<SellPage> {
         'isDeleted': false,
       };
 
-      // Add the articleData to Firestore
-      await FirebaseFirestore.instance.collection('articles').add(articleData);
+      // Check if articleId is provided for modifying an existing article
+      if (articleId != null) {
+        // Update the existing article in Firestore
+        await FirebaseFirestore.instance
+            .collection('articles')
+            .doc(articleId)
+            .update(articleData);
+      } else {
+        // Add a new article to Firestore
+        articleData['createdAt'] = Timestamp.now();
+        await FirebaseFirestore.instance
+            .collection('articles')
+            .add(articleData);
+      }
 
       // Hide loading indicator
       Navigator.of(context).pop();

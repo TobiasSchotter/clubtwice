@@ -66,7 +66,9 @@ class _PageSwitcherState extends State<PageSwitcher> {
         children: [
           const HomePage(),
           SearchPage(),
-          const SellPage(),
+          const SellPage(
+            isIndividuallyWearable: false,
+          ),
           TabPage(),
           ProfilePage(),
         ],

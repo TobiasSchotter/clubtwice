@@ -17,6 +17,7 @@ import 'package:clubtwice/core/model/UserModel.dart';
 import '../widgets/attribute_widget.dart';
 import '../widgets/date_widget.dart';
 import '../widgets/user_section.dart';
+import 'page_switcher/sell_page.dart';
 
 class ProductDetail extends StatefulWidget {
   final Article article;
@@ -76,6 +77,7 @@ class _ProductDetailState extends State<ProductDetail> {
   @override
   Widget build(BuildContext context) {
     DateTime dateTime = widget.article.updatedAt.toDate();
+
     return Scaffold(
       // extendBodyBehindAppBar: true,
       extendBody: true,
@@ -710,7 +712,29 @@ class _ProductDetailState extends State<ProductDetail> {
     );
   }
 
-  void articleEdit() {}
+  void articleEdit() {
+    // Check if the current user is the owner of the article
+    bool isCurrentUserOwner = widget.article.userId == currentUserId;
+
+    if (isCurrentUserOwner && !widget.article.isDeleted) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SellPage(
+            articleId: widget.id,
+            title: widget.article.title,
+            description: widget.article.description,
+            price: widget.article.price,
+            isIndividuallyWearable: widget.article.isIndividuallyWearable,
+            selectedType: widget.article.type,
+            selectedSize: widget.article.size,
+            selectedBrand: widget.article.brand,
+            selectedCondition: widget.article.condition,
+          ),
+        ),
+      );
+    }
+  }
 
   void articleReport() {}
 }
