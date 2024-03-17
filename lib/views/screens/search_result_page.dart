@@ -161,6 +161,7 @@ class _SearchResultPageState extends State<SearchResultPage>
         automaticallyImplyLeading: false,
         centerTitle: false,
         backgroundColor: AppColor.primary,
+        foregroundColor: AppColor.primarySoft,
         elevation: 0,
         leading: IconButton(
           onPressed: () {

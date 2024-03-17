@@ -333,6 +333,7 @@ class _SellPageState extends State<SellPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColor.primary,
+        foregroundColor: AppColor.primarySoft,
         title: const Text(
           'Vereinskleidung verkaufen',
           style: TextStyle(fontSize: 15),
