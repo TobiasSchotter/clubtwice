@@ -17,7 +17,7 @@ class _BrandSelectionPageState extends State<BrandSelectionPage> {
   List<String> lessPopularBrandOptions =
       DropdownOptions.lessPopularBrandOptions;
 
-  int selectedBrandIndex = -1;
+  // int selectedBrandIndex = -1;
   List<String> filteredPopularBrands = [];
   List<String> filteredLessPopularBrands = [];
 
