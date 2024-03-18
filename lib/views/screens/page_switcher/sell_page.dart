@@ -615,7 +615,9 @@ class _SellPageState extends State<SellPage> {
                     }
                   }
                 },
-                buttonText: 'Artikel einstellen',
+                buttonText: widget.articleId != null
+                    ? 'Artikel aktualisieren'
+                    : 'Artikel einstellen',
               ),
             ],
           ),
