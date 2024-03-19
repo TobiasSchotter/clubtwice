@@ -68,6 +68,7 @@ class _PageSwitcherState extends State<PageSwitcher> {
           SearchPage(),
           const SellPage(
             isIndividuallyWearable: false,
+            images: [],
           ),
           TabPage(),
           ProfilePage(),

@@ -6,8 +6,12 @@ import 'package:image_picker/image_picker.dart';
 
 class ImagePickerWidget extends StatefulWidget {
   final Function(List<XFile>) onImagesSelected;
+  final List<XFile> initialImages;
 
-  ImagePickerWidget({required this.onImagesSelected});
+  ImagePickerWidget({
+    required this.onImagesSelected,
+    required this.initialImages,
+  });
 
   @override
   _ImagePickerWidgetState createState() => _ImagePickerWidgetState();
@@ -16,33 +20,29 @@ class ImagePickerWidget extends StatefulWidget {
 class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   List<XFile> selectedImages = [];
 
+  @override
+  void initState() {
+    super.initState();
+    selectedImages = widget.initialImages;
+  }
+
   Future<void> pickImages(ImageSource source) async {
-    if (selectedImages.length < 5) {
+    try {
       final XFile? image = await ImagePicker().pickImage(source: source);
 
       if (image != null) {
-        setState(() {
-          selectedImages.add(image);
-        });
-        widget.onImagesSelected(selectedImages);
+        if (selectedImages.length < 5) {
+          setState(() {
+            selectedImages.add(image);
+          });
+          widget.onImagesSelected(selectedImages);
+        } else {
+          _showMaxImageLimitDialog();
+        }
       }
-    } else {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Limit erreicht'),
-            content:
-                const Text('Es können maximal 5 Bilder hochgeladen werden.'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
+    } catch (e) {
+      // Handle image picking errors
+      print("Error picking image: $e");
     }
   }
 
@@ -54,6 +54,24 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
     }
   }
 
+  void _showMaxImageLimitDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Limit erreicht'),
+          content: const Text('Es können maximal 5 Bilder hochgeladen werden.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _showImagePickerMenu() {
     showModalBottomSheet(
       context: context,
@@ -62,7 +80,6 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
-              //leading: Icon(Icons.camera),
               title: const Center(child: Text('Kamera')),
               onTap: () {
                 Navigator.pop(context);
@@ -70,7 +87,6 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
               },
             ),
             ListTile(
-              // leading: Icon(Icons.photo_library),
               title: const Center(child: Text('Galerie')),
               onTap: () {
                 Navigator.pop(context);

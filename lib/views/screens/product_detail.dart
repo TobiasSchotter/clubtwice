@@ -730,6 +730,7 @@ class _ProductDetailState extends State<ProductDetail> {
             selectedSize: widget.article.size,
             selectedBrand: widget.article.brand,
             selectedCondition: widget.article.condition,
+            images: widget.article.images,
           ),
         ),
       );

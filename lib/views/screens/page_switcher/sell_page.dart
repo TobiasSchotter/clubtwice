@@ -16,6 +16,7 @@ import 'package:clubtwice/views/widgets/image_picker_widget.dart';
 import '../../../core/model/UserModel.dart';
 import '../../../core/services/user_service.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class SellPage extends StatefulWidget {
   final String? articleId;
@@ -27,6 +28,7 @@ class SellPage extends StatefulWidget {
   final String? selectedBrand;
   final bool isIndividuallyWearable;
   final int? price;
+  final List<String> images;
 
   const SellPage({
     Key? key,
@@ -39,6 +41,7 @@ class SellPage extends StatefulWidget {
     this.selectedBrand,
     required this.isIndividuallyWearable,
     this.price,
+    required this.images,
   }) : super(key: key);
 
   @override
@@ -50,19 +53,10 @@ class _SellPageState extends State<SellPage> {
 
   bool isVerschenkenChecked = false;
 
-  // final TextEditingController _titleController = TextEditingController();
-  // final TextEditingController _descriptionController = TextEditingController();
-  // final TextEditingController _priceController = TextEditingController();
-  //bool _isIndividuallyWearable = false;
-
-  // String _selectedType = "Kids";
-  // String _selectedSize = '152';
-  // String _selectedBrand = "";
-  // String _selectedCondition = "Sehr gut";
-
   String _selectedSport = "";
   String _selectedClub = "";
   List<XFile> selectedImages = [];
+  List<XFile> initialImages = [];
 
   User? user = FirebaseAuth.instance.currentUser;
   final UserService userService = UserService();
@@ -77,6 +71,8 @@ class _SellPageState extends State<SellPage> {
   late String _selectedSize;
   late String _selectedBrand;
   late String _selectedCondition;
+
+  bool _imagesDownloaded = false;
 
   @override
   void initState() {
@@ -102,6 +98,30 @@ class _SellPageState extends State<SellPage> {
     setState(() {
       _selectedClub = userModel!.club;
       _selectedSport = userModel!.sport;
+    });
+    // Call function to download images
+    await downloadImages();
+    setState(() {
+      _imagesDownloaded = true;
+    });
+  }
+
+  Future<void> downloadImages() async {
+    List<XFile> images = [];
+    for (String imageUrl in widget.images) {
+      try {
+        // Download the image file to local storage
+        File file = await DefaultCacheManager().getSingleFile(imageUrl);
+        // Create an XFile object from the local file path
+        XFile imageFile = XFile(file.path);
+        images.add(imageFile);
+      } catch (e) {
+        print("Error downloading image: $e");
+      }
+    }
+    setState(() {
+      initialImages = List.from(images);
+      selectedImages = List.from(initialImages);
     });
   }
 
@@ -346,7 +366,11 @@ class _SellPageState extends State<SellPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              ImagePickerWidget(onImagesSelected: handleImagesSelected),
+              _imagesDownloaded
+                  ? ImagePickerWidget(
+                      onImagesSelected: handleImagesSelected,
+                      initialImages: initialImages)
+                  : const CircularProgressIndicator(),
               const SizedBox(height: 20),
               Text(
                 'Titel *',
@@ -766,7 +790,7 @@ class _SellPageState extends State<SellPage> {
 
   void handleImagesSelected(List<XFile> images) {
     setState(() {
-      selectedImages = images;
+      selectedImages = List.from(images);
     });
   }
 }
