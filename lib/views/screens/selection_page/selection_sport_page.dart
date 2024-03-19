@@ -61,6 +61,7 @@ class _SportSelectionPageState extends State<SportSelectionPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColor.primary,
+        foregroundColor: AppColor.primarySoft,
         title: const Text(
           'Sportarten',
           style: TextStyle(fontSize: 15),

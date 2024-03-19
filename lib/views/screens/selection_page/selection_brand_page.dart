@@ -80,6 +80,7 @@ class _BrandSelectionPageState extends State<BrandSelectionPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColor.primary,
+        foregroundColor: AppColor.primarySoft,
         title: const Text(
           'Marken',
           style: TextStyle(fontSize: 15),

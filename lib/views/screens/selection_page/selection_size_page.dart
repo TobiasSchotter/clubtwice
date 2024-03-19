@@ -51,6 +51,7 @@ class _SizeSelectionPageState extends State<SizeSelectionPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColor.primary,
+        foregroundColor: AppColor.primarySoft,
         title: const Text(
           'Größen',
           style: TextStyle(fontSize: 15),

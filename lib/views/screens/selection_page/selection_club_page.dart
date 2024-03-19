@@ -71,6 +71,7 @@ class _ClubSelectionPageState extends State<ClubSelectionPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColor.primary,
+        foregroundColor: AppColor.primarySoft,
         title: const Text(
           'Sportvereine',
           style: TextStyle(fontSize: 15),
