@@ -9,16 +9,17 @@ class ImagePickerWidget extends StatefulWidget {
   final List<XFile> initialImages;
 
   ImagePickerWidget({
+    Key? key,
     required this.onImagesSelected,
     required this.initialImages,
-  });
+  }) : super(key: key);
 
   @override
   _ImagePickerWidgetState createState() => _ImagePickerWidgetState();
 }
 
 class _ImagePickerWidgetState extends State<ImagePickerWidget> {
-  List<XFile> selectedImages = [];
+  late List<XFile> selectedImages;
 
   @override
   void initState() {
@@ -50,6 +51,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
     if (selectedImages.isNotEmpty) {
       setState(() {
         selectedImages.removeAt(index);
+        widget.onImagesSelected(selectedImages);
       });
     }
   }

@@ -611,6 +611,7 @@ class _SellPageState extends State<SellPage> {
                       size: _selectedSize,
                       type: _selectedType,
                       userId: user?.uid,
+                      existingImageUrls: widget.images,
                     );
                   } else {
                     if (title.isEmpty) {
@@ -666,6 +667,7 @@ class _SellPageState extends State<SellPage> {
     String? articleId, // Optional parameter for modifying an existing article
     required String? userId,
     required BuildContext context,
+    required List<String> existingImageUrls,
   }) async {
     try {
       // Show loading indicator
@@ -677,11 +679,11 @@ class _SellPageState extends State<SellPage> {
         ),
       );
 
-      List<String> imageUrls = [];
+      List<String> newImageUrls = [];
 
-      // Upload images to Firebase Storage
+      // Upload new images to Firebase Storage
       if (images.isNotEmpty) {
-        imageUrls = await uploadFiles(images);
+        newImageUrls = await uploadFiles(images);
       }
 
       // Create or update article data
@@ -696,7 +698,7 @@ class _SellPageState extends State<SellPage> {
         'condition': condition,
         'size': size,
         'type': type,
-        'images': imageUrls,
+        'images': newImageUrls,
         'updatedAt': Timestamp.now(),
         'userId': userId,
         'isSold': false,
@@ -706,11 +708,17 @@ class _SellPageState extends State<SellPage> {
 
       // Check if articleId is provided for modifying an existing article
       if (articleId != null) {
-        // Update the existing article in Firestore
+        // Update the existing article in Firestore with new image URLs
         await FirebaseFirestore.instance
             .collection('articles')
             .doc(articleId)
             .update(articleData);
+
+        // Delete old images that are not present in the new selection
+        List<String> imagesToDelete = existingImageUrls
+            .where((oldImageUrl) => !newImageUrls.contains(oldImageUrl))
+            .toList();
+        await deleteFiles(imagesToDelete);
       } else {
         // Add a new article to Firestore
         articleData['createdAt'] = Timestamp.now();
@@ -750,11 +758,14 @@ class _SellPageState extends State<SellPage> {
   }
 
   Future<List<String>> uploadFiles(List<XFile> images) async {
-    var imageUrls =
-        await Future.wait(images.map((image) => uploadFile(File(image.path))));
+    List<String> imageUrls = [];
 
-    List<String> stringList = imageUrls.map((item) => item.toString()).toList();
-    return stringList;
+    for (XFile image in images) {
+      String imageUrl = await uploadFile(File(image.path));
+      imageUrls.add(imageUrl);
+    }
+
+    return imageUrls;
   }
 
   Future<String> uploadFile(File image) async {
@@ -792,5 +803,17 @@ class _SellPageState extends State<SellPage> {
     setState(() {
       selectedImages = List.from(images);
     });
+    print('after removing ${selectedImages.length}');
+  }
+
+  Future<void> deleteFiles(List<String> imageUrls) async {
+    for (String imageUrl in imageUrls) {
+      try {
+        // Get reference to the image in Firebase Storage and delete it
+        await FirebaseStorage.instance.refFromURL(imageUrl).delete();
+      } catch (error) {
+        print('Error deleting image: $error');
+      }
+    }
   }
 }
