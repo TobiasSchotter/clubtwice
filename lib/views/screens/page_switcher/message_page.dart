@@ -33,49 +33,56 @@ class _MessagePageState extends State<MessagePage> {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
             List<Message> listMessage = snapshot.data!;
-            return ListView.builder(
-              itemCount: listMessage.length,
-              itemBuilder: (context, index) {
-                // Perform a query to get the article document by its ID
-                return FutureBuilder<DocumentSnapshot>(
-                  future: FirebaseFirestore.instance
-                      .collection('articles')
-                      .doc(listMessage[index].articleId)
-                      .get(),
-                  builder: (context, articleSnapshot) {
-                    if (articleSnapshot.connectionState ==
-                        ConnectionState.waiting) {
-                      return SizedBox(); // Return an empty widget while waiting for the query result
-                    } else if (articleSnapshot.hasError) {
-                      return SizedBox(); // Handle error state
-                    } else if (!articleSnapshot.hasData ||
-                        !articleSnapshot.data!.exists) {
-                      return SizedBox(); // Handle case where the article document does not exist
-                    } else {
-                      // Extract article data from the document snapshot
-                      String articleTitle = articleSnapshot.data!['title'];
-                      bool isSold = articleSnapshot.data?['isSold'];
-                      bool isDeleted = articleSnapshot.data?['isDeleted'];
-                      bool isReserved = articleSnapshot.data?['isReserved'];
-                      List<dynamic> images = articleSnapshot.data!['images'];
-                      String imageUrl = (images.isNotEmpty && images[0] != null)
-                          ? images[0]
-                          : '';
+            if (listMessage.isEmpty) {
+              // Wenn die Liste leer ist, zeige eine Nachricht an
+              return Center(
+                  child: Text('Du hast noch keine Nachrichten erhalten'));
+            } else {
+              return ListView.builder(
+                itemCount: listMessage.length,
+                itemBuilder: (context, index) {
+                  // Perform a query to get the article document by its ID
+                  return FutureBuilder<DocumentSnapshot>(
+                    future: FirebaseFirestore.instance
+                        .collection('articles')
+                        .doc(listMessage[index].articleId)
+                        .get(),
+                    builder: (context, articleSnapshot) {
+                      if (articleSnapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return SizedBox(); // Return an empty widget while waiting for the query result
+                      } else if (articleSnapshot.hasError) {
+                        return SizedBox(); // Handle error state
+                      } else if (!articleSnapshot.hasData ||
+                          !articleSnapshot.data!.exists) {
+                        return SizedBox(); // Handle case where the article document does not exist
+                      } else {
+                        // Extract article data from the document snapshot
+                        String articleTitle = articleSnapshot.data!['title'];
+                        bool isSold = articleSnapshot.data?['isSold'];
+                        bool isDeleted = articleSnapshot.data?['isDeleted'];
+                        bool isReserved = articleSnapshot.data?['isReserved'];
+                        List<dynamic> images = articleSnapshot.data!['images'];
+                        String imageUrl =
+                            (images.isNotEmpty && images[0] != null)
+                                ? images[0]
+                                : '';
 
-                      // Return the MessageTileWidget with the article data
-                      return MessageTileWidget(
-                        data: listMessage[index],
-                        articleTitle: articleTitle,
-                        articleImageUrl: imageUrl,
-                        isSold: isSold,
-                        isDeleted: isDeleted,
-                        isReserved: isReserved,
-                      );
-                    }
-                  },
-                );
-              },
-            );
+                        // Return the MessageTileWidget with the article data
+                        return MessageTileWidget(
+                          data: listMessage[index],
+                          articleTitle: articleTitle,
+                          articleImageUrl: imageUrl,
+                          isSold: isSold,
+                          isDeleted: isDeleted,
+                          isReserved: isReserved,
+                        );
+                      }
+                    },
+                  );
+                },
+              );
+            }
           }
         },
       ),
