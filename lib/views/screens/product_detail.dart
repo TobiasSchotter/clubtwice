@@ -128,38 +128,36 @@ class _ProductDetailState extends State<ProductDetail> {
 
                     return CarouselSlider(
                       options: CarouselOptions(
-                          //aspectRatio: 3 / 4,
-                          autoPlay: true,
-                          //  enlargeCenterPage: true,
-                          height: 650,
-                          enableInfiniteScroll: enableInfiniteScroll,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              currentImageIndex = index;
-                            });
-                          },
-                          viewportFraction: 1.0),
+                        autoPlay: true,
+                        height: 500,
+                        enableInfiniteScroll: enableInfiniteScroll,
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            currentImageIndex = index;
+                          });
+                        },
+                        viewportFraction: 1.0,
+                      ),
                       items: widget.article.images.isNotEmpty
                           ? widget.article.images.map((imageUrl) {
-                              return Builder(
-                                builder: (BuildContext context) {
-                                  return SizedBox(
-                                    child: Image.network(
-                                      imageUrl,
-                                      fit: BoxFit.contain,
-                                    ),
-                                  );
-                                },
+                              return Container(
+                                constraints: BoxConstraints
+                                    .expand(), // Volle Größe des Containers
+                                child: Image.network(
+                                  imageUrl,
+                                  fit: BoxFit.cover, // Bild passend anzeigen
+                                ),
                               );
                             }).toList()
                           : [
                               Container(
-                                width: MediaQuery.of(context).size.width,
+                                constraints: BoxConstraints
+                                    .expand(), // Volle Größe des Containers
                                 margin:
                                     const EdgeInsets.symmetric(horizontal: 5.0),
                                 child: Image.asset(
                                   'assets/images/placeholder.jpg',
-                                  fit: BoxFit.contain,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                             ],
@@ -167,7 +165,7 @@ class _ProductDetailState extends State<ProductDetail> {
                   },
                 ),
                 Positioned(
-                  top: 620.0,
+                  top: 480.0,
                   left: 0,
                   right: 0,
                   child: Row(
