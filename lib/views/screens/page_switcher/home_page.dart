@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
         isLoading = true;
       });
 
-      // Get the current scroll position
+// Get the current scroll position
       double currentPosition = _scrollController.position.pixels;
 
       try {
@@ -78,19 +78,19 @@ class _HomePageState extends State<HomePage> {
         club = userModel!.club;
 
         List<ArticleWithId> additionalArticles = [];
-        // Check if articlesWithID is not empty before accessing its last element
+// Check if articlesWithID is not empty before accessing its last element
         if (articlesWithID.isNotEmpty) {
           additionalArticles = await articleService.fetchArticles(
               searchTerm, club, sportart, typ, groesse, marke,
               limit: _limit, startArticle: articlesWithID.last);
         } else {
-          // Fetch articles without startArticleId if articlesWithID is empty
+// Fetch articles without startArticleId if articlesWithID is empty
           additionalArticles = await articleService.fetchArticles(
               searchTerm, club, sportart, typ, groesse, marke,
               limit: _limit);
         }
 
-        // Filter out duplicates before adding to the list
+// Filter out duplicates before adding to the list
         List<ArticleWithId> uniqueArticles = additionalArticles
             .where((article) => !articlesWithID
                 .any((existingArticle) => existingArticle.id == article.id))
@@ -129,30 +129,21 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Widget content;
-    if (isLoading) {
-      content = const Center(child: CircularProgressIndicator());
-    } else if (club.isNotEmpty && club != "Keine Auswahl") {
-      if (articlesWithID.isEmpty) {
-        content = buildNoSearchResults();
-        //print("A");
-      } else if (!hasSearchResults) {
-        content = buildNoArticlesMessage();
-        //print("B");
-      } else {
-        content = buildArticleList();
-      }
-    } else {
-      content = buildNoArticlesMessage();
-    }
-
     return Scaffold(
       appBar: buildAppBar(),
-      body: ListView(
-        controller: _scrollController,
-        shrinkWrap: true,
-        physics: const BouncingScrollPhysics(),
-        children: [buildHeader(), buildFilterExpansionTile(), content],
+      body: Builder(
+        builder: (BuildContext context) {
+          return ListView(
+            controller: _scrollController,
+            shrinkWrap: true,
+            physics: const BouncingScrollPhysics(),
+            children: [
+              buildHeader(),
+              buildFilterExpansionTile(),
+              buildContent(),
+            ],
+          );
+        },
       ),
     );
   }
@@ -285,6 +276,24 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+  Widget buildContent() {
+    Widget content;
+    if (isLoading) {
+      content = const Center(child: CircularProgressIndicator());
+    } else if (club.isNotEmpty && club != "Keine Auswahl") {
+      if (articlesWithID.isEmpty) {
+        content = buildNoSearchResults();
+      } else if (!hasSearchResults) {
+        content = buildNoArticlesMessage();
+      } else {
+        content = buildArticleList();
+      }
+    } else {
+      content = buildNoArticlesMessage();
+    }
+    return content;
   }
 
   Widget buildArticleList() {
