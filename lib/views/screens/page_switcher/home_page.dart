@@ -28,45 +28,89 @@ class _HomePageState extends State<HomePage> {
   UserModel? userModel;
   bool isExpansionTileOpen = false; // Track the state of the ExpansionTile
 
+  final ScrollController _scrollController = ScrollController();
+  int _limit = 8;
+
   String sportart = '';
   String typ = '';
   String groesse = '';
   String marke = '';
-  bool isLoading = true;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    loadData();
+    _scrollController.addListener(_scrollListener);
+    // Move the call to loadData to after initState is complete
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      loadData();
+    });
+  }
+
+  @override
+  void dispose() {
+    // Dispose the scroll controller
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    // Check if the user has reached the end of the list
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      // Load more articles
+      loadData();
+    }
   }
 
   Future<void> loadData() async {
-    setState(() {
-      isLoading = true;
-    });
+    if (!isLoading) {
+      setState(() {
+        isLoading = true;
+      });
 
-    try {
-      String? userId = userService.getCurrentUserId();
-      userModel = await userService.fetchUserData(userId);
-      club = userModel!.club;
-      List<ArticleWithId> articleList = await articleService.fetchArticles(
-        searchTerm,
-        club,
-        sportart,
-        typ,
-        groesse,
-        marke,
-      );
-      setState(() {
-        articlesWithID = articleList;
-        hasSearchResults = articleList.isNotEmpty;
-        isLoading = false;
-      });
-    } catch (error) {
-      // Handle error
-      setState(() {
-        isLoading = false;
-      });
+      // Get the current scroll position
+      double currentPosition = _scrollController.position.pixels;
+
+      try {
+        String? userId = userService.getCurrentUserId();
+        userModel = await userService.fetchUserData(userId);
+        club = userModel!.club;
+
+        List<ArticleWithId> additionalArticles = [];
+        // Check if articlesWithID is not empty before accessing its last element
+        if (articlesWithID.isNotEmpty) {
+          additionalArticles = await articleService.fetchArticles(
+              searchTerm, club, sportart, typ, groesse, marke,
+              limit: _limit, startArticle: articlesWithID.last);
+        } else {
+          // Fetch articles without startArticleId if articlesWithID is empty
+          additionalArticles = await articleService.fetchArticles(
+              searchTerm, club, sportart, typ, groesse, marke,
+              limit: _limit);
+        }
+
+        // Filter out duplicates before adding to the list
+        List<ArticleWithId> uniqueArticles = additionalArticles
+            .where((article) => !articlesWithID
+                .any((existingArticle) => existingArticle.id == article.id))
+            .toList();
+
+        setState(() {
+          articlesWithID.addAll(uniqueArticles);
+          _limit += additionalArticles.length;
+          isLoading = false;
+        });
+
+        // Scroll back to the previous position
+        _scrollController.jumpTo(currentPosition);
+      } catch (error) {
+        // Handle error
+        print("Error: $error");
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
@@ -91,10 +135,10 @@ class _HomePageState extends State<HomePage> {
     } else if (club.isNotEmpty && club != "Keine Auswahl") {
       if (articlesWithID.isEmpty) {
         content = buildNoSearchResults();
-        print("A");
+        //print("A");
       } else if (!hasSearchResults) {
         content = buildNoArticlesMessage();
-        print("B");
+        //print("B");
       } else {
         content = buildArticleList();
       }
@@ -105,13 +149,10 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: buildAppBar(),
       body: ListView(
+        controller: _scrollController,
         shrinkWrap: true,
         physics: const BouncingScrollPhysics(),
-        children: [
-          buildHeader(),
-          buildFilterExpansionTile(),
-          content,
-        ],
+        children: [buildHeader(), buildFilterExpansionTile(), content],
       ),
     );
   }

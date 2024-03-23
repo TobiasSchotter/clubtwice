@@ -55,8 +55,10 @@ class ArticleService {
     String sportart,
     String typ,
     String groesse,
-    String marke,
-  ) async {
+    String marke, {
+    int? limit, // optional parameter for limiting the number of documents
+    ArticleWithId? startArticle, // optional parameter for startAfter
+  }) async {
     if (club.isNotEmpty && club != "Keine Auswahl") {
       Query articlesQuery = FirebaseFirestore.instance
           .collection('articles')
@@ -66,7 +68,6 @@ class ArticleService {
           .where('isDeleted', isEqualTo: false);
 
       // Add additional filters if provided
-
       if (sportart.isNotEmpty) {
         articlesQuery = articlesQuery.where('sport', isEqualTo: sportart);
       }
@@ -83,12 +84,22 @@ class ArticleService {
         articlesQuery = articlesQuery.where('brand', isEqualTo: marke);
       }
 
+      // Apply ordering
+      articlesQuery = articlesQuery.orderBy('createdAt', descending: true);
+
+      // If start parameter is provided, use startAfter
+      if (startArticle != null) {
+        articlesQuery =
+            articlesQuery.startAfter([startArticle.article.createdAt]);
+      }
+
+      if (limit != null) {
+        articlesQuery = articlesQuery.limit(limit);
+      }
+
       // Continue with the searchTerm filtering
       return _fetchArticles(articlesQuery, searchTerm);
     } else {
-      // ignore: avoid_print
-      print("fetchArticles: Verein ist leer");
-
       return [];
     }
   }
