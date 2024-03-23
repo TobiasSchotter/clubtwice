@@ -133,14 +133,13 @@ class _HomePageState extends State<HomePage> {
       appBar: buildAppBar(),
       body: Builder(
         builder: (BuildContext context) {
-          return ListView(
-            controller: _scrollController,
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
+          return Column(
             children: [
               buildHeader(),
               buildFilterExpansionTile(),
-              buildContent(),
+              Expanded(
+                child: buildArticleList(), // Place ListView.builder here
+              ),
             ],
           );
         },
@@ -297,14 +296,28 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildArticleList() {
-    return Container(
+    return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: Wrap(
-        spacing: 16,
-        runSpacing: 16,
-        children: articlesWithID.map((article) {
-          return ItemCard(article: article.article, articleId: article.id);
-        }).toList(),
+      controller: _scrollController,
+      child: Column(
+        children: [
+          Wrap(
+            spacing: 16,
+            runSpacing: 16,
+            children: articlesWithID.map((article) {
+              return SizedBox(
+                width: MediaQuery.of(context).size.width / 2 - 16 - 8,
+                child:
+                    ItemCard(article: article.article, articleId: article.id),
+              );
+            }).toList(),
+          ),
+          if (isLoading) // Display a loading indicator if isLoading is true
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: CircularProgressIndicator(),
+            ),
+        ],
       ),
     );
   }
