@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clubtwice/views/screens/message_detail_page.dart';
 import 'package:clubtwice/views/screens/profile_page/profile_page_item.dart';
@@ -13,6 +15,7 @@ import 'package:share/share.dart';
 import '../../constant/app_button.dart';
 import '../../core/model/Article.dart';
 import 'package:clubtwice/core/model/UserModel.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../widgets/attribute_widget.dart';
 import '../widgets/date_widget.dart';
@@ -612,24 +615,47 @@ class _ProductDetailState extends State<ProductDetail> {
     }
   }
 
-  void shareArticle() {
+  void shareArticle() async {
     if (widget.article.images.isNotEmpty) {
-      // String imageUrl =
-      //  widget.article.images[0]; // Share the first image in the list
+      String imageUrl = widget.article.images[0]; // Erste Bild-URL des Artikels
 
-      Share.share('Check out this article!\n'
-          'Title: ${widget.article.title}\n'
-          'Description: ${widget.article.description}\n'
-          'Price: ${widget.article.price} €\n'
-          // 'Image: $imageUrl', // You can add more details as needed
-          );
+      try {
+        // Bild lokal speichern
+        final tempDir = await getTemporaryDirectory();
+        final file = await File('${tempDir.path}/article_image.png').create();
+        HttpClient()
+            .getUrl(Uri.parse(imageUrl))
+            .then((HttpClientRequest request) {
+          return request.close();
+        }).then((HttpClientResponse response) {
+          response.pipe(file.openWrite());
+        });
+
+        // Pfad zur lokal gespeicherten Bild-Datei
+        String imagePath = file.path;
+
+        // Beispiel-Link zur App
+        String articleLink = 'https://example.com/article/${widget.id}';
+
+        // Artikel teilen mit Bild-Datei und Link
+        Share.shareFiles([imagePath],
+            text: 'Check diesen Artikel auf ClubTwice ab!\n'
+                '${widget.article.title}\n'
+                '${widget.article.price} €\n'
+                'Link: $articleLink');
+      } catch (e) {
+        print('Error sharing article: $e');
+      }
     } else {
-      // If there are no images, share the article without an image
+      // Wenn es keine Bilder gibt, teile den Artikel ohne Bild
+      String articleLink =
+          'https://example.com/article/${widget.id}'; // Beispiel-Link zur App
+
       Share.share(
-        'Check out this article!\n'
-        'Title: ${widget.article.title}\n'
-        'Description: ${widget.article.description}\n'
-        'Price: ${widget.article.price} €\n',
+        'Check diesen Artikel auf ClubTwice ab!\n'
+        '${widget.article.title}\n'
+        '${widget.article.price} €\n'
+        'Link: $articleLink', // Füge den Link zur Nachricht hinzu
       );
     }
   }
