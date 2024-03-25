@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
     _scrollController.addListener(_scrollListener);
     // Move the call to loadData to after initState is complete
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      loadData();
+      loadData(null);
     });
   }
 
@@ -59,18 +59,16 @@ class _HomePageState extends State<HomePage> {
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
       // Load more articles
-      loadData();
+      double currentPosition = _scrollController.position.pixels;
+      loadData(currentPosition);
     }
   }
 
-  Future<void> loadData() async {
+  Future<void> loadData(double? currentPosition) async {
     if (!isLoading) {
       setState(() {
         isLoading = true;
       });
-
-      // Get the current scroll position
-      double currentPosition = _scrollController.position.pixels;
 
       try {
         String? userId = userService.getCurrentUserId();
@@ -92,20 +90,22 @@ class _HomePageState extends State<HomePage> {
 
         // Filter out duplicates before adding to the list
         // Doppelte sicherheit. Kann eigentlich entfernt werden.
-        List<ArticleWithId> uniqueArticles = additionalArticles
-            .where((article) => !articlesWithID
-                .any((existingArticle) => existingArticle.id == article.id))
-            .toList();
+        // List<ArticleWithId> uniqueArticles = additionalArticles
+        //     .where((article) => !articlesWithID
+        //         .any((existingArticle) => existingArticle.id == article.id))
+        //     .toList();
 
         setState(() {
-          articlesWithID.addAll(uniqueArticles);
+          articlesWithID.addAll(additionalArticles);
           _limit += additionalArticles.length;
           isLoading = false;
           hasSearchResults = articlesWithID.isNotEmpty;
         });
 
         // Scroll back to the previous position
-        _scrollController.jumpTo(currentPosition);
+        if (_scrollController.hasClients && currentPosition != null) {
+          _scrollController.jumpTo(currentPosition);
+        }
       } catch (error) {
         // Handle error
         print("Error: $error");
@@ -148,16 +148,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
-  // Expanded(
-  //               child: isLoading
-  //                   ? Center(child: CircularProgressIndicator())
-  //                   : articlesWithID.isEmpty
-  //                       ? buildNoArticlesMessage()
-  //                       : !hasSearchResults
-  //                           ? buildNoSearchResults()
-  //                           : buildArticleList(),
-  //             ),
 
   AppBar buildAppBar() {
     return AppBar(
@@ -266,7 +256,7 @@ class _HomePageState extends State<HomePage> {
       _limit = 8; // Reset the limit when applying filters
     });
 
-    await loadData(); // Reload data with the applied filters
+    await loadData(null); // Reload data with the applied filters
   }
 
   Widget buildNoSearchResults() {
@@ -300,6 +290,11 @@ class _HomePageState extends State<HomePage> {
       controller: _scrollController,
       child: Column(
         children: [
+          if (isLoading)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: CircularProgressIndicator(),
+            ),
           Wrap(
             spacing: 16,
             runSpacing: 16,
@@ -310,12 +305,10 @@ class _HomePageState extends State<HomePage> {
                     ItemCard(article: article.article, articleId: article.id),
               );
             }).toList(),
-          ),
-          if (isLoading) // Display a loading indicator if isLoading is true
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 20),
-              child: CircularProgressIndicator(),
-            ),
+          ), // To be improved
+          if (!isLoading && articlesWithID.isEmpty) buildNoArticlesMessage(),
+          if (!isLoading && !hasSearchResults) buildNoSearchResults(),
+          if (!isLoading && club.isEmpty) buildNoClubMessage(),
         ],
       ),
     );
