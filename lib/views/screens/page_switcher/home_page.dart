@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
           articlesWithID.addAll(uniqueArticles);
           _limit += additionalArticles.length;
           isLoading = false;
-          hasSearchResults = uniqueArticles.isNotEmpty;
+          hasSearchResults = articlesWithID.isNotEmpty;
         });
 
         // Scroll back to the previous position
@@ -165,7 +165,7 @@ class _HomePageState extends State<HomePage> {
                     limit: _limit);
             setState(() {
               articlesWithID = articleList;
-              hasSearchResults = articleList.isNotEmpty;
+              hasSearchResults = articlesWithID.isNotEmpty;
               _searchTerm = searchTerm;
             });
           },
@@ -244,16 +244,19 @@ class _HomePageState extends State<HomePage> {
 
   // Callback function to update filter values and reload data
   void applyFilters(String selectedClub, String selectedSportart,
-      String selectedTyp, String selectedGroesse, String selectedMarke) {
+      String selectedTyp, String selectedGroesse, String selectedMarke) async {
     setState(() {
       //club = selectedClub;
+      _searchTerm = '';
       sportart = selectedSportart;
       typ = selectedTyp;
       groesse = selectedGroesse;
       marke = selectedMarke;
+      articlesWithID.clear(); // Clear the list when applying filters
+      _limit = 8; // Reset the limit when applying filters
     });
 
-    loadData(); // Reload data with the applied filters
+    await loadData(); // Reload data with the applied filters
   }
 
   Widget buildNoSearchResults() {
