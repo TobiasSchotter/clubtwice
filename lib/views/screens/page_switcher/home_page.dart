@@ -140,7 +140,7 @@ class _HomePageState extends State<HomePage> {
               buildHeader(),
               buildFilterExpansionTile(),
               Expanded(
-                child: buildArticleList(), // Place ListView.builder here
+                child: buildArticleList(),
               ),
             ],
           );
@@ -148,6 +148,16 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  // Expanded(
+  //               child: isLoading
+  //                   ? Center(child: CircularProgressIndicator())
+  //                   : articlesWithID.isEmpty
+  //                       ? buildNoArticlesMessage()
+  //                       : !hasSearchResults
+  //                           ? buildNoSearchResults()
+  //                           : buildArticleList(),
+  //             ),
 
   AppBar buildAppBar() {
     return AppBar(
@@ -282,24 +292,6 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
-  }
-
-  Widget buildContent() {
-    Widget content;
-    if (isLoading) {
-      content = const Center(child: CircularProgressIndicator());
-    } else if (club.isNotEmpty && club != "Keine Auswahl") {
-      if (articlesWithID.isEmpty) {
-        content = buildNoSearchResults();
-      } else if (!hasSearchResults) {
-        content = buildNoArticlesMessage();
-      } else {
-        content = buildArticleList();
-      }
-    } else {
-      content = buildNoArticlesMessage();
-    }
-    return content;
   }
 
   Widget buildArticleList() {
