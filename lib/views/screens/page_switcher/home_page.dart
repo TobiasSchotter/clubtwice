@@ -20,7 +20,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String club = '';
-  String searchTerm = '';
+  String _searchTerm = '';
   List<ArticleWithId> articlesWithID = [];
   bool hasSearchResults = true;
   final UserService userService = UserService();
@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
         isLoading = true;
       });
 
-// Get the current scroll position
+      // Get the current scroll position
       double currentPosition = _scrollController.position.pixels;
 
       try {
@@ -78,19 +78,20 @@ class _HomePageState extends State<HomePage> {
         club = userModel!.club;
 
         List<ArticleWithId> additionalArticles = [];
-// Check if articlesWithID is not empty before accessing its last element
+        // Check if articlesWithID is not empty before accessing its last element
         if (articlesWithID.isNotEmpty) {
           additionalArticles = await articleService.fetchArticles(
-              searchTerm, club, sportart, typ, groesse, marke,
+              _searchTerm, club, sportart, typ, groesse, marke,
               limit: _limit, startArticle: articlesWithID.last);
         } else {
-// Fetch articles without startArticleId if articlesWithID is empty
+          // Fetch articles without startArticleId if articlesWithID is empty
           additionalArticles = await articleService.fetchArticles(
-              searchTerm, club, sportart, typ, groesse, marke,
+              _searchTerm, club, sportart, typ, groesse, marke,
               limit: _limit);
         }
 
-// Filter out duplicates before adding to the list
+        // Filter out duplicates before adding to the list
+        // Doppelte sicherheit. Kann eigentlich entfernt werden.
         List<ArticleWithId> uniqueArticles = additionalArticles
             .where((article) => !articlesWithID
                 .any((existingArticle) => existingArticle.id == article.id))
@@ -100,6 +101,7 @@ class _HomePageState extends State<HomePage> {
           articlesWithID.addAll(uniqueArticles);
           _limit += additionalArticles.length;
           isLoading = false;
+          hasSearchResults = uniqueArticles.isNotEmpty;
         });
 
         // Scroll back to the previous position
@@ -159,10 +161,12 @@ class _HomePageState extends State<HomePage> {
           hintText: 'Suche Vereinskleidung deines Vereins',
           onSubmitted: (searchTerm) async {
             List<ArticleWithId> articleList = await articleService
-                .fetchArticles(searchTerm, club, sportart, typ, groesse, marke);
+                .fetchArticles(searchTerm, club, sportart, typ, groesse, marke,
+                    limit: _limit);
             setState(() {
               articlesWithID = articleList;
               hasSearchResults = articleList.isNotEmpty;
+              _searchTerm = searchTerm;
             });
           },
         ),
