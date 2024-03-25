@@ -75,18 +75,17 @@ class _HomePageState extends State<HomePage> {
         userModel = await userService.fetchUserData(userId);
         club = userModel!.club;
 
-        List<ArticleWithId> additionalArticles = [];
-        // Check if articlesWithID is not empty before accessing its last element
-        if (articlesWithID.isNotEmpty) {
-          additionalArticles = await articleService.fetchArticles(
-              _searchTerm, club, sportart, typ, groesse, marke,
-              limit: _limit, startArticle: articlesWithID.last);
-        } else {
-          // Fetch articles without startArticleId if articlesWithID is empty
-          additionalArticles = await articleService.fetchArticles(
-              _searchTerm, club, sportart, typ, groesse, marke,
-              limit: _limit);
-        }
+        List<ArticleWithId> additionalArticles =
+            await articleService.fetchArticles(
+          _searchTerm,
+          club,
+          sportart,
+          typ,
+          groesse,
+          marke,
+          limit: _limit,
+          startArticle: articlesWithID.isNotEmpty ? articlesWithID.last : null,
+        );
 
         // Filter out duplicates before adding to the list
         // Doppelte sicherheit. Kann eigentlich entfernt werden.
@@ -306,7 +305,8 @@ class _HomePageState extends State<HomePage> {
               );
             }).toList(),
           ), // To be improved
-          if (!isLoading && articlesWithID.isEmpty) buildNoArticlesMessage(),
+          if (!isLoading && articlesWithID.isEmpty && hasSearchResults)
+            buildNoArticlesMessage(),
           if (!isLoading && !hasSearchResults) buildNoSearchResults(),
           if (!isLoading && club.isEmpty) buildNoClubMessage(),
         ],
