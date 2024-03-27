@@ -254,6 +254,10 @@ class _FilterWidgetState extends State<FilterWidget>
                             setState(() {
                               selectedTypFilter = value!;
                               typHintText = value;
+
+                              // Reset selectedGroesseFilter when selectedTypFilter changes
+                              selectedGroesseFilter = '';
+                              groesseHintText = 'Größe';
                             });
                           },
                           hint: Text(
@@ -286,7 +290,8 @@ class _FilterWidgetState extends State<FilterWidget>
                           context,
                           MaterialPageRoute(
                             builder: (context) => SizeSelectionPage(
-                              selectedSize: selectedTypFilter,
+                              selectedSize: selectedGroesseFilter,
+                              selectedType: selectedTypFilter,
                             ),
                           ),
                         );

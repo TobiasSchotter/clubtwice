@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 
 class SizeSelectionPage extends StatefulWidget {
   final String selectedSize;
+  final String selectedType;
 
-  SizeSelectionPage({required this.selectedSize});
+  SizeSelectionPage({required this.selectedSize, required this.selectedType});
 
   @override
   _SizeSelectionPageState createState() => _SizeSelectionPageState();
@@ -22,8 +23,8 @@ class _SizeSelectionPageState extends State<SizeSelectionPage> {
   @override
   void initState() {
     super.initState();
-    filteredSizesCloth = sizeOptionsCloth[widget.selectedSize] ?? [];
-    filteredSizesShoe = sizeOptionsShoe[widget.selectedSize] ?? [];
+    filteredSizesCloth = sizeOptionsCloth[widget.selectedType] ?? [];
+    filteredSizesShoe = sizeOptionsShoe[widget.selectedType] ?? [];
   }
 
   void filterSizesCloth(String query) {

@@ -241,8 +241,8 @@ class _SellPageState extends State<SellPage> {
         final selectedSize = await Navigator.push<String>(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                SizeSelectionPage(selectedSize: _selectedType),
+            builder: (context) => SizeSelectionPage(
+                selectedSize: _selectedSize, selectedType: _selectedType),
           ),
         );
 
