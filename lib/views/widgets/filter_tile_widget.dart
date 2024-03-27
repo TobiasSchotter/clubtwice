@@ -43,6 +43,14 @@ class _FilterWidgetState extends State<FilterWidget>
   @override
   bool get wantKeepAlive => true;
 
+  String truncateText(String text) {
+    if (text.length <= 8) {
+      return text;
+    } else {
+      return text.substring(0, 8) + '...';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -247,7 +255,11 @@ class _FilterWidgetState extends State<FilterWidget>
                           items: types.map((typesItem) {
                             return DropdownMenuItem(
                               value: typesItem,
-                              child: Text(typesItem),
+                              child: Text(
+                                truncateText(typesItem), // Truncate text
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             );
                           }).toList(),
                           onChanged: (value) {
@@ -261,8 +273,10 @@ class _FilterWidgetState extends State<FilterWidget>
                             });
                           },
                           hint: Text(
-                            typHintText,
+                            truncateText(typHintText), // Truncate hint text
                             style: const TextStyle(color: AppColor.primarySoft),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           alignment: Alignment.center,
                         ),
@@ -330,7 +344,7 @@ class _FilterWidgetState extends State<FilterWidget>
                           if (selectedGroesseFilter != '' &&
                               selectedGroesseFilter.isNotEmpty)
                             Text(
-                              groesseHintText,
+                              truncateText(groesseHintText), // Truncate text
                               style: const TextStyle(
                                   fontSize: 15, color: Colors.white),
                             ),
@@ -390,10 +404,12 @@ class _FilterWidgetState extends State<FilterWidget>
                             ),
                           if (selectedMarkeFilter != 'Keine Auswahl' &&
                               selectedMarkeFilter.isNotEmpty)
+                            // Display the hint text with ellipsis if it's too long
                             Text(
-                              markeHintText,
+                              truncateText(markeHintText), // Truncate text
                               style: const TextStyle(
                                   fontSize: 15, color: Colors.white),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           const SizedBox(width: 8),
                           if (selectedMarkeFilter != 'Keine Auswahl' &&
