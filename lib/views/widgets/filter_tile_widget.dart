@@ -47,7 +47,7 @@ class _FilterWidgetState extends State<FilterWidget>
     if (text.length <= 8) {
       return text;
     } else {
-      return text.substring(0, 8) + '...';
+      return '${text.substring(0, 8)}...';
     }
   }
 
