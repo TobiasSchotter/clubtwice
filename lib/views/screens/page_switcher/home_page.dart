@@ -88,14 +88,14 @@ class _HomePageState extends State<HomePage> {
         );
 
         // Filter out duplicates before adding to the list
-        // Doppelte sicherheit. Kann eigentlich entfernt werden.
-        // List<ArticleWithId> uniqueArticles = additionalArticles
-        //     .where((article) => !articlesWithID
-        //         .any((existingArticle) => existingArticle.id == article.id))
-        //     .toList();
+        // Ansbach fix
+        List<ArticleWithId> uniqueArticles = additionalArticles
+            .where((article) => !articlesWithID
+                .any((existingArticle) => existingArticle.id == article.id))
+            .toList();
 
         setState(() {
-          articlesWithID.addAll(additionalArticles);
+          articlesWithID.addAll(uniqueArticles);
           _limit += additionalArticles.length;
           isLoading = false;
           hasSearchResults = articlesWithID.isNotEmpty;
