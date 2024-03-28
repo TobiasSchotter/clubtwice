@@ -286,7 +286,7 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: const Center(
               child: Text(
-                'Keine passenden Artikel zu deiner Suche.',
+                'Keine passenden Artikel zu deiner Suche. \n Entweder gibt es noch keinen Artikel aus deinem Verein oder du musst deine Filter anpassen.',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 15),
               ),
@@ -320,35 +320,9 @@ class _HomePageState extends State<HomePage> {
               );
             }).toList(),
           ), // To be improved
-          if (!isLoading && articlesWithID.isEmpty && hasSearchResults)
-            buildNoArticlesMessage(),
+
           if (!isLoading && !hasSearchResults) buildNoSearchResults(),
           if (!isLoading && club.isEmpty) buildNoClubMessage(),
-        ],
-      ),
-    );
-  }
-
-  Widget buildNoArticlesMessage() {
-    return Container(
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            height: 160,
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: const Center(
-              child: Text(
-                'Aktuell gibt es noch keine Artikel von deinem Verein.\n Sobald es welche gibt, werden sie hier angezeigt.',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 15),
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
         ],
       ),
     );
