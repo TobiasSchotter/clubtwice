@@ -37,6 +37,9 @@ class _HomePageState extends State<HomePage> {
   String marke = '';
   bool isLoading = false;
 
+  // Define a TextEditingController
+  final TextEditingController _searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -158,20 +161,32 @@ class _HomePageState extends State<HomePage> {
         height: 40,
         child: SearchField(
           hintText: 'Suche Vereinskleidung deines Vereins',
-          onSubmitted: (searchTerm) async {
-            List<ArticleWithId> articleList = await articleService
-                .fetchArticles(searchTerm, club, sportart, typ, groesse, marke,
-                    limit: _limit);
-            setState(() {
-              articlesWithID = articleList;
-              hasSearchResults = articlesWithID.isNotEmpty;
-              _searchTerm = searchTerm;
-            });
+          controller: _searchController,
+          onSubmitted: (searchTerm) {
+            performSearch(searchTerm);
           },
         ),
       ),
       systemOverlayStyle: SystemUiOverlayStyle.light,
     );
+  }
+
+  void performSearch(String searchTerm) async {
+    List<ArticleWithId> articleList = await articleService.fetchArticles(
+      searchTerm,
+      club,
+      sportart,
+      typ,
+      groesse,
+      marke,
+      limit: _limit,
+    );
+    setState(() {
+      articlesWithID = articleList;
+      hasSearchResults = articlesWithID.isNotEmpty;
+    });
+    // Clear the search term from the controller after performing the search
+    _searchController.clear();
   }
 
   Widget buildHeader() {

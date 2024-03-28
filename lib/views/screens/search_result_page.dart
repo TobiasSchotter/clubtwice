@@ -13,7 +13,7 @@ import 'package:clubtwice/core/model/UserModel.dart';
 
 class SearchResultPage extends StatefulWidget {
   final String searchKeyword;
-  SearchResultPage({required this.searchKeyword});
+  const SearchResultPage({super.key, required this.searchKeyword});
 
   @override
   _SearchResultPageState createState() => _SearchResultPageState();
@@ -33,6 +33,9 @@ class _SearchResultPageState extends State<SearchResultPage>
   String groesse = '';
   String marke = '';
   String searchResultText = '';
+
+  // Define a TextEditingController
+  final TextEditingController _searchController = TextEditingController();
 
   final UserService userService = UserService();
   final ArticleService articleService = ArticleService();
@@ -177,6 +180,7 @@ class _SearchResultPageState extends State<SearchResultPage>
           height: 40,
           child: SearchField(
             hintText: 'Suche Vereinskleidung aller Vereine',
+            controller: _searchController,
             onSubmitted: (searchTerm) async {
               List<ArticleWithId> articleList =
                   await articleService.fetchArticlesClubWide(

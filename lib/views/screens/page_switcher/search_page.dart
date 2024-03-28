@@ -21,6 +21,9 @@ class _SearchPageState extends State<SearchPage> {
   final UserService userService = UserService();
   UserModel? userModel;
 
+  // Define a TextEditingController
+  final TextEditingController _searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -78,10 +81,11 @@ class _SearchPageState extends State<SearchPage> {
         centerTitle: false,
         backgroundColor: AppColor.primary,
         elevation: 0,
-        title: Container(
+        title: SizedBox(
           height: 40,
           child: SearchField(
             hintText: 'Suche Vereinskleidung aller Vereine',
+            controller: _searchController,
             onSubmitted: (searchTerm) {
               updateSearchList(searchTerm);
               saveChanges();

@@ -4,10 +4,14 @@ import 'package:flutter/services.dart';
 class SearchField extends StatelessWidget {
   final Function(String) onSubmitted;
   final String hintText;
+  final TextEditingController controller;
 
-  const SearchField(
-      {Key? key, required this.onSubmitted, required this.hintText})
-      : super(key: key);
+  const SearchField({
+    Key? key,
+    required this.onSubmitted,
+    required this.hintText,
+    required this.controller,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +19,8 @@ class SearchField extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(2.5),
         child: TextField(
+          controller:
+              controller, // Assign the TextEditingController to the text field
           onSubmitted: onSubmitted,
           autofocus: false,
           style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.5)),
