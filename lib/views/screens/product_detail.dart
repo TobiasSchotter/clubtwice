@@ -19,6 +19,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../widgets/attribute_widget.dart';
 import '../widgets/date_widget.dart';
+import '../widgets/fullscreen_widget.dart';
 import '../widgets/user_section.dart';
 import 'page_switcher/sell_page.dart';
 
@@ -143,24 +144,48 @@ class _ProductDetailState extends State<ProductDetail> {
                       ),
                       items: widget.article.images.isNotEmpty
                           ? widget.article.images.map((imageUrl) {
-                              return Container(
-                                constraints: BoxConstraints
-                                    .expand(), // Volle Größe des Containers
-                                child: Image.network(
-                                  imageUrl,
-                                  fit: BoxFit.cover, // Bild passend anzeigen
+                              return GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      // Hier wird das FullScreenImageDialog-Widget verwendet, um das Bild anzuzeigen
+                                      return FullScreenImageDialog(
+                                          imageUrl: imageUrl);
+                                    },
+                                  );
+                                },
+                                child: Container(
+                                  constraints: BoxConstraints.expand(),
+                                  child: Image.network(
+                                    imageUrl,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               );
                             }).toList()
                           : [
-                              Container(
-                                constraints: BoxConstraints
-                                    .expand(), // Volle Größe des Containers
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 5.0),
-                                child: Image.asset(
-                                  'assets/images/placeholder.jpg',
-                                  fit: BoxFit.cover,
+                              GestureDetector(
+                                onTap: () {
+                                  // Hier wird das FullScreenImageDialog-Widget verwendet, um das Platzhalterbild anzuzeigen
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return FullScreenImageDialog(
+                                        imageUrl:
+                                            'assets/images/placeholder.jpg',
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Container(
+                                  constraints: BoxConstraints.expand(),
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 5.0),
+                                  child: Image.asset(
+                                    'assets/images/placeholder.jpg',
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
                             ],
