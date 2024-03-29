@@ -16,6 +16,7 @@ import '../../constant/app_button.dart';
 import '../../core/model/Article.dart';
 import 'package:clubtwice/core/model/UserModel.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../widgets/attribute_widget.dart';
 import '../widgets/date_widget.dart';
@@ -786,5 +787,37 @@ class _ProductDetailState extends State<ProductDetail> {
     }
   }
 
-  void articleReport() {}
+  void articleReport() async {
+    String emailAddress = 'abc@clubtwice.de';
+    String subject = 'Artikel melden: ${widget.id}';
+    String body = '''
+    Sehr geehrtes ClubTwice-Team,
+
+    ich möchte einen Artikel melden, der meiner Meinung nach gegen die Nutzungsbedingungen oder Richtlinien von ClubTwice verstößt. Nachfolgend findest du die Details des Artikels:
+
+    Artikel ID: ${widget.id}
+
+    Bitte überprüfen Sie diesen Artikel und ergreifen Sie entsprechende Maßnahmen gemäß den ClubTwice-Richtlinien.
+
+    Vielen Dank für Ihre Unterstützung.
+
+    Mit freundlichen Grüßen,
+    [Ihr Name]
+    ''';
+
+    String url =
+        'mailto:$emailAddress?subject=${Uri.encodeComponent(subject)}&body=${Uri.encodeComponent(body)}';
+
+    try {
+      await launch(url);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('E-Mail-Fenster geöffnet')),
+      );
+    } catch (error) {
+      print('Could not launch $url: $error');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Fehler beim Öffnen des E-Mail-Fensters')),
+      );
+    }
+  }
 }
