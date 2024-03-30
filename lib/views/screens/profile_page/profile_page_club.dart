@@ -48,6 +48,14 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
     }
   }
 
+  String truncateText(String text) {
+    if (text.length <= 15) {
+      return text;
+    } else {
+      return '${text.substring(0, 15)}...';
+    }
+  }
+
   Widget _buildSportSelection(BuildContext context) {
     String displaySport = sport.isEmpty ? 'Keine Auswahl' : sport;
     return GestureDetector(
@@ -84,7 +92,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
             Row(
               children: [
                 Text(
-                  displaySport,
+                  truncateText(displaySport),
                   style: const TextStyle(fontSize: 16, color: AppColor.primary),
                 ),
                 const SizedBox(width: 8),
@@ -134,7 +142,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
             Row(
               children: [
                 Text(
-                  displayClub,
+                  truncateText(displayClub),
                   style: const TextStyle(fontSize: 16, color: AppColor.primary),
                 ),
                 const SizedBox(width: 8),
@@ -184,7 +192,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
         future: _userDataFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(
                 child: Text('Fehler beim Laden der Daten: ${snapshot.error}'));
