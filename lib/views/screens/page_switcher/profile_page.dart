@@ -32,7 +32,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(toolbarHeight: 0, backgroundColor: Colors.blue),
+      appBar: AppBar(toolbarHeight: 0, backgroundColor: AppColor.primary),
       body: Column(
         children: [
           const MyProfileWidget(),
