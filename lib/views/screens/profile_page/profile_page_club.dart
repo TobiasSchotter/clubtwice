@@ -49,10 +49,10 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
   }
 
   String truncateText(String text) {
-    if (text.length <= 15) {
+    if (text.length <= 12) {
       return text;
     } else {
-      return '${text.substring(0, 15)}...';
+      return '${text.substring(0, 12)}...';
     }
   }
 
