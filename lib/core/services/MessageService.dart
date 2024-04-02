@@ -68,12 +68,28 @@ class MessageService {
     ids.sort();
     String chatRoomID = ids.join('_');
 
+    // Update the isRead flag when fetching messages
+    // Use a transaction to ensure atomicity
     return FirebaseFirestore.instance
         .collection('chats')
         .doc(chatRoomID)
         .collection('messages')
         .orderBy('timestamp')
-        .snapshots();
+        .snapshots()
+        .map((querySnapshot) {
+      FirebaseFirestore.instance.runTransaction((transaction) async {
+        // Iterate over each message document in the snapshot
+        for (DocumentSnapshot doc in querySnapshot.docs) {
+          // Check if the message is sent to the current user
+          if (doc['receiverID'] == userID) {
+            // Update the isRead flag to true
+            transaction.update(doc.reference, {'isRead': true});
+          }
+        }
+      });
+      // Return the original query snapshot
+      return querySnapshot;
+    });
   }
 
   Future<List<Message>> getUserChatsData() async {

@@ -163,24 +163,43 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
         ? Alignment.centerRight
         : Alignment.centerLeft;
 
+    bool isMe = data['senderId'] == _firebaseAuth.currentUser!.uid;
+    bool isRead = data['isRead'] ?? false; // Get the isRead flag
+
     return Container(
       alignment: alignment,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
-          crossAxisAlignment: data['senderId'] == _firebaseAuth.currentUser!.uid
-              ? CrossAxisAlignment.end
-              : CrossAxisAlignment.start,
-          mainAxisAlignment: data['senderId'] == _firebaseAuth.currentUser!.uid
-              ? MainAxisAlignment.end
-              : MainAxisAlignment.start,
+          crossAxisAlignment:
+              isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          mainAxisAlignment:
+              isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
           children: [
             _chatBubble(
               message: data['message'],
-              isMe: data['senderId'] == _firebaseAuth.currentUser!.uid,
+              isMe: isMe,
             ),
             const SizedBox(height: 5),
-            Text(formattedTimestamp),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  formattedTimestamp,
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 12,
+                  ),
+                ),
+                if (isMe) SizedBox(width: 5),
+                if (isMe)
+                  Icon(
+                    isRead ? Icons.done_all : Icons.done,
+                    color: isRead ? Colors.blue : Colors.grey,
+                    size: 16,
+                  ),
+              ],
+            ),
           ],
         ),
       ),
