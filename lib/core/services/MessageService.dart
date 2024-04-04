@@ -92,6 +92,17 @@ class MessageService {
     });
   }
 
+  Future<int> getUnreadMessageCount(String articleId, String userId) async {
+    QuerySnapshot unreadMessages = await FirebaseFirestore.instance
+        .collection('messages')
+        .where('articleId', isEqualTo: articleId)
+        .where('receiverId', isEqualTo: userId)
+        .where('isRead', isEqualTo: false)
+        .get();
+
+    return unreadMessages.size;
+  }
+
   Future<List<Message>> getUserChatsData() async {
     List<Message> messageList = [];
     final String currentUserID = _firebaseAuth.currentUser!.uid;

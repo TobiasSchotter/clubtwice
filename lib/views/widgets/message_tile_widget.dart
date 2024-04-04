@@ -11,6 +11,7 @@ class MessageTileWidget extends StatelessWidget {
   final bool isSold;
   final bool isDeleted;
   final bool isReserved;
+  final int unreadMessageCount;
 
   const MessageTileWidget({
     Key? key,
@@ -20,6 +21,7 @@ class MessageTileWidget extends StatelessWidget {
     required this.isSold,
     required this.isDeleted,
     required this.isReserved,
+    required this.unreadMessageCount,
   }) : super(key: key);
 
   @override
@@ -186,6 +188,24 @@ class MessageTileWidget extends StatelessWidget {
               Icons.arrow_forward_ios,
               color: AppColor.border,
             ),
+            if (unreadMessageCount > 0) // Check if there are unread messages
+              Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.red,
+                ),
+                child: Center(
+                  child: Text(
+                    unreadMessageCount.toString(),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
           ],
         ),
       ),

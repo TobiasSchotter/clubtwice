@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:clubtwice/core/model/Message.dart';
 import 'package:clubtwice/core/services/MessageService.dart';
@@ -34,9 +35,9 @@ class _MessagePageState extends State<MessagePage> {
           } else {
             List<Message> listMessage = snapshot.data!;
             if (listMessage.isEmpty) {
-              // Wenn die Liste leer ist, zeige eine Nachricht an
-              return Center(
-                  child: Text('Du hast noch keine Nachrichten erhalten'));
+              return const Center(
+                child: Text('Du hast noch keine Nachrichten erhalten'),
+              );
             } else {
               return ListView.builder(
                 itemCount: listMessage.length,
@@ -50,12 +51,12 @@ class _MessagePageState extends State<MessagePage> {
                     builder: (context, articleSnapshot) {
                       if (articleSnapshot.connectionState ==
                           ConnectionState.waiting) {
-                        return SizedBox(); // Return an empty widget while waiting for the query result
+                        return const SizedBox(); // Return an empty widget while waiting for the query result
                       } else if (articleSnapshot.hasError) {
-                        return SizedBox(); // Handle error state
+                        return const SizedBox(); // Handle error state
                       } else if (!articleSnapshot.hasData ||
                           !articleSnapshot.data!.exists) {
-                        return SizedBox(); // Handle case where the article document does not exist
+                        return const SizedBox(); // Handle case where the article document does not exist
                       } else {
                         // Extract article data from the document snapshot
                         String articleTitle = articleSnapshot.data!['title'];
@@ -68,7 +69,13 @@ class _MessagePageState extends State<MessagePage> {
                                 ? images[0]
                                 : '';
 
-                        // Return the MessageTileWidget with the article data
+                        int unreadCount = 0;
+
+                        if (listMessage[index].senderId !=
+                            FirebaseAuth.instance.currentUser!.uid) {
+                          unreadCount = listMessage[index].isRead ? 0 : 1;
+                        }
+
                         return MessageTileWidget(
                           data: listMessage[index],
                           articleTitle: articleTitle,
@@ -76,6 +83,7 @@ class _MessagePageState extends State<MessagePage> {
                           isSold: isSold,
                           isDeleted: isDeleted,
                           isReserved: isReserved,
+                          unreadMessageCount: unreadCount,
                         );
                       }
                     },
