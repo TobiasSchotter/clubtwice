@@ -20,7 +20,7 @@ class WelcomePage extends StatelessWidget {
               margin: const EdgeInsets.only(top: 150),
               width: MediaQuery.of(context).size.width,
               //height:
-              child: Image.asset('assets/images/logo.png'),
+              child: Image.asset('assets/images/Logo.png'),
             ),
             Column(
               children: [
