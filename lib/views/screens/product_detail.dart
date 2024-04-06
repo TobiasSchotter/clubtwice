@@ -418,7 +418,7 @@ class _ProductDetailState extends State<ProductDetail> {
             child: Container(
               height: 40,
               margin: const EdgeInsets.only(right: 14),
-              child: CustomButton(
+              child: AppButton(
                 onPressed: () {
                   List<dynamic> images = widget.article.images;
                   String imageUrl = (images.isNotEmpty && images[0] != null)

@@ -135,7 +135,7 @@ class _DeletePageState extends State<DeletePage> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  CustomButton(
+                  AppButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },

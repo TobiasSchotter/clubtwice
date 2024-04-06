@@ -222,7 +222,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
                 ),
                 _buildSportSelection(context),
                 const SizedBox(height: 16),
-                CustomButton(
+                AppButton(
                   buttonText: 'Speichern',
                   onPressed: () async {
                     try {

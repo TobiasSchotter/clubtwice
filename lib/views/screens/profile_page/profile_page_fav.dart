@@ -82,9 +82,9 @@ class _ProfilePageFavState extends State<ProfilePageFav> {
                 vertical: 12,
               ),
               height: 44,
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   Text(
                     'Deine Anzeigen',
                     style: TextStyle(
@@ -132,12 +132,12 @@ class _ProfilePageFavState extends State<ProfilePageFav> {
                                       style: TextStyle(fontSize: 15),
                                     ),
                                     const SizedBox(height: 16),
-                                    CustomButton(
+                                    AppButton(
                                       onPressed: () {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    SearchResultPage(
+                                                    const SearchResultPage(
                                                       searchKeyword: '',
                                                     )));
                                       },

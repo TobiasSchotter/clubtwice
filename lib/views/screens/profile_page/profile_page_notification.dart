@@ -214,7 +214,7 @@ class _ProfilePageNotificationState extends State<ProfilePageNotification> {
                 ),
                 _buildSportSelection(context),
                 const SizedBox(height: 16),
-                CustomButton(
+                AppButton(
                   buttonText: 'Speichern',
                   onPressed: () async {
                     try {

@@ -1,9 +1,7 @@
-// ignore_for_file: unused_catch_clause
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/screens/login_register_page/register_page.dart';
 import '../../../constant/app_button.dart';
@@ -17,6 +15,7 @@ class ResetPage extends StatefulWidget {
 
 class _ResetPageState extends State<ResetPage> {
   final TextEditingController _emailController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,12 +24,11 @@ class _ResetPageState extends State<ResetPage> {
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        // ignore: prefer_const_constructors
-        title: Text('Passwort wiederherstellen',
-            style: const TextStyle(
-                color: Colors.black,
-                fontSize: 14,
-                fontWeight: FontWeight.w600)),
+        title: const Text(
+          'Passwort wiederherstellen',
+          style: TextStyle(
+              color: Colors.black, fontSize: 14, fontWeight: FontWeight.w600),
+        ),
         leading: IconButton(
           onPressed: () {
             Navigator.of(context).pop();
@@ -50,8 +48,7 @@ class _ResetPageState extends State<ResetPage> {
                 MaterialPageRoute(builder: (context) => const RegisterPage()));
           },
           style: TextButton.styleFrom(
-            foregroundColor: AppColor.secondary.withOpacity(0.1),
-          ),
+              foregroundColor: AppColor.secondary.withOpacity(0.1)),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -59,18 +56,16 @@ class _ResetPageState extends State<ResetPage> {
               Text(
                 'Du hast noch keinen Account?',
                 style: TextStyle(
-                  color: AppColor.secondary.withOpacity(0.7),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
+                    color: AppColor.secondary.withOpacity(0.7),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500),
               ),
               const Text(
                 ' Anmelden',
                 style: TextStyle(
-                  color: AppColor.primary,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
+                    color: AppColor.primary,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700),
               ),
             ],
           ),
@@ -87,11 +82,10 @@ class _ResetPageState extends State<ResetPage> {
             child: const Text(
               'ClubTwice',
               style: TextStyle(
-                color: AppColor.secondary,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'poppins',
-                fontSize: 20,
-              ),
+                  color: AppColor.secondary,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'poppins',
+                  fontSize: 20),
             ),
           ),
           Container(
@@ -136,8 +130,8 @@ class _ResetPageState extends State<ResetPage> {
           ),
           const SizedBox(height: 16),
 
-          // Sign In button
-          CustomButton(
+          // Send Reset Button
+          AppButton(
             buttonText: 'Senden',
             onPressed: _resetPassword,
           ),
@@ -146,13 +140,30 @@ class _ResetPageState extends State<ResetPage> {
     );
   }
 
+  Future<UserCredential?> _getUserByEmail(String email) async {
+    try {
+      return await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: 'fakepassword');
+    } catch (e) {
+      return null; // Return null if user not found or any other error occurs
+    }
+  }
+
   Future<void> _resetPassword() async {
     try {
-      // Check if the email exists in Firebase
-      final user = await FirebaseAuth.instance
-          .fetchSignInMethodsForEmail(_emailController.text.trim());
-      if (user.isEmpty) {
-        // ignore: use_build_context_synchronously
+      final email = _emailController.text.trim();
+
+      if (email.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Bitte geben Sie Ihre E-Mail-Adresse ein.'),
+          ),
+        );
+        return;
+      }
+
+      final userCredential = await _getUserByEmail(email);
+      if (userCredential == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Es gibt keinen Benutzer mit dieser E-Mail-Adresse.'),
@@ -162,21 +173,19 @@ class _ResetPageState extends State<ResetPage> {
       }
 
       // Send password reset email
-      await FirebaseAuth.instance.sendPasswordResetEmail(
-        email: _emailController.text.trim(),
-      );
-      // ignore: use_build_context_synchronously
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
-            'Eine E-Mail zum Zurücksetzen des Passworts wurde an Ihre E-Mail-Adresse gesendet.',
-          ),
+              'Eine E-Mail zum Zurücksetzen des Passworts wurde an Ihre E-Mail-Adresse gesendet.'),
         ),
       );
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (_) {
       ScaffoldMessenger.of(context).showSnackBar(
-        // ignore: prefer_const_constructors
-        SnackBar(content: Text('Ein Fehler ist aufgetreten.')),
+        const SnackBar(
+          content: Text(
+              'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.'),
+        ),
       );
     }
   }

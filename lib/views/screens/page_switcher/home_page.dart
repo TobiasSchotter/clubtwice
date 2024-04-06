@@ -348,7 +348,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           const SizedBox(height: 16),
-          CustomButton(
+          AppButton(
             onPressed: () {
               Navigator.push(
                 context,

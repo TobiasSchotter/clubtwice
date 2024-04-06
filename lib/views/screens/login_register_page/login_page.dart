@@ -1,13 +1,12 @@
-import 'package:clubtwice/views/screens/login_register_page/pw_reset_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:clubtwice/constant/app_color.dart';
-import 'package:clubtwice/views/screens/page_switcher.dart';
-import 'package:clubtwice/views/screens/login_register_page/register_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-import '../../../constant/app_button.dart';
+import 'package:clubtwice/constant/app_color.dart';
+import 'package:clubtwice/views/screens/login_register_page/register_page.dart';
+import 'package:clubtwice/views/screens/login_register_page/pw_reset_page.dart';
+import 'package:clubtwice/views/screens/page_switcher.dart';
+import 'package:clubtwice/constant/app_button.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,12 +16,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String? errorMessage = '';
-  bool isLogin = true;
-  bool isObscured = true;
-
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool isObscured = true;
 
   Future<void> signInWithEmailAndPassword() async {
     try {
@@ -30,36 +26,24 @@ class _LoginPageState extends State<LoginPage> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-      // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => const PageSwitcher(
-          selectedIndex: 0,
-        ),
+        builder: (context) => const PageSwitcher(selectedIndex: 0),
       ));
     } on FirebaseAuthException catch (e) {
+      String errorMessage =
+          'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.';
       if (e.code == 'wrong-password' || e.code == 'user-not-found') {
-        print('Fehlercode: ${e.code}');
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Die E-Mail-Adresse oder das Passwort ist falsch.'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      } else {
-        print('Unbekannter Fehler: ${e.code}');
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Ein Fehler ist aufgetreten.'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        errorMessage = 'Die E-Mail-Adresse oder das Passwort ist falsch.';
       }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errorMessage), backgroundColor: Colors.red),
+      );
     } catch (e) {
-      print('Unbekannter Fehler: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
-              'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.'),
+            'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.',
+          ),
           backgroundColor: Colors.red,
         ),
       );
@@ -74,12 +58,11 @@ class _LoginPageState extends State<LoginPage> {
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        // ignore: prefer_const_constructors
-        title: Text('Einloggen',
-            style: const TextStyle(
-                color: Colors.black,
-                fontSize: 14,
-                fontWeight: FontWeight.w600)),
+        title: const Text(
+          'Einloggen',
+          style: TextStyle(
+              color: Colors.black, fontSize: 14, fontWeight: FontWeight.w600),
+        ),
         leading: IconButton(
           onPressed: () {
             Navigator.of(context).pop();
@@ -101,25 +84,23 @@ class _LoginPageState extends State<LoginPage> {
           style: TextButton.styleFrom(
             foregroundColor: AppColor.secondary.withOpacity(0.1),
           ),
-          child: Row(
+          child: const Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 'Du hast noch keinen Account?',
                 style: TextStyle(
-                  color: AppColor.secondary.withOpacity(0.7),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
+                    color: AppColor.secondary,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500),
               ),
-              const Text(
+              Text(
                 ' Anmelden',
                 style: TextStyle(
-                  color: AppColor.primary,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
+                    color: AppColor.primary,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700),
               ),
             ],
           ),
@@ -136,11 +117,10 @@ class _LoginPageState extends State<LoginPage> {
             child: const Text(
               'Willkommen zurück',
               style: TextStyle(
-                color: AppColor.secondary,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'poppins',
-                fontSize: 20,
-              ),
+                  color: AppColor.secondary,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'poppins',
+                  fontSize: 20),
             ),
           ),
           Container(
@@ -227,7 +207,7 @@ class _LoginPageState extends State<LoginPage> {
               LengthLimitingTextInputFormatter(30),
             ],
           ),
-          // Forgot Passowrd
+          // Forgot Password
           Container(
             alignment: Alignment.centerRight,
             child: TextButton(
@@ -236,8 +216,7 @@ class _LoginPageState extends State<LoginPage> {
                     MaterialPageRoute(builder: (context) => const ResetPage()));
               },
               style: TextButton.styleFrom(
-                foregroundColor: AppColor.primary.withOpacity(0.1),
-              ),
+                  foregroundColor: AppColor.primary.withOpacity(0.1)),
               child: Text(
                 'Passwort vergessen?',
                 style: TextStyle(
@@ -248,7 +227,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           // Sign In button
-          CustomButton(
+          AppButton(
             buttonText: 'Einloggen',
             onPressed: () {
               if (_emailController.text.isEmpty ||

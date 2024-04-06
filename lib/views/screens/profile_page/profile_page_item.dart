@@ -141,7 +141,7 @@ class _ProfilePageItemState extends State<ProfilePageItem> {
                                       style: TextStyle(fontSize: 15),
                                     ),
                                     const SizedBox(height: 16),
-                                    CustomButton(
+                                    AppButton(
                                       onPressed: () {
                                         Navigator.of(context)
                                             .push(MaterialPageRoute(

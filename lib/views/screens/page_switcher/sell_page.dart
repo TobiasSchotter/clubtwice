@@ -591,7 +591,7 @@ class _SellPageState extends State<SellPage> {
                 ],
               ),
               const SizedBox(height: 16),
-              CustomButton(
+              AppButton(
                 onPressed: () {
                   String title = _titleController.text.trim();
                   String price = _priceController.text.trim();

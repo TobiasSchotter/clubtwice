@@ -19,8 +19,11 @@ class WelcomePage extends StatelessWidget {
             Container(
               margin: const EdgeInsets.only(top: 150),
               width: MediaQuery.of(context).size.width,
-              //height:
-              child: Image.asset('assets/images/Logo.png'),
+              child: Image.asset(
+                'assets/images/Logo.png',
+                semanticLabel:
+                    'ClubTwice Logo', // Add semantic label for accessibility
+              ),
             ),
             Column(
               children: [
@@ -39,7 +42,9 @@ class WelcomePage extends StatelessWidget {
                 Text(
                   'Schenke Vereinskleidung neues Leben',
                   style: TextStyle(
-                      color: AppColor.secondary.withOpacity(0.7), fontSize: 16),
+                    color: AppColor.secondary.withOpacity(0.7),
+                    fontSize: 16,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -48,11 +53,12 @@ class WelcomePage extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               margin: const EdgeInsets.only(bottom: 16),
-              child: CustomButton(
+              child: AppButton(
                 buttonText: 'Los gehts',
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const LoginPage()));
+                    builder: (context) => const LoginPage(),
+                  ));
                 },
               ),
             ),

@@ -185,7 +185,7 @@ class _ProfilePageMailState extends State<ProfilePageMail> {
           ),
           const SizedBox(height: 16),
 
-          CustomButton(
+          AppButton(
             buttonText: 'E-Mail-Adresse ändern',
             onPressed: _saveChanges,
           ),

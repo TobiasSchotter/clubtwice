@@ -214,7 +214,7 @@ class _PWChangePageState extends State<PWChangePage> {
             ],
           ),
           const SizedBox(height: 24),
-          CustomButton(
+          AppButton(
             buttonText: 'Passwort ändern',
             onPressed: _changePassword,
           ),

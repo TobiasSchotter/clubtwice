@@ -185,7 +185,7 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
               ),
               const SizedBox(height: 16),
 
-              CustomButton(
+              AppButton(
                 buttonText: 'Speichern',
                 onPressed: () {
                   final newFirstName = _firstNameController.text.trim();

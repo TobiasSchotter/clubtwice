@@ -8,11 +8,11 @@ class ImagePickerWidget extends StatefulWidget {
   final Function(List<XFile>) onImagesSelected;
   final List<XFile> initialImages;
 
-  ImagePickerWidget({
-    Key? key,
+  const ImagePickerWidget({
+    super.key,
     required this.onImagesSelected,
     required this.initialImages,
-  }) : super(key: key);
+  });
 
   @override
   _ImagePickerWidgetState createState() => _ImagePickerWidgetState();
@@ -113,7 +113,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                   itemCount: selectedImages.length,
                   itemBuilder: (context, index) {
                     return Padding(
-                      padding: EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8.0),
                       child: Stack(
                         children: [
                           Image.file(
@@ -158,7 +158,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
         Container(
           height: 6,
         ),
-        CustomButton(
+        AppButton(
           onPressed: _showImagePickerMenu,
           buttonText: ('Bild auswählen'),
         ),
