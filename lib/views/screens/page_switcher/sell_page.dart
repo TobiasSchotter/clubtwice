@@ -1,20 +1,20 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clubtwice/constant/app_button.dart';
+import 'package:clubtwice/core/model/UserModel.dart';
 import 'package:clubtwice/core/services/option_service.dart';
+import 'package:clubtwice/core/services/user_service.dart';
+import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:clubtwice/views/screens/selection_page/selection_brand_page.dart';
 import 'package:clubtwice/views/screens/selection_page/selection_club_page.dart';
 import 'package:clubtwice/views/screens/selection_page/selection_size_page.dart';
 import 'package:clubtwice/views/screens/selection_page/selection_sport_page.dart';
+import 'package:clubtwice/views/widgets/image_picker_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:clubtwice/constant/app_color.dart';
-import 'package:clubtwice/views/widgets/image_picker_widget.dart';
-import '../../../core/model/UserModel.dart';
-import '../../../core/services/user_service.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
@@ -49,29 +49,22 @@ class SellPage extends StatefulWidget {
 }
 
 class _SellPageState extends State<SellPage> {
-  // final database = FirebaseDatabase.instance.reference();
-
   bool isVerschenkenChecked = false;
-
   String _selectedSport = "";
   String _selectedClub = "";
   List<XFile> selectedImages = [];
   List<XFile> initialImages = [];
-
   User? user = FirebaseAuth.instance.currentUser;
   final UserService userService = UserService();
   UserModel? userModel;
-
   late TextEditingController _titleController;
   late TextEditingController _descriptionController;
   late TextEditingController _priceController;
   late bool _isIndividuallyWearable;
-
   late String _selectedType;
   late String _selectedSize;
   late String _selectedBrand;
   late String _selectedCondition;
-
   bool _imagesDownloaded = false;
 
   @override
@@ -84,8 +77,6 @@ class _SellPageState extends State<SellPage> {
     _priceController =
         TextEditingController(text: widget.price?.toString() ?? '');
     _isIndividuallyWearable = widget.isIndividuallyWearable;
-
-    // Initialize these variables based on optional parameters
     _selectedType = widget.selectedType ?? "Kids";
     _selectedSize = widget.selectedSize ?? '152';
     _selectedBrand = widget.selectedBrand ?? "";
@@ -99,7 +90,6 @@ class _SellPageState extends State<SellPage> {
       _selectedClub = userModel!.club;
       _selectedSport = userModel!.sport;
     });
-    // Call function to download images
     await downloadImages();
     setState(() {
       _imagesDownloaded = true;
@@ -134,7 +124,7 @@ class _SellPageState extends State<SellPage> {
           context,
           MaterialPageRoute(
             builder: (context) => SportSelectionPage(
-              selectedSport: _selectedSport, // Pass the selected sport
+              selectedSport: _selectedSport,
             ),
           ),
         );
@@ -143,8 +133,8 @@ class _SellPageState extends State<SellPage> {
           setState(() {
             _selectedSport = selectedSport;
           });
-          displaySport = (_selectedSport.isEmpty ? 'Keine Auswahl' : sport)
-              as String?; // Aktualisiere die Anzeige des Sports
+          displaySport =
+              (_selectedSport.isEmpty ? 'Keine Auswahl' : sport) as String?;
         }
       },
       child: Container(
@@ -198,8 +188,8 @@ class _SellPageState extends State<SellPage> {
             _selectedClub = selectedClub;
           });
 
-          displayClub = (_selectedClub.isEmpty ? 'Keine Auswahl' : club)
-              as String?; // Aktualisiere die Anzeige des Clubs
+          displayClub =
+              (_selectedClub.isEmpty ? 'Keine Auswahl' : club) as String?;
         }
       },
       child: Container(
@@ -301,7 +291,6 @@ class _SellPageState extends State<SellPage> {
         );
 
         if (selectedBrand != null) {
-          // Nur aktualisieren, wenn eine Auswahl getroffen wurde
           if (selectedBrand.isNotEmpty) {
             setState(() {
               _selectedBrand = selectedBrand;
@@ -309,7 +298,7 @@ class _SellPageState extends State<SellPage> {
             });
           } else {
             setState(() {
-              _selectedBrand = ''; // Leerstring setzen
+              _selectedBrand = '';
               displayBrand = 'Keine Auswahl';
             });
           }
@@ -397,21 +386,17 @@ class _SellPageState extends State<SellPage> {
               ),
               Container(
                 decoration: BoxDecoration(
-                  border: Border.all(
-                      color: Colors.grey), // Add a border to the TextFormField
-                  borderRadius: BorderRadius.circular(
-                      8), // Add rounded corners to the TextFormField
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: TextFormField(
                   controller: _descriptionController,
                   cursorColor: AppColor.primarySoft,
                   decoration: const InputDecoration(
                     hintText: 'z.B. nur einmal getragen',
-                    contentPadding: EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 10), // Adjust padding for the TextFormField
-                    border: InputBorder
-                        .none, // Hide the default border of the TextFormField
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                    border: InputBorder.none,
                   ),
                   maxLines: 3,
                   inputFormatters: [
@@ -512,8 +497,7 @@ class _SellPageState extends State<SellPage> {
                           setState(() {
                             if (_selectedClub.isEmpty) {
                             } else {
-                              _isIndividuallyWearable =
-                                  value; // Wert ändern, wenn ein Verein ausgewählt ist
+                              _isIndividuallyWearable = value;
                             }
                           });
                         },
@@ -581,8 +565,7 @@ class _SellPageState extends State<SellPage> {
                         if (isVerschenkenChecked) {
                           _priceController.text = '0';
                         } else {
-                          _priceController.text =
-                              ''; // Setze den Preiswert auf einen leeren String.
+                          _priceController.text = '';
                         }
                       });
                     },
@@ -651,7 +634,6 @@ class _SellPageState extends State<SellPage> {
     );
   }
 
-  // TODO relocated to service file
   Future<void> saveArticleToFirebase({
     required String title,
     required String description,
