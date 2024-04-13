@@ -10,44 +10,57 @@ class MessageService {
 
   Future sendMessage(
       String receiverID, String message, String articleId) async {
-    //get current user info
-    final String currentUserID = _firebaseAuth.currentUser!.uid;
-    final Timestamp timestamp = Timestamp.now();
+    try {
+      //get current user info
+      final String currentUserID = _firebaseAuth.currentUser!.uid;
+      final Timestamp timestamp = Timestamp.now();
 
-    //fetch receiver username
-    final DocumentSnapshot receiverDoc =
-        await _firestore.collection('users').doc(receiverID).get();
+      //fetch receiver username
+      final DocumentSnapshot receiverDoc =
+          await _firestore.collection('users').doc(receiverID).get();
 
-    //fetch sender username
-    final DocumentSnapshot senderDoc =
-        await _firestore.collection('users').doc(currentUserID).get();
+      // Check if the receiver document exists
+      if (!receiverDoc.exists) {
+        // Handle the case when the receiver document doesn't exist
+        print('Receiver document does not exist.');
+        return; // Exit the function
+      }
 
-    //create a new message
-    Message newMessage = Message(
-      senderId: currentUserID,
-      receiverID: receiverID,
-      message: message,
-      timestamp: timestamp.toDate(),
-      articleId: articleId,
-      receiverUsername: receiverDoc['username'],
-      senderUsername: senderDoc['username'],
-      isRead: false,
-    );
+      //fetch sender username
+      final DocumentSnapshot senderDoc =
+          await _firestore.collection('users').doc(currentUserID).get();
 
-    //construct chatID
-    List<String> ids = [currentUserID, receiverID, articleId];
-    ids.sort();
-    String chatRoomID = ids.join('_');
+      //create a new message
+      Message newMessage = Message(
+        senderId: currentUserID,
+        receiverID: receiverID,
+        message: message,
+        timestamp: timestamp.toDate(),
+        articleId: articleId,
+        receiverUsername: receiverDoc['username'],
+        senderUsername: senderDoc['username'],
+        isRead: false,
+      );
 
-    // add message to firestore subcollection of articles
-    await _firestore
-        .collection('chats')
-        .doc(chatRoomID)
-        .collection('messages')
-        .add(newMessage.toMap());
+      //construct chatID
+      List<String> ids = [currentUserID, receiverID, articleId];
+      ids.sort();
+      String chatRoomID = ids.join('_');
 
-    // Update participants list
-    await _updateParticipants(chatRoomID, currentUserID, receiverID, articleId);
+      // add message to firestore subcollection of articles
+      await _firestore
+          .collection('chats')
+          .doc(chatRoomID)
+          .collection('messages')
+          .add(newMessage.toMap());
+
+      // Update participants list
+      await _updateParticipants(
+          chatRoomID, currentUserID, receiverID, articleId);
+    } catch (error) {
+      // Handle any errors that occur during the process
+      print('Error sending message: $error');
+    }
   }
 
   Future<void> _updateParticipants(String chatRoomID, String currentUserID,

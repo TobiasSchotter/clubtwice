@@ -9,7 +9,6 @@ class MessagePage extends StatefulWidget {
   const MessagePage({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _MessagePageState createState() => _MessagePageState();
 }
 
@@ -42,48 +41,69 @@ class _MessagePageState extends State<MessagePage> {
               return ListView.builder(
                 itemCount: listMessage.length,
                 itemBuilder: (context, index) {
-                  // Perform a query to get the article document by its ID
                   return FutureBuilder<DocumentSnapshot>(
                     future: FirebaseFirestore.instance
-                        .collection('articles')
-                        .doc(listMessage[index].articleId)
+                        .collection('users')
+                        .doc(listMessage[index].receiverID)
                         .get(),
-                    builder: (context, articleSnapshot) {
-                      if (articleSnapshot.connectionState ==
+                    builder: (context, receiverSnapshot) {
+                      if (receiverSnapshot.connectionState ==
                           ConnectionState.waiting) {
-                        return const SizedBox(); // Return an empty widget while waiting for the query result
-                      } else if (articleSnapshot.hasError) {
-                        return const SizedBox(); // Handle error state
-                      } else if (!articleSnapshot.hasData ||
-                          !articleSnapshot.data!.exists) {
-                        return const SizedBox(); // Handle case where the article document does not exist
+                        return const SizedBox();
+                      } else if (receiverSnapshot.hasError) {
+                        return const SizedBox();
+                      } else if (!receiverSnapshot.hasData ||
+                          !receiverSnapshot.data!.exists) {
+                        return const SizedBox();
                       } else {
-                        // Extract article data from the document snapshot
-                        String articleTitle = articleSnapshot.data!['title'];
-                        bool isSold = articleSnapshot.data?['isSold'];
-                        bool isDeleted = articleSnapshot.data?['isDeleted'];
-                        bool isReserved = articleSnapshot.data?['isReserved'];
-                        List<dynamic> images = articleSnapshot.data!['images'];
-                        String imageUrl =
-                            (images.isNotEmpty && images[0] != null)
-                                ? images[0]
-                                : '';
+                        return FutureBuilder<DocumentSnapshot>(
+                          future: FirebaseFirestore.instance
+                              .collection('articles')
+                              .doc(listMessage[index].articleId)
+                              .get(),
+                          builder: (context, articleSnapshot) {
+                            if (articleSnapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const SizedBox();
+                            } else if (articleSnapshot.hasError) {
+                              return const SizedBox();
+                            } else if (!articleSnapshot.hasData ||
+                                !articleSnapshot.data!.exists) {
+                              return const SizedBox();
+                            } else {
+                              String articleTitle =
+                                  articleSnapshot.data!['title'];
+                              bool isSold =
+                                  articleSnapshot.data?['isSold'] ?? false;
+                              bool isDeleted =
+                                  articleSnapshot.data?['isDeleted'] ?? false;
+                              bool isReserved =
+                                  articleSnapshot.data?['isReserved'] ?? false;
+                              List<dynamic> images =
+                                  articleSnapshot.data!['images'];
+                              String imageUrl =
+                                  (images.isNotEmpty && images[0] != null)
+                                      ? images[0]
+                                      : '';
 
-                        int unreadCount = 0;
+                              int unreadCount = 0;
 
-                        if (listMessage[index].senderId !=
-                            FirebaseAuth.instance.currentUser!.uid) {
-                          unreadCount = listMessage[index].isRead ? 0 : 1;
-                        }
+                              if (listMessage[index].senderId !=
+                                  FirebaseAuth.instance.currentUser!.uid) {
+                                unreadCount = listMessage[index].isRead ? 0 : 1;
+                              }
 
-                        return MessageTileWidget(
-                          data: listMessage[index],
-                          articleTitle: articleTitle,
-                          articleImageUrl: imageUrl,
-                          isSold: isSold,
-                          isDeleted: isDeleted,
-                          isReserved: isReserved,
-                          unreadMessageCount: unreadCount,
+                              return MessageTileWidget(
+                                data: listMessage[index],
+                                articleTitle: articleTitle,
+                                articleImageUrl: imageUrl,
+                                isSold: isSold,
+                                isDeleted: isDeleted,
+                                isReserved: isReserved,
+                                unreadMessageCount: unreadCount,
+                              );
+                            }
+                          },
                         );
                       }
                     },
