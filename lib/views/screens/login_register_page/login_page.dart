@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
     } on FirebaseAuthException catch (e) {
       String errorMessage =
           'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.';
-      if (e.code == 'wrong-password' || e.code == 'user-not-found') {
+      if (e.code == "wrong-password" || e.code == "invalid-email") {
         errorMessage = 'Die E-Mail-Adresse oder das Passwort ist falsch.';
       }
       ScaffoldMessenger.of(context).showSnackBar(
@@ -99,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
           // Display a message indicating that the user needs to create an account
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('You need to create an account first.'),
+              content: Text('Du musst zu erst ein Konto erstellen.'),
               backgroundColor: Colors.red,
             ),
           );
