@@ -98,10 +98,14 @@ class _HomePageState extends State<HomePage> {
             .toList();
 
         setState(() {
-          articlesWithID.addAll(uniqueArticles);
+          articlesWithID ??= []; // Ensure articlesWithID is not null
+          if (uniqueArticles != null) {
+            articlesWithID.addAll(uniqueArticles);
+          }
           _limit += additionalArticles.length;
           isLoading = false;
-          hasSearchResults = articlesWithID.isNotEmpty;
+          hasSearchResults =
+              articlesWithID != null && articlesWithID.isNotEmpty;
         });
 
         // Scroll back to the previous position
@@ -322,7 +326,8 @@ class _HomePageState extends State<HomePage> {
           ), // To be improved
 
           if (!isLoading && !hasSearchResults) buildNoSearchResults(),
-          if (!isLoading && club.isEmpty) buildNoClubMessage(),
+          if (!isLoading && (club.isEmpty || club == "Keine Auswahl"))
+            buildNoClubMessage(),
         ],
       ),
     );

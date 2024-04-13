@@ -11,11 +11,18 @@ class UserService {
           .collection('users')
           .doc(userId)
           .get();
-      Map<String, dynamic> userData = snapshot.data() ?? {};
 
-      return UserModel.fromMap(userData);
+      if (snapshot.exists) {
+        // Check if the document exists before trying to access its data
+        Map<String, dynamic> userData = snapshot.data() ?? {};
+        return UserModel.fromMap(userData);
+      } else {
+        // Return null if the document does not exist
+        return null;
+      }
     } else {
-      return null; // Return null instead of throwing an error
+      // Return null if userId is null
+      return null;
     }
   }
 

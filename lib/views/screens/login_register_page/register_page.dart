@@ -1,3 +1,4 @@
+import 'package:clubtwice/views/screens/page_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -6,6 +7,7 @@ import 'package:clubtwice/views/screens/login_register_page/login_page.dart';
 import 'package:clubtwice/views/screens/login_register_page/otp_verification_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../../../constant/app_button.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -25,6 +27,8 @@ class _RegisterPageState extends State<RegisterPage> {
       TextEditingController();
 
   String? _errorMessage;
+
+  final GoogleSignIn googleSignIn = GoogleSignIn();
 
   @override
   Widget build(BuildContext context) {
@@ -277,12 +281,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return Column(
       children: [
         ElevatedButton(
-          onPressed: () {
-            const snackBar = SnackBar(
-              content: Text('Funktion aktuell nicht verfügbar'),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          },
+          onPressed: _signInWithGoogle,
           style: ElevatedButton.styleFrom(
             foregroundColor: AppColor.primary,
             padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 12),
@@ -307,39 +306,74 @@ class _RegisterPageState extends State<RegisterPage> {
             ],
           ),
         ),
-        const SizedBox(height: 5),
-        ElevatedButton(
-          onPressed: () {
-            const snackBar = SnackBar(
-              content: Text('Funktion aktuell nicht verfügbar'),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          },
-          style: ElevatedButton.styleFrom(
-            foregroundColor: AppColor.primary,
-            padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 12),
-            backgroundColor: AppColor.primarySoft,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            elevation: 0,
-            shadowColor: Colors.transparent,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.asset('assets/icons/Google.svg'),
-              const SizedBox(width: 16),
-              const Text(
-                'Registriere dich mit Facebook',
-                style: TextStyle(
-                  color: AppColor.secondary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
       ],
+    );
+  }
+
+  Future<void> _signInWithGoogle() async {
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+      final GoogleSignInAccount? googleSignInAccount =
+          await googleSignIn.signIn();
+      if (googleSignInAccount != null) {
+        final GoogleSignInAuthentication googleSignInAuthentication =
+            await googleSignInAccount.authentication;
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleSignInAuthentication.accessToken,
+          idToken: googleSignInAuthentication.idToken,
+        );
+
+        // Access the email here
+        final googleEmail = googleSignInAccount.email;
+        String? googleName = googleSignInAccount.displayName;
+
+        // Check if the Google email already exists
+        final UserCredential existingUser =
+            await FirebaseAuth.instance.signInWithCredential(credential);
+
+        if (existingUser.additionalUserInfo!.isNewUser) {
+          // User is new, proceed with registration process
+          final UserCredential userCredential =
+              await FirebaseAuth.instance.signInWithCredential(credential);
+          final User? user = userCredential.user;
+
+          // Add user details to Firestore and Firebase Authentication
+          if (user != null) {
+            // if googleName is null, set it to "Nicht festgelegt"
+            googleName ??= "Nicht festgelegt";
+
+            await _addUserDetailsGoogle(user.uid, googleEmail, googleName);
+          }
+
+          // Continue with your registration flow...
+          _navigateToNextPage();
+        } else {
+          // User is already registered
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content:
+                  Text('Ein Konto mit dieser Google-E-Mail existiert bereits.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      print('Error signing in with Google: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Fehler beim Anmelden mit Google.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  void _navigateToNextPage() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => const PageSwitcher(selectedIndex: 0),
+      ),
     );
   }
 
@@ -475,6 +509,19 @@ class _RegisterPageState extends State<RegisterPage> {
       'first Name': _firstNameController.text.trim(),
       'username': _userNameController.text.trim(),
       'email': _emailController.text.trim(),
+      'club': "Keine Auswahl",
+      'sport': "Keine Auswahl",
+      'favorites': <String>[], // Empty list for favorites
+    });
+  }
+
+  Future<void> _addUserDetailsGoogle(
+      String uid, String email, String googleName) async {
+    // Save user details in Firestore
+    await FirebaseFirestore.instance.collection('users').doc(uid).set({
+      'first Name': googleName,
+      'username': googleName,
+      'email': email,
       'club': "Keine Auswahl",
       'sport': "Keine Auswahl",
       'favorites': <String>[], // Empty list for favorites
