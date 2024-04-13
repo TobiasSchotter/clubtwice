@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clubtwice/views/screens/message_detail_page.dart';
 import 'package:clubtwice/views/screens/profile_page/profile_page_item.dart';
@@ -9,9 +10,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:flutter/services.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:clubtwice/core/services/user_service.dart';
 import 'package:share/share.dart';
+
 import '../../constant/app_button.dart';
 import '../../core/model/Article.dart';
 import 'package:clubtwice/core/model/UserModel.dart';
@@ -35,9 +36,6 @@ class ProductDetail extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  // Warning: Invalid use of a private type in a public API.
-  // Theoreitsch müssten _ProductDetailState und ProductDetail in zwei verschiedene Dateien, da (Unterstrich) Aussagt, dass die State private ist. Heißt Es ist nur in dieser File erlaubt aber die
-  // folgende Zeile erstellt einen State des Widgets ProductDetails was quasi eine Reference außerhalb dieser File macht.
   _ProductDetailState createState() => _ProductDetailState();
 }
 
@@ -45,16 +43,13 @@ class _ProductDetailState extends State<ProductDetail> {
   PageController productImageSlider = PageController();
   String profileImageUrl = '';
   String? userName = '';
-  bool isArticleFavorite = false; // Track whether the article is in favorites
+  bool isArticleFavorite = false;
 
-  // Services
   final UserService userService = UserService();
   UserModel? userModel;
   final FirebaseAuth auth = FirebaseAuth.instance;
-  // get current userId
   final String currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
-  // params for additional articles
   int articleCount = 0;
   bool isFetching = true;
   int currentImageIndex = 0;
@@ -68,7 +63,6 @@ class _ProductDetailState extends State<ProductDetail> {
   }
 
   Future<void> loadData() async {
-    // user Daten des Erstellers des Artikels
     userModel = await userService.fetchUserData(widget.article.userId);
 
     setState(() {
@@ -77,14 +71,11 @@ class _ProductDetailState extends State<ProductDetail> {
     });
   }
 
-  // get senderId, receiverId, articleId and receiverUsername
-
   @override
   Widget build(BuildContext context) {
     DateTime dateTime = widget.article.updatedAt.toDate();
 
     return Scaffold(
-      // extendBodyBehindAppBar: true,
       extendBody: true,
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -105,9 +96,7 @@ class _ProductDetailState extends State<ProductDetail> {
           Builder(
             builder: (BuildContext context) {
               if (widget.article.isDeleted) {
-                // Artikel ist gelöscht, also keine Popup-Menüschaltfläche anzeigen
-                return const SizedBox
-                    .shrink(); // oder eine andere leere Widget-Instanz zurückgeben
+                return const SizedBox.shrink();
               } else {
                 return PopupMenuButton<String>(
                   onSelected: (value) => handlePopupMenuSelection(value),
@@ -143,53 +132,7 @@ class _ProductDetailState extends State<ProductDetail> {
                         },
                         viewportFraction: 1.0,
                       ),
-                      items: widget.article.images.isNotEmpty
-                          ? widget.article.images.map((imageUrl) {
-                              return GestureDetector(
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      // Hier wird das FullScreenImageDialog-Widget verwendet, um das Bild anzuzeigen
-                                      return FullScreenImageDialog(
-                                          imageUrl: imageUrl);
-                                    },
-                                  );
-                                },
-                                child: Container(
-                                  constraints: BoxConstraints.expand(),
-                                  child: Image.network(
-                                    imageUrl,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              );
-                            }).toList()
-                          : [
-                              GestureDetector(
-                                onTap: () {
-                                  // Hier wird das FullScreenImageDialog-Widget verwendet, um das Platzhalterbild anzuzeigen
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return FullScreenImageDialog(
-                                        imageUrl:
-                                            'assets/images/placeholder.jpg',
-                                      );
-                                    },
-                                  );
-                                },
-                                child: Container(
-                                  constraints: BoxConstraints.expand(),
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 5.0),
-                                  child: Image.asset(
-                                    'assets/images/placeholder.jpg',
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                            ],
+                      items: buildCarouselItems(),
                     );
                   },
                 ),
@@ -199,23 +142,7 @@ class _ProductDetailState extends State<ProductDetail> {
                   right: 0,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: widget.article.images.isNotEmpty
-                        ? widget.article.images.asMap().entries.map((entry) {
-                            int index = entry.key;
-                            return Container(
-                              width: 8.0,
-                              height: 8.0,
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 4.0),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: currentImageIndex == index
-                                    ? AppColor.primary
-                                    : AppColor.primarySoft,
-                              ),
-                            );
-                          }).toList()
-                        : [],
+                    children: buildCarouselIndicators(),
                   ),
                 ),
               ],
@@ -229,8 +156,6 @@ class _ProductDetailState extends State<ProductDetail> {
           : null,
     );
   }
-
-  // Functions for handling popup menu item selection
 
   void handlePopupMenuSelection(String value) {
     final actions = {
@@ -246,8 +171,6 @@ class _ProductDetailState extends State<ProductDetail> {
       actions[value]!();
     }
   }
-
-  // Helper methods to build UI elements
 
   List<PopupMenuEntry<String>> buildPopupMenuItems() => FirebaseAuth
                   .instance.currentUser?.uid ==
@@ -292,6 +215,70 @@ class _ProductDetailState extends State<ProductDetail> {
           ),
         ];
 
+  List<Widget> buildCarouselItems() {
+    return widget.article.images.isNotEmpty
+        ? widget.article.images.map((imageUrl) {
+            return GestureDetector(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return FullScreenImageDialog(imageUrl: imageUrl);
+                  },
+                );
+              },
+              child: Container(
+                constraints: const BoxConstraints.expand(),
+                child: Image.network(
+                  imageUrl,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            );
+          }).toList()
+        : [
+            GestureDetector(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const FullScreenImageDialog(
+                      imageUrl: 'assets/images/placeholder.jpg',
+                    );
+                  },
+                );
+              },
+              child: Container(
+                constraints: const BoxConstraints.expand(),
+                margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                child: Image.asset(
+                  'assets/images/placeholder.jpg',
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ];
+  }
+
+  List<Widget> buildCarouselIndicators() {
+    return widget.article.images.isNotEmpty
+        ? widget.article.images.asMap().entries.map((entry) {
+            int index = entry.key;
+            return Container(
+              width: 8.0,
+              height: 8.0,
+              margin: const EdgeInsets.symmetric(horizontal: 4.0),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: currentImageIndex == index
+                    ? AppColor.primary
+                    : AppColor.primarySoft,
+              ),
+            );
+          }).toList()
+        : [];
+  }
+
   ListView buildBodyContent(DateTime dateTime) {
     Widget buildSeparator() {
       return Container(
@@ -325,10 +312,11 @@ class _ProductDetailState extends State<ProductDetail> {
                       child: Text(
                         widget.article.title,
                         style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: 'poppins',
-                            color: AppColor.secondary),
+                          fontSize: 24,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: 'poppins',
+                          color: AppColor.secondary,
+                        ),
                       ),
                     )
                   ],
@@ -357,28 +345,22 @@ class _ProductDetailState extends State<ProductDetail> {
               buildSeparator(),
               RichTextBuilderAffiliation.buildRichTextInfo2(widget.article),
               buildSeparator(),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Visibility(
-                    visible: widget.article.description.isNotEmpty,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 3.0),
-                      child: Container(
-                        color: const Color.fromARGB(255, 238, 238,
-                            238), // Set the background color to light gray
-                        child: Text(
-                          widget.article.description,
-                          style: TextStyle(
-                            color: AppColor.secondary.withOpacity(0.7),
-                            fontSize: 18,
-                            height: 150 / 100,
-                          ),
-                        ),
+              Visibility(
+                visible: widget.article.description.isNotEmpty,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                  child: Container(
+                    color: const Color.fromARGB(255, 238, 238, 238),
+                    child: Text(
+                      widget.article.description,
+                      style: TextStyle(
+                        color: AppColor.secondary.withOpacity(0.7),
+                        fontSize: 18,
+                        height: 150 / 100,
                       ),
                     ),
                   ),
-                ],
+                ),
               ),
               Visibility(
                 visible: widget.article.description.isNotEmpty,
@@ -423,7 +405,7 @@ class _ProductDetailState extends State<ProductDetail> {
                   List<dynamic> images = widget.article.images;
                   String imageUrl = (images.isNotEmpty && images[0] != null)
                       ? images[0]
-                      : 'assets/images/placeholder.jpg'; // Placeholder URL
+                      : 'assets/images/placeholder.jpg';
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -445,18 +427,18 @@ class _ProductDetailState extends State<ProductDetail> {
             ),
           ),
           Container(
-              width: 40,
-              margin: const EdgeInsets.only(right: 14),
-              child: IconButton(
-                onPressed: () {
-                  toggleFavoriteArticle(
-                      context); // Pass the current isArticleFavorite value
-                },
-                icon: Icon(
-                  isArticleFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: isArticleFavorite ? Colors.red : null,
-                ),
-              )),
+            width: 40,
+            margin: const EdgeInsets.only(right: 14),
+            child: IconButton(
+              onPressed: () {
+                toggleFavoriteArticle(context);
+              },
+              icon: Icon(
+                isArticleFavorite ? Icons.favorite : Icons.favorite_border,
+                color: isArticleFavorite ? Colors.red : null,
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -499,7 +481,6 @@ class _ProductDetailState extends State<ProductDetail> {
   }
 
   void toggleFavoriteArticle(BuildContext context) async {
-    // Check if the user is authenticated
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -508,15 +489,12 @@ class _ProductDetailState extends State<ProductDetail> {
       return;
     }
 
-    // Get the user's ID
     String userId = user.uid;
 
     try {
-      // Get a reference to the Firestore collection for users
       CollectionReference usersRef =
           FirebaseFirestore.instance.collection('users');
 
-      // Get the user document from Firestore
       DocumentSnapshot userSnapshot = await usersRef.doc(userId).get();
 
       if (userSnapshot.exists && userSnapshot.data() != null) {
@@ -528,50 +506,41 @@ class _ProductDetailState extends State<ProductDetail> {
             userData['favorites'] is List) {
           List<String> favoritesList = List<String>.from(userData['favorites']);
 
-          // Check if the article ID is in the favorites list
           bool isFavorite = favoritesList.contains(widget.id);
 
           if (isFavorite) {
-            // If the article is already in favorites, remove it
             favoritesList.remove(widget.id);
           } else {
-            // If the article is not in favorites, add it
             if (!isFavorite) {
               favoritesList.add(widget.id);
             }
           }
 
-          // Update the user document with the updated favorites list
           await usersRef.doc(userId).set(
             {'favorites': favoritesList},
-            SetOptions(
-                merge: true), // Using merge: true to merge with existing data
+            SetOptions(merge: true),
           );
 
           setState(() {
-            isArticleFavorite = !isFavorite; // Toggle the state value
+            isArticleFavorite = !isFavorite;
           });
         } else {
-          // If the "favorites" field is missing or not a List, add the "favorites" field to the user document
           List<String> favoritesList = [widget.id];
           await usersRef.doc(userId).set(
             {'favorites': favoritesList},
-            SetOptions(
-                merge: true), // Using merge: true to merge with existing data
+            SetOptions(merge: true),
           );
 
           setState(() {
-            isArticleFavorite = true; // Update the state
+            isArticleFavorite = true;
           });
         }
       } else {
-        // If the user document doesn't exist or data is null, handle the error accordingly
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Failed to toggle article favorite')),
         );
       }
     } catch (error) {
-      // Handle any errors that occurred during the process
       print('Error toggling article favorite: $error');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Failed to toggle article favorite')),
@@ -580,25 +549,20 @@ class _ProductDetailState extends State<ProductDetail> {
   }
 
   Future<void> checkAndSetIsArticleFavorite(String articleId) async {
-    // Check if the user is authenticated
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       setState(() {
-        isArticleFavorite =
-            false; // If the user is not logged in, the article cannot be in favorites
+        isArticleFavorite = false;
       });
       return;
     }
 
-    // Get the user's ID
     String userId = user.uid;
 
     try {
-      // Get a reference to the Firestore collection for users
       CollectionReference usersRef =
           FirebaseFirestore.instance.collection('users');
 
-      // Get the user document from Firestore
       DocumentSnapshot userSnapshot = await usersRef.doc(userId).get();
 
       if (userSnapshot.exists && userSnapshot.data() != null) {
@@ -610,15 +574,12 @@ class _ProductDetailState extends State<ProductDetail> {
             userData['favorites'] is List) {
           List<String> favoritesList = List<String>.from(userData['favorites']);
 
-          // Check if the article ID is in the favorites list
           bool isFavorite = favoritesList.contains(articleId);
 
           setState(() {
             isArticleFavorite = isFavorite;
           });
         } else {
-          // If the "favorites" field is missing or not a List, check if it's an empty list
-          // If it's empty, the article is not in favorites; otherwise, it's assumed to be not in favorites
           bool isEmptyFavorites = (userData != null &&
               userData['favorites'] is List &&
               userData['favorites'].isEmpty);
@@ -628,25 +589,22 @@ class _ProductDetailState extends State<ProductDetail> {
         }
       } else {
         setState(() {
-          isArticleFavorite =
-              false; // If the user document doesn't exist or data is null, the article cannot be in favorites
+          isArticleFavorite = false;
         });
       }
     } catch (error) {
       print('Error checking if article is in favorites: $error');
       setState(() {
-        isArticleFavorite =
-            false; // Handle any errors and assume the article is not in favorites
+        isArticleFavorite = false;
       });
     }
   }
 
   void shareArticle() async {
     if (widget.article.images.isNotEmpty) {
-      String imageUrl = widget.article.images[0]; // Erste Bild-URL des Artikels
+      String imageUrl = widget.article.images[0];
 
       try {
-        // Bild lokal speichern
         final tempDir = await getTemporaryDirectory();
         final file = await File('${tempDir.path}/article_image.png').create();
         HttpClient()
@@ -657,13 +615,10 @@ class _ProductDetailState extends State<ProductDetail> {
           response.pipe(file.openWrite());
         });
 
-        // Pfad zur lokal gespeicherten Bild-Datei
         String imagePath = file.path;
 
-        // Beispiel-Link zur App
         String articleLink = 'https://example.com/article/${widget.id}';
 
-        // Artikel teilen mit Bild-Datei und Link
         Share.shareFiles([imagePath],
             text: 'Check diesen Artikel auf ClubTwice ab!\n'
                 '${widget.article.title}\n'
@@ -673,15 +628,13 @@ class _ProductDetailState extends State<ProductDetail> {
         print('Error sharing article: $e');
       }
     } else {
-      // Wenn es keine Bilder gibt, teile den Artikel ohne Bild
-      String articleLink =
-          'https://example.com/article/${widget.id}'; // Beispiel-Link zur App
+      String articleLink = 'https://example.com/article/${widget.id}';
 
       Share.share(
         'Check diesen Artikel auf ClubTwice ab!\n'
         '${widget.article.title}\n'
         '${widget.article.price} €\n'
-        'Link: $articleLink', // Füge den Link zur Nachricht hinzu
+        'Link: $articleLink',
       );
     }
   }
@@ -693,7 +646,6 @@ class _ProductDetailState extends State<ProductDetail> {
 
     try {
       if (field == 'isSold' && value == true) {
-        // Wenn der Artikel als verkauft markiert wird, setze isReserved auf false
         await articlesRef.doc(widget.id).update({
           'isSold': true,
           'isReserved': false,
