@@ -41,70 +41,101 @@ class _MessagePageState extends State<MessagePage> {
               return ListView.builder(
                 itemCount: listMessage.length,
                 itemBuilder: (context, index) {
-                  return FutureBuilder<DocumentSnapshot>(
-                    future: FirebaseFirestore.instance
-                        .collection('users')
-                        .doc(listMessage[index].receiverID)
-                        .get(),
-                    builder: (context, receiverSnapshot) {
-                      if (receiverSnapshot.connectionState ==
+                  // Fetch user data for the receiver
+                  Future<DocumentSnapshot> receiverDocFuture = FirebaseFirestore
+                      .instance
+                      .collection('users')
+                      .doc(listMessage[index].receiverID)
+                      .get();
+
+                  // Fetch user data for the sender
+                  Future<DocumentSnapshot> senderDocFuture = FirebaseFirestore
+                      .instance
+                      .collection('users')
+                      .doc(listMessage[index].senderId)
+                      .get();
+
+                  return FutureBuilder(
+                    future: Future.wait([receiverDocFuture, senderDocFuture]),
+                    builder: (context, userSnapshot) {
+                      if (userSnapshot.connectionState ==
                           ConnectionState.waiting) {
                         return const SizedBox();
-                      } else if (receiverSnapshot.hasError) {
-                        return const SizedBox();
-                      } else if (!receiverSnapshot.hasData ||
-                          !receiverSnapshot.data!.exists) {
+                      } else if (userSnapshot.hasError) {
                         return const SizedBox();
                       } else {
-                        return FutureBuilder<DocumentSnapshot>(
-                          future: FirebaseFirestore.instance
-                              .collection('articles')
-                              .doc(listMessage[index].articleId)
-                              .get(),
-                          builder: (context, articleSnapshot) {
-                            if (articleSnapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const SizedBox();
-                            } else if (articleSnapshot.hasError) {
-                              return const SizedBox();
-                            } else if (!articleSnapshot.hasData ||
-                                !articleSnapshot.data!.exists) {
-                              return const SizedBox();
-                            } else {
-                              String articleTitle =
-                                  articleSnapshot.data!['title'];
-                              bool isSold =
-                                  articleSnapshot.data?['isSold'] ?? false;
-                              bool isDeleted =
-                                  articleSnapshot.data?['isDeleted'] ?? false;
-                              bool isReserved =
-                                  articleSnapshot.data?['isReserved'] ?? false;
-                              List<dynamic> images =
-                                  articleSnapshot.data!['images'];
-                              String imageUrl =
-                                  (images.isNotEmpty && images[0] != null)
-                                      ? images[0]
-                                      : '';
+                        // Extract receiver and sender document snapshots
+                        DocumentSnapshot receiverSnapshot =
+                            userSnapshot.data![0] as DocumentSnapshot;
+                        DocumentSnapshot senderSnapshot =
+                            userSnapshot.data![1] as DocumentSnapshot;
 
-                              int unreadCount = 0;
+                        // Check if both receiver and sender exist
+                        bool bothUsersExist =
+                            receiverSnapshot.exists && senderSnapshot.exists;
 
-                              if (listMessage[index].senderId !=
-                                  FirebaseAuth.instance.currentUser!.uid) {
-                                unreadCount = listMessage[index].isRead ? 0 : 1;
+                        // Only build message tile if both users exist
+                        if (bothUsersExist) {
+                          // Fetch article data
+                          Future<DocumentSnapshot> articleDocFuture =
+                              FirebaseFirestore.instance
+                                  .collection('articles')
+                                  .doc(listMessage[index].articleId)
+                                  .get();
+
+                          return FutureBuilder(
+                            future: articleDocFuture,
+                            builder: (context, articleSnapshot) {
+                              if (articleSnapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const SizedBox();
+                              } else if (articleSnapshot.hasError) {
+                                return const SizedBox();
+                              } else if (!articleSnapshot.hasData ||
+                                  !articleSnapshot.data!.exists) {
+                                return const SizedBox();
+                              } else {
+                                // Extract article data
+                                String articleTitle =
+                                    articleSnapshot.data!['title'];
+                                bool isSold =
+                                    articleSnapshot.data?['isSold'] ?? false;
+                                bool isDeleted =
+                                    articleSnapshot.data?['isDeleted'] ?? false;
+                                bool isReserved =
+                                    articleSnapshot.data?['isReserved'] ??
+                                        false;
+                                List<dynamic> images =
+                                    articleSnapshot.data!['images'];
+                                String imageUrl =
+                                    (images.isNotEmpty && images[0] != null)
+                                        ? images[0]
+                                        : '';
+
+                                int unreadCount = 0;
+
+                                if (listMessage[index].senderId !=
+                                    FirebaseAuth.instance.currentUser!.uid) {
+                                  unreadCount =
+                                      listMessage[index].isRead ? 0 : 1;
+                                }
+
+                                return MessageTileWidget(
+                                  data: listMessage[index],
+                                  articleTitle: articleTitle,
+                                  articleImageUrl: imageUrl,
+                                  isSold: isSold,
+                                  isDeleted: isDeleted,
+                                  isReserved: isReserved,
+                                  unreadMessageCount: unreadCount,
+                                );
                               }
-
-                              return MessageTileWidget(
-                                data: listMessage[index],
-                                articleTitle: articleTitle,
-                                articleImageUrl: imageUrl,
-                                isSold: isSold,
-                                isDeleted: isDeleted,
-                                isReserved: isReserved,
-                                unreadMessageCount: unreadCount,
-                              );
-                            }
-                          },
-                        );
+                            },
+                          );
+                        } else {
+                          // Don't build message tile if either user doesn't exist
+                          return const SizedBox();
+                        }
                       }
                     },
                   );
