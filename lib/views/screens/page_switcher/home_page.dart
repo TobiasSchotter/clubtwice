@@ -98,14 +98,10 @@ class _HomePageState extends State<HomePage> {
             .toList();
 
         setState(() {
-          articlesWithID ??= []; // Ensure articlesWithID is not null
-          if (uniqueArticles != null) {
-            articlesWithID.addAll(uniqueArticles);
-          }
+          articlesWithID.addAll(uniqueArticles);
           _limit += additionalArticles.length;
           isLoading = false;
-          hasSearchResults =
-              articlesWithID != null && articlesWithID.isNotEmpty;
+          hasSearchResults = articlesWithID.isNotEmpty;
         });
 
         // Scroll back to the previous position

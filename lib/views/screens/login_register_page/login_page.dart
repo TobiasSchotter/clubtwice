@@ -6,7 +6,6 @@ import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/screens/login_register_page/register_page.dart';
 import 'package:clubtwice/views/screens/login_register_page/pw_reset_page.dart';
 import 'package:clubtwice/views/screens/page_switcher.dart';
-import 'package:clubtwice/constant/app_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatefulWidget {
