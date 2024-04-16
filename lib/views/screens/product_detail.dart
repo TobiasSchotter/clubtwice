@@ -511,9 +511,7 @@ class _ProductDetailState extends State<ProductDetail> {
           if (isFavorite) {
             favoritesList.remove(widget.id);
           } else {
-            if (!isFavorite) {
-              favoritesList.add(widget.id);
-            }
+            favoritesList.add(widget.id);
           }
 
           await usersRef.doc(userId).set(
