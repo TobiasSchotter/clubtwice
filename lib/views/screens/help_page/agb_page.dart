@@ -17,7 +17,7 @@ class _AgbPageState extends State<AgbPage> {
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: const Text('AGB',
+        title: const Text('AGB test',
             style: TextStyle(
                 color: Colors.black,
                 fontSize: 14,
