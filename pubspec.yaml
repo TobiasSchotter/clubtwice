@@ -38,7 +38,7 @@ dependencies:
   flutter_svg: ^2.0.9
   smooth_page_indicator: ^1.0.1
   pin_code_fields: ^8.0.1
-  money2: ^4.1.0
+  money2: ^5.0.1
   image_picker: ^0.8.7
   firebase_core: ^2.8.0
   firebase_auth: ^4.3.0
