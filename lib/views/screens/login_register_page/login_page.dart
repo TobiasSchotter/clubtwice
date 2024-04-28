@@ -335,21 +335,15 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           const SizedBox(height: 32),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 48,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              color: AppColor.primary, // Set the background color here
-            ),
-            child: ElevatedButton(
+            ElevatedButton(
               onPressed: signInWithEmailAndPassword,
               style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 12),
                 backgroundColor: AppColor.primary,
-                elevation: 0, // Remove elevation
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
+                  borderRadius: BorderRadius.circular(16)),
+                elevation: 0, // Remove elevation
+                shadowColor: Colors.transparent,
               ),
               child: const Text(
                 'Einloggen',
@@ -360,7 +354,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-          ),
+          
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: _signInWithGoogle,
