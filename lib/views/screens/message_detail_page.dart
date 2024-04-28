@@ -197,28 +197,21 @@ if (hoursDifference < 4) {
   formattedTimestamp = 'vor 48 Stunden';
 } else {
   // If the message is older than 48 hours, format the timestamp normally
-  formattedTimestamp = DateFormat('dd MMM yyyy').format(timestamp);
+  formattedTimestamp = DateFormat('dd. MMM. yyyy').format(timestamp);
 }
 
   return Column(
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
       if (shouldShowTimestamp)
-        Container(
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          padding: const EdgeInsets.all(6),
-          decoration: BoxDecoration(
-            color: Colors.grey.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Text(
+        Text(
             formattedTimestamp,
             style: const TextStyle(
               color: Colors.grey,
               fontSize: 12,
             ),
           ),
-        ),
+        
       Container(
         alignment: alignment,
         child: Padding(
@@ -232,19 +225,10 @@ if (hoursDifference < 4) {
               _chatBubble(
                 message: data['message'],
                 isMe: isMe,
+                 isRead: isRead,
               ),
-              const SizedBox(height: 5),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  if (isMe)
-                    Icon(
-                      isRead ? Icons.done_all : Icons.done,
-                      color: isRead ? Colors.blue : Colors.grey,
-                      size: 16,
-                    ),
-                ],
-              ),
+              const SizedBox(height: 1),
+              
             ],
           ),
         ),
@@ -359,23 +343,50 @@ bool _shouldShowTimestamp(DateTime timestamp) {
     return article;
   }
 
-  Widget _chatBubble({required String message, required bool isMe}) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: isMe ? Colors.blue : Colors.grey,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        message,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 16,
+
+Widget _chatBubble({required String message, required bool isMe, required bool isRead}) {
+  return Container(
+    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+    decoration: BoxDecoration(
+      color: isMe ? Color.fromARGB(255, 211, 208, 208) : Colors.white,
+      borderRadius: BorderRadius.circular(8),
+      border: isMe ? null : Border.all(color: Colors.grey, width: 0.5),
+    ),
+    constraints: BoxConstraints(
+      maxWidth: MediaQuery.of(context).size.width * 0.7,
+    ),
+    child: Stack(
+      alignment: Alignment.bottomRight,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '$message     ',
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+              ),
+            ),
+          ],
         ),
-      ),
-    );
-  }
-}
+        if (isMe) // Zeige Häkchen nur für ausgehende Nachrichten
+          Positioned(
+            bottom: 0,
+            right:0,
+            child: Icon(
+              isRead ? Icons.done_all : Icons.done,
+              color: isRead ? Colors.blue : Colors.grey,
+              size: 16,
+            ),
+          ),
+      ],
+    ),
+  );
+}}
+
+
 
 class ParagraphLimitingTextInputFormatter extends TextInputFormatter {
   final int maxParagraphs;
