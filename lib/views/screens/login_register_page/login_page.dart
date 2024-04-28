@@ -21,34 +21,54 @@ class _LoginPageState extends State<LoginPage> {
   bool isObscured = true;
 
   Future<void> signInWithEmailAndPassword() async {
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => const PageSwitcher(selectedIndex: 0),
-      ));
-    } on FirebaseAuthException catch (e) {
-      String errorMessage =
-          'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.';
-      if (e.code == "wrong-password" || e.code == "invalid-email") {
-        errorMessage = 'Die E-Mail-Adresse oder das Passwort ist falsch.';
-      }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(errorMessage), backgroundColor: Colors.red),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.',
-          ),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
+  // Überprüfen, ob E-Mail und Passwort eingegeben wurden
+  if (_emailController.text.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Bitte E-Mail eingeben.'),
+        backgroundColor: Colors.red,
+      ),
+    );
+    return;
   }
+  if (_passwordController.text.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Bitte Passwort eingeben.'),
+        backgroundColor: Colors.red,
+      ),
+    );
+    return;
+  }
+
+  try {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: _emailController.text,
+      password: _passwordController.text,
+    );
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) => const PageSwitcher(selectedIndex: 0),
+    ));
+  } on FirebaseAuthException catch (e) {
+    String errorMessage =
+        'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.';
+    if (e.code == "wrong-password" || e.code == "invalid-email") {
+      errorMessage = 'Die E-Mail-Adresse oder das Passwort ist falsch.';
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(errorMessage), backgroundColor: Colors.red),
+    );
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.',
+        ),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+}
 
   Future<bool> checkIfUserIsRegistered(String email) async {
     try {
