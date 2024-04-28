@@ -43,6 +43,7 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final ScrollController _scrollController = ScrollController();
   final ArticleService articleService = ArticleService();
+   DateTime? _lastMessageTime;
 
   @override
   Widget build(BuildContext context) {
@@ -152,59 +153,119 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
         : widget.articleTitle;
   }
 
-  Widget _buildMessageItem(DocumentSnapshot document) {
-    Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+Widget _buildMessageItem(DocumentSnapshot document) {
+  Map<String, dynamic> data = document.data() as Map<String, dynamic>;
 
-    String isoTimestampString = data['timestamp'];
-    DateTime timestamp = DateTime.parse(isoTimestampString);
-    String formattedTimestamp = DateFormat('dd MMM HH:mm').format(timestamp);
+  String isoTimestampString = data['timestamp'];
+  DateTime timestamp = DateTime.parse(isoTimestampString);
 
-    var alignment = data['senderId'] == _firebaseAuth.currentUser!.uid
-        ? Alignment.centerRight
-        : Alignment.centerLeft;
+  var alignment = data['senderId'] == _firebaseAuth.currentUser!.uid
+      ? Alignment.centerRight
+      : Alignment.centerLeft;
 
-    bool isMe = data['senderId'] == _firebaseAuth.currentUser!.uid;
-    bool isRead = data['isRead'] ?? false; // Get the isRead flag
+  bool isMe = data['senderId'] == _firebaseAuth.currentUser!.uid;
+  bool isRead = data['isRead'] ?? false; // Get the isRead flag
 
-    return Container(
-      alignment: alignment,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment:
-              isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-          mainAxisAlignment:
-              isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
-          children: [
-            _chatBubble(
-              message: data['message'],
-              isMe: isMe,
+  bool shouldShowTimestamp = _shouldShowTimestamp(timestamp);
+  if (shouldShowTimestamp) {
+    _lastMessageTime = timestamp;
+  }
+
+ String formattedTimestamp;
+
+// Calculate the time difference in hours
+int hoursDifference = DateTime.now().difference(timestamp).inHours;
+
+// Check the time difference and set the formatted timestamp accordingly
+if (hoursDifference < 4) {
+  formattedTimestamp = 'vor 4 Stunden';
+} else if (hoursDifference < 8) {
+  formattedTimestamp = 'vor 8 Stunden';
+} else if (hoursDifference < 12) {
+  formattedTimestamp = 'vor 12 Stunden';
+} else if (hoursDifference < 18) {
+  formattedTimestamp = 'vor 18 Stunden';
+} else if (hoursDifference < 24) {
+  formattedTimestamp = 'vor 24 Stunden';
+} else if (hoursDifference < 30) {
+  formattedTimestamp = 'vor 30 Stunden';
+} else if (hoursDifference < 36) {
+  formattedTimestamp = 'vor 36 Stunden';
+} else if (hoursDifference < 40) {
+  formattedTimestamp = 'vor 40 Stunden';
+} else if (hoursDifference < 48) {
+  formattedTimestamp = 'vor 48 Stunden';
+} else {
+  // If the message is older than 48 hours, format the timestamp normally
+  formattedTimestamp = DateFormat('dd MMM yyyy').format(timestamp);
+}
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      if (shouldShowTimestamp)
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            color: Colors.grey.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Text(
+            formattedTimestamp,
+            style: const TextStyle(
+              color: Colors.grey,
+              fontSize: 12,
             ),
-            const SizedBox(height: 5),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  formattedTimestamp,
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12,
-                  ),
-                ),
-                if (isMe) SizedBox(width: 5),
-                if (isMe)
-                  Icon(
-                    isRead ? Icons.done_all : Icons.done,
-                    color: isRead ? Colors.blue : Colors.grey,
-                    size: 16,
-                  ),
-              ],
-            ),
-          ],
+          ),
+        ),
+      Container(
+        alignment: alignment,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment:
+                isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            mainAxisAlignment:
+                isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+            children: [
+              _chatBubble(
+                message: data['message'],
+                isMe: isMe,
+              ),
+              const SizedBox(height: 5),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  if (isMe)
+                    Icon(
+                      isRead ? Icons.done_all : Icons.done,
+                      color: isRead ? Colors.blue : Colors.grey,
+                      size: 16,
+                    ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
-    );
+    ],
+  );
+}
+
+
+bool _shouldShowTimestamp(DateTime timestamp) {
+  if (_lastMessageTime == null ||
+      timestamp.day != _lastMessageTime!.day ||
+      timestamp.month != _lastMessageTime!.month ||
+      timestamp.year != _lastMessageTime!.year) {
+    // Show timestamp if it's the first message or if the last message was sent on a different day
+    return true;
   }
+  return false;
+}
+
+
 
 // user input
   Widget _buildMessageInput() {
