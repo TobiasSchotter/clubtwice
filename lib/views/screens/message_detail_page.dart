@@ -345,46 +345,46 @@ bool _shouldShowTimestamp(DateTime timestamp) {
 
 
 Widget _chatBubble({required String message, required bool isMe, required bool isRead}) {
-  return Container(
-    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-    decoration: BoxDecoration(
-      color: isMe ? Color.fromARGB(255, 211, 208, 208) : Colors.white,
-      borderRadius: BorderRadius.circular(8),
-      border: isMe ? null : Border.all(color: Colors.grey, width: 0.5),
-    ),
-    constraints: BoxConstraints(
-      maxWidth: MediaQuery.of(context).size.width * 0.7,
-    ),
-    child: Stack(
-      alignment: Alignment.bottomRight,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              '$message     ',
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-              ),
-            ),
-          ],
+  return Column(
+    crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+    children: [
+      Container(
+        margin: EdgeInsets.only(bottom: 4), // Abstand zwischen der ChatBubble und dem "Gelesen"-Text
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        decoration: BoxDecoration(
+          color: isMe ? Color.fromARGB(255, 211, 208, 208) : Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: isMe ? null : Border.all(color: Colors.grey, width: 0.5),
         ),
-        if (isMe) // Zeige Häkchen nur für ausgehende Nachrichten
-          Positioned(
-            bottom: 0,
-            right:0,
-            child: Icon(
-              isRead ? Icons.done_all : Icons.done,
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width * 0.7,
+        ),
+        child: Text(
+          '$message',
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+          ),
+        ),
+      ),
+      if (isMe && isRead) // Zeige "gelesen" nur für ausgehende Nachrichten
+        Padding(
+          padding: const EdgeInsets.only(right: 8), // Abstand zwischen der ChatBubble und dem "Gelesen"-Text
+          child: Text(
+            "Gelesen",
+            style: TextStyle(
               color: isRead ? Colors.blue : Colors.grey,
-              size: 16,
+              fontSize: 12,
             ),
           ),
-      ],
-    ),
+        ),
+    ],
   );
 }}
+
+
+
+
 
 
 
