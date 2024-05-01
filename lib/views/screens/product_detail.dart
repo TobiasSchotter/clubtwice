@@ -201,15 +201,12 @@ Widget build(BuildContext context) {
                 visible: widget.article.description.isNotEmpty,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 3.0),
-                  child: Container(
-                    color: const Color.fromARGB(255, 238, 238, 238),
-                    child: Text(
-                      widget.article.description,
-                      style: TextStyle(
-                        color: AppColor.secondary.withOpacity(0.7),
-                        fontSize: 18,
-                        height: 150 / 100,
-                      ),
+                  child: Text(
+                    widget.article.description,
+                    style: TextStyle(
+                      color: AppColor.secondary.withOpacity(0.7),
+                      fontSize: 18,
+                      height: 150 / 100,
                     ),
                   ),
                 ),

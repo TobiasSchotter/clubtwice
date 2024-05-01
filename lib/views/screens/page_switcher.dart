@@ -38,26 +38,6 @@ class _PageSwitcherState extends State<PageSwitcher> {
     }
   }
 
-  //  void _onDestinationSelected(int index) {
-  //  if (_selectedIndex != index) {
-  //    setState(() {
-  //     _selectedIndex = index;
-  //   });
-  //  }
-  // Seitenwechsel nur wenn auf den Index für den Inbox-Bildschirm geklickt wird
-  //  if (index == 3) {
-  //    Navigator.of(context).pushAndRemoveUntil(
-  //      MaterialPageRoute(
-  //      builder: (context) => const PageSwitcher(
-  // selectedIndex: index,
-  //         selectedIndex: 3,
-  //     ),
-  //     ),
-  //    (route) => false,
-  //   );
-  //  }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
