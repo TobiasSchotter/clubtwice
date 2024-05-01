@@ -349,7 +349,7 @@ Widget _chatBubble({required String message, required bool isMe, required bool i
     crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
     children: [
       Container(
-        margin: EdgeInsets.only(bottom: 4), // Abstand zwischen der ChatBubble und dem "Gelesen"-Text
+        margin: EdgeInsets.only(bottom: 2), // Kleinerer Abstand zwischen den ChatBubbles
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         decoration: BoxDecoration(
           color: isMe ? Color.fromARGB(255, 211, 208, 208) : Colors.white,
@@ -369,7 +369,7 @@ Widget _chatBubble({required String message, required bool isMe, required bool i
       ),
       if (isMe && isRead) // Zeige "gelesen" nur für ausgehende Nachrichten
         Padding(
-          padding: const EdgeInsets.only(right: 8), // Abstand zwischen der ChatBubble und dem "Gelesen"-Text
+          padding: const EdgeInsets.only(right: 2), // Abstand zwischen der ChatBubble und dem "Gelesen"-Text
           child: Text(
             "Gelesen",
             style: TextStyle(
@@ -380,14 +380,7 @@ Widget _chatBubble({required String message, required bool isMe, required bool i
         ),
     ],
   );
-}}
-
-
-
-
-
-
-
+}} 
 class ParagraphLimitingTextInputFormatter extends TextInputFormatter {
   final int maxParagraphs;
   final int maxCharacters;
