@@ -71,91 +71,171 @@ class _ProductDetailState extends State<ProductDetail> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    DateTime dateTime = widget.article.updatedAt.toDate();
 
-    return Scaffold(
-      extendBody: true,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(widget.article.title),
-        foregroundColor: Colors.black,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          icon: const Icon(Icons.arrow_back_outlined),
-          color: Colors.black,
-          alignment: Alignment.center,
-        ),
-        actions: [
-          Builder(
-            builder: (BuildContext context) {
-              if (widget.article.isDeleted) {
-                return const SizedBox.shrink();
-              } else {
-                return PopupMenuButton<String>(
-                  onSelected: (value) => handlePopupMenuSelection(value),
-                  itemBuilder: (BuildContext context) => buildPopupMenuItems(),
-                  icon: const Icon(Icons.more_horiz),
-                );
-              }
-            },
-          ),
-        ],
-        systemOverlayStyle: SystemUiOverlayStyle.light,
+@override
+Widget build(BuildContext context) {
+  DateTime dateTime = widget.article.updatedAt.toDate();
+
+  return Scaffold(
+    extendBodyBehindAppBar: true,
+    appBar: AppBar(
+      automaticallyImplyLeading: false,
+      centerTitle: true,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      foregroundColor: Colors.black,
+      leading: IconButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        icon: const Icon(Icons.arrow_back_outlined),
+        color: Colors.black,
+        alignment: Alignment.center,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+      actions: [
+        Builder(
+          builder: (BuildContext context) {
+            if (widget.article.isDeleted) {
+              return const SizedBox.shrink();
+            } else {
+              return PopupMenuButton<String>(
+                onSelected: (value) => handlePopupMenuSelection(value),
+                itemBuilder: (BuildContext context) => buildPopupMenuItems(),
+                icon: const Icon(Icons.more_horiz),
+              );
+            }
+          },
+        ),
+      ],
+      systemOverlayStyle: SystemUiOverlayStyle.light,
+    ),
+    body: ListView(
+      padding: EdgeInsets.zero, // Setze padding auf EdgeInsets.zero
+      shrinkWrap: true,
+      children: [
+        Stack(
           children: [
-            Stack(
-              children: [
-                Builder(
-                  builder: (BuildContext context) {
-                    bool enableInfiniteScroll =
-                        widget.article.images.length > 1;
+            Builder(
+              builder: (BuildContext context) {
+                bool enableInfiniteScroll =
+                    widget.article.images.length > 1;
 
-                    return CarouselSlider(
-                      options: CarouselOptions(
-                        autoPlay: true,
-                        height: 500,
-                        enableInfiniteScroll: enableInfiniteScroll,
-                        onPageChanged: (index, reason) {
-                          setState(() {
-                            currentImageIndex = index;
-                          });
-                        },
-                        viewportFraction: 1.0,
-                      ),
-                      items: buildCarouselItems(),
-                    );
-                  },
-                ),
-                Positioned(
-                  top: 480.0,
-                  left: 0,
-                  right: 0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: buildCarouselIndicators(),
+                return CarouselSlider(
+                  options: CarouselOptions(
+                    autoPlay: true,
+                    height: 500,
+                    enableInfiniteScroll: enableInfiniteScroll,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        currentImageIndex = index;
+                      });
+                    },
+                    viewportFraction: 1.0,
                   ),
-                ),
-              ],
+                  items: buildCarouselItems(),
+                );
+              },
             ),
-            buildBodyContent(dateTime),
+            Positioned(
+              top: 470.0,
+              left: 0,
+              right: 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: buildCarouselIndicators(),
+              ),
+            ),
           ],
         ),
-      ),
-      bottomNavigationBar: widget.article.userId != currentUserId
-          ? buildBottomNavigationBar(context)
-          : null,
-    );
-  }
+        Container(
+          width: MediaQuery.of(context).size.width,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(bottom: 4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        widget.article.title,
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: 'poppins',
+                          color: AppColor.secondary,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 2),
+                child: Text(
+                  widget.article.price == 0
+                      ? "Zu verschenken"
+                      : "${widget.article.price} €",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Poppins',
+                    color: widget.article.price == 0
+                        ? Colors.green
+                        : AppColor.primary,
+                  ),
+                ),
+              ),
+              buildSeparator(),
+              buildUserProfileSection(),
+              buildSeparator(),
+              RichTextBuilderAttribute.buildRichTextInfo(widget.article),
+              buildSeparator(),
+              RichTextBuilderAffiliation.buildRichTextInfo2(widget.article),
+              buildSeparator(),
+              Visibility(
+                visible: widget.article.description.isNotEmpty,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                  child: Container(
+                    color: const Color.fromARGB(255, 238, 238, 238),
+                    child: Text(
+                      widget.article.description,
+                      style: TextStyle(
+                        color: AppColor.secondary.withOpacity(0.7),
+                        fontSize: 18,
+                        height: 150 / 100,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: widget.article.description.isNotEmpty,
+                child: Container(
+                  height: 1,
+                  color: Colors.grey,
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                ),
+              ),
+              DateWidget(dateTime: dateTime),
+            ],
+          ),
+        ),
+      ],
+    ),
+    bottomNavigationBar: widget.article.userId != currentUserId
+        ? buildBottomNavigationBar(context)
+        : null,
+  );
+}
+
+
+
 
   void handlePopupMenuSelection(String value) {
     final actions = {
@@ -279,104 +359,6 @@ class _ProductDetailState extends State<ProductDetail> {
         : [];
   }
 
-  ListView buildBodyContent(DateTime dateTime) {
-    Widget buildSeparator() {
-      return Container(
-        height: 2,
-        decoration: BoxDecoration(
-          color: Colors.grey,
-          borderRadius: BorderRadius.circular(4),
-        ),
-        margin: const EdgeInsets.symmetric(vertical: 8),
-      );
-    }
-
-    return ListView(
-      shrinkWrap: true,
-      physics: const BouncingScrollPhysics(),
-      children: [
-        Container(
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(bottom: 4),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        widget.article.title,
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: 'poppins',
-                          color: AppColor.secondary,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 2),
-                child: Text(
-                  widget.article.price == 0
-                      ? "Zu verschenken"
-                      : "${widget.article.price} €",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: 'Poppins',
-                    color: widget.article.price == 0
-                        ? Colors.green
-                        : AppColor.primary,
-                  ),
-                ),
-              ),
-              buildSeparator(),
-              buildUserProfileSection(),
-              buildSeparator(),
-              RichTextBuilderAttribute.buildRichTextInfo(widget.article),
-              buildSeparator(),
-              RichTextBuilderAffiliation.buildRichTextInfo2(widget.article),
-              buildSeparator(),
-              Visibility(
-                visible: widget.article.description.isNotEmpty,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 3.0),
-                  child: Container(
-                    color: const Color.fromARGB(255, 238, 238, 238),
-                    child: Text(
-                      widget.article.description,
-                      style: TextStyle(
-                        color: AppColor.secondary.withOpacity(0.7),
-                        fontSize: 18,
-                        height: 150 / 100,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Visibility(
-                visible: widget.article.description.isNotEmpty,
-                child: Container(
-                  height: 1,
-                  color: Colors.grey,
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                ),
-              ),
-              DateWidget(dateTime: dateTime),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
 
   Widget buildBottomNavigationBar(context) {
     return Container(
@@ -743,7 +725,7 @@ class _ProductDetailState extends State<ProductDetail> {
     String body = '''
     Sehr geehrtes ClubTwice-Team,
 
-    ich möchte einen Artikel melden, der meiner Meinung nach gegen die Nutzungsbedingungen oder Richtlinien von ClubTwice verstößt. Nachfolgend findest du die Details des Artikels:
+    ich möchte einen Artikel melden, der meiner Meinung nach gegen die Nutzungsbedingungen oder Richtlinien von ClubTwice verstößt. Nachfolgend findest Sie die Details des Artikels:
 
     Artikel ID: ${widget.id}
 
@@ -770,4 +752,15 @@ class _ProductDetailState extends State<ProductDetail> {
       );
     }
   }
+  
+  buildSeparator() {
+      return Container(
+        height: 2,
+        decoration: BoxDecoration(
+          color: Colors.grey,
+          borderRadius: BorderRadius.circular(4),
+        ),
+        margin: const EdgeInsets.symmetric(vertical: 8),
+      );
+    }
 }
