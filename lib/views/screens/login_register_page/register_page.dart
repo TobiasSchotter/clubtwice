@@ -382,6 +382,22 @@ class _RegisterPageState extends State<RegisterPage> {
       // Validate form fields
       if (!_validateFields()) return;
 
+      // Check if the username is already taken
+      bool isUsernameTaken =
+          await _isUsernameTaken(_userNameController.text.trim());
+      if (isUsernameTaken) {
+        setState(() {
+          _errorMessage = 'Der Benutzername ist bereits vergeben.';
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(_errorMessage!),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
       // Create user
       final UserCredential userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -417,6 +433,19 @@ class _RegisterPageState extends State<RegisterPage> {
           backgroundColor: Colors.red,
         ),
       );
+    }
+  }
+
+  Future<bool> _isUsernameTaken(String username) async {
+    try {
+      final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where('username', isEqualTo: username)
+          .get();
+      return querySnapshot.docs.isNotEmpty;
+    } catch (e) {
+      print('Error checking username availability: $e');
+      return true; // Assume username is taken in case of error
     }
   }
 
@@ -517,6 +546,21 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> _addUserDetailsGoogle(
       String uid, String email, String googleName) async {
+    // Check if the Google username already exists
+    bool isUsernameTaken = await _isUsernameTaken(googleName);
+
+    // If the username is already taken, append an index
+    if (isUsernameTaken) {
+      int index = 1;
+      String newUsername = googleName;
+      while (isUsernameTaken) {
+        newUsername = '$googleName$index';
+        isUsernameTaken = await _isUsernameTaken(newUsername);
+        index++;
+      }
+      googleName = newUsername;
+    }
+
     // Save user details in Firestore
     await FirebaseFirestore.instance.collection('users').doc(uid).set({
       'first Name': googleName,

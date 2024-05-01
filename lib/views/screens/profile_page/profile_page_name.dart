@@ -16,13 +16,11 @@ class ProfilePageSet extends StatefulWidget {
 
 class _ProfilePageSetState extends State<ProfilePageSet> {
   final TextEditingController _firstNameController = TextEditingController();
-  // final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _userNameController = TextEditingController();
 
   @override
   void dispose() {
     _firstNameController.dispose();
-    // _lastNameController.dispose();
     _userNameController.dispose();
 
     super.dispose();
@@ -51,12 +49,10 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
         }
 
         final firstName = userData['first Name'] ?? '';
-        //final lastName = userData['last Name'] ?? '';
         final userName = userData['username'] ?? '';
 
         // Set the initial value of the TextField
         _firstNameController.text = firstName;
-        // _lastNameController.text = lastName;
         _userNameController.text = userName;
 
         return Scaffold(
@@ -187,38 +183,52 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
 
               AppButton(
                 buttonText: 'Speichern',
-                onPressed: () {
+                onPressed: () async {
                   final newFirstName = _firstNameController.text.trim();
-                  // final newLastName = _lastNameController.text.trim();
                   final newUserName = _userNameController.text.trim();
 
                   if (newFirstName.isNotEmpty && newUserName.isNotEmpty) {
                     if (newFirstName != firstName || newUserName != userName) {
-                      // Set changesMade to true if changes are detected
-                      changesMade = true;
+                      // Check if the new username is unique
+                      final usernameExists =
+                          await _isUsernameTaken(newUserName);
 
-                      // Update user data in Firebase
-                      FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(user.uid)
-                          .update({
-                        'first Name': newFirstName,
-                        'username': newUserName,
-                      }).then((_) {
+                      if (!usernameExists) {
+                        // Set changesMade to true if changes are detected
+                        changesMade = true;
+
+                        // Update user data in Firebase
+                        FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(user.uid)
+                            .update({
+                          'first Name': newFirstName,
+                          'username': newUserName,
+                        }).then((_) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Erfolgreich gespeichert'),
+                            ),
+                          );
+                        }).catchError((error) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  'Fehler beim Speichern der Daten: $error'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        });
+                      } else {
+                        // Username already exists
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('Erfolgreich gespeichert'),
-                          ),
-                        );
-                      }).catchError((error) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
                             content:
-                                Text('Fehler beim Speichern der Daten: $error'),
+                                Text('Der Benutzername existiert bereits.'),
                             backgroundColor: Colors.red,
                           ),
                         );
-                      });
+                      }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -243,5 +253,18 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
         );
       },
     );
+  }
+}
+
+Future<bool> _isUsernameTaken(String username) async {
+  try {
+    final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: username)
+        .get();
+    return querySnapshot.docs.isNotEmpty;
+  } catch (e) {
+    print('Error checking username availability: $e');
+    return true; // Assume username is taken in case of error
   }
 }
