@@ -120,14 +120,32 @@ class _MessagePageState extends State<MessagePage> {
                                       listMessage[index].isRead ? 0 : 1;
                                 }
 
-                                return MessageTileWidget(
-                                  data: listMessage[index],
-                                  articleTitle: articleTitle,
-                                  articleImageUrl: imageUrl,
-                                  isSold: isSold,
-                                  isDeleted: isDeleted,
-                                  isReserved: isReserved,
-                                  unreadMessageCount: unreadCount,
+                                return GestureDetector(
+                                  
+                                  child: Dismissible(
+                                    key: UniqueKey(),
+                                    direction: DismissDirection.endToStart,
+                                    background: Container(
+                                      color: Colors.red,
+                                      alignment: Alignment.centerRight,
+                                      padding: EdgeInsets.only(right: 20.0),
+                                      child: Icon(Icons.delete),
+                                    ),
+                                    onDismissed: (direction) {
+                                      // Implement delete action here
+                                      // For now, we can just print a message
+                                      print('Deleted message');
+                                    },
+                                    child: MessageTileWidget(
+                                      data: listMessage[index],
+                                      articleTitle: articleTitle,
+                                      articleImageUrl: imageUrl,
+                                      isSold: isSold,
+                                      isDeleted: isDeleted,
+                                      isReserved: isReserved,
+                                      unreadMessageCount: unreadCount,
+                                    ),
+                                  ),
                                 );
                               }
                             },
