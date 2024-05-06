@@ -128,8 +128,8 @@ class _MessagePageState extends State<MessagePage> {
                                     background: Container(
                                       color: Colors.red,
                                       alignment: Alignment.centerRight,
-                                      padding: EdgeInsets.only(right: 20.0),
-                                      child: Icon(Icons.delete),
+                                      padding: const EdgeInsets.only(right: 20.0),
+                                      child: const Icon(Icons.delete),
                                     ),
                                     onDismissed: (direction) {
                                       // Implement delete action here

@@ -31,7 +31,7 @@ class MessageTileWidget extends StatelessWidget {
 
     String messagePreview = data.message.split('\n')[0].length <= 40
         ? data.message.split('\n')[0]
-        : '${data.message.split('\n')[0].substring(0, 40)}...';
+        : '${data.message.split('\n')[0].substring(0, 40)} ...';
 
     return GestureDetector(
       onTap: () {
@@ -103,76 +103,73 @@ class MessageTileWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        if (isSold ||
-                            isDeleted) // Check if any of the conditions are true
-                          const TextSpan(
-                            text: 'Gelöscht ', // Prefix with "Gelöscht"
-                            style: TextStyle(
-                              color: AppColor.icon,
-                              fontFamily: 'poppins',
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                          ),
-                        if (isReserved) // Check if any of the conditions are true
-                          const TextSpan(
-                            text: 'Reserviert ', // Prefix with "Gelöscht"
-                            style: TextStyle(
-                              color: AppColor.icon,
-                              fontFamily: 'poppins',
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                          ),
-                        if (isReserved ||
-                            isSold ||
-                            isDeleted) // Check if any of the conditions are true
-                          const TextSpan(
-                            text: '· ',
-                            style: TextStyle(
-                              color: AppColor.secondary,
-                              fontFamily: 'poppins',
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          ),
-                        TextSpan(
-                          text: data.receiverID == currentUserID
-                              ? '${data.senderUsername} '
-                              : '${data.receiverUsername} ',
-                          style: const TextStyle(
-                            color: AppColor.secondary,
-                            fontFamily: 'poppins',
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15,
-                          ),
-                        ),
-                        const TextSpan(
-                          text: '· ',
-                          style: TextStyle(
-                            color: AppColor.secondary,
-                            fontFamily: 'poppins',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                        TextSpan(
-                          text: articleTitle.length > 20
-                              ? '${articleTitle.substring(0, 20)}...'
-                              : articleTitle,
-                          style: const TextStyle(
-                            color: AppColor.secondary,
-                            fontFamily: 'poppins',
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                 RichText(
+    text: TextSpan(
+    children: [
+      if (isSold || isDeleted)
+        const TextSpan(
+          text: 'Gelöscht ',
+          style: TextStyle(
+            color: AppColor.icon,
+            fontFamily: 'poppins',
+            fontWeight: FontWeight.w500,
+            fontSize: 15,
+          ),
+        ),
+      if (isReserved)
+        const TextSpan(
+          text: 'Reserviert ',
+          style: TextStyle(
+            color: AppColor.icon,
+            fontFamily: 'poppins',
+            fontWeight: FontWeight.w500,
+            fontSize: 15,
+          ),
+        ),
+      if (isReserved || isSold || isDeleted)
+        const TextSpan(
+          text: '· ',
+          style: TextStyle(
+            color: AppColor.secondary,
+            fontFamily: 'poppins',
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
+      TextSpan(
+        text: data.receiverID == currentUserID
+            ? '${data.senderUsername} '
+            : '${data.receiverUsername} ',
+        style: const TextStyle(
+          color: AppColor.secondary,
+          fontFamily: 'poppins',
+          fontWeight: FontWeight.w500,
+          fontSize: 15,
+        ),
+      ),
+      const TextSpan(
+        text: '· ',
+        style: TextStyle(
+          color: AppColor.secondary,
+          fontFamily: 'poppins',
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+        ),
+      ),
+      TextSpan(
+        text: articleTitle,
+        style: const TextStyle(
+          color: AppColor.secondary,
+          fontFamily: 'poppins',
+          fontWeight: FontWeight.w500,
+          fontSize: 15,
+        ),
+      ),
+    ],
+  ),
+  overflow: TextOverflow.ellipsis, 
+  maxLines: 1,
+),
                   const SizedBox(height: 2),
                   Text(
                     messagePreview,
@@ -192,14 +189,14 @@ class MessageTileWidget extends StatelessWidget {
               Container(
                 width: 24,
                 height: 24,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.red,
                 ),
                 child: Center(
                   child: Text(
                     unreadMessageCount.toString(),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
