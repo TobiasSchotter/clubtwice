@@ -425,8 +425,22 @@ class _RegisterPageState extends State<RegisterPage> {
       }
     } on FirebaseAuthException catch (e) {
       setState(() {
-        _errorMessage = e.message;
+        switch (e.code) {
+          case 'email-already-in-use':
+            _errorMessage = 'Die E-Mail-Adresse wird bereits verwendet.';
+            break;
+          case 'invalid-email':
+            _errorMessage = 'Ungültige E-Mail-Adresse.';
+            break;
+          case 'weak-password':
+            _errorMessage = 'Das Passwort ist zu schwach.';
+            break;
+          default:
+            _errorMessage = 'Ein Fehler ist aufgetreten: ${e.message}';
+            break;
+        }
       });
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(_errorMessage!),
