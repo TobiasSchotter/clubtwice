@@ -108,50 +108,54 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
     );
   }
 
-  Widget _buildAppBarTitle() {
-    return GestureDetector(
-      onTap: _navigateToProductDetail,
-      child: Row(
-        children: [
-          Container(
-            width: 32,
-            height: 32,
-            margin: const EdgeInsets.only(right: 16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
-              color: AppColor.border,
-              image: DecorationImage(
-                image: widget.articleImageUrl.isNotEmpty
-                    ? NetworkImage(widget.articleImageUrl)
-                    : const AssetImage('assets/images/placeholder.jpg')
-                        as ImageProvider<Object>,
-                fit: BoxFit.cover,
-              ),
+Widget _buildAppBarTitle() {
+  return GestureDetector(
+    onTap: _navigateToProductDetail,
+    child: Row(
+      children: [
+        Container(
+          width: 32,
+          height: 32,
+          margin: const EdgeInsets.only(right: 16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            color: AppColor.border,
+            image: DecorationImage(
+              image: widget.articleImageUrl.isNotEmpty
+                  ? NetworkImage(widget.articleImageUrl)
+                  : const AssetImage('assets/images/placeholder.jpg')
+                      as ImageProvider<Object>,
+              fit: BoxFit.cover,
             ),
           ),
-          Text(
-            '${widget.receiverUsername} - ${_getShortenedArticleTitle()}',
-            style: const TextStyle(
-                color: Colors.black, fontSize: 14, fontWeight: FontWeight.w600),
-          ),
-        ],
-      ),
-    );
-  }
+        ),
+        Text(
+          _getShortenedText(
+              '${widget.receiverUsername} - ${widget.articleTitle}'),
+          style: const TextStyle(
+              color: Colors.black, fontSize: 14, fontWeight: FontWeight.w600),
+        ),
+      ],
+    ),
+  );
+}
 
-  void _navigateToProductDetail() async {
-    Article currentArticle = await getArticleById(widget.articleId);
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) =>
-          ProductDetail(article: currentArticle, id: widget.articleId),
-    ));
+String _getShortenedText(String text, {int maxLength = 28}) {
+  if (text.length <= maxLength) {
+    return text;
+  } else {
+    return text.substring(0, maxLength - 3) + ' ...';
   }
+}
 
-  String _getShortenedArticleTitle() {
-    return widget.articleTitle.length > 15
-        ? '${widget.articleTitle.substring(0, 15)}...'
-        : widget.articleTitle;
-  }
+void _navigateToProductDetail() async {
+  Article currentArticle = await getArticleById(widget.articleId);
+  Navigator.of(context).push(MaterialPageRoute(
+    builder: (context) =>
+        ProductDetail(article: currentArticle, id: widget.articleId),
+  ));
+}
+
 
 Widget _buildMessageItem(DocumentSnapshot document) {
   Map<String, dynamic> data = document.data() as Map<String, dynamic>;
@@ -248,8 +252,6 @@ bool _shouldShowTimestamp(DateTime timestamp) {
   }
   return false;
 }
-
-
 
 // user input
   Widget _buildMessageInput() {

@@ -221,7 +221,7 @@ class _RegisterPageState extends State<RegisterPage> {
         filled: true,
       ),
       inputFormatters: [
-        LengthLimitingTextInputFormatter(30),
+        LengthLimitingTextInputFormatter(55),
       ],
     );
   }
@@ -295,7 +295,7 @@ class _RegisterPageState extends State<RegisterPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SvgPicture.asset('assets/icons/Google.svg'),
-              const SizedBox(width: 16),
+              const SizedBox(width: 8),
               const Text(
                 'Registriere dich mit Google',
                 style: TextStyle(
@@ -361,7 +361,7 @@ class _RegisterPageState extends State<RegisterPage> {
     } catch (e) {
       print('Error signing in with Google: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Fehler beim Anmelden mit Google.'),
           backgroundColor: Colors.red,
         ),

@@ -321,7 +321,7 @@ class _HomePageState extends State<HomePage> {
             }).toList(),
           ), // To be improved
 
-          if (!isLoading && !hasSearchResults) buildNoSearchResults(),
+          if (!isLoading && !hasSearchResults && club.isNotEmpty && club != "Keine Auswahl" ) buildNoSearchResults(),
           if (!isLoading && (club.isEmpty || club == "Keine Auswahl"))
             buildNoClubMessage(),
         ],
