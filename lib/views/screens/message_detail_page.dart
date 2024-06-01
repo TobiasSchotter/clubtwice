@@ -48,6 +48,9 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
   final ArticleService articleService = ArticleService();
   DateTime? _lastMessageTime;
 
+  File? _selectedImage;
+  String? _selectedImageUrl;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -170,7 +173,7 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
         : Alignment.centerLeft;
 
     bool isMe = data['senderId'] == _firebaseAuth.currentUser!.uid;
-    bool isRead = data['isRead'] ?? false; // Get the isRead flag
+    bool isRead = data['isRead'] ?? false;
 
     bool shouldShowTimestamp = _shouldShowTimestamp(timestamp);
     if (shouldShowTimestamp) {
@@ -179,10 +182,7 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
 
     String formattedTimestamp;
 
-    // Calculate the time difference in hours
     int hoursDifference = DateTime.now().difference(timestamp).inHours;
-
-    // Check the time difference and set the formatted timestamp accordingly
     if (hoursDifference < 4) {
       formattedTimestamp = 'vor 4 Stunden';
     } else if (hoursDifference < 8) {
@@ -202,7 +202,6 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
     } else if (hoursDifference < 48) {
       formattedTimestamp = 'vor 48 Stunden';
     } else {
-      // If the message is older than 48 hours, format the timestamp normally
       formattedTimestamp = DateFormat('dd. MMM. yyyy').format(timestamp);
     }
 
@@ -229,7 +228,7 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
               children: [
                 _chatBubble(
                   message: data['message'],
-                  imageUrl: data['imageUrl'], // Pass imageUrl to chat bubble
+                  imageUrl: data['imageUrl'],
                   isMe: isMe,
                   isRead: isRead,
                 ),
@@ -257,20 +256,25 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      await _uploadImage(File(pickedFile.path));
+      setState(() {
+        _selectedImage =
+            File(pickedFile.path); // Store the selected image temporarily
+      });
     }
   }
 
-  Future<void> _uploadImage(File imageFile) async {
+  Future<void> _uploadImage() async {
     try {
+      if (_selectedImage == null) return;
+
       final storageRef = FirebaseStorage.instance
           .ref()
           .child('chat_images/${DateTime.now().millisecondsSinceEpoch}');
-      final uploadTask = storageRef.putFile(imageFile);
+      final uploadTask = storageRef.putFile(_selectedImage!);
 
       final snapshot = await uploadTask;
       final downloadUrl = await snapshot.ref.getDownloadURL();
-      _sendMessageWithImage(downloadUrl);
+      _selectedImageUrl = downloadUrl;
     } catch (e) {
       print('Error uploading image: $e');
     }
@@ -308,7 +312,9 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
               maxLines: null,
               inputFormatters: [paragraphLimitFormatter],
               decoration: InputDecoration(
-                hintText: 'Gebe hier deine Nachricht ein ...',
+                hintText: _selectedImage != null
+                    ? 'Image selected. Add a message...'
+                    : 'Gebe hier deine Nachricht ein ...',
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
                 enabledBorder: OutlineInputBorder(
@@ -321,6 +327,16 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
                       const BorderSide(color: AppColor.border, width: 1),
                   borderRadius: BorderRadius.circular(8),
                 ),
+                suffixIcon: _selectedImage != null
+                    ? IconButton(
+                        icon: const Icon(Icons.clear, color: Colors.red),
+                        onPressed: () {
+                          setState(() {
+                            _selectedImage = null;
+                          });
+                        },
+                      )
+                    : null,
               ),
             ),
           ),
@@ -341,22 +357,34 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
               child:
                   const Icon(Icons.send_rounded, color: Colors.white, size: 18),
             ),
-          )
+          ),
         ],
       ),
     );
   }
 
   void scrollToBottom() {
-    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
+    );
   }
 
   void sendMessage() async {
     final String message = _messageController.text;
-    if (message.isNotEmpty) {
+    if (message.isNotEmpty || _selectedImage != null) {
+      if (_selectedImage != null) {
+        await _uploadImage();
+      }
       await messageService.sendMessage(
-          widget.receiverId, message, widget.articleId);
+          widget.receiverId, message, widget.articleId,
+          imageUrl: _selectedImageUrl);
       _messageController.clear();
+      setState(() {
+        _selectedImage = null; // Clear the selected image after sending
+        _selectedImageUrl = null; // Clear the selected image URL after sending
+      });
       scrollToBottom();
     }
   }
@@ -366,18 +394,18 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
     return article;
   }
 
-  Widget _chatBubble(
-      {required String message,
-      String? imageUrl,
-      required bool isMe,
-      required bool isRead}) {
+  Widget _chatBubble({
+    required String message,
+    String? imageUrl,
+    required bool isMe,
+    required bool isRead,
+  }) {
     return Column(
       crossAxisAlignment:
           isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
       children: [
         Container(
-          margin: const EdgeInsets.only(
-              bottom: 2), // Kleinerer Abstand zwischen den ChatBubbles
+          margin: const EdgeInsets.only(bottom: 2),
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
           decoration: BoxDecoration(
             color:
@@ -392,11 +420,14 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
             crossAxisAlignment:
                 isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
             children: [
-              if (imageUrl != null) // Display image if imageUrl is not null
-                Image.network(imageUrl),
-              if (message.isNotEmpty) // Display message if it's not empty
+              if (imageUrl != null)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Image.network(imageUrl),
+                ),
+              if (message.isNotEmpty)
                 Text(
-                  '$message',
+                  message,
                   style: const TextStyle(
                     color: Colors.black,
                     fontSize: 16,
@@ -405,11 +436,9 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
             ],
           ),
         ),
-        if (isMe && isRead) // Zeige "gelesen" nur für ausgehende Nachrichten
+        if (isMe && isRead)
           Padding(
-            padding: const EdgeInsets.only(
-                right:
-                    2), // Abstand zwischen der ChatBubble und dem "Gelesen"-Text
+            padding: const EdgeInsets.only(right: 2),
             child: Text(
               "Gelesen",
               style: TextStyle(
@@ -432,11 +461,11 @@ class ParagraphLimitingTextInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
-// Check if the new text exceeds the maximum allowed characters
+    // Check if the new text exceeds the maximum allowed characters
     if (newValue.text.length > maxCharacters) {
-// If so, truncate the text to contain only the allowed number of characters
+      // If so, truncate the text to contain only the allowed number of characters
       final truncatedText = newValue.text.substring(0, maxCharacters);
-// Return the truncated text
+      // Return the truncated text
       return TextEditingValue(
         text: truncatedText,
         selection: newValue.selection.copyWith(
@@ -445,13 +474,13 @@ class ParagraphLimitingTextInputFormatter extends TextInputFormatter {
         ),
       );
     }
-// If the new text is within the character limit, split it by paragraph (line breaks)
+    // If the new text is within the character limit, split it by paragraph (line breaks)
     final paragraphs = newValue.text.split('\n');
-// Check if the number of paragraphs exceeds the limit
+    // Check if the number of paragraphs exceeds the limit
     if (paragraphs.length > maxParagraphs) {
-// If so, truncate the text to contain only the allowed number of paragraphs
+      // If so, truncate the text to contain only the allowed number of paragraphs
       final truncatedText = paragraphs.sublist(0, maxParagraphs).join('\n');
-// Return the truncated text
+      // Return the truncated text
       return TextEditingValue(
         text: truncatedText,
         selection: newValue.selection.copyWith(
@@ -460,7 +489,7 @@ class ParagraphLimitingTextInputFormatter extends TextInputFormatter {
         ),
       );
     }
-// If the text is within both character and paragraph limits, allow the edit
+    // If the text is within both character and paragraph limits, allow the edit
     return newValue;
   }
 }
