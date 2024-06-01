@@ -13,6 +13,9 @@ import 'package:flutter/services.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:path_provider/path_provider.dart';
 
 class MessageDetailPage extends StatefulWidget {
   final String senderId;
@@ -263,14 +266,37 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
     }
   }
 
-  Future<void> _uploadImage() async {
+  Future<File> compressImage(File file) async {
     try {
-      if (_selectedImage == null) return;
+      final dir = await getTemporaryDirectory();
+      final targetPath = "${dir.absolute.path}/temp.jpg";
 
+      final result = await FlutterImageCompress.compressAndGetFile(
+        file.absolute.path,
+        targetPath,
+        quality: 80,
+      );
+
+      if (result == null) {
+        // Return the original file if compression fails
+        print('Image compression failed. Returning the original file.');
+        return file;
+      }
+
+      return File(result.path);
+    } catch (e) {
+      // Log the error and return the original file in case of an exception
+      print('Error during image compression: $e');
+      return file;
+    }
+  }
+
+  Future<void> _uploadImage(File imageFile) async {
+    try {
       final storageRef = FirebaseStorage.instance
           .ref()
           .child('chat_images/${DateTime.now().millisecondsSinceEpoch}');
-      final uploadTask = storageRef.putFile(_selectedImage!);
+      final uploadTask = storageRef.putFile(imageFile);
 
       final snapshot = await uploadTask;
       final downloadUrl = await snapshot.ref.getDownloadURL();
@@ -375,7 +401,9 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
     final String message = _messageController.text;
     if (message.isNotEmpty || _selectedImage != null) {
       if (_selectedImage != null) {
-        await _uploadImage();
+        // Compress the selected image before uploading
+        File compressedImage = await compressImage(_selectedImage!);
+        await _uploadImage(compressedImage);
       }
       await messageService.sendMessage(
           widget.receiverId, message, widget.articleId,
@@ -423,7 +451,11 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
               if (imageUrl != null)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Image.network(imageUrl),
+                  child: CachedNetworkImage(
+                    imageUrl: imageUrl,
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
                 ),
               if (message.isNotEmpty)
                 Text(
