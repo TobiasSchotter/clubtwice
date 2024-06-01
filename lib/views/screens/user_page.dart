@@ -56,6 +56,7 @@ class _UserPageState extends State<UserPage> {
         automaticallyImplyLeading: false,
         centerTitle: true,
         backgroundColor: AppColor.primary,
+        foregroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
           onPressed: () {
@@ -76,7 +77,7 @@ class _UserPageState extends State<UserPage> {
               children: [
                 Text(
                   '${widget.articleCount + 1} Artikel von ${widget.userName} online',
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: AppColor.border,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
