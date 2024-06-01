@@ -8,14 +8,14 @@ class MessageService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future sendMessage(
-      String receiverID, String message, String articleId) async {
+  Future sendMessage(String receiverID, String message, String articleId,
+      {String? imageUrl}) async {
     try {
-      //get current user info
+      // Get current user info
       final String currentUserID = _firebaseAuth.currentUser!.uid;
       final Timestamp timestamp = Timestamp.now();
 
-      //fetch receiver username
+      // Fetch receiver username
       final DocumentSnapshot receiverDoc =
           await _firestore.collection('users').doc(receiverID).get();
 
@@ -26,11 +26,11 @@ class MessageService {
         return; // Exit the function
       }
 
-      //fetch sender username
+      // Fetch sender username
       final DocumentSnapshot senderDoc =
           await _firestore.collection('users').doc(currentUserID).get();
 
-      //create a new message
+      // Create a new message
       Message newMessage = Message(
         senderId: currentUserID,
         receiverID: receiverID,
@@ -40,14 +40,15 @@ class MessageService {
         receiverUsername: receiverDoc['username'],
         senderUsername: senderDoc['username'],
         isRead: false,
+        imageUrl: imageUrl, // Add this line
       );
 
-      //construct chatID
+      // Construct chatID
       List<String> ids = [currentUserID, receiverID, articleId];
       ids.sort();
       String chatRoomID = ids.join('_');
 
-      // add message to firestore subcollection of articles
+      // Add message to firestore subcollection of articles
       await _firestore
           .collection('chats')
           .doc(chatRoomID)

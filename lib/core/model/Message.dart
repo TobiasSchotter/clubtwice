@@ -7,6 +7,7 @@ class Message {
   final String receiverUsername;
   final String senderUsername;
   bool isRead;
+  final String? imageUrl;
 
   Message(
       {required this.senderId,
@@ -16,7 +17,8 @@ class Message {
       required this.articleId,
       required this.receiverUsername,
       required this.senderUsername,
-      required this.isRead});
+      required this.isRead,
+      required this.imageUrl});
 
   factory Message.fromJson(Map<String, dynamic> json, String articleId) {
     return Message(
@@ -27,7 +29,8 @@ class Message {
         articleId: articleId,
         receiverUsername: json['receiverUsername'],
         senderUsername: json['senderUsername'],
-        isRead: json['isRead']);
+        isRead: json['isRead'],
+        imageUrl: json['imageUrl']);
   }
 
   Map<String, dynamic> toMap() {
@@ -39,7 +42,8 @@ class Message {
       'articleId': articleId,
       'receiverUsername': receiverUsername,
       'senderUsername': senderUsername,
-      'isRead': isRead
+      'isRead': isRead,
+      'imageUrl': imageUrl,
     };
   }
 }
