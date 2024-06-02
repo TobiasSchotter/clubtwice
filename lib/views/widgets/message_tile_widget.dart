@@ -29,9 +29,12 @@ class MessageTileWidget extends StatelessWidget {
     final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     final String currentUserID = firebaseAuth.currentUser!.uid;
 
-    String messagePreview = data.message.split('\n')[0].length <= 40
-        ? data.message.split('\n')[0]
-        : '${data.message.split('\n')[0].substring(0, 40)} ...';
+    
+    String messagePreview = data.imageUrl != null && data.imageUrl!.isNotEmpty
+        ? 'Bild'
+        : data.message.split('\n')[0].length <= 40
+            ? data.message.split('\n')[0]
+            : '${data.message.split('\n')[0].substring(0, 40)} ...';
 
     return GestureDetector(
       onTap: () {
@@ -72,18 +75,18 @@ class MessageTileWidget extends StatelessWidget {
               margin: const EdgeInsets.only(right: 16),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                //borderRadius: BorderRadius.circular(8),
-                image: DecorationImage(
+                   //borderRadius: BorderRadius.circular(8),
+                                image: DecorationImage(
                   image: articleImageUrl.isNotEmpty
                       ? NetworkImage(articleImageUrl)
-                      : const AssetImage('assets/images/placeholder.jpg')
+                    : const AssetImage('assets/images/placeholder.jpg')
                           as ImageProvider<
                               Object>, // Cast AssetImage to ImageProvider
                   fit: BoxFit.cover,
                 ),
                 color: isSold
                     ? Colors.grey.withOpacity(0.5)
-                    : null, // Set color if article is sold
+                      : null, // Set color if article is sold
               ),
               child: isSold || isDeleted
                   ? const Icon(
@@ -103,73 +106,73 @@ class MessageTileWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                 RichText(
-    text: TextSpan(
-    children: [
-      if (isSold || isDeleted)
-        const TextSpan(
-          text: 'Gelöscht ',
-          style: TextStyle(
-            color: AppColor.icon,
-            fontFamily: 'poppins',
-            fontWeight: FontWeight.w500,
-            fontSize: 15,
-          ),
-        ),
-      if (isReserved)
-        const TextSpan(
-          text: 'Reserviert ',
-          style: TextStyle(
-            color: AppColor.icon,
-            fontFamily: 'poppins',
-            fontWeight: FontWeight.w500,
-            fontSize: 15,
-          ),
-        ),
-      if (isReserved || isSold || isDeleted)
-        const TextSpan(
-          text: '· ',
-          style: TextStyle(
-            color: AppColor.secondary,
-            fontFamily: 'poppins',
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-          ),
-        ),
-      TextSpan(
-        text: data.receiverID == currentUserID
-            ? '${data.senderUsername} '
-            : '${data.receiverUsername} ',
-        style: const TextStyle(
-          color: AppColor.secondary,
-          fontFamily: 'poppins',
-          fontWeight: FontWeight.w500,
-          fontSize: 15,
-        ),
-      ),
-      const TextSpan(
-        text: '· ',
-        style: TextStyle(
-          color: AppColor.secondary,
-          fontFamily: 'poppins',
-          fontWeight: FontWeight.bold,
-          fontSize: 18,
-        ),
-      ),
-      TextSpan(
-        text: articleTitle,
-        style: const TextStyle(
-          color: AppColor.secondary,
-          fontFamily: 'poppins',
-          fontWeight: FontWeight.w500,
-          fontSize: 15,
-        ),
-      ),
-    ],
-  ),
-  overflow: TextOverflow.ellipsis, 
-  maxLines: 1,
-),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        if (isSold || isDeleted)
+                          const TextSpan(
+                            text: 'Gelöscht ',
+                            style: TextStyle(
+                              color: AppColor.icon,
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                        if (isReserved)
+                          const TextSpan(
+                            text: 'Reserviert ',
+                            style: TextStyle(
+                              color: AppColor.icon,
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                        if (isReserved || isSold || isDeleted)
+                          const TextSpan(
+                            text: '· ',
+                            style: TextStyle(
+                              color: AppColor.secondary,
+                              fontFamily: 'poppins',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                        TextSpan(
+                          text: data.receiverID == currentUserID
+                              ? '${data.senderUsername} '
+                              : '${data.receiverUsername} ',
+                          style: const TextStyle(
+                            color: AppColor.secondary,
+                            fontFamily: 'poppins',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                          ),
+                        ),
+                        const TextSpan(
+                          text: '· ',
+                          style: TextStyle(
+                            color: AppColor.secondary,
+                            fontFamily: 'poppins',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                        TextSpan(
+                          text: articleTitle,
+                          style: const TextStyle(
+                            color: AppColor.secondary,
+                            fontFamily: 'poppins',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
                   const SizedBox(height: 2),
                   Text(
                     messagePreview,
