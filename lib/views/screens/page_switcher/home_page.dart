@@ -298,36 +298,43 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildArticleList() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      controller: _scrollController,
-      child: Column(
-        children: [
-          if (isLoading)
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 20),
-              child: CircularProgressIndicator(),
-            ),
-          Wrap(
-            spacing: 16,
-            runSpacing: 16,
-            children: articlesWithID.map((article) {
+ Widget buildArticleList() {
+  return SingleChildScrollView(
+    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    controller: _scrollController,
+    child: Column(
+      children: [
+        if (isLoading)
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 20),
+            child: CircularProgressIndicator(),
+          ),
+        Wrap(
+          spacing: 16,
+          runSpacing: 16,
+          children: [...articlesWithID.map((article) {
               return SizedBox(
                 width: MediaQuery.of(context).size.width / 2 - 16 - 8,
-                child:
-                    ItemCard(article: article.article, articleId: article.id),
+                child: 
+                ItemCard(article: article.article, articleId: article.id),
               );
             }).toList(),
-          ), // To be improved
+            if (articlesWithID.length == 1)
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 2 - 16 - 8,
+                child: const SizedBox(), // Invisible second item
+              ),
+          ],
+        ), 
 
-          if (!isLoading && !hasSearchResults && club.isNotEmpty && club != "Keine Auswahl" ) buildNoSearchResults(),
-          if (!isLoading && (club.isEmpty || club == "Keine Auswahl"))
-            buildNoClubMessage(),
-        ],
-      ),
-    );
-  }
+        if (!isLoading && !hasSearchResults && club.isNotEmpty && club != "Keine Auswahl" ) buildNoSearchResults(),
+        if (!isLoading && (club.isEmpty || club == "Keine Auswahl"))
+          buildNoClubMessage(),
+      ],
+    ),
+  );
+}
+
 
   Widget buildNoClubMessage() {
     return Container(
