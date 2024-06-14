@@ -16,6 +16,7 @@ class PageSwitcher extends StatefulWidget {
 
 class _PageSwitcherState extends State<PageSwitcher> {
   late int _selectedIndex;
+  int _unreadMessageCount = 0;
 
   @override
   void initState() {
@@ -38,6 +39,12 @@ class _PageSwitcherState extends State<PageSwitcher> {
     }
   }
 
+  void _updateUnreadMessageCount(int count) {
+    setState(() {
+      _unreadMessageCount = count;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +57,7 @@ class _PageSwitcherState extends State<PageSwitcher> {
             isIndividuallyWearable: false,
             images: [],
           ),
-          TabPage(),
+          TabPage(onUnreadMessageCountChanged: _updateUnreadMessageCount),
           ProfilePage(),
         ],
       ),
@@ -59,28 +66,82 @@ class _PageSwitcherState extends State<PageSwitcher> {
         backgroundColor: AppColor.primarySoft,
         onDestinationSelected: _onDestinationSelected,
         selectedIndex: _selectedIndex,
-        destinations: const <Widget>[
-          NavigationDestination(
+        destinations: <Widget>[
+          const NavigationDestination(
             icon: Icon(Icons.home_outlined),
             selectedIcon: Icon(Icons.home),
             label: 'Club',
           ),
-          NavigationDestination(
+          const NavigationDestination(
             icon: Icon(Icons.search_outlined),
             selectedIcon: Icon(Icons.search),
             label: 'Suche',
           ),
-          NavigationDestination(
+          const NavigationDestination(
             icon: Icon(Icons.sell_outlined),
             selectedIcon: Icon(Icons.sell),
             label: 'Verkaufen',
           ),
           NavigationDestination(
-            icon: Icon(Icons.mail_outlined),
-            selectedIcon: Icon(Icons.mail),
+            icon: Stack(
+              children: [
+                const Icon(Icons.mail_outlined),
+                if (_unreadMessageCount > 0)
+                  Positioned(
+                    right: 0,
+                    child: Container(
+                      padding: const EdgeInsets.all(1),
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.all(Radius.circular(6)),
+                      ),
+                      constraints: const BoxConstraints(
+                        minWidth: 12,
+                        minHeight: 12,
+                      ),
+                      child: Text(
+                        '$_unreadMessageCount',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 8,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            selectedIcon: Stack(
+              children: [
+                const Icon(Icons.mail),
+                if (_unreadMessageCount > 0)
+                  Positioned(
+                    right: 0,
+                    child: Container(
+                      padding: const EdgeInsets.all(1),
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.all(Radius.circular(6)),
+                      ),
+                      constraints: const BoxConstraints(
+                        minWidth: 12,
+                        minHeight: 12,
+                      ),
+                      child: Text(
+                        '$_unreadMessageCount',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 8,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
             label: 'Inbox',
           ),
-          NavigationDestination(
+          const NavigationDestination(
             icon: Icon(Icons.person_outlined),
             selectedIcon: Icon(Icons.person),
             label: 'Profil',

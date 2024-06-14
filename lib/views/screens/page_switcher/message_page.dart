@@ -6,7 +6,9 @@ import 'package:clubtwice/core/services/MessageService.dart';
 import 'package:clubtwice/views/widgets/message_tile_widget.dart';
 
 class MessagePage extends StatefulWidget {
-  const MessagePage({Key? key}) : super(key: key);
+  final Function(int) onUnreadMessageCountChanged;
+
+  const MessagePage({Key? key, required this.onUnreadMessageCountChanged}) : super(key: key);
 
   @override
   _MessagePageState createState() => _MessagePageState();
@@ -14,11 +16,19 @@ class MessagePage extends StatefulWidget {
 
 class _MessagePageState extends State<MessagePage> {
   late Future<List<Message>> _listMessageFuture;
+  bool _unreadCountNotified = false;
 
   @override
   void initState() {
     super.initState();
     _listMessageFuture = MessageService().getUserChatsData();
+  }
+
+  void _notifyUnreadMessageCount(List<Message> messages) {
+    int unreadCount = messages.where((msg) => !msg.isRead && msg.senderId != FirebaseAuth.instance.currentUser!.uid).length;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.onUnreadMessageCountChanged(unreadCount);
+    });
   }
 
   @override
@@ -30,32 +40,36 @@ class _MessagePageState extends State<MessagePage> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(child: Text('Fehler: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(
+              child: Text('Du hast noch keine Nachrichten erhalten'),
+            );
           } else {
             List<Message> listMessage = snapshot.data!;
-            if (listMessage.isEmpty) {
-              return const Center(
-                child: Text('Du hast noch keine Nachrichten erhalten'),
-              );
-            } else {
-              return ListView.builder(
-                itemCount: listMessage.length,
-                itemBuilder: (context, index) {
-                  // Fetch user data for the receiver
-                  Future<DocumentSnapshot> receiverDocFuture = FirebaseFirestore
-                      .instance
-                      .collection('users')
-                      .doc(listMessage[index].receiverID)
-                      .get();
+            if (!_unreadCountNotified) {
+              _notifyUnreadMessageCount(listMessage);
+              _unreadCountNotified = true;
+            }
 
-                  // Fetch user data for the sender
-                  Future<DocumentSnapshot> senderDocFuture = FirebaseFirestore
-                      .instance
-                      .collection('users')
-                      .doc(listMessage[index].senderId)
-                      .get();
+            return ListView.builder(
+              itemCount: listMessage.length,
+              itemBuilder: (context, index) { 
+                // Fetch user data for the receiver
+                Future<DocumentSnapshot> receiverDocFuture = FirebaseFirestore
+                    .instance
+                    .collection('users')
+                    .doc(listMessage[index].receiverID)
+                    .get();
 
-                  return FutureBuilder(
+                // Fetch user data for the sender
+                Future<DocumentSnapshot> senderDocFuture = FirebaseFirestore
+                    .instance
+                    .collection('users')
+                    .doc(listMessage[index].senderId)
+                    .get();
+
+             return FutureBuilder(
                     future: Future.wait([receiverDocFuture, senderDocFuture]),
                     builder: (context, userSnapshot) {
                       if (userSnapshot.connectionState ==
@@ -75,7 +89,7 @@ class _MessagePageState extends State<MessagePage> {
                             receiverSnapshot.exists && senderSnapshot.exists;
 
                         // Only build message tile if both users exist
-                        if (bothUsersExist) {
+                       if (bothUsersExist) {
                           // Fetch article data
                           Future<DocumentSnapshot> articleDocFuture =
                               FirebaseFirestore.instance
@@ -161,7 +175,7 @@ class _MessagePageState extends State<MessagePage> {
               );
             }
           }
-        },
+        
       ),
     );
   }

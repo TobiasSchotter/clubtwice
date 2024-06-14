@@ -1,10 +1,13 @@
 import 'package:clubtwice/views/screens/page_switcher/message_page.dart';
 import 'package:clubtwice/views/screens/page_switcher/notification_page.dart';
-
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
 
 class TabPage extends StatefulWidget {
+  final Function(int) onUnreadMessageCountChanged;
+
+  const TabPage({Key? key, required this.onUnreadMessageCountChanged}) : super(key: key);
+
   @override
   _TabPageState createState() => _TabPageState();
 }
@@ -12,6 +15,7 @@ class TabPage extends StatefulWidget {
 class _TabPageState extends State<TabPage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   int _currentIndex = 0;
+  int _unreadMessageCount = 0;
 
   @override
   void initState() {
@@ -30,6 +34,13 @@ class _TabPageState extends State<TabPage> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
+  void _updateUnreadMessageCount(int count) {
+    setState(() {
+      _unreadMessageCount = count;
+    });
+    widget.onUnreadMessageCountChanged(count);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,16 +51,16 @@ class _TabPageState extends State<TabPage> with SingleTickerProviderStateMixin {
           indicatorColor: Colors.black,
           labelColor: Colors.black,
           controller: _tabController,
-          tabs: const [
-            Tab(text: 'Nachrichten'),
-            Tab(text: 'Benachrichtigungen'),
+          tabs: [
+            Tab(text: _unreadMessageCount > 0 ? 'Nachrichten (${_unreadMessageCount})' : 'Nachrichten'),
+            const Tab(text: 'Benachrichtigungen'),
           ],
         ),
       ),
       body: IndexedStack(
         index: _currentIndex,
         children: [
-          const MessagePage(),
+          MessagePage(onUnreadMessageCountChanged: _updateUnreadMessageCount),
           NotificationPage(),
         ],
       ),
