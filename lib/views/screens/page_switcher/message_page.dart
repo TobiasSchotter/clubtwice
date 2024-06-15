@@ -47,6 +47,10 @@ class _MessagePageState extends State<MessagePage> {
             );
           } else {
             List<Message> listMessage = snapshot.data!;
+
+            // Sort messages by timestamp in descending order
+            listMessage.sort((a, b) => b.timestamp.compareTo(a.timestamp));
+
             if (!_unreadCountNotified) {
               _notifyUnreadMessageCount(listMessage);
               _unreadCountNotified = true;
