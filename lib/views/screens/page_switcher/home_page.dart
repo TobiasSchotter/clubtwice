@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
 
   // Define a TextEditingController
   final TextEditingController _searchController = TextEditingController();
-  bool _unreadCountNotified = false;
+
 
   @override
   void initState() {
