@@ -1,8 +1,11 @@
 import 'package:clubtwice/constant/app_button.dart';
+import 'package:clubtwice/core/model/Message.dart';
+import 'package:clubtwice/core/services/MessageService.dart';
 import 'package:clubtwice/core/services/articles_service.dart';
 import 'package:clubtwice/core/services/user_service.dart';
 import 'package:clubtwice/views/screens/profile_page/profile_page_club.dart';
 import 'package:clubtwice/views/widgets/filter_tile_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:clubtwice/constant/app_color.dart';
 import 'package:clubtwice/views/widgets/item_card.dart';
@@ -11,10 +14,11 @@ import '../../widgets/search_field_tile.dart';
 import 'package:clubtwice/core/model/UserModel.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final Function(int) onUnreadMessageCountChanged;
+
+  const HomePage({Key? key, required this.onUnreadMessageCountChanged}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _HomePageState createState() => _HomePageState();
 }
 
@@ -39,6 +43,7 @@ class _HomePageState extends State<HomePage> {
 
   // Define a TextEditingController
   final TextEditingController _searchController = TextEditingController();
+  bool _unreadCountNotified = false;
 
   @override
   void initState() {
@@ -47,6 +52,7 @@ class _HomePageState extends State<HomePage> {
     // Move the call to loadData to after initState is complete
     WidgetsBinding.instance.addPostFrameCallback((_) {
       loadData(null);
+      _fetchUnreadMessages();
     });
   }
 
@@ -118,7 +124,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  // void checkUserVerification() async {
+    // void checkUserVerification() async {
   //   User? currentUser = FirebaseAuth.instance.currentUser;
   //   if (currentUser != null && !currentUser.emailVerified) {
   //     await Future.delayed(const Duration(
@@ -130,6 +136,26 @@ class _HomePageState extends State<HomePage> {
   //     );
   //   }
   // }
+
+  Future<void> _fetchUnreadMessages() async {
+    try {
+      List<Message> messages = await MessageService().getUserChatsData();
+      _notifyUnreadMessageCount(messages);
+    } catch (error) {
+      print("Error fetching unread messages: $error");
+    }
+  }
+
+  void _notifyUnreadMessageCount(List<Message> messages) {
+    int unreadCount = messages
+        .where((msg) =>
+            !msg.isRead &&
+            msg.senderId != FirebaseAuth.instance.currentUser!.uid)
+        .length;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.onUnreadMessageCountChanged(unreadCount);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -298,19 +324,19 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
- Widget buildArticleList() {
-  return SingleChildScrollView(
-    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-    controller: _scrollController,
-    child: Column(
-      children: [
-        if (isLoading)
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 20),
-            child: CircularProgressIndicator(),
-          ),
-        Wrap(
-          spacing: 16,
+  Widget buildArticleList() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      controller: _scrollController,
+      child: Column(
+        children: [
+          if (isLoading)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: CircularProgressIndicator(),
+            ),
+          Wrap(
+        spacing: 16,
           runSpacing: 16,
           children: [...articlesWithID.map((article) {
               return SizedBox(
@@ -336,7 +362,7 @@ class _HomePageState extends State<HomePage> {
 }
 
 
-  Widget buildNoClubMessage() {
+ Widget buildNoClubMessage() {
     return Container(
       alignment: Alignment.center,
       child: Column(
@@ -361,7 +387,7 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const ProfilePageClub()),
+                  builder: (context) => const ProfilePageClub()),
               );
             },
             buttonText: 'Verein hinterlegen',

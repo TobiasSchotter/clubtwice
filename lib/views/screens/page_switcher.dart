@@ -51,7 +51,7 @@ class _PageSwitcherState extends State<PageSwitcher> {
       body: IndexedStack(
         index: _selectedIndex,
         children: [
-          const HomePage(),
+          HomePage(onUnreadMessageCountChanged: _updateUnreadMessageCount),
           SearchPage(),
           const SellPage(
             isIndividuallyWearable: false,
