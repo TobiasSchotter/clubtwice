@@ -79,6 +79,8 @@ class _HomePageState extends State<HomePage> {
         isLoading = true;
       });
 
+      final startLoadingTime = DateTime.now();
+
       try {
         String? userId = userService.getCurrentUserId();
         userModel = await userService.fetchUserData(userId);
@@ -102,6 +104,12 @@ class _HomePageState extends State<HomePage> {
             .where((article) => !articlesWithID
                 .any((existingArticle) => existingArticle.id == article.id))
             .toList();
+
+       final elapsedLoadingTime = DateTime.now().difference(startLoadingTime);
+
+        if (elapsedLoadingTime < const Duration(milliseconds: 500)) {
+        await Future.delayed(const Duration(milliseconds: 500) - elapsedLoadingTime);
+        }
 
         setState(() {
           articlesWithID.addAll(uniqueArticles);
@@ -330,15 +338,10 @@ class _HomePageState extends State<HomePage> {
       controller: _scrollController,
       child: Column(
         children: [
-          if (isLoading)
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 20),
-              child: CircularProgressIndicator(),
-            ),
           Wrap(
-        spacing: 16,
-          runSpacing: 16,
-          children: [...articlesWithID.map((article) {
+            spacing: 16,
+            runSpacing: 16,
+            children: [...articlesWithID.map((article) {
               return SizedBox(
                 width: MediaQuery.of(context).size.width / 2 - 16 - 8,
                 child: 
@@ -350,19 +353,22 @@ class _HomePageState extends State<HomePage> {
                 width: MediaQuery.of(context).size.width / 2 - 16 - 8,
                 child: const SizedBox(), // Invisible second item
               ),
-          ],
-        ), 
+            ],
+          ),
+          if (isLoading)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: CircularProgressIndicator(),
+            ),
+          if (!isLoading && !hasSearchResults && club.isNotEmpty && club != "Keine Auswahl" ) buildNoSearchResults(),
+          if (!isLoading && (club.isEmpty || club == "Keine Auswahl"))
+            buildNoClubMessage(),
+        ],
+      ),
+    );
+  }
 
-        if (!isLoading && !hasSearchResults && club.isNotEmpty && club != "Keine Auswahl" ) buildNoSearchResults(),
-        if (!isLoading && (club.isEmpty || club == "Keine Auswahl"))
-          buildNoClubMessage(),
-      ],
-    ),
-  );
-}
-
-
- Widget buildNoClubMessage() {
+  Widget buildNoClubMessage() {
     return Container(
       alignment: Alignment.center,
       child: Column(
