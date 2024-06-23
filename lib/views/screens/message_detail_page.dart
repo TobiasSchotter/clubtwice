@@ -53,6 +53,7 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
 
   File? _selectedImage;
   String? _selectedImageUrl;
+  bool _isUploading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -292,6 +293,10 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
   }
 
   Future<void> _uploadImage(File imageFile) async {
+    setState(() {
+      _isUploading = true;
+    });
+
     try {
       final storageRef = FirebaseStorage.instance
           .ref()
@@ -303,6 +308,10 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
       _selectedImageUrl = downloadUrl;
     } catch (e) {
       print('Error uploading image: $e');
+    } finally {
+      setState(() {
+        _isUploading = false;
+      });
     }
   }
 
@@ -371,17 +380,22 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
             width: 42,
             height: 42,
             child: ElevatedButton(
-              onPressed: sendMessage,
+              onPressed: _isUploading ? null : sendMessage,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColor.primary,
+                backgroundColor: _isUploading ? Colors.grey : AppColor.primary,
                 padding: const EdgeInsets.all(0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
                 shadowColor: Colors.transparent,
               ),
-              child:
-                  const Icon(Icons.send_rounded, color: Colors.white, size: 18),
+              child: _isUploading
+                  ? const CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      strokeWidth: 2,
+                    )
+                  : const Icon(Icons.send_rounded,
+                      color: Colors.white, size: 18),
             ),
           ),
         ],
