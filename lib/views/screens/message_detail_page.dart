@@ -166,95 +166,135 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
     ));
   }
 
-  Widget _buildMessageItem(DocumentSnapshot document) {
-    Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+DateTime? _lastDisplayedTimestamp;
 
-    String isoTimestampString = data['timestamp'];
-    DateTime timestamp = DateTime.parse(isoTimestampString);
+bool _shouldShowTimestamp(DateTime timestamp) {
+  if (_lastDisplayedTimestamp == null) {
+    // Zeige Zeitstempel an, wenn es die erste Nachricht ist
+    _lastDisplayedTimestamp = timestamp;
+    return true;
+  }
 
-    var alignment = data['senderId'] == _firebaseAuth.currentUser!.uid
-        ? Alignment.centerRight
-        : Alignment.centerLeft;
+  int minutesDifference = timestamp.difference(_lastDisplayedTimestamp!).inMinutes;
+  int hoursDifference = timestamp.difference(_lastDisplayedTimestamp!).inHours;
 
-    bool isMe = data['senderId'] == _firebaseAuth.currentUser!.uid;
-    bool isRead = data['isRead'] ?? false;
+  if ((minutesDifference >= 2 && minutesDifference < 5) ||
+      (minutesDifference >= 5 && minutesDifference < 10) ||
+      (minutesDifference >= 10 && minutesDifference < 30) ||
+      (minutesDifference >= 30 && hoursDifference < 1) ||
+      (hoursDifference >= 1 && hoursDifference < 2) ||
+      (hoursDifference >= 2 && hoursDifference < 4) ||
+      (hoursDifference >= 4 && hoursDifference < 8) ||
+      (hoursDifference >= 8 && hoursDifference < 12) ||
+      (hoursDifference >= 12 && hoursDifference < 18) ||
+      (hoursDifference >= 18 && hoursDifference < 24) ||
+      (hoursDifference >= 24) ||
+      (timestamp.day != _lastDisplayedTimestamp!.day)) {
+    _lastDisplayedTimestamp = timestamp;
+    return true;
+  }
 
-    bool shouldShowTimestamp = _shouldShowTimestamp(timestamp);
-    if (shouldShowTimestamp) {
-      _lastMessageTime = timestamp;
-    }
+  return false;
+}
 
-    String formattedTimestamp;
 
-    int hoursDifference = DateTime.now().difference(timestamp).inHours;
-    if (hoursDifference < 4) {
-      formattedTimestamp = 'vor 4 Stunden';
-    } else if (hoursDifference < 8) {
-      formattedTimestamp = 'vor 8 Stunden';
-    } else if (hoursDifference < 12) {
-      formattedTimestamp = 'vor 12 Stunden';
-    } else if (hoursDifference < 18) {
-      formattedTimestamp = 'vor 18 Stunden';
-    } else if (hoursDifference < 24) {
-      formattedTimestamp = 'vor 24 Stunden';
-    } else if (hoursDifference < 30) {
-      formattedTimestamp = 'vor 30 Stunden';
-    } else if (hoursDifference < 36) {
-      formattedTimestamp = 'vor 36 Stunden';
-    } else if (hoursDifference < 40) {
-      formattedTimestamp = 'vor 40 Stunden';
-    } else if (hoursDifference < 48) {
-      formattedTimestamp = 'vor 48 Stunden';
-    } else {
-      formattedTimestamp = DateFormat('dd. MMM. yyyy').format(timestamp);
-    }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        if (shouldShowTimestamp)
-          Text(
-            formattedTimestamp,
-            style: const TextStyle(
-              color: Colors.grey,
-              fontSize: 12,
-            ),
-          ),
-        Container(
-          alignment: alignment,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment:
-                  isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-              mainAxisAlignment:
-                  isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
-              children: [
-                _chatBubble(
-                  message: data['message'],
-                  imageUrl: data['imageUrl'],
-                  isMe: isMe,
-                  isRead: isRead,
-                ),
-                const SizedBox(height: 1),
-              ],
-            ),
+Widget _buildMessageItem(DocumentSnapshot document) {
+  Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+
+  String isoTimestampString = data['timestamp'];
+  DateTime timestamp = DateTime.parse(isoTimestampString);
+
+  var alignment = data['senderId'] == _firebaseAuth.currentUser!.uid
+      ? Alignment.centerRight
+      : Alignment.centerLeft;
+
+  bool isMe = data['senderId'] == _firebaseAuth.currentUser!.uid;
+  bool isRead = data['isRead'] ?? false;
+
+  bool shouldShowTimestamp = _shouldShowTimestamp(timestamp);
+  if (shouldShowTimestamp) {
+    _lastDisplayedTimestamp = timestamp;
+  }
+
+  String formattedTimestamp;
+
+  int minutesDifference = DateTime.now().difference(timestamp).inMinutes;
+  int hoursDifference = DateTime.now().difference(timestamp).inHours;
+
+  if (minutesDifference < 2) {
+    formattedTimestamp = 'Gerade eben';
+  } else if (minutesDifference < 5) {
+    formattedTimestamp = 'vor 5 Minuten';
+  } else if (minutesDifference < 10) {
+    formattedTimestamp = 'vor 10 Minuten';
+  } else if (minutesDifference < 30) {
+    formattedTimestamp = 'vor 30 Minuten';
+  } else if (hoursDifference < 1) {
+    formattedTimestamp = 'vor 1 Stunde';
+  } else if (hoursDifference < 2) {
+    formattedTimestamp = 'vor 2 Stunden';
+  } else if (hoursDifference < 4) {
+    formattedTimestamp = 'vor 4 Stunden';
+  } else if (hoursDifference < 8) {
+    formattedTimestamp = 'vor 8 Stunden';
+  } else if (hoursDifference < 12) {
+    formattedTimestamp = 'vor 12 Stunden';
+  } else if (hoursDifference < 18) {
+    formattedTimestamp = 'vor 18 Stunden';
+  } else if (hoursDifference < 24) {
+    formattedTimestamp = 'vor 24 Stunden';
+  } else if (hoursDifference < 30) {
+    formattedTimestamp = 'vor 30 Stunden';
+  } else if (hoursDifference < 36) {
+    formattedTimestamp = 'vor 36 Stunden';
+  } else if (hoursDifference < 40) {
+    formattedTimestamp = 'vor 40 Stunden';
+  } else if (hoursDifference < 48) {
+    formattedTimestamp = 'vor 48 Stunden';
+  } else {
+    formattedTimestamp = DateFormat('dd. MMM. yyyy').format(timestamp);
+  }
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      if (shouldShowTimestamp)
+        Text(
+          formattedTimestamp,
+          style: const TextStyle(
+            color: Colors.grey,
+            fontSize: 12,
           ),
         ),
-      ],
-    );
-  }
+      Container(
+        alignment: alignment,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment:
+                isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            mainAxisAlignment:
+                isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+            children: [
+              _chatBubble(
+                message: data['message'],
+                imageUrl: data['imageUrl'],
+                isMe: isMe,
+                isRead: isRead,
+              ),
+              const SizedBox(height: 1),
+            ],
+          ),
+        ),
+      ),
+    ],
+  );
+}
 
-  bool _shouldShowTimestamp(DateTime timestamp) {
-    if (_lastMessageTime == null ||
-        timestamp.day != _lastMessageTime!.day ||
-        timestamp.month != _lastMessageTime!.month ||
-        timestamp.year != _lastMessageTime!.year) {
-      // Show timestamp if it's the first message or if the last message was sent on a different day
-      return true;
-    }
-    return false;
-  }
+
+
+
 
   Future<void> _pickImage() async {
     final pickedFile =
@@ -348,7 +388,7 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
               inputFormatters: [paragraphLimitFormatter],
               decoration: InputDecoration(
                 hintText: _selectedImage != null
-                    ? 'Image selected. Add a message...'
+                    ? 'Bild ausgewählt. Füge eine Nachricht hinzu..'
                     : 'Gebe hier deine Nachricht ein ...',
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
