@@ -375,6 +375,7 @@ class _SellPageState extends State<SellPage> {
                 ),
                 inputFormatters: [
                   LengthLimitingTextInputFormatter(50),
+                  //UpperCaseLimitingTextInputFormatter(10),
                 ],
               ),
               const SizedBox(height: 16),
@@ -578,6 +579,11 @@ class _SellPageState extends State<SellPage> {
                 onPressed: () {
                   String title = _titleController.text.trim();
                   String price = _priceController.text.trim();
+
+                  int upperCaseLetterCount = title.runes
+                  .where((int rune) => String.fromCharCode(rune).toUpperCase() == String.fromCharCode(rune) && String.fromCharCode(rune).toLowerCase() != String.fromCharCode(rune))
+                  .length;
+
                   if (title.length >= 3 && price.isNotEmpty) {
                     saveArticleToFirebase(
                       title: title,
@@ -613,6 +619,14 @@ class _SellPageState extends State<SellPage> {
                         ),
                       );
                     }
+                    else if (upperCaseLetterCount > 10) {
+                     ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                       content: Text('Titel besteht aus zu vielen Großbuchstaben'),
+                       backgroundColor: Colors.red,
+                      ),
+                    );
+                   }
                     if (price.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -797,5 +811,23 @@ class _SellPageState extends State<SellPage> {
         print('Error deleting image: $error');
       }
     }
+  }
+}
+
+class UpperCaseLimitingTextInputFormatter extends TextInputFormatter {
+  final int maxUpperCaseLetters;
+
+  UpperCaseLimitingTextInputFormatter(this.maxUpperCaseLetters);
+
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    int upperCaseLetterCount = newValue.text.runes
+        .where((int rune) => String.fromCharCode(rune).toUpperCase() == String.fromCharCode(rune) && String.fromCharCode(rune).toLowerCase() != String.fromCharCode(rune))
+        .length;
+
+    if (upperCaseLetterCount > maxUpperCaseLetters) {
+      return oldValue;
+    }
+    return newValue;
   }
 }

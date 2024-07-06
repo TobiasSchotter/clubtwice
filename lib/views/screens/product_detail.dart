@@ -337,24 +337,25 @@ Widget build(BuildContext context) {
           ];
   }
 
-  List<Widget> buildCarouselIndicators() {
-    return widget.article.images.isNotEmpty
-        ? widget.article.images.asMap().entries.map((entry) {
-            int index = entry.key;
-            return Container(
-              width: 8.0,
-              height: 8.0,
-              margin: const EdgeInsets.symmetric(horizontal: 4.0),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: currentImageIndex == index
-                    ? AppColor.primary
-                    : AppColor.primarySoft,
-              ),
-            );
-          }).toList()
-        : [];
-  }
+List<Widget> buildCarouselIndicators() {
+  return widget.article.images.length > 1 // Bedingung auf mehr als 1 Bild geändert
+      ? widget.article.images.asMap().entries.map((entry) {
+          int index = entry.key;
+          return Container(
+            width: 8.0,
+            height: 8.0,
+            margin: const EdgeInsets.symmetric(horizontal: 4.0),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: currentImageIndex == index
+                  ? AppColor.primary
+                  : AppColor.primarySoft,
+            ),
+          );
+        }).toList()
+      : [];
+}
+
 
 
   Widget buildBottomNavigationBar(context) {
