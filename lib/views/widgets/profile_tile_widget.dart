@@ -146,67 +146,67 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
           club = '[kein Verein hinterlegt]';
         }
 
-        return GestureDetector(
-          onTap: () async {
-            final pickedFile = await showModalBottomSheet(
-              context: context,
-              builder: (BuildContext context) {
-                return SafeArea(
-                  child: Wrap(
-                    children: [
-                      ListTile(
-                        leading: const Icon(Icons.photo_library),
-                        title: const Text('Galerie'),
-                        onTap: () async {
-                          final picker = ImagePicker();
-                          final pickedImage = await picker.pickImage(
-                            source: ImageSource.gallery,
-                            maxWidth: 400,
-                          );
-                          Navigator.of(context).pop(pickedImage);
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.camera_alt),
-                        title: const Text('Kamera'),
-                        onTap: () async {
-                          final picker = ImagePicker();
-                          final pickedImage = await picker.pickImage(
-                            source: ImageSource.camera,
-                            maxWidth: 400,
-                          );
-                          Navigator.of(context).pop(pickedImage);
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.delete),
-                        title: const Text('Bild löschen'),
-                        onTap: () {
-                          Navigator.of(context).pop(null);
-                          _deleteImage();
-                        },
-                      ),
-                    ],
-                  ),
-                );
-              },
-            );
-            if (pickedFile != null) {
-              await _uploadImage(File(pickedFile.path));
-            }
-          },
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/background.jpg'),
-                fit: BoxFit.cover,
-              ),
+        return Container(
+          width: MediaQuery.of(context).size.width,
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/background.jpg'),
+              fit: BoxFit.cover,
             ),
-            child: Column(
-              children: [
-                Container(
+          ),
+          child: Column(
+            children: [
+              GestureDetector(
+                onTap: () async {
+                  final pickedFile = await showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return SafeArea(
+                        child: Wrap(
+                          children: [
+                            ListTile(
+                              leading: const Icon(Icons.photo_library),
+                              title: const Text('Galerie'),
+                              onTap: () async {
+                                final picker = ImagePicker();
+                                final pickedImage = await picker.pickImage(
+                                  source: ImageSource.gallery,
+                                  maxWidth: 400,
+                                );
+                                Navigator.of(context).pop(pickedImage);
+                              },
+                            ),
+                            ListTile(
+                              leading: const Icon(Icons.camera_alt),
+                              title: const Text('Kamera'),
+                              onTap: () async {
+                                final picker = ImagePicker();
+                                final pickedImage = await picker.pickImage(
+                                  source: ImageSource.camera,
+                                  maxWidth: 400,
+                                );
+                                Navigator.of(context).pop(pickedImage);
+                              },
+                            ),
+                            ListTile(
+                              leading: const Icon(Icons.delete),
+                              title: const Text('Bild löschen'),
+                              onTap: () {
+                                Navigator.of(context).pop(null);
+                                _deleteImage();
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                  if (pickedFile != null) {
+                    await _uploadImage(File(pickedFile.path));
+                  }
+                },
+                child: Container(
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
@@ -215,30 +215,33 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                     image: DecorationImage(
                       image: userData['profileImageUrl'] != null
                           ? NetworkImage(userData['profileImageUrl'])
-                          : const AssetImage('assets/images/pp.png')
-                              as ImageProvider,
+                          : const AssetImage('assets/images/pp.png') as ImageProvider,
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
-                Container(
-                  margin: const EdgeInsets.only(bottom: 2, top: 7),
-                  child: Text(
-                    '$firstname',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 12),
+                child: Column(
+                  children: [
+                    Text(
+                      '$firstname',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
                     ),
-                  ),
+                    _buildUserInfoText('$username'),
+                    _buildUserInfoText('$club'),
+                    _buildUserInfoText('$sport'),
+                    if (_isUploading) const CircularProgressIndicator(),
+                    if (_isDeleting) const CircularProgressIndicator(),
+                  ],
                 ),
-                _buildUserInfoText('$username'),
-                _buildUserInfoText('$club'),
-                _buildUserInfoText('$sport'),
-                if (_isUploading) const CircularProgressIndicator(),
-                if (_isDeleting) const CircularProgressIndicator(),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },
