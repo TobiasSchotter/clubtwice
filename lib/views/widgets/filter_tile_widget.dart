@@ -61,8 +61,8 @@ class _FilterWidgetState extends State<FilterWidget>
     }
 
     return FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-      future:
-          FirebaseFirestore.instance.collection('users').doc(user.uid).get(),
+      future: 
+      FirebaseFirestore.instance.collection('users').doc(user.uid).get(),
       builder: (context, snapshot) {
         final userData = snapshot.data?.data();
         if (userData == null) {
@@ -88,10 +88,10 @@ class _FilterWidgetState extends State<FilterWidget>
                               onTap: () {
                                 const snackBar = SnackBar(
                                   content:
-                                      Text('Dein Verein ist fest hinterlegt'),
+                                  Text('Dein Verein ist fest hinterlegt'),
                                 );
                                 ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
+                                .showSnackBar(snackBar);
                               },
                               child: Text(
                                 currentClub,
@@ -104,7 +104,7 @@ class _FilterWidgetState extends State<FilterWidget>
                           : GestureDetector(
                               onTap: () async {
                                 final selectedClub =
-                                    await Navigator.push<String>(
+                                await Navigator.push<String>(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => ClubSelectionPage(
@@ -200,14 +200,14 @@ class _FilterWidgetState extends State<FilterWidget>
                             const Text(
                               'Sportart',
                               style:
-                                  TextStyle(fontSize: 15, color: Colors.white),
+                              TextStyle(fontSize: 15, color: Colors.white),
                             ),
                           if (selectedSportFilter != 'Keine Auswahl' &&
                               selectedSportFilter.isNotEmpty)
                             Text(
                               sportHintText,
                               style: const TextStyle(
-                                  fontSize: 15, color: Colors.white),
+                                fontSize: 15, color: Colors.white),
                             ),
                           const SizedBox(width: 8),
                           if (selectedSportFilter != 'Keine Auswahl' &&
@@ -267,9 +267,13 @@ class _FilterWidgetState extends State<FilterWidget>
                               selectedTypFilter = value!;
                               typHintText = value;
 
-                              // Reset selectedGroesseFilter when selectedTypFilter changes
-                              selectedGroesseFilter = '';
-                              groesseHintText = 'Größe';
+                              if (selectedTypFilter == 'One Size') {
+                                selectedGroesseFilter = 'One Size';
+                                groesseHintText = 'One Size';
+                              } else {
+                                selectedGroesseFilter = '';
+                                groesseHintText = 'Größe';
+                              }
                             });
                           },
                           hint: Text(
@@ -291,82 +295,84 @@ class _FilterWidgetState extends State<FilterWidget>
                               selectedTypFilter = '';
                               typHintText = "Typ";
                               selectedGroesseFilter = '';
+                              groesseHintText = 'Größe';
                             });
                           },
                         ),
                     ],
                   ),
-                  // Filter für die Größe
-                  GestureDetector(
-                    onTap: () async {
-                      if (selectedTypFilter != '') {
-                        final selectedSize = await Navigator.push<String>(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SizeSelectionPage(
-                              selectedSize: selectedGroesseFilter,
-                              selectedType: selectedTypFilter,
-                            ),
-                          ),
-                        );
-
-                        if (selectedSize != null) {
-                          setState(() {
-                            selectedGroesseFilter = selectedSize;
-                            groesseHintText = selectedSize;
-                          });
-                        }
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text(
-                                  "Bitte wählen Sie zuerst einen Typ aus."),
-                              duration: Duration(seconds: 2)),
-                        );
-                      }
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      height: 54,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          if (selectedGroesseFilter == '' ||
-                              selectedGroesseFilter.isEmpty)
-                            const Text(
-                              'Größe',
-                              style:
-                                  TextStyle(fontSize: 15, color: Colors.white),
-                            ),
-                          if (selectedGroesseFilter != '' &&
-                              selectedGroesseFilter.isNotEmpty)
-                            Text(
-                              truncateText(groesseHintText), // Truncate text
-                              style: const TextStyle(
-                                  fontSize: 15, color: Colors.white),
-                            ),
-                          const SizedBox(width: 8),
-                          if (selectedGroesseFilter != '' &&
-                              selectedGroesseFilter.isNotEmpty)
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  selectedGroesseFilter = '';
-                                });
-                              },
-                              child: const Icon(
-                                Icons.clear,
-                                color: Colors.white,
-                                size: 16,
+                  if (selectedTypFilter != 'One Size')
+                    // Filter für die Größe
+                    GestureDetector(
+                      onTap: () async {
+                        if (selectedTypFilter != '') {
+                          final selectedSize = await Navigator.push<String>(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SizeSelectionPage(
+                                selectedSize: selectedGroesseFilter,
+                                selectedType: selectedTypFilter,
                               ),
                             ),
-                        ],
+                          );
+
+                          if (selectedSize != null) {
+                            setState(() {
+                              selectedGroesseFilter = selectedSize;
+                              groesseHintText = selectedSize;
+                            });
+                          }
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text(
+                                  "Bitte wählen Sie zuerst einen Typ aus."),
+                                duration: Duration(seconds: 2)),
+                          );
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        height: 54,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            if (selectedGroesseFilter == '' ||
+                                selectedGroesseFilter.isEmpty)
+                              const Text(
+                                'Größe',
+                                style:
+                                TextStyle(fontSize: 15, color: Colors.white),
+                              ),
+                            if (selectedGroesseFilter != '' &&
+                                selectedGroesseFilter.isNotEmpty)
+                              Text(
+                                truncateText(groesseHintText), // Truncate text
+                                style: const TextStyle(
+                                  fontSize: 15, color: Colors.white),
+                              ),
+                            const SizedBox(width: 8),
+                            if (selectedGroesseFilter != '' &&
+                                selectedGroesseFilter.isNotEmpty)
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectedGroesseFilter = '';
+                                  });
+                                },
+                                child: const Icon(
+                                  Icons.clear,
+                                  color: Colors.white,
+                                  size: 16,
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
                   // Filter für die Marke
                   GestureDetector(
                     onTap: () async {
@@ -400,7 +406,7 @@ class _FilterWidgetState extends State<FilterWidget>
                             const Text(
                               'Marke',
                               style:
-                                  TextStyle(fontSize: 15, color: Colors.white),
+                              TextStyle(fontSize: 15, color: Colors.white),
                             ),
                           if (selectedMarkeFilter != 'Keine Auswahl' &&
                               selectedMarkeFilter.isNotEmpty)
@@ -408,7 +414,7 @@ class _FilterWidgetState extends State<FilterWidget>
                             Text(
                               truncateText(markeHintText), // Truncate text
                               style: const TextStyle(
-                                  fontSize: 15, color: Colors.white),
+                                fontSize: 15, color: Colors.white),
                               overflow: TextOverflow.ellipsis,
                             ),
                           const SizedBox(width: 8),
@@ -449,7 +455,7 @@ class _FilterWidgetState extends State<FilterWidget>
                 backgroundColor: AppColor.primary,
                 foregroundColor: Colors.white,
                 padding:
-                    const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),

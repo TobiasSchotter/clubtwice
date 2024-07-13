@@ -7,10 +7,10 @@ class DropdownOptions {
     'Zufriedenstellend'
   ];
 
-  static List<String> typeOptions = ['Kids', 'Adults', 'Universal'];
+  static List<String> typeOptions = ['Kids', 'Adults', 'One Size'];
 
   static Map<String, List<String>> sizeOptionsCloth = {
-    'Adults': ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', 'Einheitsgröße'],
+    'Adults': ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', 'One Size'],
     'Kids': [
       '128',
       '134',
@@ -21,9 +21,9 @@ class DropdownOptions {
       '164',
       '170',
       '176',
-      'Einheitsgröße'
+      'One Size'
     ],
-    'Universal': ['Einheitsgröße'],
+    'One Size': ['One Size'],
   };
 
   static Map<String, List<String>> sizeOptionsShoe = {
@@ -48,7 +48,7 @@ class DropdownOptions {
       'EU 47 1/3',
       'EU 48',
       'EU 48 2/3',
-      'Einheitsgröße'
+      'One Size'
     ],
     'Kids': [
       'EU 28',
@@ -69,9 +69,9 @@ class DropdownOptions {
       'EU 37 1/3',
       'EU 38',
       'EU 38 2/3',
-      'Einheitsgröße'
+      'One Size'
     ],
-    'Universal': ['Einheitsgröße'],
+    'One Size': ['One Size'],
   };
 
   static List<String> popularBrandOptions = ['Adidas', 'Puma', 'Nike'];
