@@ -227,21 +227,23 @@ class _SellPageState extends State<SellPage> {
 
   Widget _buildSizeSelection(BuildContext context) {
     return GestureDetector(
-      onTap: () async {
-        final selectedSize = await Navigator.push<String>(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SizeSelectionPage(
-                selectedSize: _selectedSize, selectedType: _selectedType),
-          ),
-        );
+      onTap: _selectedType == 'One Size'
+          ? null
+          : () async {
+              final selectedSize = await Navigator.push<String>(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SizeSelectionPage(
+                      selectedSize: _selectedSize, selectedType: _selectedType),
+                ),
+              );
 
-        if (selectedSize != null) {
-          setState(() {
-            _selectedSize = selectedSize;
-          });
-        }
-      },
+              if (selectedSize != null) {
+                setState(() {
+                  _selectedSize = selectedSize;
+                });
+              }
+            },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16),
         height: 54,
