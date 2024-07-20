@@ -10,17 +10,16 @@ import 'package:clubtwice/views/widgets/menu_tile_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import '../help_page/datenschutz.dart';
-import '../help_page/notiffication_page.dart';
 
 class HelpPage extends StatefulWidget {
-  HelpPage({super.key});
+    HelpPage({super.key});
 
   final User? user = FirebaseAuth.instance.currentUser;
 
   Future signOut() async {
     await FirebaseAuth.instance.signOut();
-  }
-
+  }  
+  
   @override
   State<HelpPage> createState() => _HelpPageState();
 }
@@ -64,25 +63,11 @@ class _HelpPageState extends State<HelpPage> {
                 MenuTileWidget(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const NotificationPage()));
-                  },
-                  margin: const EdgeInsets.only(top: 10),
-                  icon: Icon(
-                    Icons.help_center_outlined,
-                    color: AppColor.secondary.withOpacity(0.5),
-                  ),
-                  title: 'Benachrichtigungen',
-                  subtitle:
-                      'Passe hier deine Benachrichtigungen zu neuen Artikel etc. an',
-                ),
-                MenuTileWidget(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const RatePage()));
                   },
                   margin: const EdgeInsets.only(top: 10),
                   icon: Icon(
-                    Icons.help_center_outlined,
+                    Icons.star_rate_outlined,
                     color: AppColor.secondary.withOpacity(0.5),
                   ),
                   title: 'App bewerten',
@@ -95,7 +80,7 @@ class _HelpPageState extends State<HelpPage> {
                   },
                   margin: const EdgeInsets.only(top: 10),
                   icon: Icon(
-                    Icons.help_center_outlined,
+                    Icons.feedback_outlined,
                     color: AppColor.secondary.withOpacity(0.5),
                   ),
                   title: 'Feedback an ClubTwice',
@@ -108,7 +93,7 @@ class _HelpPageState extends State<HelpPage> {
                   },
                   margin: const EdgeInsets.only(top: 10),
                   icon: Icon(
-                    Icons.help_center_outlined,
+                    Icons.article_outlined,
                     color: AppColor.secondary.withOpacity(0.5),
                   ),
                   title: 'AGB',
@@ -121,7 +106,7 @@ class _HelpPageState extends State<HelpPage> {
                   },
                   margin: const EdgeInsets.only(top: 10),
                   icon: Icon(
-                    Icons.help_center_outlined,
+                    Icons.privacy_tip_outlined,
                     color: AppColor.secondary.withOpacity(0.5),
                   ),
                   title: 'Datenschutz',
@@ -134,7 +119,7 @@ class _HelpPageState extends State<HelpPage> {
                   },
                   margin: const EdgeInsets.only(top: 10),
                   icon: Icon(
-                    Icons.help_center_outlined,
+                    Icons.info_outline,
                     color: AppColor.secondary.withOpacity(0.5),
                   ),
                   title: 'Impressum',
@@ -225,3 +210,4 @@ class _HelpPageState extends State<HelpPage> {
     );
   }
 }
+ 
