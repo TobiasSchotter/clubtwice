@@ -37,7 +37,7 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
 
     return FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
       future:
-          FirebaseFirestore.instance.collection('users').doc(user.uid).get(),
+      FirebaseFirestore.instance.collection('users').doc(user.uid).get(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator(); // Handle while data is being fetched
@@ -72,13 +72,15 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
             leading: IconButton(
               onPressed: () async {
                 if (changesMade) {
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => const PageSwitcher(
-                      selectedIndex: 4,
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => const PageSwitcher(
+                        selectedIndex: 4,
+                      ),
                     ),
-                  ));
+                  );
                 } else {
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pop(true); // Pass 'true' as a result indicating changes were made
                 }
               },
               icon: const Icon(Icons.arrow_back_outlined),
@@ -104,7 +106,7 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
               TextField(
                 autofocus: false,
                 controller:
-                    _firstNameController, // Bind the controller to the TextField
+                _firstNameController, // Bind the controller to the TextField
                 decoration: InputDecoration(
                   hintText: 'Vorname',
                   prefixIcon: Container(
@@ -115,15 +117,15 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
                     ),
                   ),
                   contentPadding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
                   enabledBorder: OutlineInputBorder(
                     borderSide:
-                        const BorderSide(color: AppColor.border, width: 1),
+                    const BorderSide(color: AppColor.border, width: 1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide:
-                        const BorderSide(color: AppColor.primary, width: 1),
+                    const BorderSide(color: AppColor.primary, width: 1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   fillColor: AppColor.primarySoft,
@@ -149,7 +151,7 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
               TextField(
                 autofocus: false,
                 controller:
-                    _userNameController, // Bind the controller to the TextField
+                _userNameController, // Bind the controller to the TextField
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   hintText: 'Benutzername',
@@ -161,15 +163,15 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
                     ),
                   ),
                   contentPadding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
                   enabledBorder: OutlineInputBorder(
                     borderSide:
-                        const BorderSide(color: AppColor.border, width: 1),
+                    const BorderSide(color: AppColor.border, width: 1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide:
-                        const BorderSide(color: AppColor.primary, width: 1),
+                    const BorderSide(color: AppColor.primary, width: 1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   fillColor: AppColor.primarySoft,
@@ -188,10 +190,9 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
                   final newUserName = _userNameController.text.trim();
 
                   if (newFirstName.isNotEmpty && newUserName.isNotEmpty) {
-                    if (newFirstName != firstName || newUserName != userName) {
+                    if (newUserName != userName) {
                       // Check if the new username is unique
-                      final usernameExists =
-                          await _isUsernameTaken(newUserName);
+                      final usernameExists = await _isUsernameTaken(newUserName);
 
                       if (!usernameExists) {
                         // Set changesMade to true if changes are detected
@@ -199,9 +200,9 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
 
                         // Update user data in Firebase
                         FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(user.uid)
-                            .update({
+                        .collection('users')
+                        .doc(user.uid)
+                        .update({
                           'first Name': newFirstName,
                           'username': newUserName,
                         }).then((_) {
@@ -214,7 +215,7 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
-                                  'Fehler beim Speichern der Daten: $error'),
+                                'Fehler beim Speichern der Daten: $error'),
                               backgroundColor: Colors.red,
                             ),
                           );
@@ -224,16 +225,35 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content:
-                                Text('Der Benutzername existiert bereits.'),
+                            Text('Der Benutzername existiert bereits.'),
                             backgroundColor: Colors.red,
                           ),
                         );
                       }
+                    } else if (newFirstName != firstName) {
+                      // Only the first name is changed
+                      changesMade = true;
+                      FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+                        'first Name': newFirstName,
+                      }).then((_) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Erfolgreich gespeichert'),
+                          ),
+                        );
+                      }).catchError((error) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Fehler beim Speichern der Daten: $error'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      });
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content:
-                              Text('Es wurden keine Änderungen vorgenommen'),
+                          Text('Es wurden keine Änderungen vorgenommen'),
                         ),
                       );
                     }
@@ -241,7 +261,7 @@ class _ProfilePageSetState extends State<ProfilePageSet> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text(
-                            'Vorname und Benutzername dürfen nicht leer sein'),
+                          'Vorname und Benutzername dürfen nicht leer sein'),
                         backgroundColor: Colors.red,
                       ),
                     );
