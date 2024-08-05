@@ -126,6 +126,16 @@ Future<void> saveChanges() async {
                   truncateText(displaySport),
                   style: const TextStyle(fontSize: 16, color: AppColor.primary),
                 ),
+                 const SizedBox(width: 8),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    sport = '';
+                  });
+                  displaySport = 'Keine Auswahl';
+                },
+                child: const Icon(Icons.delete, color: Colors.grey),
+              ),
                 const SizedBox(width: 8),
                 const Icon(Icons.keyboard_arrow_right, color: AppColor.primary),
               ],
@@ -135,56 +145,66 @@ Future<void> saveChanges() async {
       ),
     );
   }
+Widget _buildClubSelection(BuildContext context) {
+  String displayClub = club.isEmpty ? 'Keine Auswahl' : club;
 
-  Widget _buildClubSelection(BuildContext context) {
-    String displayClub = club.isEmpty ? 'Keine Auswahl' : club;
-
-    return GestureDetector(
-      onTap: () async {
-        final selectedClub = await Navigator.push<String>(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ClubSelectionPage(selectedClub: club),
-          ),
-        );
-        if (selectedClub != null) {
-          setState(() {
-            club = selectedClub;
-          });
-          displayClub = club.isEmpty ? 'Keine Auswahl' : club;
-        }
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Colors.grey,
-            width: 1.0,
-          ),
-          borderRadius: BorderRadius.circular(6),
+  return GestureDetector(
+    onTap: () async {
+      final selectedClub = await Navigator.push<String>(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ClubSelectionPage(selectedClub: club),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              '  Verein wählen',
-              style: TextStyle(fontSize: 16),
-            ),
-            Row(
-              children: [
-                Text(
-                  truncateText(displayClub),
-                  style: const TextStyle(fontSize: 16, color: AppColor.primary),
-                ),
-                const SizedBox(width: 8),
-                const Icon(Icons.keyboard_arrow_right, color: AppColor.primary),
-              ],
-            ),
-          ],
+      );
+      if (selectedClub != null) {
+        setState(() {
+          club = selectedClub;
+        });
+        displayClub = club.isEmpty ? 'Keine Auswahl' : club;
+      }
+    },
+    child: Container(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.grey,
+          width: 1.0,
         ),
+        borderRadius: BorderRadius.circular(6),
       ),
-    );
-  }
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            '  Verein wählen',
+            style: TextStyle(fontSize: 16),
+          ),
+          Row(
+            children: [
+              Text(
+                truncateText(displayClub),
+                style: const TextStyle(fontSize: 16, color: AppColor.primary),
+              ),
+              const SizedBox(width: 8),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    club = '';
+                  });
+                  displayClub = 'Keine Auswahl';
+                },
+                child: const Icon(Icons.delete, color: Colors.grey),
+              ),
+              const SizedBox(width: 8),
+              const Icon(Icons.keyboard_arrow_right, color: AppColor.primary),
+            ],
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
 
   Widget _buildSecondClubSelection(BuildContext context) { // New second club selection
     String displayClub2 = club2.isEmpty ? 'Keine Auswahl' : club2;
@@ -225,7 +245,18 @@ Future<void> saveChanges() async {
                 Text(
                   truncateText(displayClub2),
                   style: const TextStyle(fontSize: 16, color: AppColor.primary),
+                  
                 ),
+                 const SizedBox(width: 8),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    club2 = '';
+                  });
+                  displayClub2 = 'Keine Auswahl';
+                },
+                child: const Icon(Icons.delete, color: Colors.grey),
+              ),
                 const SizedBox(width: 8),
                 const Icon(Icons.keyboard_arrow_right, color: AppColor.primary),
               ],
