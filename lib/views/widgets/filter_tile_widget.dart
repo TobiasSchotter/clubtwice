@@ -61,8 +61,7 @@ class _FilterWidgetState extends State<FilterWidget>
     }
 
     return FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-      future: 
-      FirebaseFirestore.instance.collection('users').doc(user.uid).get(),
+      future: FirebaseFirestore.instance.collection('users').doc(user.uid).get(),
       builder: (context, snapshot) {
         final userData = snapshot.data?.data();
         if (userData == null) {
@@ -70,6 +69,7 @@ class _FilterWidgetState extends State<FilterWidget>
         }
 
         final currentClub = userData['club'] as String? ?? '';
+        final secondClub = userData['club2'] as String? ?? '';
 
         return Column(
           children: <Widget>[
@@ -80,31 +80,56 @@ class _FilterWidgetState extends State<FilterWidget>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  //Filter für den Verein
                   SizedBox(
                     child: Center(
                       child: widget.isHomePage == true
-                          ? GestureDetector(
-                              onTap: () {
-                                const snackBar = SnackBar(
-                                  content:
-                                  Text('Dein Verein ist fest hinterlegt'),
-                                );
-                                ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                              },
-                              child: Text(
-                                currentClub,
-                                style: const TextStyle(
-                                  color: AppColor.primarySoft,
-                                  fontSize: 15.0,
-                                ),
-                              ),
-                            )
+                          ? (secondClub.isNotEmpty && secondClub != 'Keine Auswahl'
+                              ? DropdownButton<String>(
+  dropdownColor: Colors.blueAccent,
+  alignment: Alignment.center,
+  value: selectedClubFilter.isEmpty ? currentClub : selectedClubFilter,
+  onChanged: (String? newValue) {
+    setState(() {
+      selectedClubFilter = newValue!;
+      clubHintText = newValue;
+      print('Selected Club: $selectedClubFilter'); // Debugging
+    });
+    print('newValue: $newValue'); // Debugging
+  },
+  items: <String>[currentClub, secondClub]
+      .where((value) => value.isNotEmpty && value != 'Keine Auswahl')
+      .map<DropdownMenuItem<String>>((String value) {
+    return DropdownMenuItem<String>(
+      value: value,
+      child: Text(
+        value,
+        style: const TextStyle(color: Colors.white),
+      ),
+    );
+  }).toList(),
+)
+
+                              : GestureDetector(
+                                  onTap: () {
+                                    const snackBar = SnackBar(
+                                      content:
+                                      Text('Dein Verein ist fest hinterlegt'),
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                                  },
+                                  child: Text(
+                                    currentClub,
+                                    style: const TextStyle(
+                                      color: AppColor.primarySoft,
+                                      fontSize: 15.0,
+                                    ),
+                                  ),
+                                ))
                           : GestureDetector(
                               onTap: () async {
                                 final selectedClub =
-                                await Navigator.push<String>(
+                                 await Navigator.push<String>(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => ClubSelectionPage(
@@ -117,37 +142,31 @@ class _FilterWidgetState extends State<FilterWidget>
                                   setState(() {
                                     selectedClubFilter = selectedClub;
                                     clubHintText = selectedClub;
+                                    print('Selected Club: $selectedClubFilter'); // Debugging
                                   });
                                 }
                               },
                               child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
+                                padding: const EdgeInsets.symmetric(vertical: 16),
                                 height: 54,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(6),
                                 ),
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    if (selectedClubFilter == 'Keine Auswahl' ||
-                                        selectedClubFilter.isEmpty)
+                                    if (selectedClubFilter == 'Keine Auswahl' || selectedClubFilter.isEmpty)
                                       const Text(
                                         'Verein',
-                                        style: TextStyle(
-                                            fontSize: 15, color: Colors.white),
+                                        style: TextStyle(fontSize: 15, color: Colors.white),
                                       ),
-                                    if (selectedClubFilter != 'Keine Auswahl' &&
-                                        selectedClubFilter.isNotEmpty)
+                                    if (selectedClubFilter != 'Keine Auswahl' && selectedClubFilter.isNotEmpty)
                                       Text(
                                         clubHintText,
-                                        style: const TextStyle(
-                                            fontSize: 15, color: Colors.white),
+                                        style: const TextStyle(fontSize: 15, color: Colors.white),
                                       ),
                                     const SizedBox(width: 8),
-                                    if (selectedClubFilter != 'Keine Auswahl' &&
-                                        selectedClubFilter.isNotEmpty)
+                                    if (selectedClubFilter != 'Keine Auswahl' && selectedClubFilter.isNotEmpty)
                                       GestureDetector(
                                         onTap: () {
                                           setState(() {
@@ -167,7 +186,7 @@ class _FilterWidgetState extends State<FilterWidget>
                     ),
                   ),
 
-                  //Filter für Sportart
+                  // Filter für Sportart
                   GestureDetector(
                     onTap: () async {
                       final selectedSport = await Navigator.push<String>(
@@ -195,23 +214,18 @@ class _FilterWidgetState extends State<FilterWidget>
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          if (selectedSportFilter == 'Keine Auswahl' ||
-                              selectedSportFilter.isEmpty)
+                          if (selectedSportFilter == 'Keine Auswahl' || selectedSportFilter.isEmpty)
                             const Text(
                               'Sportart',
-                              style:
-                              TextStyle(fontSize: 15, color: Colors.white),
+                              style: TextStyle(fontSize: 15, color: Colors.white),
                             ),
-                          if (selectedSportFilter != 'Keine Auswahl' &&
-                              selectedSportFilter.isNotEmpty)
+                          if (selectedSportFilter != 'Keine Auswahl' && selectedSportFilter.isNotEmpty)
                             Text(
                               sportHintText,
-                              style: const TextStyle(
-                                fontSize: 15, color: Colors.white),
+                              style: const TextStyle(fontSize: 15, color: Colors.white),
                             ),
                           const SizedBox(width: 8),
-                          if (selectedSportFilter != 'Keine Auswahl' &&
-                              selectedSportFilter.isNotEmpty)
+                          if (selectedSportFilter != 'Keine Auswahl' && selectedSportFilter.isNotEmpty)
                             GestureDetector(
                               onTap: () {
                                 setState(() {
@@ -240,10 +254,8 @@ class _FilterWidgetState extends State<FilterWidget>
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    // Zur Anzeige von Dropdown und Zurücksetzungsbutton nebeneinander
                     children: [
                       SizedBox(
-                        // Dropdown für den Typ
                         child: DropdownButton<String>(
                           iconSize: 15.0,
                           elevation: 16,
@@ -256,7 +268,7 @@ class _FilterWidgetState extends State<FilterWidget>
                             return DropdownMenuItem(
                               value: typesItem,
                               child: Text(
-                                truncateText(typesItem), // Truncate text
+                                truncateText(typesItem),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -277,7 +289,7 @@ class _FilterWidgetState extends State<FilterWidget>
                             });
                           },
                           hint: Text(
-                            truncateText(typHintText), // Truncate hint text
+                            truncateText(typHintText),
                             style: const TextStyle(color: AppColor.primarySoft),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -302,7 +314,6 @@ class _FilterWidgetState extends State<FilterWidget>
                     ],
                   ),
                   if (selectedTypFilter != 'One Size')
-                    // Filter für die Größe
                     GestureDetector(
                       onTap: () async {
                         if (selectedTypFilter != '') {
@@ -340,23 +351,18 @@ class _FilterWidgetState extends State<FilterWidget>
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            if (selectedGroesseFilter == '' ||
-                                selectedGroesseFilter.isEmpty)
+                            if (selectedGroesseFilter == '' || selectedGroesseFilter.isEmpty)
                               const Text(
                                 'Größe',
-                                style:
-                                TextStyle(fontSize: 15, color: Colors.white),
+                                style: TextStyle(fontSize: 15, color: Colors.white),
                               ),
-                            if (selectedGroesseFilter != '' &&
-                                selectedGroesseFilter.isNotEmpty)
+                            if (selectedGroesseFilter != '' && selectedGroesseFilter.isNotEmpty)
                               Text(
-                                truncateText(groesseHintText), // Truncate text
-                                style: const TextStyle(
-                                  fontSize: 15, color: Colors.white),
+                                truncateText(groesseHintText),
+                                style: const TextStyle(fontSize: 15, color: Colors.white),
                               ),
                             const SizedBox(width: 8),
-                            if (selectedGroesseFilter != '' &&
-                                selectedGroesseFilter.isNotEmpty)
+                            if (selectedGroesseFilter != '' && selectedGroesseFilter.isNotEmpty)
                               GestureDetector(
                                 onTap: () {
                                   setState(() {
@@ -373,7 +379,6 @@ class _FilterWidgetState extends State<FilterWidget>
                         ),
                       ),
                     ),
-                  // Filter für die Marke
                   GestureDetector(
                     onTap: () async {
                       final selectedBrand = await Navigator.push<String>(
@@ -401,25 +406,19 @@ class _FilterWidgetState extends State<FilterWidget>
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          if (selectedMarkeFilter == 'Keine Auswahl' ||
-                              selectedMarkeFilter.isEmpty)
+                          if (selectedMarkeFilter == 'Keine Auswahl' || selectedMarkeFilter.isEmpty)
                             const Text(
                               'Marke',
-                              style:
-                              TextStyle(fontSize: 15, color: Colors.white),
+                              style: TextStyle(fontSize: 15, color: Colors.white),
                             ),
-                          if (selectedMarkeFilter != 'Keine Auswahl' &&
-                              selectedMarkeFilter.isNotEmpty)
-                            // Display the hint text with ellipsis if it's too long
+                          if (selectedMarkeFilter != 'Keine Auswahl' && selectedMarkeFilter.isNotEmpty)
                             Text(
-                              truncateText(markeHintText), // Truncate text
-                              style: const TextStyle(
-                                fontSize: 15, color: Colors.white),
+                              truncateText(markeHintText),
+                              style: const TextStyle(fontSize: 15, color: Colors.white),
                               overflow: TextOverflow.ellipsis,
                             ),
                           const SizedBox(width: 8),
-                          if (selectedMarkeFilter != 'Keine Auswahl' &&
-                              selectedMarkeFilter.isNotEmpty)
+                          if (selectedMarkeFilter != 'Keine Auswahl' && selectedMarkeFilter.isNotEmpty)
                             GestureDetector(
                               onTap: () {
                                 setState(() {
@@ -441,6 +440,7 @@ class _FilterWidgetState extends State<FilterWidget>
             ),
             ElevatedButton(
               onPressed: () {
+                print('Applying filters: $selectedClubFilter, $selectedSportFilter, $selectedTypFilter, $selectedGroesseFilter, $selectedMarkeFilter'); // Debugging
                 widget.applyFilters(
                   selectedClubFilter,
                   selectedSportFilter,
@@ -454,8 +454,7 @@ class _FilterWidgetState extends State<FilterWidget>
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColor.primary,
                 foregroundColor: Colors.white,
-                padding:
-                const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -468,3 +467,4 @@ class _FilterWidgetState extends State<FilterWidget>
     );
   }
 }
+

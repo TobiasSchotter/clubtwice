@@ -20,6 +20,7 @@ class ProfilePageClub extends StatefulWidget {
 class _ProfilePageClubState extends State<ProfilePageClub> {
   late Future<UserModel?> _userDataFuture;
   String club = '';
+  String club2 = ''; // New second club
   String sport = '';
   final UserService userService = UserService();
   bool changesMade = false;
@@ -35,6 +36,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
     UserModel? user = await userService.fetchUserData(userId);
     setState(() {
       club = user?.club ?? '';
+     club2 = user?.club2 ?? ''; // New second club
       sport = user?.sport ?? '';
     });
     return user;
@@ -44,7 +46,7 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       String userId = user.uid;
-      await userService.updateUserClubInformation(userId, club, sport);
+      await userService.updateUserClubInformation(userId, club, club2, sport);
     }
   }
 
@@ -155,6 +157,56 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
     );
   }
 
+  Widget _buildSecondClubSelection(BuildContext context) { // New second club selection
+    String displayClub2 = club2.isEmpty ? 'Keine Auswahl' : club2;
+
+    return GestureDetector(
+      onTap: () async {
+        final selectedClub2 = await Navigator.push<String>(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ClubSelectionPage(selectedClub: club2),
+          ),
+        );
+        if (selectedClub2 != null) {
+          setState(() {
+            club2 = selectedClub2;
+          });
+          displayClub2 = club2.isEmpty ? 'Keine Auswahl' : club2;
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.grey,
+            width: 1.0,
+          ),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              '  Zweiten Verein wählen',
+              style: TextStyle(fontSize: 16),
+            ),
+            Row(
+              children: [
+                Text(
+                  truncateText(displayClub2),
+                  style: const TextStyle(fontSize: 16, color: AppColor.primary),
+                ),
+                const SizedBox(width: 8),
+                const Icon(Icons.keyboard_arrow_right, color: AppColor.primary),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -221,6 +273,10 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
                   height: 16,
                 ),
                 _buildSportSelection(context),
+                 Container(
+                  height: 16,
+                ),
+                _buildSecondClubSelection(context), //  New second club selection
                 const SizedBox(height: 16),
                 AppButton(
                   buttonText: 'Speichern',

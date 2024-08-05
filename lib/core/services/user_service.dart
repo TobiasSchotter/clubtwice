@@ -27,9 +27,10 @@ class UserService {
   }
 
   Future<void> updateUserClubInformation(
-      String userId, String club, String sportart) async {
+      String userId, String club, String club2, String sportart) async {
     await FirebaseFirestore.instance.collection('users').doc(userId).update({
       'club': club,
+      'club2': club2,
       'sport': sportart,
     });
   }

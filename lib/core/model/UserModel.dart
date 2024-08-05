@@ -1,5 +1,6 @@
 class UserModel {
   String club;
+   String club2;
   String email;
   String sport;
   String username;
@@ -10,6 +11,7 @@ class UserModel {
 
   UserModel({
     required this.club,
+    required this.club2,
     required this.email,
     required this.firstName,
     required this.sport,
@@ -23,6 +25,7 @@ class UserModel {
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
       club: map['club'],
+      club2: map['club2'],
       email: map['email'],
       favorites: List<String>.from(map['favorites'] ?? []),
       firstName: map['first Name'],
@@ -37,6 +40,7 @@ class UserModel {
   Map<String, dynamic> toMap() {
     return {
       'club': club,
+      'club2': club,
       'email': email,
       'favorites': favorites,
       'firstName': firstName,
