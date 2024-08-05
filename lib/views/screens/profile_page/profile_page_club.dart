@@ -127,6 +127,7 @@ Future<void> saveChanges() async {
                   style: const TextStyle(fontSize: 16, color: AppColor.primary),
                 ),
                  const SizedBox(width: 8),
+                  if (sport.isNotEmpty)
               GestureDetector(
                 onTap: () {
                   setState(() {
@@ -186,6 +187,7 @@ Widget _buildClubSelection(BuildContext context) {
                 style: const TextStyle(fontSize: 16, color: AppColor.primary),
               ),
               const SizedBox(width: 8),
+               if (club.isNotEmpty)
               GestureDetector(
                 onTap: () {
                   setState(() {
@@ -248,6 +250,7 @@ Widget _buildClubSelection(BuildContext context) {
                   
                 ),
                  const SizedBox(width: 8),
+                  if (club2.isNotEmpty)
               GestureDetector(
                 onTap: () {
                   setState(() {

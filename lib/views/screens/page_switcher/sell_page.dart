@@ -114,116 +114,136 @@ class _SellPageState extends State<SellPage> {
       selectedImages = List.from(initialImages);
     });
   }
+Widget _buildSportSelection(BuildContext context) {
+  String? displaySport = _selectedSport.isEmpty ? 'Keine Auswahl' : _selectedSport;
 
-  Widget _buildSportSelection(BuildContext context) {
-    String? displaySport =
-        _selectedSport.isEmpty ? 'Keine Auswahl' : _selectedSport;
-    return GestureDetector(
-      onTap: () async {
-        final selectedSport = await Navigator.push<String>(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SportSelectionPage(
-              selectedSport: _selectedSport,
-            ),
+  return GestureDetector(
+    onTap: () async {
+      final selectedSport = await Navigator.push<String>(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SportSelectionPage(
+            selectedSport: _selectedSport,
           ),
-        );
+        ),
+      );
 
-        if (selectedSport != null) {
-          setState(() {
-            _selectedSport = selectedSport;
-          });
-          displaySport =
-              (_selectedSport.isEmpty ? 'Keine Auswahl' : sport) as String?;
-        }
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        height: 54,
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Colors.grey,
-            width: 1.0,
-          ),
-          borderRadius: BorderRadius.circular(6),
+      if (selectedSport != null) {
+        setState(() {
+          _selectedSport = selectedSport;
+        });
+        displaySport = _selectedSport.isEmpty ? 'Keine Auswahl' : _selectedSport;
+      }
+    },
+    child: Container(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      height: 54,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.grey,
+          width: 1.0,
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              '  Sport wählen',
-              style: TextStyle(fontSize: 16),
-            ),
-            Row(
-              children: [
-                Text(
-                  displaySport,
-                  style: const TextStyle(fontSize: 16, color: AppColor.primary),
-                ),
-                const SizedBox(width: 8),
-                const Icon(Icons.keyboard_arrow_right, color: AppColor.primary),
-              ],
-            ),
-          ],
-        ),
+        borderRadius: BorderRadius.circular(6),
       ),
-    );
-  }
-
-  Widget _buildClubSelection(BuildContext context) {
-    String? displayClub =
-        _selectedClub.isEmpty ? 'Keine Auswahl' : _selectedClub;
-    return GestureDetector(
-      onTap: () async {
-        final selectedClub = await Navigator.push<String>(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ClubSelectionPage(
-                    selectedClub: _selectedClub,
-                  )),
-        );
-
-        if (selectedClub != null) {
-          setState(() {
-            _selectedClub = selectedClub;
-          });
-
-          displayClub =
-              (_selectedClub.isEmpty ? 'Keine Auswahl' : club) as String?;
-        }
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        height: 54,
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Colors.grey,
-            width: 1.0,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            '  Sport wählen',
+            style: TextStyle(fontSize: 16),
           ),
-          borderRadius: BorderRadius.circular(6),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              '  Verein wählen',
-              style: TextStyle(fontSize: 16),
-            ),
-            Row(
-              children: [
-                Text(
-                  displayClub,
-                  style: const TextStyle(fontSize: 16, color: AppColor.primary),
+          Row(
+            children: [
+              Text(
+                displaySport ?? 'Keine Auswahl',
+                style: const TextStyle(fontSize: 16, color: AppColor.primary),
+              ),
+              const SizedBox(width: 8),
+              if (_selectedSport.isNotEmpty)
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _selectedSport = '';
+                    });
+                  },
+                  child: const Icon(Icons.delete, color: Colors.grey),
                 ),
-                const SizedBox(width: 8),
-                const Icon(Icons.keyboard_arrow_right, color: AppColor.primary),
-              ],
-            ),
-          ],
-        ),
+              const SizedBox(width: 8),
+              const Icon(Icons.keyboard_arrow_right, color: AppColor.primary),
+            ],
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
+
+
+
+Widget _buildClubSelection(BuildContext context) {
+  String? displayClub =
+  _selectedClub.isEmpty ? 'Keine Auswahl' : _selectedClub;
+  return GestureDetector(
+    onTap: () async {
+      final selectedClub = await Navigator.push<String>(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ClubSelectionPage(
+            selectedClub: _selectedClub,
+          ),),
+      );
+
+      if (selectedClub != null) {
+        setState(() {
+          _selectedClub = selectedClub;
+        });
+
+        displayClub = _selectedClub.isEmpty ? 'Keine Auswahl' : _selectedClub;
+      }
+    },
+    child: Container(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      height: 54,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.grey,
+          width: 1.0,
+        ),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            '  Verein wählen',
+            style: TextStyle(fontSize: 16),
+          ),
+          Row(
+            children: [
+              Text(
+                displayClub,
+                style: const TextStyle(fontSize: 16, color: AppColor.primary),
+              ),
+              const SizedBox(width: 8),
+               if (_selectedClub.isNotEmpty)
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _selectedClub = '';
+                  });
+                },
+                child: const Icon(Icons.delete, color: Colors.grey),
+              ),
+              const SizedBox(width: 8),
+              const Icon(Icons.keyboard_arrow_right, color: AppColor.primary),
+            ],
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
 
   Widget _buildSizeSelection(BuildContext context) {
     return GestureDetector(
