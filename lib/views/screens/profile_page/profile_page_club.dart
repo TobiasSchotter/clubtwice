@@ -42,13 +42,42 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
     return user;
   }
 
-  Future<void> saveChanges() async {
+Future<void> saveChanges() async {
+  if (club == club2) {
+    // Zeige eine Snackbar mit der Fehlermeldung an
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Der erste und der zweite Verein dürfen nicht identisch sein.'),
+        backgroundColor: Colors.red,
+      ),
+    );
+    return; // Verhindere das weitere Ausführen der Methode
+  }
+
+  try {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       String userId = user.uid;
       await userService.updateUserClubInformation(userId, club, club2, sport);
+      // Erfolgreiche Speicherung
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Änderungen erfolgreich gespeichert.'),
+          backgroundColor: Colors.green,
+        ),
+      );
     }
+  } catch (error) {
+    // Zeige eine Snackbar für allgemeine Fehler an
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Fehler beim Speichern: $error'),
+        backgroundColor: Colors.red,
+      ),
+    );
   }
+}
+
 
   String truncateText(String text) {
     if (text.length <= 12) {
@@ -276,31 +305,28 @@ class _ProfilePageClubState extends State<ProfilePageClub> {
                  Container(
                   height: 16,
                 ),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 8.0),
+                  child: const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Optional:',
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 _buildSecondClubSelection(context), //  New second club selection
                 const SizedBox(height: 16),
                 AppButton(
-                  buttonText: 'Speichern',
-                  onPressed: () async {
-                    try {
-                      await saveChanges();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Erfolgreich gespeichert'),
-                        ),
-                      );
-                      setState(() {
-                        changesMade = true;
-                      });
-                    } catch (error) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Fehler beim Speichern: $error'),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    }
-                  },
-                )
+  buttonText: 'Speichern',
+  onPressed: () async {
+    await saveChanges();
+  },
+)
               ],
             );
           }
