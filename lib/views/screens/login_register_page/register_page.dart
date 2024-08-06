@@ -552,9 +552,9 @@ class _RegisterPageState extends State<RegisterPage> {
       'first Name': _firstNameController.text.trim(),
       'username': _userNameController.text.trim(),
       'email': _emailController.text.trim(),
-      'club': "Keine Auswahl",
+      'club': "",
       'club2': "",
-      'sport': "Keine Auswahl",
+      'sport': "",
       'favorites': <String>[], // Empty list for favorites
     });
   }
@@ -581,9 +581,9 @@ class _RegisterPageState extends State<RegisterPage> {
       'first Name': googleName,
       'username': googleName,
       'email': email,
-      'club': "Keine Auswahl",
+      'club': "",
       'club2': "",
-      'sport': "Keine Auswahl",
+      'sport': "",
       'favorites': <String>[], // Empty list for favorites
     });
   }
