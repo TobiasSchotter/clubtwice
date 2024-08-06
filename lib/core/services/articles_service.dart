@@ -119,10 +119,10 @@ class ArticleService {
         .where('isDeleted', isEqualTo: false);
 
     // Remove the condition 'isIndividualeWearable' if club is selected
-    if (club.isEmpty) {
-      articlesQuery =
-          articlesQuery.where('isIndividuallyWearable', isEqualTo: true);
-    }
+   // if (club.isEmpty) {
+    //  articlesQuery =
+      //    articlesQuery.where('isIndividuallyWearable', isEqualTo: true);
+   // }
 
     // Add additional filters if provided
     if (club.isNotEmpty) {

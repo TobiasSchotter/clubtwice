@@ -502,60 +502,63 @@ Widget _buildClubSelection(BuildContext context) {
               _buildClubSelection(context),
               const SizedBox(height: 12),
               _buildSportSelection(context),
-              ListTile(
-                title: const Text(
-                  "Artikel unabhängig nutzbar",
-                  style: TextStyle(fontSize: 15),
-                ),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Transform.scale(
-                      scale: 0.8,
-                      child: Switch(
-                        value: _selectedClub.isEmpty
-                            ? true
-                            : _isIndividuallyWearable,
-                        onChanged: (value) {
-                          setState(() {
-                            if (_selectedClub.isEmpty) {
-                            } else {
-                              _isIndividuallyWearable = value;
-                            }
-                          });
-                        },
-                        activeTrackColor:
-                            _selectedClub.isEmpty ? Colors.grey : null,
-                        activeColor: _selectedClub.isEmpty ? Colors.grey : null,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (_) => AlertDialog(
-                            title: const Text("Individuell tragbar"),
-                            content: const Text(
-                                "Artikel die kein Vereinslogo und somit auch unabhängig des Vereins getragen werden können, werden in der Suche allen angezeigt. Wird keine Vereinsauswahl getroffen, wird das Feld automatisch aktiviert."),
-                            actions: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text("Schließen"),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                      child: const Icon(
-                        Icons.info_outline,
-                        size: 18,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+
+
+            //  ListTile(
+             //   title: const Text(
+             //     "Artikel unabhängig nutzbar",
+              //    style: TextStyle(fontSize: 15),
+              //  ),
+              //  trailing: Row(
+               //   mainAxisSize: MainAxisSize.min,
+               //   children: [
+               //     Transform.scale(
+               //       scale: 0.8,
+               //       child: Switch(
+               //         value: _selectedClub.isEmpty
+               //            ? true
+                //            : _isIndividuallyWearable,
+                //        onChanged: (value) {
+                //          setState(() {
+                //            if (_selectedClub.isEmpty) {
+                //            } else {
+                 //             _isIndividuallyWearable = value;
+                //            }
+                //          });
+                //        },
+                 //       activeTrackColor:
+                 //           _selectedClub.isEmpty ? Colors.grey : null,
+                 //       activeColor: _selectedClub.isEmpty ? Colors.grey : null,
+                 //     ),
+                 //   ),
+                  //  GestureDetector(
+                  //    onTap: () {
+                  //      showDialog(
+                  //        context: context,
+                   //       builder: (_) => AlertDialog(
+                  //          title: const Text("Individuell tragbar"),
+                   //         content: const Text(
+                  //              "Artikel die kein Vereinslogo und somit auch unabhängig des Vereins getragen werden können, werden in der Suche allen angezeigt. Wird keine Vereinsauswahl getroffen, wird das Feld automatisch aktiviert."),
+                   //         actions: [
+                 //             ElevatedButton(
+                 //               onPressed: () {
+                 //                 Navigator.of(context).pop();
+                 //               },
+                 //               child: const Text("Schließen"),
+                 //             ),
+                //            ],
+                //          ),
+                //        );
+                //      },
+                //      child: const Icon(
+               //         Icons.info_outline,
+              //          size: 18,
+              //        ),
+              //      ),
+             //     ],
+             //   ),
+            //  ),
+              const SizedBox(height: 12),
               Text(
                 'Preis*',
                 style: TextStyle(
