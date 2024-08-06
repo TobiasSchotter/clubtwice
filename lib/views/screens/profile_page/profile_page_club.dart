@@ -320,10 +320,10 @@ Widget _buildClubSelection(BuildContext context) {
                 Container(
                   margin: const EdgeInsets.only(bottom: 0),
                   child: Text(
-                    'Deine Startseite wird dir dementsprechend angezeigt. Bei Verkäufen wird dies bereits vorausgefüllt sein.\nDu kannst diese jederzeit ändern.',
+                    'Deine Startseite wird dir dementsprechend angezeigt. Bei Verkäufen wird dies bereits vorausgefüllt seinn. Du kannst diese jederzeit ändern.',
                     style: TextStyle(
                       color: AppColor.secondary.withOpacity(0.7),
-                      fontSize: 12,
+                      fontSize: 15,
                       height: 150 / 100,
                     ),
                   ),

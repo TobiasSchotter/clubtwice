@@ -553,7 +553,7 @@ class _RegisterPageState extends State<RegisterPage> {
       'username': _userNameController.text.trim(),
       'email': _emailController.text.trim(),
       'club': "Keine Auswahl",
-      'club2': "Keine Auswahl",
+      'club2': "",
       'sport': "Keine Auswahl",
       'favorites': <String>[], // Empty list for favorites
     });
@@ -582,7 +582,7 @@ class _RegisterPageState extends State<RegisterPage> {
       'username': googleName,
       'email': email,
       'club': "Keine Auswahl",
-      'club2': "Keine Auswahl",
+      'club2': "",
       'sport': "Keine Auswahl",
       'favorites': <String>[], // Empty list for favorites
     });
