@@ -172,38 +172,36 @@ class ItemCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      RichText(
-                        text: TextSpan(
-                          style: TextStyle(
-                            color: AppColor.secondary.withOpacity(0.7),
-                            height: 1.5,
-                            fontSize: 12,
-                          ),
-                          children: [
-                            TextSpan(text: textToDisplay),
-                          ],
+                  Visibility(
+                    visible: textToDisplay.isNotEmpty,
+                    child: RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                          color: AppColor.secondary.withOpacity(0.7),
+                          height: 1.5,
+                          fontSize: 12,
                         ),
+                        children: [
+                          TextSpan(text: textToDisplay),
+                        ],
                       ),
-                      RichText(
-                        text: TextSpan(
-                          style: TextStyle(
-                            color: AppColor.secondary.withOpacity(0.7),
-                            height: 1.5,
-                            fontSize: 12,
-                          ),
-                          children: [
-                            TextSpan(text: '${article.condition} • '),
-                            TextSpan(text: '${article.size} '),
-                            if (article.brand != "")
-                              TextSpan(text: '• ${article.brand}'),
-                          ],
-                        ),
+                    ),
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      style: TextStyle(
+                        color: AppColor.secondary.withOpacity(0.7),
+                        height: 1.5,
+                        fontSize: 12,
                       ),
-                    ],
-                  )
+                      children: [
+                        TextSpan(text: '${article.condition} • '),
+                        TextSpan(text: '${article.size} '),
+                        if (article.brand != "")
+                          TextSpan(text: '• ${article.brand}'),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             )
