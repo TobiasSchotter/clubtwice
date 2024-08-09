@@ -157,12 +157,10 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
         title: const Text(
           'Verifizierung',
           style: TextStyle(
-              color: Colors.black, fontSize: 14, fontWeight: FontWeight.w600),
+              color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
         ),
         leading: IconButton(
-          onPressed: () {
-            _showConfirmationDialog();
-          },
+          onPressed: _showConfirmationDialog,
           icon: const Icon(Icons.arrow_back_outlined),
           color: Colors.black,
         ),
@@ -175,87 +173,68 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 20, bottom: 8),
-                  child: const Text(
-                    'Bitte bestätige deine E-Mail-Adresse',
-                    style: TextStyle(
-                        color: AppColor.secondary,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: 'poppins',
-                        fontSize: 20),
-                  ),
+                const SizedBox(height: 20),
+                const Text(
+                  'Bitte bestätige deine E-Mail-Adresse',
+                  style: TextStyle(
+                      color: AppColor.secondary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22),
                 ),
-                Container(
-                  margin: const EdgeInsets.only(bottom: 8),
-                  child: Wrap(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 8),
-                        child: Center(
-                          child: Text(
-                            '- Der Verifizierungs-Code wurde an deine E-Mail Adresse geschickt:',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: AppColor.secondary, fontSize: 14),
+                const SizedBox(height: 20),
+                Card(
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        const Text(
+                          'Der Verifizierungs-Code wurde an deine E-Mail Adresse geschickt:',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: AppColor.secondary, fontSize: 16),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          widget.email,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
                           ),
                         ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 8),
-                            child: Center(
-                              child: RichText(
-                                textAlign: TextAlign.center,
-                                text: TextSpan(
-                                  text: widget.email,
-                                  style: const TextStyle(
-                                      color: Colors.blue,
-                                      fontSize: 18,
-                                      decoration: TextDecoration.underline),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: 8),
-                            child: Center(
-                              child: Text(
-                                '- Kontrolliere deinen Spam-Ordner',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: AppColor.secondary, fontSize: 14),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 8),
-                        child: Text(
-                          '- Bitte fordere einen neue Bestätigungsmail an, wenn du die E-Mail weiterhin nicht finden kannst',
+                        const SizedBox(height: 8),
+                        const Text(
+                          'Kontrolliere deinen Spam-Ordner',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               color: AppColor.secondary, fontSize: 14),
                         ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 8),
-                        child: Text(
-                          '- Nach Bestätigung der Mailadresse kann es noch bis zu 15 Sekunden dauern, bis du automatisch weitergeleitet wirst',
+                        const SizedBox(height: 8),
+                        const Text(
+                          'Bitte fordere eine neue Bestätigungsmail an, wenn du die E-Mail weiterhin nicht finden kannst',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               color: AppColor.secondary, fontSize: 14),
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 8),
+                        const Text(
+                          'Nach Bestätigung der Mailadresse kann es noch bis zu 15 Sekunden dauern, bis du automatisch weitergeleitet wirst',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: AppColor.secondary, fontSize: 14),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
+                const SizedBox(height: 20),
                 const Text(
                   'Keine E-Mail von uns erhalten?',
-                  style: TextStyle(fontSize: 16.0),
+                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16.0),
                 AppButton(

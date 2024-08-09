@@ -45,6 +45,9 @@ class _SearchResultPageState extends State<SearchResultPage>
     super.initState();
 
     currentSearchKeyword = widget.searchKeyword;
+
+    // Set the search term in the controller to pre-fill the search field
+    _searchController.text = widget.searchKeyword;
     loadData();
   }
 
@@ -131,8 +134,13 @@ class _SearchResultPageState extends State<SearchResultPage>
   }
 
   // Callback function to update filter values and reload data
-  void applyFilters(String selectedClub, String selectedSportart,
-      String selectedTyp, String selectedGroesse, String selectedMarke) {
+  void applyFilters(
+    String selectedClub,
+    String selectedSportart,
+    String selectedTyp,
+    String selectedGroesse,
+    String selectedMarke,
+  ) {
     setState(() {
       club = selectedClub;
       sportart = selectedSportart;
@@ -189,6 +197,8 @@ class _SearchResultPageState extends State<SearchResultPage>
                 articlesWithID = articleList;
                 searchResultText =
                     generateSearchResultText(searchTerm, articleList.length);
+                _searchController.text =
+                    searchTerm; // Aktualisiere den eingegebenen Text im Suchfeld
               });
             },
           ),
